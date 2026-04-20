@@ -10,9 +10,54 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_20_130508) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_20_153836) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "checklist_items", force: :cascade do |t|
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.integer "position"
+    t.bigint "task_id", null: false
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.index ["task_id"], name: "index_checklist_items_on_task_id"
+  end
+
+  create_table "cities", force: :cascade do |t|
+    t.string "country"
+    t.datetime "created_at", null: false
+    t.string "name"
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "profiles", force: :cascade do |t|
+    t.bigint "city_id", null: false
+    t.datetime "created_at", null: false
+    t.string "first_name"
+    t.string "last_name"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["city_id"], name: "index_profiles_on_city_id"
+    t.index ["user_id"], name: "index_profiles_on_user_id"
+  end
+
+  create_table "tasks", force: :cascade do |t|
+    t.bigint "city_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["city_id"], name: "index_tasks_on_city_id"
+  end
+
+  create_table "user_checklist_items", force: :cascade do |t|
+    t.bigint "checklist_item_id", null: false
+    t.boolean "completed"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["checklist_item_id"], name: "index_user_checklist_items_on_checklist_item_id"
+    t.index ["user_id"], name: "index_user_checklist_items_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.datetime "created_at", null: false
@@ -25,4 +70,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_20_130508) do
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
+
+  add_foreign_key "checklist_items", "tasks"
+  add_foreign_key "profiles", "cities"
+  add_foreign_key "profiles", "users"
+  add_foreign_key "tasks", "cities"
+  add_foreign_key "user_checklist_items", "checklist_items"
+  add_foreign_key "user_checklist_items", "users"
 end
