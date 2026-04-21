@@ -1,0 +1,23 @@
+<h1><%= @task.name %></h1>
+<p><%= @task.description %></p>
+
+<h2>Onboarding Steps</h2>
+
+<p>Checklist</p>
+
+<% if @checklist_items.any? %>
+  <ul>
+    <% @checklist_items.each do |item| %>
+      <li>
+        <strong><%= item.title %></strong>
+        <% if item.category.present? %>
+          <div><%= item.category %></div> <!-- image or icon for category, hence to the separate div -->
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No checklist items yet.</p>
+<% end %>
+
+<%= link_to "Back to tasks", tasks_path, class: "btn btn-secondary" %>
