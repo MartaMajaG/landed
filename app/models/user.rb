@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+
+
   has_one :profile, dependent: :destroy
   has_many :user_checklist_items, dependent: :destroy
 
@@ -6,6 +8,8 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
+
+  after_create :initialize_profile
 
   private
 

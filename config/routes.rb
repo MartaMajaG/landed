@@ -7,9 +7,6 @@ Rails.application.routes.draw do
   resources :user_checklist_items, only: [:update]
 
   # Routes for chat functionality and PDF document uploads
-  resources :chats, only: [:index, :show, :new, :create]
-
-  # Routes for chat functionality and PDF document uploads
   resources :chats, only: [:index, :show, :new, :create] do
     # Messages are nested within chats as child resources
     resources :messages, only: [:create]
@@ -25,5 +22,6 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  resource :profile, only: [:edit, :update, :show]
   resources :tasks, only: [:index, :show]
 end
