@@ -1,18 +1,20 @@
 <h1><%= @task.name %></h1>
 <p><%= @task.description %></p>
 
-<h2>Onboarding Steps</h2>
-
-<p>Checklist</p>
+<h2>Checklist</h2>
 
 <% if @checklist_items.any? %>
   <ul>
     <% @checklist_items.each do |item| %>
+      <% progress = @user_checklist_items[item.id] %>
       <li>
         <strong><%= item.title %></strong>
-        <% if item.category.present? %>
-          <div><%= item.category %></div> <!-- image or icon for category, hence to the separate div -->
-        <% end %>
+        <div><%= item.category %></div> <!-- image or icon for category, hence to the separate div -->
+        <%= button_to(
+              progress&.completed ? "Mark not done" : "Mark done",
+              user_checklist_item_path(item),
+              method: :patch
+            ) %>
       </li>
     <% end %>
   </ul>
@@ -20,4 +22,4 @@
   <p>No checklist items yet.</p>
 <% end %>
 
-<%= link_to "Back to tasks", tasks_path, class: "btn btn-secondary" %>
+<%= link_to "Back to tasks", tasks_path %>
