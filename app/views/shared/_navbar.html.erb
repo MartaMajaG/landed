@@ -1,8 +1,6 @@
 <nav class="navbar navbar-expand-sm navbar-light navbar-lewagon">
   <div class="container-fluid">
-    <%= link_to root_path, class: "navbar-brand" do %>
-      <%= image_tag "https://raw.githubusercontent.com/lewagon/fullstack-images/master/uikit/logo.png" %>
-    <% end %>
+    <%= link_to "Landed", root_path, class: "navbar-brand" %>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -12,13 +10,26 @@
       <ul class="navbar-nav me-auto">
         <% if user_signed_in? %>
           <li class="nav-item active">
-            <%= link_to "Home", root_path, class: "nav-link" %>
+            <%= link_to "Dashboard", root_path, class: "nav-link" %>
           </li>
           <li class="nav-item">
-            <%= link_to "Messages", "#", class: "nav-link" %>
+            <%= link_to "Document", "#", class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Community", "#", class: "nav-link" %>
+          </li>
+          <li class="nav-item">
+            <%= link_to "Profile", "#", class: "nav-link" %>
           </li>
         <% end %>
       </ul>
+
+      <% if user_signed_in? %>
+        <form class="d-flex me-3 navbar-search" role="search">
+          <i class="fa-solid fa-magnifying-glass navbar-search-icon"></i>
+          <input class="form-control rounded-pill" type="search" placeholder="Search" aria-label="Search">
+        </form>
+      <% end %>
 
       <ul class="navbar-nav ms-auto">
         <% if user_signed_in? %>
