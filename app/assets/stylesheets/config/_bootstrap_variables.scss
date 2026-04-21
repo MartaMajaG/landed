@@ -4,25 +4,23 @@
 // 2. These variables are defined with default value (see https://robots.thoughtbot.com/sass-default)
 // 3. You can override them below!
 
-// General style
-$font-family-sans-serif: $body-font;
-$headings-font-family:   $headers-font;
-$body-bg:                $light-gray;
-$font-size-base:         1rem;
+// Typography
+$font-family-base:       $body-font;    // Inter (from _fonts.scss)
+$headings-font-family:   $headers-font; // Jakarta (from _fonts.scss)
+$headings-font-weight:   700;
 
 // Colors
-$body-color: $gray;
-$primary:    $blue;
-$success:    $green;
-$info:       $yellow;
-$danger:     $red;
-$warning:    $orange;
+$primary:       $blue-action;
+$success:       $chartreuse;
+$danger:        $urgent-red;
+$body-bg:       $gray-bg;
+$body-color:    $text-dark;
 
-// Buttons & inputs' radius
-$border-radius-sm:            .0625rem;
-$border-radius:               .125rem;
-$border-radius-lg:            .25rem;
-$border-radius-xl:            .5rem;
-$border-radius-xxl:           1rem;
+// Geometry
+$border-radius:          8px;   // Buttons
+$border-radius-lg:       16px;  // Cards
+$enable-shadows:         true;
 
-// Override other variables below!
+// Components
+$card-border-width:      0;
+$card-border-radius:     $border-radius-lg;
