@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
+  get "user_checklist_items/update"
   devise_for :users
   root to: "pages#home"
-  # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Route to update the status (e.g., toggle completed) of user checklist items
   resources :user_checklist_items, only: [:update]
@@ -19,4 +19,5 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
+  resources :tasks, only: [:index, :show]
 end

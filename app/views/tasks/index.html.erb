@@ -1,0 +1,15 @@
+<h1>Actions</h1>
+
+<% if @tasks.any? %>
+  <ul>
+    <% @tasks.each do |task| %>
+      <li>
+        <h2><%= task.name %></h2>
+        <p><%= task.description %></p>
+        <%= link_to "View Details", task_path(task) %>
+      </li>
+    <% end %>
+  </ul>
+<% else %>
+  <p>No tasks available.</p>
+<% end %>

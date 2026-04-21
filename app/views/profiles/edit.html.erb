@@ -1,0 +1,22 @@
+<h1>Edit Your Profile</h1>
+
+<%= form_with model: @profile, url: profile_path, method: :patch do |f| %>
+  <div>
+    <%= f.label :first_name %><br>
+    <%= f.text_field :first_name %>
+  </div>
+
+  <div>
+    <%= f.label :last_name %><br>
+    <%= f.text_field :last_name %>
+  </div>
+
+  <div>
+    <%= f.label :city_id, "City" %><br>
+    <%= f.collection_select :city_id, City.all, :id, :name, prompt: "Select a city" %>
+  </div>
+
+  <div>
+    <%= f.submit "Update Profile" %>
+  </div>
+<% end %>
