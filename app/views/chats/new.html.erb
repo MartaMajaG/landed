@@ -1,0 +1,27 @@
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-8 col-lg-6">
+      <div class="card shadow-sm p-4">
+        <h1 class="h3 mb-4">Upload Document</h1>
+        
+        <%= form_with model: @chat, local: true do |f| %>
+          <div class="mb-3">
+            <%= f.label :checklist_item_id, "Linked Task", class: "form-label" %>
+            <%= f.collection_select :checklist_item_id, ChecklistItem.all, :id, :title, { prompt: "Choose the relevant task..." }, { class: "form-select" } %>
+          </div>
+
+          <div class="mb-4">
+            <%= f.label :pdf, "PDF Document", class: "form-label" %>
+            <%= f.file_field :pdf, class: "form-control", accept: 'application/pdf' %>
+          </div>
+
+          <div class="d-grid">
+            <%= f.submit "Start Scan", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+
+        <%= link_to "Cancel", chats_path, class: "btn btn-link mt-2" %>
+      </div>
+    </div>
+  </div>
+</div>
