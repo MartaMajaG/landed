@@ -1,0 +1,27 @@
+<div class="container py-5">
+  <div class="card shadow-sm p-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h1 class="h3 mb-0">Document Analysis</h1>
+      <span class="badge bg-secondary">Processing...</span>
+    </div>
+
+    <div class="p-3 bg-light rounded mb-4">
+      <div class="d-flex align-items-center">
+        <i class="fa-solid fa-file-pdf text-danger h2 mb-0 me-3"></i>
+        <div>
+          <h5 class="mb-0"><%= @chat.pdf.filename %></h5>
+          <small class="text-muted"><%= number_to_human_size(@chat.pdf.byte_size) %></small>
+        </div>
+      </div>
+    </div>
+
+    <div class="alert alert-info">
+      <h4 class="h6">AI Processing</h4>
+      <p class="mb-0">We are currently scanning this document for the task: <strong><%= @chat.checklist_item.title %></strong>. Results will be available soon.</p>
+    </div>
+
+    <div class="mt-4">
+      <%= link_to "Back to all scans", chats_path, class: "btn btn-outline-primary" %>
+    </div>
+  </div>
+</div>
