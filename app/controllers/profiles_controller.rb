@@ -10,7 +10,7 @@ class ProfilesController < ApplicationController
   end
 
   def update
-    @profile = current_user.profile
+    @profile = current_user.profile || current_user.create_profile
     if @profile.update(profile_params)
       redirect_to profile_path, notice: "Profile updated"
     else
@@ -21,6 +21,6 @@ class ProfilesController < ApplicationController
   private
 
   def profile_params
-    params.require(:profile).permit(:first_name, :last_name)
+    params.require(:profile).permit(:first_name, :last_name, :city_id)
   end
 end
