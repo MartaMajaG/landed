@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_21_112107) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_21_125020) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -234,17 +234,19 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_21_112107) do
   create_table "tasks", force: :cascade do |t|
     t.bigint "city_id", null: false
     t.datetime "created_at", null: false
+    t.string "name"
     t.datetime "updated_at", null: false
     t.index ["city_id"], name: "index_tasks_on_city_id"
   end
 
   create_table "user_checklist_items", force: :cascade do |t|
     t.bigint "checklist_item_id", null: false
-    t.boolean "completed"
+    t.boolean "completed", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["checklist_item_id"], name: "index_user_checklist_items_on_checklist_item_id"
+    t.index ["user_id", "checklist_item_id"], name: "index_user_checklist_items_on_user_id_and_checklist_item_id", unique: true
     t.index ["user_id"], name: "index_user_checklist_items_on_user_id"
   end
 
