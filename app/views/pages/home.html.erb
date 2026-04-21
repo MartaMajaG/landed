@@ -1,2 +1,62 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<div class="container py-5">
+  
+  <div class="row align-items-center mb-5 mt-4">
+    <div class="col-md-7">
+      <span class="badge bg-white text-success border border-success-subtle mb-3 px-3 py-2 fw-bold" style="font-size: 11px; letter-spacing: 0.5px;">
+        THE BERLIN QUEST
+      </span>
+      
+      <h1 class="display-2 fw-bold mb-0" style="letter-spacing: -2px; line-height: 1.1;">
+        You're arriving, <br>
+        <span style="color: var(--brand-indigo);">Sarah.</span>
+      </h1>
+      
+      <div class="mt-5">
+        <p class="fw-bold mb-3">3 of 11 <span class="text-muted fw-normal">milestones conquered</span></p>
+        
+        <div class="d-flex align-items-center gap-2">
+          <div class="bg-success rounded-pill" style="width: 60px; height: 10px;"></div>
+          <% 7.times do %>
+            <div class="bg-secondary opacity-25 rounded-pill" style="width: 24px; height: 10px;"></div>
+          <% end %>
+          <span class="ms-3 text-success fw-bold small">● Next: Registration (Anmeldung)</span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-5 text-end">
+      <div class="position-relative d-inline-block">
+        <h2 class="fw-bold" style="font-size: 160px; color: var(--brand-indigo); line-height: 1; opacity: 0.9;">33%</h2>
+        </div>
+    </div>
+  </div>
+
+  <hr class="opacity-0 my-5">
+
+  <div class="mt-5">
+    <h3 class="h6 fw-bold text-muted text-uppercase mb-4" style="letter-spacing: 1px;">This week</h3>
+    
+    <div class="bg-white rounded-4 shadow-sm p-4 mb-5 border-0 d-flex justify-content-between text-center">
+       <p class="text-muted m-0">Calendar Scaffolding...</p>
+    </div>
+
+    <h3 class="h6 fw-bold text-muted text-uppercase mb-4" style="letter-spacing: 1px;">Actions</h3>
+
+    <div class="card border-0 shadow-sm mb-3 rounded-4 overflow-hidden" style="border-left: 5px solid var(--urgent-red) !important;">
+      <div class="card-body d-flex align-items-center p-4">
+        <div class="bg-light rounded-3 p-3 me-4 text-danger">
+          <i class="fa-solid fa-calendar-plus fs-4"></i>
+        </div>
+        <div class="flex-grow-1">
+          <div class="d-flex align-items-center gap-2">
+            <h4 class="h6 mb-0 fw-bold">Book Anmeldung Appointment</h4>
+            <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1" style="font-size: 9px;">URGENT</span>
+          </div>
+          <p class="text-muted small mb-0 mt-1">The clock is ticking. You have 14 days from arrival.</p>
+        </div>
+        <button class="btn btn-primary px-4 fw-bold shadow-sm">Start Task</button>
+      </div>
+    </div>
+
+  </div>
+</div>
