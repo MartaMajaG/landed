@@ -1,0 +1,7 @@
+.camera-only {
+  display: none !important;
+
+  @media (hover: none) and (pointer: coarse) {
+    display: inline-flex !important;
+  }
+}
