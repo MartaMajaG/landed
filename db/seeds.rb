@@ -7,17 +7,20 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-City.create!(
-  country: "Germany",
-  name: "Berlin"
-)
+# Master Data: Cities
+["Berlin", "Munich", "Hamburg"].each do |city_name|
+  City.find_or_create_by!(name: city_name, country: "Germany")
+end
 
-City.create!(
-  country: "Germany",
-  name: "Munich"
-)
+# Knowledge Base: Document Types for Scanner
+puts "Seeding Document Types..."
+doc_types_path = Rails.root.join('db', 'seeds', 'data', 'document_types.json')
+doc_types_data = JSON.parse(File.read(doc_types_path))
 
-City.create!(
-  country: "Germany",
-  name: "Hamburg"
-)
+doc_types_data.each do |data|
+  DocumentType.find_or_create_by!(slug: data['id']) do |dt|
+    dt.name = data['name']
+    dt.master_data = data
+  end
+end
+puts "Seeding complete: #{DocumentType.count} document types loaded."
