@@ -1,0 +1,81 @@
+<%# Header %>
+<div class="doc-analysis-header">
+  <div>
+    <p class="analysis-label mb-1">AI Analysis</p>
+    <h2 class="doc-title"><%= document.title || "Untitled Document" %></h2>
+    <div class="d-flex align-items-center gap-2 mt-1">
+      <span class="text-muted small">Processed on <%= document.created_at.strftime("%b %d, %Y") %></span>
+      <% if document.document_type.present? %>
+        <span class="badge rounded-pill bg-primary px-3 py-1 text-uppercase" style="font-size: 0.6rem;">
+          <%= document.document_type %>
+        </span>
+      <% end %>
+    </div>
+  </div>
+  <div class="d-flex gap-2">
+    <button class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+      <i class="bi bi-share me-1"></i>Share
+    </button>
+    <button class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+      <i class="bi bi-download me-1"></i>Download
+    </button>
+  </div>
+</div>
+
+<%# Info Cards %>
+<div class="doc-cards-row">
+  <% if document.deadline.present? %>
+    <div class="deadline-card">
+      <div class="deadline-label">
+        <i class="bi bi-calendar-check-fill me-1"></i>Critical Deadline
+      </div>
+      <div class="deadline-date"><%= document.deadline.strftime("%b %d, %Y") %></div>
+      <% days_left = (document.deadline - Date.today).to_i %>
+      <div class="deadline-remaining">
+        <% if days_left > 0 %>
+          <%= days_left %> days remaining
+        <% elsif days_left == 0 %>
+          Due today
+        <% else %>
+          <%= days_left.abs %> days overdue
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+
+  <% if document.amount.present? && document.amount > 0 %>
+    <div class="amount-card">
+      <div class="amount-label">
+        <i class="bi bi-piggy-bank-fill me-1"></i>Amount
+      </div>
+      <div class="amount-value">€<%= number_with_precision(document.amount, precision: 2) %></div>
+      <div class="amount-sub">Identified in document</div>
+    </div>
+  <% end %>
+</div>
+
+<%# Advice Section %>
+<% if document.advice.present? %>
+  <div class="advice-card">
+    <h5 class="advice-title">
+      <i class="bi bi-lightning-charge-fill text-warning me-2"></i>What this means
+    </h5>
+    <div class="advice-body">
+      <%= simple_format(document.advice) %>
+    </div>
+  </div>
+<% end %>
+
+<%# Ask AI Bar %>
+<div class="ai-ask-bar">
+  <i class="bi bi-stars text-warning px-2"></i>
+  <input type="text" placeholder="Ask AI a question about this document...">
+<button class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; flex-shrink: 0;">
+  <i class="bi bi-arrow-right"></i>
+</button>
+</div>
+<div class="d-flex gap-2 mt-3 flex-wrap">
+  <button class="ai-suggestion-chip">Is there a late fee?</button>
+  <button class="ai-suggestion-chip">What do I need to do first?</button>
+  <button class="ai-suggestion-chip">Explain in simple terms</button>
+</div>
