@@ -7,17 +7,34 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
-City.create!(
-  country: "Germany",
-  name: "Berlin"
-)
+berlin = City.find_or_create_by!(name: "Berlin", country: "Germany")
+City.find_or_create_by!(name: "Munich", country: "Germany")
+City.find_or_create_by!(name: "Hamburg", country: "Germany")
 
-City.create!(
-  country: "Germany",
-  name: "Munich"
-)
+registration = Task.find_or_create_by!(name: "Registration (Anmeldung)", city: berlin)
+banking = Task.find_or_create_by!(name: "Banking", city: berlin)
+health = Task.find_or_create_by!(name: "Health Insurance", city: berlin)
 
-City.create!(
-  country: "Germany",
-  name: "Hamburg"
-)
+ChecklistItem.find_or_create_by!(title: "Book Anmeldung appointment", task: registration) do |item|
+  item.category = "Admin"
+end
+ChecklistItem.find_or_create_by!(title: "Gather required documents for Anmeldung", task: registration) do |item|
+  item.category = "Admin"
+end
+ChecklistItem.find_or_create_by!(title: "Attend appointment and collect Meldebescheinigung", task: registration) do |item|
+  item.category = "Admin"
+end
+
+ChecklistItem.find_or_create_by!(title: "Open a German bank account", task: banking) do |item|
+  item.category = "Finance"
+end
+ChecklistItem.find_or_create_by!(title: "Set up online banking", task: banking) do |item|
+  item.category = "Finance"
+end
+
+ChecklistItem.find_or_create_by!(title: "Choose public or private health insurance", task: health) do |item|
+  item.category = "Admin"
+end
+ChecklistItem.find_or_create_by!(title: "Submit health insurance registration", task: health) do |item|
+  item.category = "Admin"
+end

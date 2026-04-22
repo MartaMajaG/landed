@@ -3,16 +3,45 @@
     <div class="col-12 col-md-8 col-lg-6">
       <div class="card shadow-sm p-4">
         <h1 class="h3 mb-4">Upload Document</h1>
-        
-        <%= form_with model: @chat, local: true do |f| %>
+
+        <% if @chat.errors.any? %>
+          <div class="alert alert-danger">
+            <ul class="mb-0">
+              <% @chat.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+        <%= form_with model: @chat, local: true, multipart: true do |f| %>
           <div class="mb-3">
             <%= f.label :checklist_item_id, "Linked Task", class: "form-label" %>
             <%= f.collection_select :checklist_item_id, ChecklistItem.all, :id, :title, { prompt: "Choose the relevant task..." }, { class: "form-select" } %>
           </div>
 
-          <div class="mb-4">
-            <%= f.label :pdf, "PDF Document", class: "form-label" %>
-            <%= f.file_field :pdf, class: "form-control", accept: 'application/pdf' %>
+          <div class="mb-4" data-controller="uploadpreview">
+            <%= f.label :document, "Document", class: "form-label" %>
+
+            <div class="d-flex gap-2 mb-3">
+              <label class="btn btn-outline-primary d-inline-flex align-items-center gap-2" for="chat_document_upload">
+                <i class="fa-solid fa-upload"></i>Upload File
+              </label>
+              <label class="btn btn-outline-secondary camera-only d-inline-flex align-items-center gap-2" for="chat_document_camera">
+                <i class="fa-solid fa-camera"></i>Take Photo
+              </label>
+            </div>
+
+            <%= f.file_field :document, id: "chat_document_upload",
+                class: "d-none", accept: "image/*,application/pdf",
+                data: { action: "change->uploadpreview#show", uploadpreview_target: "input" } %>
+
+            <input type="file" id="chat_document_camera" name="chat[document]"
+              accept="image/*" capture="environment" class="d-none"
+              data-action="change->uploadpreview#show"
+              data-uploadpreview-target="input" />
+
+            <img data-uploadpreview-target="preview" class="img-fluid rounded mt-3 d-none" />
           </div>
 
           <div class="d-grid">

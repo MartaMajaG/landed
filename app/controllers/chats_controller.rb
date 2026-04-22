@@ -22,7 +22,7 @@ class ChatsController < ApplicationController
 
     if @chat.save
       # Redirect to the show page with a success message
-      redirect_to chat_path(@chat), notice: "PDF uploaded successfully. Processing started."
+      redirect_to chat_path(@chat), notice: "Document uploaded successfully. Processing started."
     else
       # Re-render the form if validations fail
       render :new, status: :unprocessable_entity
@@ -32,7 +32,7 @@ class ChatsController < ApplicationController
   private
 
   def chat_params
-    # Strong parameters permitting the checklist item ID and the attached PDF
-    params.require(:chat).permit(:checklist_item_id, :pdf)
+    # Strong parameters permitting the checklist item ID and the attached document (PDF or image files)
+    params.require(:chat).permit(:checklist_item_id, :document)
   end
 end

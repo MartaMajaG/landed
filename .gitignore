@@ -43,3 +43,7 @@
 # Local Documentation & System Prompts
 /system_prompt/
 /doc/debriefs/
+
+CLAUDE.md
+git-diagnostics-*.zip
+.claude/

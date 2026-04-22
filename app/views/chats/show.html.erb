@@ -7,12 +7,24 @@
 
     <div class="p-3 bg-light rounded mb-4">
       <div class="d-flex align-items-center">
-        <i class="fa-solid fa-file-pdf text-danger h2 mb-0 me-3"></i>
+        <% icon, color = case @chat.document.content_type
+           when /image/ then ["fa-file-image", "text-primary"]
+           when /pdf/   then ["fa-file-pdf",   "text-danger"]
+           when /word/  then ["fa-file-word",  "text-primary"]
+           else              ["fa-file",        "text-secondary"]
+           end %>
+        <i class="fa-solid <%= icon %> <%= color %> h2 mb-0 me-3"></i>
         <div>
-          <h5 class="mb-0"><%= @chat.pdf.filename %></h5>
-          <small class="text-muted"><%= number_to_human_size(@chat.pdf.byte_size) %></small>
+          <h5 class="mb-0"><%= @chat.document.filename %></h5>
+          <small class="text-muted"><%= number_to_human_size(@chat.document.byte_size) %></small>
         </div>
       </div>
+
+        <% if @chat.document.content_type.start_with?("image/") %>
+          <%= image_tag url_for(@chat.document), class: "img-fluid rounded", style: "max-height: 400px;" %>
+        <% else %>
+          <%= link_to "Download content", url_for(@chat.document), class: "btn btn-outline-secondary btn-sm", target: "_blank" %>
+        <% end %>
     </div>
 
     <div class="alert alert-info">
