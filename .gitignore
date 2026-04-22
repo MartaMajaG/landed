@@ -43,3 +43,18 @@
 # Local Documentation & System Prompts
 /system_prompt/
 /doc/debriefs/
+
+# Ignore JS libraries
+node_modules/
+
+# Ignore local environment secrets (don't upload your API keys!)
+.env
+.env.local
+
+# Ignore Mac system clutter
+.DS_Store
+
+# Ignore Rails temporary files and logs
+/log/*
+/tmp/*
+/public/assets
