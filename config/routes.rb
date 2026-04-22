@@ -5,6 +5,8 @@ Rails.application.routes.draw do
 
   # Route to update the status (e.g., toggle completed) of user checklist items
   resources :user_checklist_items, only: [:update]
+#route for documents in document scanner
+  resources :documents, only: [:create, :show, :index]
 
   # Routes for chat functionality and PDF document uploads
   resources :chats, only: [:index, :show, :new, :create] do
