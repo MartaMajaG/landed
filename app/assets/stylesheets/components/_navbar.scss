@@ -10,7 +10,7 @@
 
 .navbar-lewagon .navbar-nav:first-child {
   flex: 1;
-  justify-content: center;
+  justify-content: left;
 }
 
 .navbar-lewagon .navbar-brand {
@@ -48,5 +48,9 @@
   &.active {
     color: #4F46E5;
     font-weight: 600;
+    text-decoration: underline;
+    text-decoration-color: #4F46E5;
+    text-decoration-thickness: 4px;
+    text-underline-offset: 8px;
   }
 }

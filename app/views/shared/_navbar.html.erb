@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-sm navbar-light navbar-lewagon">
-  <div class="container-fluid">
+  <div class="container">
     <%= link_to "Landed", root_path, class: "navbar-brand" %>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,8 +33,11 @@
 
       <ul class="navbar-nav ms-auto">
         <% if user_signed_in? %>
+          <li class="nav-item me-2 d-flex align-items-center">
+            <%= image_tag "icon.svg", style: "height: 28px; width: auto;" %>
+          </li>
           <li class="nav-item dropdown">
-            <%= image_tag "profile.png", class: "avatar dropdown-toggle", id: "navbarDropdown", data: { bs_toggle: "dropdown" }, aria: { haspopup: true, expanded: false } %>
+            <%= image_tag "profile.svg", class: "avatar dropdown-toggle", style: "cursor: pointer;", id: "navbarDropdown", data: { bs_toggle: "dropdown" }, aria: { haspopup: true, expanded: false } %>
             <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
               <%= link_to "My profile", profile_path, class: "dropdown-item" %>
               <%= link_to "Log out", destroy_user_session_path, data: { turbo_method: :delete }, class: "dropdown-item" %>
