@@ -33,9 +33,6 @@
 # Ignore key files for decrypting credentials and more.
 /config/*.key
 
-# Ignore .env file containing credentials.
-.env*
-
 # Ignore Mac and Linux file system files
 *.swp
 .DS_Store
@@ -44,6 +41,10 @@
 /system_prompt/
 /doc/debriefs/
 
-CLAUDE.md
-git-diagnostics-*.zip
-.claude/
+# Ignore Mac system clutter
+.DS_Store
+
+# Ignore Rails temporary files and logs
+/log/*
+/tmp/*
+/public/assets

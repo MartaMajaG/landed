@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_21_125020) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_22_103454) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -67,6 +67,17 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_21_125020) do
     t.datetime "created_at", null: false
     t.string "name"
     t.datetime "updated_at", null: false
+  end
+
+  create_table "documents", force: :cascade do |t|
+    t.float "amount"
+    t.datetime "created_at", null: false
+    t.date "deadline"
+    t.string "title"
+    t.datetime "updated_at", null: false
+    t.string "urgency"
+    t.bigint "user_id", null: false
+    t.index ["user_id"], name: "index_documents_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -267,6 +278,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_21_125020) do
   add_foreign_key "chats", "checklist_items"
   add_foreign_key "chats", "users"
   add_foreign_key "checklist_items", "tasks"
+  add_foreign_key "documents", "users"
   add_foreign_key "messages", "chats"
   add_foreign_key "profiles", "cities"
   add_foreign_key "profiles", "users"
