@@ -16,18 +16,28 @@ class ChatsController < ApplicationController
     @chat = Chat.new
   end
 
+  # Save the chat, trigger AI analysis if a document was attached, then redirect to results
   def create
-    # Build a chat instance associated with the current user
     @chat = current_user.chats.build(chat_params)
 
     if @chat.save
-      # Redirect to the show page with a success message
-      redirect_to chat_path(@chat), notice: "Document uploaded successfully. Processing started."
+      if @chat.document.attached?
+        ai_data = @chat.analyze_document
+        @chat.update(
+          title:         ai_data["title"],
+          amount:        ai_data["amount"],
+          deadline:      ai_data["deadline"],
+          urgency:       ai_data["urgency"],
+          document_type: ai_data["document_type"],
+          advice:        ai_data["advice"]
+        )
+      end
+      redirect_to chat_path(@chat), notice: "Document scanned and analyzed!"
     else
-      # Re-render the form if validations fail
       render :new, status: :unprocessable_entity
     end
   end
+
 
   private
 
