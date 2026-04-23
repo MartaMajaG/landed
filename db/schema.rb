@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_22_145153) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_23_121800) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -69,16 +69,26 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_22_145153) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "document_types", force: :cascade do |t|
+    t.string "category"
+    t.datetime "created_at", null: false
+    t.jsonb "master_data", default: {}
+    t.string "name"
+    t.datetime "updated_at", null: false
+  end
+
   create_table "documents", force: :cascade do |t|
     t.text "advice"
     t.float "amount"
     t.datetime "created_at", null: false
     t.date "deadline"
     t.string "document_type"
+    t.bigint "document_type_id"
     t.string "title"
     t.datetime "updated_at", null: false
     t.string "urgency"
     t.bigint "user_id", null: false
+    t.index ["document_type_id"], name: "index_documents_on_document_type_id"
     t.index ["user_id"], name: "index_documents_on_user_id"
   end
 
@@ -280,6 +290,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_22_145153) do
   add_foreign_key "chats", "checklist_items"
   add_foreign_key "chats", "users"
   add_foreign_key "checklist_items", "tasks"
+  add_foreign_key "documents", "document_types"
   add_foreign_key "documents", "users"
   add_foreign_key "messages", "chats"
   add_foreign_key "profiles", "cities"

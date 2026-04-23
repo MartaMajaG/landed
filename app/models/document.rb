@@ -1,5 +1,6 @@
 class Document < ApplicationRecord
   belongs_to :user
+  belongs_to :document_type, optional: true
   has_one_attached :file
 
   def extract_ai_data

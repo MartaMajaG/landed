@@ -67,13 +67,15 @@
 <% end %>
 
 <%# Ask AI Bar %>
-<div class="ai-ask-bar">
+<div id="ai_chat_response" class="mb-3"></div>
+
+<%= form_with url: ask_document_path(document), method: :post, class: "ai-ask-bar", id: "ai_ask_form" do |f| %>
   <i class="bi bi-stars text-warning px-2"></i>
-  <input type="text" placeholder="Ask AI a question about this document...">
-<button class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; flex-shrink: 0;">
-  <i class="bi bi-arrow-right"></i>
-</button>
-</div>
+  <%= f.text_field :question, placeholder: "Ask AI a question about this document...", class: "border-0 shadow-none bg-transparent flex-grow-1 outline-none", style: "outline: none;" %>
+  <button type="submit" class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; flex-shrink: 0;" data-disable-with="<i class='bi bi-hourglass-split'></i>">
+    <i class="bi bi-arrow-right"></i>
+  </button>
+<% end %>
 <div class="d-flex gap-2 mt-3 flex-wrap">
   <button class="ai-suggestion-chip">Is there a late fee?</button>
   <button class="ai-suggestion-chip">What do I need to do first?</button>
