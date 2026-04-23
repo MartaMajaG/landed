@@ -43,10 +43,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_23_150015) do
   end
 
   create_table "chats", force: :cascade do |t|
+    t.text "advice"
+    t.float "amount"
     t.bigint "checklist_item_id", null: false
     t.datetime "created_at", null: false
+    t.date "deadline"
     t.text "description"
+    t.string "document_type"
+    t.string "title"
     t.datetime "updated_at", null: false
+    t.string "urgency"
     t.bigint "user_id", null: false
     t.index ["checklist_item_id"], name: "index_chats_on_checklist_item_id"
     t.index ["user_id"], name: "index_chats_on_user_id"
@@ -67,19 +73,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_23_150015) do
     t.datetime "created_at", null: false
     t.string "name"
     t.datetime "updated_at", null: false
-  end
-
-  create_table "documents", force: :cascade do |t|
-    t.text "advice"
-    t.float "amount"
-    t.datetime "created_at", null: false
-    t.date "deadline"
-    t.string "document_type"
-    t.string "title"
-    t.datetime "updated_at", null: false
-    t.string "urgency"
-    t.bigint "user_id", null: false
-    t.index ["user_id"], name: "index_documents_on_user_id"
   end
 
   create_table "messages", force: :cascade do |t|
@@ -281,7 +274,6 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_23_150015) do
   add_foreign_key "chats", "checklist_items"
   add_foreign_key "chats", "users"
   add_foreign_key "checklist_items", "tasks"
-  add_foreign_key "documents", "users"
   add_foreign_key "messages", "chats"
   add_foreign_key "profiles", "cities"
   add_foreign_key "profiles", "users"

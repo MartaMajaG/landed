@@ -15,8 +15,8 @@ gem "turbo-rails"
 gem "stimulus-rails"
 # Build JSON APIs with ease [https://github.com/rails/jbuilder]
 gem "jbuilder"
-# Anthropic gem
-gem 'anthropic'
+# OpenAI gem not working with GitHUb using Net::HTTP instead
+# gem "ruby-openai"
 
 # Use Active Model has_secure_password [https://guides.rubyonrails.org/active_model_basics.html#securepassword]
 # gem "bcrypt", "~> 3.1.7"
@@ -46,7 +46,7 @@ gem "bootstrap", "~> 5.3"
 gem "devise"
 gem "autoprefixer-rails"
 gem "font-awesome-sass", "~> 6.1"
-gem "simple_form", github: "heartcombo/simple_form"
+gem "simple_form"
 gem "sassc-rails"
 
 group :development, :test do
