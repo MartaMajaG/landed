@@ -1,0 +1,52 @@
+<div class="min-h-screen flex items-center justify-center bg-gray-50">
+  <div class="bg-white w-full max-w-lg p-8 rounded-xl shadow-lg">
+
+    <!-- Progress / Header -->
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-gray-800">Welcome! Let's get you set up</h1>
+      <p class="text-gray-500 mt-1">We just need a few details to personalise your tasks.</p>
+    </div>
+
+    <!-- Form -->
+    <form action="/onboardings" method="patch" class="space-y-6">
+
+      <!-- Country -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Country</label>
+        <select name="profile[country]" class="w-full border rounded-lg p-3">
+          <option value="">Select a country</option>
+          <% City.distinct.order(:country).pluck(:country).each do |country| %>
+          <option value="<%= country %>"><%= country %></option>
+          <% end %>
+          <!-- Loop countries -->
+        </select>
+      </div>
+
+      <!-- City -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
+        <select name="profile[city_id]" class="w-full border rounded-lg p-3">
+          <option value="">Select a city</option>
+          <% City.order(:name).each do |city| %>
+          <option value="<%= city.id %>"><%= city.name %></option>
+        <% end %>
+          <!-- Loop cities -->
+        </select>
+      </div>
+
+      <!-- Arrival Date -->
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1">Arrival Date</label>
+        <input type="date" name="profile[arrival_date]" class="w-full border rounded-lg p-3">
+      </div>
+
+      <!-- Submit -->
+      <button
+        type="submit"
+        class="w-full bg-blue-600 text-white py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition">
+        Continue
+      </button>
+
+    </form>
+  </div>
+</div>

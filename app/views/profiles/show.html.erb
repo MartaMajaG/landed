@@ -2,7 +2,9 @@
 
 <p><strong>First name:</strong> <%= @profile.first_name %></p>
 <p><strong>Last name:</strong> <%= @profile.last_name %></p>
-<p><strong>Last name:</strong> <%= @profile.city_id %></p>
+<p><strong>City:</strong> <%= @profile.city.name %></p>
+<p><strong>Country:</strong> <%= @profile.city.country%></p>
+<p><strong>Arrival Date:</strong> <%= @profile.arrival_date %></p>
 
 
 <%= link_to "Edit Profile", edit_profile_path %>
