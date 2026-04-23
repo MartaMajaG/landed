@@ -75,6 +75,15 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_23_095604) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "document_types", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.jsonb "master_data", default: {}, null: false
+    t.string "name", null: false
+    t.string "slug", null: false
+    t.datetime "updated_at", null: false
+    t.index ["slug"], name: "index_document_types_on_slug", unique: true
+  end
+
   create_table "messages", force: :cascade do |t|
     t.bigint "chat_id", null: false
     t.text "content"

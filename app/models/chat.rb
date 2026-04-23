@@ -2,7 +2,8 @@ require "net/http"
 
 class Chat < ApplicationRecord
   belongs_to :user
-  belongs_to :checklist_item
+  belongs_to :checklist_item, optional: true
+
 
   has_one_attached :document do |attachable|
     attachable.variant :ai_ready, resize_to_limit: [2048, 2048], format: :jpeg, saver: { quality: 85 }
@@ -58,7 +59,7 @@ class Chat < ApplicationRecord
             content_block,
             {
               type: "text",
-              text: "Please analyze this document and provide the following keys in JSON:
+              text: "Please analyze this document and provide the following keys in JSON. Always show the english wording to users:
                      1. 'title' (English with German in brackets)
                      2. 'amount' (Float)
                      3. 'deadline' (YYYY-MM-DD)

@@ -1,68 +1,136 @@
-<div class="container py-5">
-  <div class="card shadow-sm p-4">
-    
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1 class="h3 mb-0"><%= @chat.title || "Document Analysis" %></h1>
-      <% if @chat.urgency.present? %>
-        <% badge_color = { "high" => "danger", "medium" => "warning", "low" => "success" }[@chat.urgency] || "secondary" %>
-        <span class="badge bg-<%= badge_color %>"><%= @chat.urgency.capitalize %> urgency</span>
-      <% end %>
+<div style="background:#F0F1F8; min-height:100vh; padding:48px 0;">
+  <div class="container">
+
+    <%# Full width header %>
+    <div class="d-flex justify-content-between align-items-center mb-2">
+      <p style="font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#7A9E1F; margin-bottom:0;">AI Analysis</p>
+      <%= link_to "← Back", new_chat_path, style:"font-size:13px; font-weight:500; color:#6B7280; text-decoration:none;" %>
+    </div>
+    <div class="mb-4">
+      <h1 style="font-size:22px; font-weight:700; color:#1A1A2E; margin-bottom:6px;">
+        <%= @chat.title || @chat.document.filename %>
+      </h1>
+      <div class="d-flex align-items-center gap-2 flex-wrap">
+        <small style="color:#6B7280;">Processed on <%= @chat.created_at.strftime("%b %d, %Y") %></small>
+        <% if @chat.document_type.present? %>
+          <span style="background:#E6F0FB; color:#185FA5; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">
+            <%= @chat.document_type %>
+          </span>
+        <% end %>
+        <% if @chat.urgency.present? %>
+          <% badge_bg    = { "high" => "#FEE8E8", "medium" => "#FEF3CD", "low" => "#EBF5E0" }[@chat.urgency] %>
+          <% badge_color = { "high" => "#A32D2D", "medium" => "#7C4A00", "low" => "#3B6D11" }[@chat.urgency] %>
+          <span style="background:<%= badge_bg %>; color:<%= badge_color %>; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">
+            <%= @chat.urgency.capitalize %> urgency
+          </span>
+        <% end %>
+      </div>
     </div>
 
-    <%# Document preview: image renders inline, PDF shows a download link %>
-    <div class="p-3 bg-light rounded mb-4">
-      <div class="d-flex align-items-center mb-3">
-        <% icon, color = case @chat.document.content_type
-           when /image/ then ["fa-file-image", "text-primary"]
-           when /pdf/   then ["fa-file-pdf",   "text-danger"]
-           else              ["fa-file",        "text-secondary"]
-           end %>
-        <i class="fa-solid <%= icon %> <%= color %> h2 mb-0 me-3"></i>
-        <div>
-          <h5 class="mb-0"><%= @chat.document.filename %></h5>
-          <small class="text-muted"><%= number_to_human_size(@chat.document.byte_size) %></small>
+    <%# Two columns — both start at same point %>
+    <div class="row g-4 align-items-start">
+
+      <%# Left: document preview %>
+      <div class="col-12 col-md-5">
+        <div style="background:#fff; border:1px solid #E5E7EB; border-radius:12px; padding:16px; display:flex; align-items:center; justify-content:center; min-height:320px;">
+          <% if @chat.document.attached? && @chat.document.content_type.start_with?("image/") %>
+            <%= image_tag url_for(@chat.document), style:"max-width:100%; max-height:480px; width:auto; height:auto; border-radius:8px; display:block;" %>
+          <% elsif @chat.document.attached? %>
+            <div style="text-align:center;">
+              <i class="fa-solid fa-file-pdf" style="font-size:40px; color:#E24B4A;"></i>
+              <p style="color:#6B7280; margin-top:12px; font-size:14px;"><%= @chat.document.filename %></p>
+              <%= link_to "Download", url_for(@chat.document), class:"btn btn-sm btn-outline-secondary mt-2", target:"_blank" %>
+            </div>
+          <% end %>
         </div>
       </div>
 
-      <% if @chat.document.content_type.start_with?("image/") %>
-        <%= image_tag url_for(@chat.document), class: "img-fluid rounded", style: "max-height: 400px;" %>
-      <% else %>
-        <%= link_to "Download document", url_for(@chat.document), class: "btn btn-outline-secondary btn-sm", target: "_blank" %>
-      <% end %>
-    </div>
+      <%# Right: AI results %>
+      <div class="col-12 col-md-7 d-flex flex-column gap-3">
 
-    <%# Plain English explanation of the document returned by the AI %>
-    <% if @chat.advice.present? %>
-      <div class="mb-4">
-        <h5>What this means for you</h5>
-        <p class="text-muted"><%= @chat.advice %></p>
-      </div>
-    <% end %>
+        <% if @chat.deadline.present? || @chat.amount.present? %>
+          <% both = @chat.deadline.present? && @chat.amount.present? %>
+          <div class="row g-3">
 
-    <%# Deadline and amount shown only if the AI extracted them %>
-    <% if @chat.deadline.present? || @chat.amount.present? %>
-      <div class="row mb-4">
-        <% if @chat.deadline.present? %>
-          <div class="col-md-6">
-            <div class="card border-0 bg-light p-3">
-              <small class="text-muted">Deadline</small>
-              <strong><%= @chat.deadline.strftime("%d %B %Y") %></strong>
-            </div>
+            <% if @chat.deadline.present? %>
+              <div class="<%= both ? 'col-6' : 'col-12' %>">
+                <div style="background:#FEE8E8; border:1px solid #FCA5A5; border-radius:10px; padding:16px; height:100%;">
+                  <div style="font-size:28px; line-height:1; margin-bottom:8px;">
+                    <%= @chat.urgency == "high" ? "🚨" : "📅" %>
+                  </div>
+                  <p style="font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#A32D2D; margin-bottom:6px;">
+                    <%= @chat.urgency == "high" ? "Critical Deadline" : "Deadline" %>
+                  </p>
+                  <p style="font-size:20px; font-weight:700; color:#791F1F; margin-bottom:4px;">
+                    <%= @chat.deadline.strftime("%b %d, %Y") %>
+                  </p>
+                  <% days_left = (@chat.deadline - Date.today).to_i %>
+                  <small style="color:#A32D2D;">
+                    <% if days_left < 0 %>Passed <%= days_left.abs %> days ago
+                    <% else %><%= days_left %> days remaining
+                    <% end %>
+                  </small>
+                </div>
+              </div>
+            <% end %>
+
+            <% if @chat.amount.present? %>
+              <div class="<%= both ? 'col-6' : 'col-12' %>">
+                <% if @chat.amount <= 0 %>
+                  <% amt_bg = "#EBF5E0"; amt_border = "#C0DD97"; amt_label_color = "#3B6D11"; amt_value_color = "#27500A" %>
+                  <% amt_icon  = @chat.amount < 0 ? "💰" : "✅" %>
+                  <% amt_label = @chat.amount < 0 ? "Potential Refund" : "No Payment Required" %>
+                  <% amt_sub   = @chat.amount < 0 ? "You may receive this back" : "Nothing to pay here" %>
+                <% else %>
+                  <% amt_bg = "#FEE8E8"; amt_border = "#FCA5A5"; amt_label_color = "#A32D2D"; amt_value_color = "#791F1F" %>
+                  <% amt_icon = "💸"; amt_label = "Amount Owed"; amt_sub = "See advice below" %>
+                <% end %>
+                <div style="background:<%= amt_bg %>; border:1px solid <%= amt_border %>; border-radius:10px; padding:16px; height:100%;">
+                  <div style="font-size:28px; line-height:1; margin-bottom:8px;"><%= amt_icon %></div>
+                  <p style="font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:<%= amt_label_color %>; margin-bottom:6px;">
+                    <%= amt_label %>
+                  </p>
+                  <% if @chat.amount != 0 %>
+                    <p style="font-size:20px; font-weight:700; color:<%= amt_value_color %>; margin-bottom:4px;">
+                      €<%= number_with_precision(@chat.amount.abs, precision: 2) %>
+                    </p>
+                  <% end %>
+                  <small style="color:<%= amt_label_color %>;"><%= amt_sub %></small>
+                </div>
+              </div>
+            <% end %>
+
           </div>
         <% end %>
-        <% if @chat.amount.present? %>
-          <div class="col-md-6">
-            <div class="card border-0 bg-light p-3">
-              <small class="text-muted">Amount</small>
-              <strong>€<%= number_with_precision(@chat.amount, precision: 2) %></strong>
-            </div>
+
+        <% if @chat.advice.present? %>
+          <div style="background:#fff; border:1px solid #E5E7EB; border-radius:12px; padding:20px;">
+            <h5 style="font-size:15px; font-weight:600; color:#1A1A2E; margin-bottom:14px;">
+              <span style="font-size:18px; line-height:1; margin-right:6px;">⚡</span>What this means
+            </h5>
+            <ul style="font-size:14px; color:#4B5563; line-height:1.8; padding-left:18px; margin-bottom:0;">
+              <% @chat.advice.split(/(?<=\.)\s+/).reject(&:blank?).each do |point| %>
+                <li style="margin-bottom:6px;"><%= point.strip %></li>
+              <% end %>
+            </ul>
           </div>
         <% end %>
-      </div>
-    <% end %>
 
-    <div class="mt-4">
-      <%= link_to "Back to all scans", chats_path, class: "btn btn-outline-primary" %>
+        <% if @chat.description.present? %>
+          <div style="background:#fff; border:1px solid #E5E7EB; border-radius:12px; padding:20px;">
+            <h5 style="font-size:15px; font-weight:600; color:#1A1A2E; margin-bottom:14px;">
+              <span style="font-size:18px; line-height:1; margin-right:6px;">📋</span>Next steps
+            </h5>
+            <ul style="font-size:14px; color:#4B5563; line-height:1.8; padding-left:18px; margin-bottom:0;">
+              <% @chat.description.split("\n").reject(&:blank?).each do |step| %>
+                <li style="margin-bottom:6px;"><%= step.gsub(/^[-•\d.]\s*/, "").strip %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+
+      </div>
     </div>
+
   </div>
 </div>
