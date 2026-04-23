@@ -8,6 +8,7 @@ class Chat < ApplicationRecord
     attachable.variant :ai_ready, resize_to_limit: [2048, 2048], format: :jpeg, saver: { quality: 85 }
   end
 
+  # Sends the attached image to GitHub Models and returns extracted fields as a hash
   def analyze_document
     return unless document.attached?
     return unless document.content_type.start_with?("image/")
@@ -24,6 +25,7 @@ class Chat < ApplicationRecord
 
   private
 
+  # Makes the HTTP POST request to GitHub Models and returns the parsed response body
   def call_github_models
     uri = URI("https://models.inference.ai.azure.com/chat/completions")
     http = Net::HTTP.new(uri.host, uri.port)
@@ -38,6 +40,7 @@ class Chat < ApplicationRecord
     JSON.parse(response.body)
   end
 
+  # Builds the payload sent to the AI: model, system persona, image, and extraction instructions
   def ai_settings
     {
       model: "gpt-4o-mini",
@@ -69,6 +72,7 @@ class Chat < ApplicationRecord
     }
   end
 
+  # Wraps the image as a base64 data URL
   def content_block
     {
       type: "image_url",
@@ -78,6 +82,7 @@ class Chat < ApplicationRecord
     }
   end
 
+  # Downloads the file from Active Storage and encodes it to base64 for the API
   def encoded_file
     Base64.strict_encode64(document.download)
   end

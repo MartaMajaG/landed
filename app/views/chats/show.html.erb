@@ -1,5 +1,6 @@
 <div class="container py-5">
   <div class="card shadow-sm p-4">
+    
     <div class="d-flex justify-content-between align-items-center mb-4">
       <h1 class="h3 mb-0"><%= @chat.title || "Document Analysis" %></h1>
       <% if @chat.urgency.present? %>
@@ -8,6 +9,7 @@
       <% end %>
     </div>
 
+    <%# Document preview: image renders inline, PDF shows a download link %>
     <div class="p-3 bg-light rounded mb-4">
       <div class="d-flex align-items-center mb-3">
         <% icon, color = case @chat.document.content_type
@@ -29,6 +31,7 @@
       <% end %>
     </div>
 
+    <%# Plain English explanation of the document returned by the AI %>
     <% if @chat.advice.present? %>
       <div class="mb-4">
         <h5>What this means for you</h5>
@@ -36,6 +39,7 @@
       </div>
     <% end %>
 
+    <%# Deadline and amount shown only if the AI extracted them %>
     <% if @chat.deadline.present? || @chat.amount.present? %>
       <div class="row mb-4">
         <% if @chat.deadline.present? %>
