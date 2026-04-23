@@ -32,6 +32,7 @@
               </label>
             </div>
 
+             
             <%= f.file_field :document, id: "chat_document_upload",
                 class: "d-none", accept: "image/*,application/pdf",
                 data: { action: "change->uploadpreview#show", uploadpreview_target: "input" } %>
@@ -42,6 +43,9 @@
               data-uploadpreview-target="input" />
 
             <img data-uploadpreview-target="preview" class="img-fluid rounded mt-3 d-none" />
+            <p data-uploadpreview-target="filename" class="mt-3 text-muted d-none">
+              <i class="fa-solid fa-file-pdf text-danger me-1"></i>
+            </p>
           </div>
 
           <div class="d-grid">
