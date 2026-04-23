@@ -22,7 +22,6 @@ class DocumentsController < ApplicationController
         amount:        ai_data["amount"],
         deadline:      ai_data["deadline"],
         urgency:       ai_data["urgency"],
-        document_type: ai_data["document_type"], # Keep raw string for fallback
         advice:        ai_data["advice"],
         document_type_id: match_result[:document_type]&.id # Link to Knowledge Base
       )

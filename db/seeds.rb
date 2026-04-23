@@ -40,11 +40,13 @@ ChecklistItem.find_or_create_by!(title: "Submit health insurance registration", 
 end
 
 # Dev user for testing
-dev_user = User.find_by!(email: "dev@landed.com")
+dev_user = User.find_or_create_by!(email: "dev@landed.com") do |user|
+  user.password = "password123"
+  user.password_confirmation = "password123"
+end
 
 doc = Document.new(
   title:         "Anmeldung Confirmation",
-  document_type: "Registration",
   amount:        0.00,
   deadline:      Date.today + 14.days,
   advice:        "Book your Bürgeramt appointment as soon as possible.",
