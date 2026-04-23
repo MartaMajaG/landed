@@ -1,39 +1,42 @@
+<%# Partial to display the AI analysis results %>
+<%# match contains: { matched_type: Object, confidence_score: Int, target_logic: Hash } %>
+
 <%# Header %>
 <div class="doc-analysis-header">
   <div>
-    <p class="analysis-label mb-1">AI Analysis</p>
-    <h2 class="doc-title"><%= document.title || "Untitled Document" %></h2>
-    <div class="d-flex align-items-center gap-2 mt-1">
+    <p class="analysis-label mb-1 text-primary fw-bold small">AI ANALYSIS</p>
+    <h2 class="doc-title h3 mb-2"><%= document.title || "Untitled Document" %></h2>
+    <div class="d-flex align-items-center gap-2">
       <span class="text-muted small">Processed on <%= document.created_at.strftime("%b %d, %Y") %></span>
-      <% if document.document_type.present? %>
-        <span class="badge rounded-pill bg-primary px-3 py-1 text-uppercase" style="font-size: 0.6rem;">
-          <%= document.document_type %>
+      <% if match[:matched_type].present? %>
+        <span class="badge rounded-pill bg-primary px-2 py-1 text-uppercase" style="font-size: 0.65rem;">
+          <%= match[:matched_type].name %>
         </span>
       <% end %>
     </div>
   </div>
-  <div class="d-flex gap-2">
-    <button class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+  <div class="d-flex gap-2 mt-3">
+    <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 d-flex align-items-center">
       <i class="bi bi-share me-1"></i>Share
     </button>
-    <button class="btn btn-outline-secondary btn-sm rounded-pill px-3">
+    <button class="btn btn-outline-secondary btn-sm rounded-pill px-3 d-flex align-items-center">
       <i class="bi bi-download me-1"></i>Download
     </button>
   </div>
 </div>
 
 <%# Info Cards %>
-<div class="doc-cards-row">
+<div class="doc-cards-row mt-4 mb-4 d-flex gap-3">
   <% if document.deadline.present? %>
-    <div class="deadline-card">
-      <div class="deadline-label">
+    <div class="deadline-card p-3 rounded-4 shadow-sm" style="background-color: #ffe5e5; flex: 1;">
+      <div class="deadline-label text-danger fw-bold small mb-1">
         <i class="bi bi-calendar-check-fill me-1"></i>Critical Deadline
       </div>
-      <div class="deadline-date"><%= document.deadline.strftime("%b %d, %Y") %></div>
+      <div class="deadline-date fs-5 fw-bold"><%= document.deadline.strftime("%b %d, %Y") %></div>
       <% days_left = (document.deadline - Date.today).to_i %>
-      <div class="deadline-remaining">
+      <div class="deadline-remaining small text-danger">
         <% if days_left > 0 %>
-          <%= days_left %> days remaining
+          <%= days_left %> days remaining to pay
         <% elsif days_left == 0 %>
           Due today
         <% else %>
@@ -44,40 +47,64 @@
   <% end %>
 
   <% if document.amount.present? && document.amount > 0 %>
-    <div class="amount-card">
-      <div class="amount-label">
-        <i class="bi bi-piggy-bank-fill me-1"></i>Amount
+    <div class="amount-card p-3 rounded-4 shadow-sm" style="background-color: #e5ffe5; flex: 1;">
+      <div class="amount-label text-success fw-bold small mb-1">
+        <i class="bi bi-piggy-bank-fill me-1"></i>Potential Saving
       </div>
-      <div class="amount-value">€<%= number_with_precision(document.amount, precision: 2) %></div>
-      <div class="amount-sub">Identified in document</div>
+      <div class="amount-value fs-5 fw-bold text-success">€<%= number_with_precision(document.amount, precision: 2) %></div>
+      <div class="amount-sub small text-success">Via early payment discount</div>
     </div>
   <% end %>
 </div>
 
 <%# Advice Section %>
 <% if document.advice.present? %>
-  <div class="advice-card">
-    <h5 class="advice-title">
+  <div class="advice-card mb-4 bg-white p-4 rounded-4 shadow-sm border">
+    <h5 class="advice-title mb-3 fs-6 fw-bold">
       <i class="bi bi-lightning-charge-fill text-warning me-2"></i>What this means
     </h5>
-    <div class="advice-body">
+    <div class="advice-body text-muted small">
       <%= simple_format(document.advice) %>
     </div>
+    
+    <%# Smart Actions Button Container %>
+    <% if match[:target_logic].present? %>
+      <div class="mt-4 p-3 rounded-3" style="background-color: #f8f9fa;"
+           data-controller="smart-actions"
+           data-smart-actions-type-value="<%= match[:target_logic]['action_type'] %>"
+           data-smart-actions-url-value="<%= match[:target_logic]['target_url'] %>"
+           data-smart-actions-task-id-value="<%= match[:target_logic]['completes_task_id'] %>">
+        
+        <strong class="d-block mb-2 text-dark small">Next Steps</strong>
+        <button type="button" 
+                class="btn btn-primary py-2 px-4 rounded-pill d-inline-flex align-items-center shadow-sm"
+                data-action="click->smart-actions#perform">
+          <i class="bi bi-check2-circle me-2"></i>
+          <%= match[:target_logic]['action_type'].titleize %>
+        </button>
+        
+        <% if match[:target_logic]['completes_task_id'].present? %>
+          <div class="mt-2 text-muted" style="font-size: 0.75rem;">
+            <i class="bi bi-link-45deg me-1"></i>Links to Checklist Task: <strong><%= match[:target_logic]['completes_task_id'] %></strong>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
   </div>
 <% end %>
 
 <%# Ask AI Bar %>
 <div id="ai_chat_response" class="mb-3"></div>
 
-<%= form_with url: ask_document_path(document), method: :post, class: "ai-ask-bar", id: "ai_ask_form" do |f| %>
-  <i class="bi bi-stars text-warning px-2"></i>
-  <%= f.text_field :question, placeholder: "Ask AI a question about this document...", class: "border-0 shadow-none bg-transparent flex-grow-1 outline-none", style: "outline: none;" %>
+<%= form_with url: ask_document_path(document), method: :post, class: "ai-ask-bar d-flex align-items-center bg-white border rounded-pill p-2 shadow-sm", id: "ai_ask_form" do |f| %>
+  <i class="bi bi-stars text-warning px-2 fs-5"></i>
+  <%= f.text_field :question, placeholder: "Ask AI a question about this document...", class: "border-0 shadow-none bg-transparent flex-grow-1 outline-none px-2", style: "outline: none;" %>
   <button type="submit" class="btn btn-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; flex-shrink: 0;" data-disable-with="<i class='bi bi-hourglass-split'></i>">
-    <i class="bi bi-arrow-right"></i>
+    <i class="bi bi-arrow-up"></i>
   </button>
 <% end %>
 <div class="d-flex gap-2 mt-3 flex-wrap">
-  <button class="ai-suggestion-chip">Is there a late fee?</button>
-  <button class="ai-suggestion-chip">What do I need to do first?</button>
-  <button class="ai-suggestion-chip">Explain in simple terms</button>
+  <button class="btn btn-sm btn-light rounded-pill border ai-suggestion-chip text-muted">Is there a late fee?</button>
+  <button class="btn btn-sm btn-light rounded-pill border ai-suggestion-chip text-muted">What do I need to do first?</button>
+  <button class="btn btn-sm btn-light rounded-pill border ai-suggestion-chip text-muted">Explain in simple terms</button>
 </div>
