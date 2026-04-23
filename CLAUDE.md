@@ -5,55 +5,69 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Commands
 
 ```bash
-# Start development server
-bin/dev                        # runs rails server (no separate JS build needed — importmap)
-
-# Database
-bin/rails db:migrate
-bin/rails db:seed
-
-# Tests
-bin/rails test                              # all unit + controller tests
-bin/rails test test/models/user_test.rb     # single test file
-bin/rails test:system                       # system tests (requires Chrome)
-
-# Code quality
-bin/rubocop                    # lint
-bin/brakeman                   # security scan
-bundle exec bundler-audit check --update   # dependency vulnerability scan
-
-# Credentials
-bin/rails credentials:edit     # edit encrypted credentials (requires RAILS_MASTER_KEY)
+bin/dev                          # Start development server
+bin/setup                        # Initialize or reset dev environment
+rails db:migrate                 # Run migrations
+rails db:seed                    # Load seed data (cities, tasks, checklist items)
+bin/rails test                   # Run Minitest unit/controller tests
+bin/rails test:system            # Run system tests (requires Chrome)
+bin/rubocop                      # Lint Ruby code
+bin/brakeman                     # Static security analysis
+bin/bundler-audit                # Audit gems for vulnerabilities
+bin/rails credentials:edit       # Edit encrypted credentials
 ```
 
-## Architecture
+## What This App Does
 
-### Request Flow
+Landed helps expats navigate German bureaucracy. Users upload official German letters (PDFs/images), Claude AI extracts key info (deadline, amount, urgency, advice), and users track relocation tasks via city-specific checklists.
 
-All routes require authentication (`before_action :authenticate_user!` in `ApplicationController`) except `PagesController#home`. Devise handles auth.
+## Data Model
 
-On signup, `User` automatically creates a `Profile` via an `after_create` callback — the profile is expected to always exist for a logged-in user.
+```
+User (Devise)
+├── Profile (1-1) → belongs_to City
+├── UserChecklistItem (many) → belongs_to ChecklistItem, completed: boolean
+├── Document (many) → has_one_attached :file, AI-extracted fields
+└── Chat (many) → belongs_to ChecklistItem, has_one_attached :document
+    └── Message (many) → content, role (user/assistant)
 
-### City-Scoped Data
+City → has_many Tasks → has_many ChecklistItems → has_many UserChecklistItems
+```
 
-Everything is scoped to `current_user.profile.city`. Tasks and checklist items belong to a `City`, and `TasksController#index` filters by `current_user.profile.city_id`. If a user has no city set, this will raise a nil error — city selection happens on profile edit.
+The `UserChecklistItem` join table tracks per-user task completion (`find_or_initialize_by` pattern on toggle). Composite unique index on `(user_id, checklist_item_id)`.
 
-### Checklist Progress
+## AI Integration
 
-`UserChecklistItem` is a join model between `User` and `ChecklistItem` with a `completed` boolean. Toggling is done via `button_to` PATCH to `UserChecklistItemsController#update`, which uses `find_or_initialize_by` so the record is created on first toggle.
+`Document#extract_ai_data` sends the uploaded file to Claude:
+- PDFs → `type: "document"` block; images → `type: "image"` block
+- Model: `claude-3-5-sonnet-20240620`, max_tokens: 1000
+- Returns JSON with: `title`, `amount`, `deadline`, `urgency`, `document_type`, `advice`
+- API key via `ANTHROPIC_API_KEY` env var
 
-### Chats & Messages
+`Chat` has an `:ai_ready` Active Storage variant (resize 2048×2048, JPEG q85) for images before sending to AI.
 
-`Chat` belongs to both a `User` and a `ChecklistItem`, and has an Active Storage PDF attachment (`:pdf`). `Message` belongs to `Chat` and stores `content` + `role` (intended values: `"user"` / `"assistant"`). The AI analysis pipeline (sending PDFs to Anthropic Claude, parsing the response) is not yet implemented — `chats/show` currently shows a "Processing…" placeholder.
+## Key Conventions
 
-### Frontend
+- **Image processing:** libvips (not ImageMagick). `auto_orient` is not supported — libvips handles EXIF rotation automatically.
+- **File uploads:** `form_with` requires explicit `multipart: true`. Two separate hidden file inputs: one standard upload (`accept: "image/*,application/pdf"`) and one camera-only (`capture="environment"`, images only).
+- **Camera button visibility:** Controlled by `.camera-only` CSS class in `_document_scanner.scss` — hidden on desktop via `display: none !important`, shown on touch devices via `(hover: none) and (pointer: coarse)` media query. The `!important` is required to override Bootstrap's `.btn`.
+- **Stimulus:** One custom controller — `uploadpreview_controller.js` — shows instant image preview via `URL.createObjectURL` before upload.
+- **Forms:** Simple Form with Bootstrap integration. `collection_select` used for `checklist_item_id` association on Chat.
 
-No Node.js/npm — assets are managed via Rails importmap (`config/importmap.rb`). Bootstrap 5.3 and Stimulus are pinned there. To add a new Stimulus controller, create `app/javascript/controllers/my_controller.js` — it is eager-loaded automatically via `index.js`.
+## Routes Overview
 
-### Multiple Databases (Production)
+```ruby
+root "pages#home"
+devise_for :users
+resources :documents, only: [:create, :show, :index]
+resources :chats, only: [:index, :show, :new, :create] do
+  resources :messages, only: [:create]
+end
+resource :profile, only: [:edit, :update, :show]
+resources :tasks, only: [:index, :show]
+resources :user_checklist_items, only: [:update]
+```
 
-`config/database.yml` defines four separate databases for production: `primary`, `cache`, `queue`, and `cable`, each sourced from a distinct env var (`DATABASE_URL`, `CACHE_DATABASE_URL`, `QUEUE_DATABASE_URL`, `CABLE_DATABASE_URL`). Solid Queue runs inside the Puma process (`SOLID_QUEUE_IN_PUMA=true`).
+## Deployment
 
-### Generator Config
-
-Generators are configured in `config/application.rb` to skip assets, helpers, and fixtures. Don't expect those to be generated automatically.
+Kamal + Docker. `config/deploy.yml` orchestrates. Health check: `GET /up`. Production secrets in `.kamal/secrets`; use `bin/rails credentials:edit` for app secrets.

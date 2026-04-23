@@ -1,0 +1,188 @@
+// ─── Document Show Page ───────────────────────────────────────────
+
+// Left pane preview area
+.doc-preview-pane {
+  background: #fff;
+  border: 1.5px dashed #dee2e6;
+  border-radius: 12px;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: auto;
+  padding: 1rem;
+
+  .empty-state {
+    text-align: center;
+    color: #adb5bd;
+    i { font-size: 2.5rem; opacity: 0.35; display: block; }
+    p { font-size: 0.82rem; margin-top: 0.5rem; margin-bottom: 0; }
+  }
+}
+
+// ─── Right column ─────────────────────────────────────────────────
+
+.doc-analysis-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  padding-top: 0.5rem;
+}
+
+.doc-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #111827;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.analysis-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  color: #246DD5;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+// ─── Info cards row ───────────────────────────────────────────────
+
+.doc-cards-row {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.deadline-card {
+  flex: 0 0 auto;  
+  width: 280px;
+  background: linear-gradient(135deg, #fff5f5 0%, #fee2e2 100%);
+  border: 1px solid #fecaca;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+
+  .deadline-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #ef4444;
+    margin-bottom: 0.5rem;
+  }
+
+  .deadline-date {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #111827;
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+  }
+
+  .deadline-remaining {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #ef4444;
+  }
+}
+
+.amount-card {
+  flex: 0 0 auto;
+  width: 200px;
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+  border: 1px solid #bbf7d0;
+  border-radius: 16px;
+  padding: 1.25rem 1.5rem;
+
+  .amount-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #16a34a;
+    margin-bottom: 0.5rem;
+  }
+
+  .amount-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: #111827;
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+  }
+
+  .amount-sub {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: #16a34a;
+  }
+}
+
+// ─── Advice card ──────────────────────────────────────────────────
+
+.advice-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+  padding: 1.75rem 2rem;
+  margin-bottom: 1.5rem;
+
+  .advice-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #111827;
+    margin-bottom: 1rem;
+  }
+
+  .advice-body {
+    color: #4b5563;
+    line-height: 1.75;
+    font-size: 0.93rem;
+
+    p { margin-bottom: 0.5rem; }
+    p:last-child { margin-bottom: 0; }
+  }
+}
+
+// ─── Ask AI bar ───────────────────────────────────────────────────
+
+.ai-ask-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 50px;
+  padding: 0.35rem 0.35rem 0.35rem 0.75rem;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+
+  input {
+    flex: 1;
+    border: 0;
+    background: transparent;
+    font-size: 0.9rem;
+    color: #374151;
+
+    &::placeholder { color: #9ca3af; }
+    &:focus { outline: none; box-shadow: none; }
+  }
+}
+
+.ai-suggestion-chip {
+  border: 1px solid #e5e7eb;
+  border-radius: 50px;
+  background: #fff;
+  color: #6b7280;
+  font-size: 0.78rem;
+  padding: 0.3rem 0.85rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+
+  &:hover {
+    border-color: #246DD5;
+    color: #246DD5;
+    background: #eff6ff;
+  }
+}
