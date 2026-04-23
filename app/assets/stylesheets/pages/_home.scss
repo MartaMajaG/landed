@@ -1,1 +1,559 @@
 // Specific CSS for your home-page
+// ── WRAPPER
+.dashboard-wrapper {
+  padding: 24px 32px;
+  background: #f0f2f7;
+  min-height: 100vh;
+  font-family: var(--bs-font-sans-serif);
+}
+
+// ── HERO
+.dashboard-hero {
+  background: #fff;
+  border-radius: 12px;
+  border: 0.5px solid #e2e5ec;
+  padding: 18px 24px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 28px;
+}
+
+.hero-divider {
+  width: 0.5px;
+  height: 48px;
+  background: #e2e5ec;
+  flex-shrink: 0;
+}
+
+.hero-greeting {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 0 0 auto;
+  min-width: 200px;
+}
+
+.hero-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.hero-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1d23;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.hero-stage {
+  font-size: 12px;
+  color: #7a7f8e;
+  margin: 3px 0 0;
+}
+
+.stage-badge {
+  background: #fff3e0;
+  color: #e65100;
+  font-size: 10px;
+  font-weight: 700;
+  border-radius: 4px;
+  padding: 2px 6px;
+  letter-spacing: 0.05em;
+}
+
+.hero-progress {
+  flex: 1;
+}
+
+.progress-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+  margin: 0 0 4px;
+}
+
+.progress-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 8px;
+}
+
+.progress-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a1d23;
+}
+
+.progress-pct {
+  font-size: 13px;
+  font-weight: 600;
+  color: #246DD5;
+}
+
+.progress-track {
+  height: 5px;
+  background: #e9ecef;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #246DD5;
+  border-radius: 3px;
+}
+
+.hero-events {
+  flex: 0 0 220px;
+}
+
+.events-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.events-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+}
+
+.events-viewall {
+  font-size: 11px;
+  color: #246DD5;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.event-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.event-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+.event-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: #1a1d23;
+  margin: 0;
+}
+
+.event-time {
+  font-size: 11px;
+  color: #9ca3af;
+  margin: 1px 0 0;
+}
+
+// ── TASKS HEADER
+.tasks-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.tasks-label {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1d23;
+  letter-spacing: -0.02em;
+  margin: 0;
+}
+
+.tasks-toggle {
+  display: flex;
+  background: #fff;
+  border: 0.5px solid #e2e5ec;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.toggle-btn {
+  padding: 6px 16px;
+  font-size: 12px;
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  color: #7a7f8e;
+  cursor: pointer;
+
+  &.active {
+    background: #246DD5;
+    color: #fff;
+  }
+}
+
+// ── KANBAN
+.kanban {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 36px;
+}
+
+.col-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.col-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &.urgent-dot   { background: #e53e3e; }
+  &.active-dot   { background: #e6a817; }
+  &.upcoming-dot { background: #7c3aed; }
+}
+
+.col-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1d23;
+  flex: 1;
+}
+
+.col-count {
+  font-size: 11px;
+  color: #9ca3af;
+  background: #f0f2f7;
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+.col-menu {
+  font-size: 14px;
+  color: #c0c4ce;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+// ── TASK CARDS
+.task-card {
+  background: #fff;
+  border: 0.5px solid #e2e5ec;
+  border-radius: 10px;
+  padding: 14px;
+  margin-bottom: 8px;
+}
+
+// Urgent card style
+.urgent-card {
+  .card-top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .card-bottom-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+  }
+}
+
+.urgent-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  background: #fee2e2;
+  color: #b91c1c;
+  border-radius: 4px;
+  padding: 2px 7px;
+}
+
+.card-menu {
+  font-size: 14px;
+  color: #c0c4ce;
+  cursor: pointer;
+}
+
+.card-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.card-due {
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.urgent-due {
+  color: #e65100;
+}
+
+// Active/Upcoming card style
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
+
+.card-tags {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 4px;
+  padding: 2px 6px;
+
+  &.tag-medium    { background: #fef3c7; color: #92400e; }
+  &.tag-low       { background: #dcfce7; color: #166534; }
+  &.tag-visa      { background: #dbeafe; color: #1e40af; }
+  &.tag-insurance { background: #d1fae5; color: #065f46; }
+  &.tag-travel    { background: #e0f2fe; color: #0369a1; }
+}
+
+.card-date {
+  font-size: 10px;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+.card-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a1d23;
+  margin: 0 0 5px;
+  letter-spacing: -0.01em;
+}
+
+.card-desc {
+  font-size: 11px;
+  color: #7a7f8e;
+  margin: 0 0 10px;
+  line-height: 1.5;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.card-progress-label {
+  font-size: 10px;
+  color: #9ca3af;
+}
+
+.card-pct {
+  font-size: 10px;
+  font-weight: 600;
+  color: #1a1d23;
+}
+
+.card-track {
+  height: 4px;
+  background: #f0f2f7;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.card-fill {
+  height: 100%;
+  background: #246DD5;
+  border-radius: 2px;
+}
+
+// ── CALENDAR
+.calendar-section {
+  margin-top: 8px;
+}
+
+.calendar-card {
+  background: #fff;
+  border: 0.5px solid #e2e5ec;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 14px;
+}
+
+.cal-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  border-bottom: 0.5px solid #e2e5ec;
+  gap: 16px;
+}
+
+.cal-view-toggle {
+  display: flex;
+  background: #f0f2f7;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.cal-view-btn {
+  padding: 5px 14px;
+  font-size: 12px;
+  font-weight: 500;
+  border: none;
+  background: transparent;
+  color: #7a7f8e;
+  cursor: pointer;
+  border-radius: 6px;
+
+  &.active {
+    background: #fff;
+    color: #1a1d23;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+}
+
+.cal-legend {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+  justify-content: center;
+}
+
+.leg-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: #7a7f8e;
+}
+
+.leg-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.cal-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.cal-month-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1d23;
+}
+
+.cal-nav-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  border: 0.5px solid #e2e5ec;
+  background: #fff;
+  font-size: 14px;
+  color: #7a7f8e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  border-top: 0.5px solid #e2e5ec;
+}
+
+.cal-dow {
+  padding: 10px 12px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-align: left;
+  border-bottom: 0.5px solid #e2e5ec;
+  letter-spacing: 0.02em;
+}
+
+.cal-cell {
+  min-height: 80px;
+  padding: 8px 10px;
+  border-right: 0.5px solid #f0f2f7;
+  border-bottom: 0.5px solid #f0f2f7;
+  vertical-align: top;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &:nth-child(7n) {
+    border-right: none;
+  }
+}
+
+.cal-date {
+  font-size: 12px;
+  font-weight: 500;
+  color: #1a1d23;
+  margin-bottom: 2px;
+
+  &.muted { color: #c0c4ce; }
+}
+
+.today-num {
+  font-size: 12px;
+  font-weight: 700;
+  background: #246DD5;
+  color: #fff;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2px;
+}
+
+.cal-event {
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 4px;
+  padding: 3px 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &.housing   { background: #ffedd5; color: #c2410c; }
+  &.visa      { background: #dbeafe; color: #1e40af; }
+  &.logistics { background: #fef9c3; color: #854d0e; }
+  &.medical   { background: #fce7f3; color: #9d174d; }
+}
+
+.hero-progress {
+  flex: 0 0 380px;
+}
