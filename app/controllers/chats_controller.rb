@@ -19,6 +19,7 @@ class ChatsController < ApplicationController
   # Save the chat, trigger AI analysis if a document was attached, then redirect to results
   def create
     @chat = current_user.chats.build(chat_params)
+    @chat.checklist_item_id ||= ChecklistItem.first.id 
 
     if @chat.save
       if @chat.document.attached?
