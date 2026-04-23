@@ -1,16 +1,20 @@
 <div class="container py-5">
   <div class="card shadow-sm p-4">
+    
     <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1 class="h3 mb-0">Document Analysis</h1>
-      <span class="badge bg-secondary">Processing...</span>
+      <h1 class="h3 mb-0"><%= @chat.title || "Document Analysis" %></h1>
+      <% if @chat.urgency.present? %>
+        <% badge_color = { "high" => "danger", "medium" => "warning", "low" => "success" }[@chat.urgency] || "secondary" %>
+        <span class="badge bg-<%= badge_color %>"><%= @chat.urgency.capitalize %> urgency</span>
+      <% end %>
     </div>
 
+    <%# Document preview: image renders inline, PDF shows a download link %>
     <div class="p-3 bg-light rounded mb-4">
-      <div class="d-flex align-items-center">
+      <div class="d-flex align-items-center mb-3">
         <% icon, color = case @chat.document.content_type
            when /image/ then ["fa-file-image", "text-primary"]
            when /pdf/   then ["fa-file-pdf",   "text-danger"]
-           when /word/  then ["fa-file-word",  "text-primary"]
            else              ["fa-file",        "text-secondary"]
            end %>
         <i class="fa-solid <%= icon %> <%= color %> h2 mb-0 me-3"></i>
@@ -20,17 +24,42 @@
         </div>
       </div>
 
-        <% if @chat.document.content_type.start_with?("image/") %>
-          <%= image_tag url_for(@chat.document), class: "img-fluid rounded", style: "max-height: 400px;" %>
-        <% else %>
-          <%= link_to "Download content", url_for(@chat.document), class: "btn btn-outline-secondary btn-sm", target: "_blank" %>
-        <% end %>
+      <% if @chat.document.content_type.start_with?("image/") %>
+        <%= image_tag url_for(@chat.document), class: "img-fluid rounded", style: "max-height: 400px;" %>
+      <% else %>
+        <%= link_to "Download document", url_for(@chat.document), class: "btn btn-outline-secondary btn-sm", target: "_blank" %>
+      <% end %>
     </div>
 
-    <div class="alert alert-info">
-      <h4 class="h6">AI Processing</h4>
-      <p class="mb-0">We are currently scanning this document for the task: <strong><%= @chat.checklist_item.title %></strong>. Results will be available soon.</p>
-    </div>
+    <%# Plain English explanation of the document returned by the AI %>
+    <% if @chat.advice.present? %>
+      <div class="mb-4">
+        <h5>What this means for you</h5>
+        <p class="text-muted"><%= @chat.advice %></p>
+      </div>
+    <% end %>
+
+    <%# Deadline and amount shown only if the AI extracted them %>
+    <% if @chat.deadline.present? || @chat.amount.present? %>
+      <div class="row mb-4">
+        <% if @chat.deadline.present? %>
+          <div class="col-md-6">
+            <div class="card border-0 bg-light p-3">
+              <small class="text-muted">Deadline</small>
+              <strong><%= @chat.deadline.strftime("%d %B %Y") %></strong>
+            </div>
+          </div>
+        <% end %>
+        <% if @chat.amount.present? %>
+          <div class="col-md-6">
+            <div class="card border-0 bg-light p-3">
+              <small class="text-muted">Amount</small>
+              <strong>€<%= number_with_precision(@chat.amount, precision: 2) %></strong>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
 
     <div class="mt-4">
       <%= link_to "Back to all scans", chats_path, class: "btn btn-outline-primary" %>

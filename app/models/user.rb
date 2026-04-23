@@ -2,7 +2,6 @@ class User < ApplicationRecord
   has_many :chats, dependent: :destroy
   has_one :profile, dependent: :destroy
   has_many :user_checklist_items, dependent: :destroy
-  has_many :documents, dependent: :destroy
 
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
