@@ -1,0 +1,58 @@
+[
+  {
+    "id": "kvr_erkl_beschaeftigung",
+    "name": "Erklärung zum Beschäftigungsverhältnis",
+    "category": "legal",
+    "document_type": "form_to_fill",
+    "provider": "employer",
+    "relevance": "mandatory_for_all_work_permits",
+    "detection_markers": [
+      "Erklärung zum Beschäftigungsverhältnis",
+      "Bundesagentur für Arbeit",
+      "Stellenbeschreibung",
+      "Zusatzblatt"
+    ],
+    "logic": {
+      "action_type": "download_and_send_to_employer",
+      "target_url": "https://www.arbeitsagentur.de/datei/erklaerung-beschaeftigung_ba014763.pdf",
+      "completes_task_id": "task_occupational_declaration"
+    }
+  },
+  {
+    "id": "kvr_identity_passport",
+    "name": "Passport & Visa",
+    "category": "legal",
+    "document_type": "evidence",
+    "provider": "user",
+    "relevance": "mandatory",
+    "detection_markers": [
+      "Reisepass",
+      "Passport",
+      "Visa",
+      "Einreisestempel"
+    ],
+    "logic": {
+      "action_type": "verify_validity",
+      "completes_task_id": "task_identity_verification"
+    }
+  },
+  {
+    "id": "kvr_anabin_proof",
+    "name": "Anabin / ZAB Recognition",
+    "category": "legal",
+    "document_type": "evidence",
+    "provider": "government_body",
+    "relevance": "mandatory_for_academics",
+    "detection_markers": [
+      "anabin",
+      "Zentralstelle für ausländisches Bildungswesen",
+      "Zeugnisbewertung",
+      "Kultusministerkonferenz"
+    ],
+    "logic": {
+      "action_type": "link_to_external_search",
+      "target_url": "https://anabin.kmk.org/anabin.html",
+      "completes_task_id": "task_degree_recognition"
+    }
+  }
+]
