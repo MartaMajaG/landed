@@ -1,62 +1,235 @@
-<div class="container py-5">
-  
-  <div class="row align-items-center mb-5 mt-4">
-    <div class="col-md-7">
-      <span class="badge bg-white text-success border border-success-subtle mb-3 px-3 py-2 fw-bold" style="font-size: 11px; letter-spacing: 0.5px;">
-        THE BERLIN QUEST
-      </span>
-      
-      <h1 class="display-2 fw-bold mb-0" style="letter-spacing: -2px; line-height: 1.1;">
-        You're arriving, <br>
-        <span style="color: var(--brand-indigo);">Sarah.</span>
-      </h1>
-      
-      <div class="mt-5">
-        <p class="fw-bold mb-3">3 of 11 <span class="text-muted fw-normal">milestones conquered</span></p>
-        
-        <div class="d-flex align-items-center gap-2">
-          <div class="bg-success rounded-pill" style="width: 60px; height: 10px;"></div>
-          <% 7.times do %>
-            <div class="bg-secondary opacity-25 rounded-pill" style="width: 24px; height: 10px;"></div>
-          <% end %>
-          <span class="ms-3 text-success fw-bold small">● Next: Registration (Anmeldung)</span>
+<div class="dashboard-wrapper">
+
+  <%# ── HERO STRIP ── %>
+  <div class="dashboard-hero">
+    <div class="hero-greeting">
+      <img src="https://i.pravatar.cc/48?img=47" alt="Alex" class="hero-avatar" />
+      <div>
+        <h1 class="hero-name">Good morning, Alex</h1>
+        <p class="hero-stage">Current Stage: <span class="stage-badge">PRE-DEPARTURE</span></p>
+      </div>
+    </div>
+
+    <div class="hero-divider"></div>
+
+    <div class="hero-progress">
+      <p class="progress-label">MILESTONE PROGRESS</p>
+      <div class="progress-title-row">
+        <span class="progress-title">Visa &amp; Documentation</span>
+        <span class="progress-pct">65%</span>
+      </div>
+      <div class="progress-track">
+        <div class="progress-fill" style="width: 65%;"></div>
+      </div>
+    </div>
+
+    <div class="hero-divider"></div>
+
+    <div class="hero-events">
+      <div class="events-header">
+        <span class="events-label">UPCOMING EVENTS</span>
+        <a href="#" class="events-viewall">View All</a>
+      </div>
+      <div class="event-item">
+        <span class="event-dot" style="background: #246DD5;"></span>
+        <div>
+          <p class="event-name">HR Onboarding Call</p>
+          <p class="event-time">Today, 09:30 am</p>
+        </div>
+      </div>
+      <div class="event-item">
+        <span class="event-dot" style="background: #7c3aed;"></span>
+        <div>
+          <p class="event-name">Local Expat Meetup</p>
+          <p class="event-time">Today, 06:00 pm</p>
         </div>
       </div>
     </div>
-    
-    <div class="col-md-5 text-end">
-      <div class="position-relative d-inline-block">
-        <h2 class="fw-bold" style="font-size: 160px; color: var(--brand-indigo); line-height: 1; opacity: 0.9;">33%</h2>
-        </div>
+  </div>
+
+  <%# ── TASKS ── %>
+  <div class="tasks-header">
+    <h2 class="tasks-label">Tasks</h2>
+    <div class="tasks-toggle">
+      <button class="toggle-btn active">All Tasks</button>
+      <button class="toggle-btn">Completed</button>
     </div>
   </div>
 
-  <hr class="opacity-0 my-5">
+  <div class="kanban">
 
-  <div class="mt-5">
-    <h3 class="h6 fw-bold text-muted text-uppercase mb-4" style="letter-spacing: 1px;">This week</h3>
-    
-    <div class="bg-white rounded-4 shadow-sm p-4 mb-5 border-0 d-flex justify-content-between text-center">
-       <p class="text-muted m-0">Calendar Scaffolding...</p>
+    <%# URGENT %>
+    <div class="kanban-col">
+      <div class="col-header">
+        <span class="col-dot urgent-dot"></span>
+        <span class="col-title">Urgent</span>
+        <span class="col-count">3</span>
+        <span class="col-menu">⋯</span>
+      </div>
+
+      <div class="task-card urgent-card">
+        <div class="card-top-row">
+          <span class="urgent-badge">URGENT</span>
+          <span class="card-menu">⋯</span>
+        </div>
+        <h4 class="card-title">Sign Housing Contract</h4>
+        <p class="card-desc">Review the final terms for the downtown apartment and send signed copies to the...</p>
+        <div class="card-bottom-row">
+          <img src="https://i.pravatar.cc/24?img=47" class="card-avatar" alt="user" />
+          <span class="card-due urgent-due">⏰ Today</span>
+        </div>
+      </div>
+
+      <div class="task-card urgent-card">
+        <div class="card-top-row">
+          <span class="urgent-badge">URGENT</span>
+          <span class="card-menu">⋯</span>
+        </div>
+        <h4 class="card-title">Transfer Deposit</h4>
+        <p class="card-desc">Initiate international transfer for the 3-month rent deposit.</p>
+        <div class="card-bottom-row">
+          <img src="https://i.pravatar.cc/24?img=47" class="card-avatar" alt="user" />
+          <span class="card-due urgent-due">⏰ Today</span>
+        </div>
+      </div>
     </div>
 
-    <h3 class="h6 fw-bold text-muted text-uppercase mb-4" style="letter-spacing: 1px;">Actions</h3>
+    <%# ACTIVE %>
+    <div class="kanban-col">
+      <div class="col-header">
+        <span class="col-dot active-dot"></span>
+        <span class="col-title">Active</span>
+        <span class="col-count">4</span>
+        <span class="col-menu">⋯</span>
+      </div>
 
-    <div class="card border-0 shadow-sm mb-3 rounded-4 overflow-hidden" style="border-left: 5px solid var(--urgent-red) !important;">
-      <div class="card-body d-flex align-items-center p-4">
-        <div class="bg-light rounded-3 p-3 me-4 text-danger">
-          <i class="fa-solid fa-calendar-plus fs-4"></i>
-        </div>
-        <div class="flex-grow-1">
-          <div class="d-flex align-items-center gap-2">
-            <h4 class="h6 mb-0 fw-bold">Book Anmeldung Appointment</h4>
-            <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2 py-1" style="font-size: 9px;">URGENT</span>
+      <div class="task-card">
+        <div class="card-top">
+          <div class="card-tags">
+            <span class="tag tag-medium">Medium</span>
+            <span class="tag tag-visa">Visa</span>
           </div>
-          <p class="text-muted small mb-0 mt-1">The clock is ticking. You have 14 days from arrival.</p>
+          <span class="card-date">Oct 18</span>
         </div>
-        <button class="btn btn-primary px-4 fw-bold shadow-sm">Start Task</button>
+        <h4 class="card-title">Gather Visa Documents</h4>
+        <p class="card-desc">Compare TK vs Barmer for public health insurance options.</p>
+        <div class="card-footer">
+          <span class="card-progress-label">In Progress</span>
+          <span class="card-pct">75%</span>
+        </div>
+        <div class="card-track"><div class="card-fill" style="width: 75%;"></div></div>
+      </div>
+
+      <div class="task-card">
+        <div class="card-top">
+          <div class="card-tags">
+            <span class="tag tag-medium">Medium</span>
+            <span class="tag tag-insurance">Insurance</span>
+          </div>
+          <span class="card-date">Oct 18</span>
+        </div>
+        <h4 class="card-title">Select Health Insurance</h4>
+        <p class="card-desc">Compare TK vs Barmer for public health insurance options.</p>
+        <div class="card-footer">
+          <span class="card-progress-label">In Progress</span>
+          <span class="card-pct">20%</span>
+        </div>
+        <div class="card-track"><div class="card-fill" style="width: 20%;"></div></div>
+      </div>
+    </div>
+
+    <%# UPCOMING %>
+    <div class="kanban-col">
+      <div class="col-header">
+        <span class="col-dot upcoming-dot"></span>
+        <span class="col-title">Upcoming</span>
+        <span class="col-count">5</span>
+        <span class="col-menu">⋯</span>
+      </div>
+
+      <div class="task-card">
+        <div class="card-top">
+          <div class="card-tags">
+            <span class="tag tag-low">Low</span>
+            <span class="tag tag-travel">Travel</span>
+          </div>
+          <span class="card-date">Oct 25</span>
+        </div>
+        <h4 class="card-title">Book Flight Tickets</h4>
+        <p class="card-desc">Find best routes to BER arriving before the 1st of November.</p>
+        <div class="card-footer">
+          <span class="card-progress-label">Not started</span>
+          <span class="card-pct">0%</span>
+        </div>
+        <div class="card-track"><div class="card-fill" style="width: 0%;"></div></div>
       </div>
     </div>
 
   </div>
-</div>
+
+  <%# ── CALENDAR ── %>
+  <div class="calendar-section">
+    <h2 class="tasks-label">Calendar</h2>
+
+    <div class="calendar-card">
+      <div class="cal-toolbar">
+        <div class="cal-view-toggle">
+          <button class="cal-view-btn active">Month</button>
+          <button class="cal-view-btn">Week</button>
+          <button class="cal-view-btn">Day</button>
+        </div>
+        <div class="cal-legend">
+          <span class="leg-item"><span class="leg-dot" style="background:#f97316;"></span>Housing</span>
+          <span class="leg-item"><span class="leg-dot" style="background:#246DD5;"></span>Visa</span>
+          <span class="leg-item"><span class="leg-dot" style="background:#eab308;"></span>Logistics</span>
+          <span class="leg-item"><span class="leg-dot" style="background:#ec4899;"></span>Medical</span>
+        </div>
+        <div class="cal-nav">
+          <span class="cal-month-title">October 2026</span>
+          <button class="cal-nav-btn">‹</button>
+          <button class="cal-nav-btn">›</button>
+        </div>
+      </div>
+
+      <div class="cal-grid">
+        <div class="cal-dow">Monday</div>
+        <div class="cal-dow">Tuesday</div>
+        <div class="cal-dow">Wednesday</div>
+        <div class="cal-dow">Thursday</div>
+        <div class="cal-dow">Friday</div>
+        <div class="cal-dow">Saturday</div>
+        <div class="cal-dow">Sunday</div>
+
+        <%# Week 1 — Oct 21-27 %>
+        <div class="cal-cell"></div>
+        <div class="cal-cell">
+          <span class="cal-date">22</span>
+          <div class="cal-event visa">Visa Appointment</div>
+        </div>
+        <div class="cal-cell">
+          <span class="cal-date">23</span>
+          <div class="cal-event logistics">Sign Lease</div>
+          <div class="cal-event logistics">Flight Booking</div>
+        </div>
+        <div class="cal-cell"><span class="cal-date">24</span></div>
+        <div class="cal-cell">
+          <span class="cal-date">25</span>
+          <div class="cal-event medical">Health Check</div>
+        </div>
+        <div class="cal-cell"><span class="cal-date">26</span></div>
+        <div class="cal-cell"><span class="cal-date">27</span></div>
+
+        <%# Week 2 — Oct 28 - Nov 3 %>
+        <div class="cal-cell"><span class="cal-date">28</span></div>
+        <div class="cal-cell">
+          <span class="cal-date">29</span>
+          <div class="cal-event visa">Document Scan Due</div>
+        </div>
+        <div class="cal-cell"><span class="cal-date today-num">30</span></div>
+        <div class="cal-cell">
+          <span class="cal-date">31</span>
+          <div class="cal-event housing">Movers Arrive</div>
+        </div>
+        <div class="cal-cell"><span class="cal-date muted">1</span></div>
+        <div class="cal-cell"><span class="cal-date muted">2</span></div>
+        <div class="cal-cell"><span class="c
