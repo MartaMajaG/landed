@@ -22,10 +22,196 @@
       "completes_task_id": "task_anmeldung_registration"
     }
   },
+
+  {
+    "id": "wohnungsgeber_bestaetigung",
+    "name": "Wohnungsgeberbestätigung (Landlord Confirmation of Residence)",
+    "category": "housing_and_registration",
+    "pillar": 2,
+    "document_type": "form_to_fill",
+    "provider": "government_body",
+    "relevance": "mandatory",
+    "detection_markers": [
+      "Wohnungsgeberbestätigung",
+      "Wohnungsgeber",
+      "Einzugsdatum",
+      "Anschrift der Wohnung",
+      "Bundesmeldegesetz",
+      "§ 19 BMG"
+    ],
+    "logic": {
+      "action_type": "fill_and_submit",
+      "target_url": "https://stadt.muenchen.de/dam/jcr:27ce8942-0e04-4e0e-8af7-65a0de6e2e2d/wohnungsgeberbestaetigung.pdf",
+      "completes_task_id": "task_anmeldung_registration"
+    }
+  },
+
+  {
+    "id": "vollmacht_anmeldung",
+    "name": "Vollmacht (Power of Attorney for Registration)",
+    "category": "housing_and_registration",
+    "pillar": 2,
+    "document_type": "form_to_fill",
+    "provider": "user",
+    "relevance": "optional",
+    "detection_markers": [
+      "Vollmacht",
+      "bevollmächtige",
+      "Anmeldung",
+      "Vertretung",
+      "Bürgerbüro"
+    ],
+    "logic": {
+      "action_type": "fill_and_submit",
+      "target_url": "https://stadt.muenchen.de/dam/jcr:a5ab0e73-c4f0-4778-8bde-c6df765a2e5e/vollmacht_ummeldung.pdf",
+      "completes_task_id": "task_anmeldung_registration"
+    }
+  },
+
+  {
+    "id": "aufenthaltstitel_eat",
+    "name": "Aufenthaltstitel / eAT (Residence Permit for Non-EU Citizens)",
+    "category": "housing_and_registration",
+    "pillar": 2,
+    "document_type": "evidence",
+    "provider": "government_body",
+    "relevance": "mandatory",
+    "detection_markers": [
+      "Aufenthaltstitel",
+      "elektronischer Aufenthaltstitel",
+      "eAT",
+      "Niederlassungserlaubnis",
+      "Aufenthaltserlaubnis",
+      "Ausländerbehörde"
+    ],
+    "logic": {
+      "action_type": "verify_validity",
+      "completes_task_id": "task_anmeldung_registration"
+    }
+  },
+
+  {
+    "id": "personenstandsurkunden",
+    "name": "Personenstandsurkunden (Marriage / Birth Certificates)",
+    "category": "housing_and_registration",
+    "pillar": 2,
+    "document_type": "evidence",
+    "provider": "user",
+    "relevance": "optional",
+    "detection_markers": [
+      "Heiratsurkunde",
+      "Geburtsurkunde",
+      "Personenstandsurkunde",
+      "Standesamt",
+      "Eheschließung",
+      "Geburtsort"
+    ],
+    "logic": {
+      "action_type": "verify_validity",
+      "completes_task_id": "task_anmeldung_registration"
+    }
+  },
+
+  {
+    "id": "beglaubigte_uebersetzung",
+    "name": "Beglaubigte Übersetzung / Apostille (Certified Translation)",
+    "category": "housing_and_registration",
+    "pillar": 2,
+    "document_type": "evidence",
+    "provider": "government_body",
+    "relevance": "optional",
+    "detection_markers": [
+      "beglaubigte Übersetzung",
+      "öffentlich bestellter Übersetzer",
+      "Apostille",
+      "Legalisation",
+      "beeidigter Übersetzer",
+      "CIEC"
+    ],
+    "logic": {
+      "action_type": "verify_validity",
+      "completes_task_id": "task_anmeldung_registration"
+    }
+  },
+
+  {
+    "id": "rundfunkbeitrag_anmeldung",
+    "name": "Anmeldung zum Rundfunkbeitrag (Broadcasting Fee Registration)",
+    "category": "housing_and_registration",
+    "pillar": 2,
+    "document_type": "form_to_fill",
+    "provider": "government_body",
+    "relevance": "mandatory",
+    "detection_markers": [
+      "Rundfunkbeitrag",
+      "ARD ZDF Deutschlandradio",
+      "Beitragsservice",
+      "Beitragsnummer",
+      "Anmeldung Rundfunkbeitrag",
+      "Haushaltsabgabe"
+    ],
+    "logic": {
+      "action_type": "fill_and_submit",
+      "target_url": "https://www.rundfunkbeitrag.de/buergerinnen_und_buerger/formulare/anmelden/index_ger.html",
+      "completes_task_id": "task_rundfunkbeitrag_registration"
+    }
+  },
+
+  {
+    "id": "stromliefervertrag",
+    "name": "Stromliefervertrag (Electricity Supply Contract)",
+    "category": "housing_and_registration",
+    "pillar": 2,
+    "document_type": "form_to_fill",
+    "provider": "government_body",
+    "relevance": "mandatory",
+    "detection_markers": [
+      "Stromliefervertrag",
+      "Zählerstand",
+      "Zählernummer",
+      "Stromlieferung",
+      "Stromanbieter",
+      "Stadtwerke München",
+      "SWM",
+      "Grundversorgung"
+    ],
+    "logic": {
+      "action_type": "fill_and_submit",
+      "target_url": "https://www.swm.de/privatkunden/strom/tarife",
+      "completes_task_id": "task_utilities_electricity"
+    }
+  },
+
+  {
+    "id": "breitbandauftrag_internet",
+    "name": "Breitbandauftrag (Internet Supply Contract)",
+    "category": "housing_and_registration",
+    "pillar": 2,
+    "document_type": "form_to_fill",
+    "provider": "government_body",
+    "relevance": "mandatory",
+    "detection_markers": [
+      "Breitbandanschluss",
+      "Internetvertrag",
+      "DSL",
+      "Glasfaser",
+      "Anschlussadresse",
+      "IBAN",
+      "Telekom",
+      "Vodafone",
+      "O2"
+    ],
+    "logic": {
+      "action_type": "fill_and_submit",
+      "completes_task_id": "task_utilities_internet"
+    }
+  },
+
   {
     "id": "kvr_erkl_beschaeftigung",
     "name": "Erklärung zum Beschäftigungsverhältnis",
     "category": "legal",
+    "pillar": 1,
     "document_type": "form_to_fill",
     "provider": "employer",
     "relevance": "mandatory_for_all_work_permits",
@@ -41,10 +227,12 @@
       "completes_task_id": "task_occupational_declaration"
     }
   },
+
   {
     "id": "kvr_identity_passport",
     "name": "Passport & Visa",
     "category": "legal",
+    "pillar": 1,
     "document_type": "evidence",
     "provider": "user",
     "relevance": "mandatory",
@@ -59,10 +247,12 @@
       "completes_task_id": "task_identity_verification"
     }
   },
+
   {
     "id": "kvr_anabin_proof",
     "name": "Anabin / ZAB Recognition",
     "category": "legal",
+    "pillar": 1,
     "document_type": "evidence",
     "provider": "government_body",
     "relevance": "mandatory_for_academics",
