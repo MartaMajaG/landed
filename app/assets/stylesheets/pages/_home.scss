@@ -591,3 +591,9 @@
 .hero-progress {
   flex: 0 0 380px;
 }
+
+// Spinner animation for loading state
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
