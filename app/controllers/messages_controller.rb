@@ -4,15 +4,23 @@ class MessagesController < ApplicationController
   def create
     # Find the chat through current_user to ensure authorization
     @chat = current_user.chats.find(params[:chat_id])
-    
-    # Create the new message within the specific chat
+
+    # Build and save the user's message
     @message = @chat.messages.build(message_params)
+    @message.role = "user"
 
     if @message.save
-      # Redirect back to the chat view where the message was sent
-      redirect_to chat_path(@chat)
+      # Call the AI with the user's question using the document's existing context
+      ai_response = @chat.ask_document(@message.content)
+
+      # Save the AI's response as a second message in the same chat
+      @chat.messages.create!(
+        role: "assistant",
+        content: ai_response
+      )
+
+      redirect_to chat_path(@chat), notice: "Response received."
     else
-      # Fallback in case of save errors
       redirect_to chat_path(@chat), alert: "Message could not be sent."
     end
   end
@@ -20,7 +28,8 @@ class MessagesController < ApplicationController
   private
 
   def message_params
-    # Whitelist content and role for the message
-    params.require(:message).permit(:content, :role)
+    # Only permit content — role is set explicitly in the action, not from the form
+    params.require(:message).permit(:content)
   end
 end
+
