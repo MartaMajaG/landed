@@ -2,6 +2,8 @@ class Profile < ApplicationRecord
   belongs_to :user
   belongs_to :city, optional: true
 
+  has_many :tasks, through: :city
+
   validates :user_id, uniqueness: true
   validates :city_id, presence: true, if: :onboardings_complete?
   validates :arrival_date, presence: true, if: :onboardings_complete?
