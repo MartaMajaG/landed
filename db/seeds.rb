@@ -35,39 +35,12 @@ ChecklistItem.find_or_create_by!(title: "Set up online banking", task: banking) 
 ChecklistItem.find_or_create_by!(title: "Choose public or private health insurance", task: health) { |item| item.category = "Admin" }
 ChecklistItem.find_or_create_by!(title: "Submit health insurance registration", task: health) { |item| item.category = "Admin" }
 
-# User for testing
+
+# Dev user for testing (development only)
 dev_user = User.find_or_create_by!(email: "dev@landed.com") do |u|
   u.password = "password"
   u.password_confirmation = "password"
 end
 
-# Mid-Term Presentation Seed: Housing & Registration (Munich) Document
-puts "Seeding presentation document..."
-pdf_url = "https://stadt.muenchen.de/dam/jcr:15cee8cc-bd9a-46f0-9c4b-052766dc547f/Anmeldung_Meldeschein_20220622.pdf"
+puts "Seeds complete. #{DocumentType.count} document types ready for matching."
 
-chat = Chat.new(
-  title:         "Registration Form (Meldeschein)",
-  document_type: "Housing & Registration",
-  amount:        0.00,
-  deadline:      Date.new(2023, 10, 9),
-  advice:        "This document is a registration form that individuals must fill out when moving to a new residence in Germany. It captures personal details such as name, address, and previous residence. You need to submit it to the local authorities to officially register your new address. Make sure to provide all required information accurately.",
-  urgency:       "medium",
-  is_mandatory:  true,
-  user:          dev_user,
-  checklist_item: ChecklistItem.find_by(title: "Gather required documents for Anmeldung")
-)
-
-begin
-  chat.document.attach(
-    io: URI.open(pdf_url),
-    filename: 'Anmeldung_Meldeschein_20220622.pdf',
-    content_type: 'application/pdf'
-  )
-  if chat.save
-    puts "Successfully seeded presentation document (Chat ID: #{chat.id})"
-  else
-    puts "FAILED to seed chat: #{chat.errors.full_messages}"
-  end
-rescue => e
-  puts "FAILED to download or attach PDF: #{e.message}"
-end

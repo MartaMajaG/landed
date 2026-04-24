@@ -1,5 +1,28 @@
 [
   {
+    "id": "meldeschein_munich",
+    "name": "Meldeschein (Anmeldung bei der Meldebehörde)",
+    "category": "housing_and_registration",
+    "pillar": 2,
+    "document_type": "form_to_fill",
+    "provider": "government_body",
+    "relevance": "mandatory",
+    "detection_markers": [
+      "Meldeschein",
+      "Anmeldung bei der Meldebehörde",
+      "Kreisverwaltungsreferat",
+      "Landeshauptstadt München",
+      "Meldebehörde",
+      "Bundesmeldegesetz",
+      "BMG"
+    ],
+    "logic": {
+      "action_type": "fill_and_submit",
+      "target_url": "https://stadt.muenchen.de/dam/jcr:15cee8cc-bd9a-46f0-9c4b-052766dc547f/Anmeldung_Meldeschein_20220622.pdf",
+      "completes_task_id": "task_anmeldung_registration"
+    }
+  },
+  {
     "id": "kvr_erkl_beschaeftigung",
     "name": "Erklärung zum Beschäftigungsverhältnis",
     "category": "legal",
