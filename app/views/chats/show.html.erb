@@ -12,9 +12,28 @@
       </h1>
       <div class="d-flex align-items-center gap-2 flex-wrap">
         <small style="color:#6B7280;">Processed on <%= @chat.created_at.strftime("%b %d, %Y") %></small>
-        <% if @chat.document_type.present? %>
+        <% if @chat.is_mandatory? || @chat.is_mandatory.nil? %>
           <span style="background:#E6F0FB; color:#185FA5; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">
-            <%= @chat.document_type %>
+            MANDATORY
+          </span>
+        <% else %>
+          <span style="background:#F3F4F6; color:#6B7280; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">
+            OPTIONAL
+          </span>
+        <% end %>
+
+        <% if @chat.document_type.present? %>
+          <%
+            pillar_icon = case @chat.document_type
+            when /Housing|Registration/i then "<i class='fa-solid fa-house'></i>".html_safe
+            when /Finance|Banking|Bank/i then "<i class='fa-solid fa-building-columns'></i>".html_safe
+            when /Health|Insurance/i then "<i class='fa-solid fa-notes-medical'></i>".html_safe
+            when /Work|Employment/i then "<i class='fa-solid fa-briefcase'></i>".html_safe
+            else "<i class='fa-solid fa-folder'></i>".html_safe
+            end
+          %>
+          <span style="background:#E6F0FB; color:#185FA5; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">
+            <%= pillar_icon %> <%= @chat.document_type %>
           </span>
         <% end %>
         <% if @chat.urgency.present? %>
@@ -113,6 +132,13 @@
                 <li style="margin-bottom:6px;"><%= point.strip %></li>
               <% end %>
             </ul>
+            <% if @chat.document.attached? %>
+              <div style="margin-top: 14px;">
+                <%= link_to url_for(@chat.document), target: "_blank", style: "display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: #4B5563; text-decoration: none; padding: 6px 12px; border: 1px solid #E5E7EB; border-radius: 6px; background: #F9FAFB;" do %>
+                  <i class="fa-solid fa-file-pdf" style="color: #E24B4A;"></i> View full document
+                <% end %>
+              </div>
+            <% end %>
           </div>
         <% end %>
 

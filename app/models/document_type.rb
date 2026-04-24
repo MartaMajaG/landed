@@ -42,6 +42,8 @@ class DocumentType < ApplicationRecord
     end
 
     score
+  end
+
   # Validations to ensure data integrity in the Knowledge Base
   validates :name, presence: true
   validates :slug, presence: true, uniqueness: true
