@@ -1,3 +1,41 @@
+<%# CSS for chat-active layout reorganization %>
+<style>
+  .chat-panel-container {
+    transition: all 0.4s ease;
+  }
+  /* Loading overlay */
+  #chat-loading-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(255,255,255,0.85);
+    z-index: 9999;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    backdrop-filter: blur(2px);
+  }
+  .chat-spinner {
+    width: 52px;
+    height: 52px;
+    border: 4px solid #E5E7EB;
+    border-top-color: #185FA5;
+    border-radius: 50%;
+    animation: spin 0.9s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+</style>
+
+<%# Loading overlay — shown by Stimulus on form submit, hidden on turbo:submit-end %>
+<div id="chat-loading-overlay">
+  <div class="chat-spinner"></div>
+  <div style="text-align:center;">
+    <p style="font-size:16px; font-weight:600; color:#1A1A2E; margin:0;">Analysing your document...</p>
+    <p style="font-size:13px; color:#6B7280; margin:4px 0 0;">It takes about 10 seconds...</p>
+  </div>
+</div>
+
 <div style="background:#F0F1F8; min-height:100vh; padding:48px 0;">
   <div class="container">
 
@@ -13,13 +51,9 @@
       <div class="d-flex align-items-center gap-2 flex-wrap">
         <small style="color:#6B7280;">Processed on <%= @chat.created_at.strftime("%b %d, %Y") %></small>
         <% if @chat.is_mandatory? || @chat.is_mandatory.nil? %>
-          <span style="background:#E6F0FB; color:#185FA5; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">
-            MANDATORY
-          </span>
+          <span style="background:#E6F0FB; color:#185FA5; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">MANDATORY</span>
         <% else %>
-          <span style="background:#F3F4F6; color:#6B7280; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">
-            OPTIONAL
-          </span>
+          <span style="background:#F3F4F6; color:#6B7280; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">OPTIONAL</span>
         <% end %>
 
         <% if @chat.document_type.present? %>
@@ -46,7 +80,7 @@
       </div>
     </div>
 
-    <%# Two columns — both start at same point %>
+    <%# Two columns %>
     <div class="row g-4 align-items-start">
 
       <%# Left: document preview %>
@@ -74,15 +108,11 @@
             <% if @chat.deadline.present? %>
               <div class="<%= both ? 'col-6' : 'col-12' %>">
                 <div style="background:#FEE8E8; border:1px solid #FCA5A5; border-radius:10px; padding:16px; height:100%;">
-                  <div style="font-size:28px; line-height:1; margin-bottom:8px;">
-                    <%= @chat.urgency == "high" ? "🚨" : "📅" %>
-                  </div>
+                  <div style="font-size:28px; line-height:1; margin-bottom:8px;"><%= @chat.urgency == "high" ? "🚨" : "📅" %></div>
                   <p style="font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#A32D2D; margin-bottom:6px;">
                     <%= @chat.urgency == "high" ? "Critical Deadline" : "Deadline" %>
                   </p>
-                  <p style="font-size:20px; font-weight:700; color:#791F1F; margin-bottom:4px;">
-                    <%= @chat.deadline.strftime("%b %d, %Y") %>
-                  </p>
+                  <p style="font-size:20px; font-weight:700; color:#791F1F; margin-bottom:4px;"><%= @chat.deadline.strftime("%b %d, %Y") %></p>
                   <% days_left = (@chat.deadline - Date.today).to_i %>
                   <small style="color:#A32D2D;">
                     <% if days_left < 0 %>Passed <%= days_left.abs %> days ago
@@ -158,70 +188,66 @@
       </div>
     </div>
 
-    <%# AI Chat Panel — full width below the two-column results %>
+    <%# AI Chat Panel — full width, redesigned to match Screenshot 2 %>
     <% if @chat.advice.present? %>
-      <div style="margin-top: 32px;">
-        <div style="background:#fff; border:1px solid #E5E7EB; border-radius:12px; overflow:hidden;">
+      <div id="chat-layout-container-<%= @chat.id %>" class="chat-panel-container" style="margin-top:32px;">
+        <div style="background:#fff; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
 
-          <%# Panel header %>
-          <div style="padding: 14px 20px; border-bottom: 1px solid #E5E7EB; display:flex; align-items:center; gap:8px;">
-            <span style="font-size:16px;">🤖</span>
-            <p style="font-size:13px; font-weight:700; color:#1A1A2E; margin:0;">Ask AI about this document</p>
+          <%# Message history — scrollable, only shown if messages exist %>
+          <div id="chat-messages-<%= @chat.id %>"
+               style="padding: <%= @chat.messages.any? ? '16px 20px' : '0' %>; display:flex; flex-direction:column; max-height:400px; overflow-y:auto;">
+            <% @chat.messages.order(:created_at).each do |message| %>
+              <% if message.role == "user" %>
+                <div style="display:flex; justify-content:flex-end; margin-bottom:8px;">
+                  <div style="background:#185FA5; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 4px 16px; max-width:75%;">
+                    <%= message.content %>
+                  </div>
+                </div>
+              <% else %>
+                <div style="display:flex; justify-content:flex-start; gap:8px; align-items:flex-start; margin-bottom:8px;">
+                  <div style="width:28px; height:28px; background:#F0F1F8; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:13px;">✦</div>
+                  <div style="background:#F3F4F6; color:#1A1A2E; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 16px 4px; max-width:75%;">
+                    <%= message.content %>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
           </div>
 
-          <%# Message history — only shown if messages exist %>
-          <% if @chat.messages.any? %>
-            <div style="padding: 16px 20px; display:flex; flex-direction:column; gap:12px; max-height:320px; overflow-y:auto;">
-              <% @chat.messages.order(:created_at).each do |message| %>
-                <% if message.role == "user" %>
-                  <%# User message — right aligned, blue bubble %>
-                  <div style="display:flex; justify-content:flex-end;">
-                    <div style="background:#185FA5; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 4px 16px; max-width:75%;">
-                      <%= message.content %>
-                    </div>
-                  </div>
-                <% else %>
-                  <%# Assistant message — left aligned, grey bubble %>
-                  <div style="display:flex; justify-content:flex-start; gap:8px; align-items:flex-start;">
-                    <div style="width:28px; height:28px; background:#F0F1F8; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:13px;">🤖</div>
-                    <div style="background:#F3F4F6; color:#1A1A2E; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 16px 4px; max-width:75%;">
-                      <%= message.content %>
-                    </div>
-                  </div>
-                <% end %>
+          <%# Input area — redesigned to match Screenshot 2 %>
+          <div style="padding: 14px 16px; border-top: 1px solid #F3F4F6; background:#fff;">
+
+            <%# Input row: spark icon + text field + send button — matches Screenshot 2 %>
+            <div id="chat-input-wrapper-<%= @chat.id %>">
+              <%= form_with url: chat_messages_path(@chat), method: :post,
+                    data: { controller: "chat-form", action: "submit->chat-form#showLoader" },
+                    style: "display:flex; align-items:center; gap:10px; background:#F8F9FA; border:1px solid #E5E7EB; border-radius:28px; padding:6px 6px 6px 14px;" do |f| %>
+                <span style="font-size:16px; color:#185FA5; flex-shrink:0;">✦</span>
+                <%= f.text_field :message,
+                      name: "message[content]",
+                      id: "chat-input-#{@chat.id}",
+                      placeholder: "Ask AI a question about this document...",
+                      autocomplete: "off",
+                      required: true,
+                      style: "flex:1; font-size:14px; border:none; outline:none; background:transparent; color:#1A1A2E; padding:4px 0;" %>
+                <%= f.submit "→",
+                      style: "width:34px; height:34px; background:#185FA5; color:#fff; border:none; border-radius:50%; font-size:16px; cursor:pointer; flex-shrink:0; line-height:1;" %>
               <% end %>
             </div>
-          <% end %>
 
-          <%# Input form %>
-          <div style="padding: 12px 16px; border-top: 1px solid #E5E7EB; background:#FAFAFA;">
-
-            <%# Quick-question chips %>
-            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px;">
+            <%# Quick-question chips — below input, matching Screenshot 2 %>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
               <% ["What is the deadline?", "What do I need to bring?", "Is there a penalty if I miss it?"].each do |chip| %>
                 <button
                   type="button"
                   onclick="document.getElementById('chat-input-<%= @chat.id %>').value = '<%= chip %>'"
-                  style="font-size:12px; color:#185FA5; background:#E6F0FB; border:none; border-radius:20px; padding:4px 12px; cursor:pointer; font-weight:500;">
+                  style="font-size:12px; color:#374151; background:#F3F4F6; border:1px solid #E5E7EB; border-radius:20px; padding:4px 12px; cursor:pointer; font-weight:500; transition:background 0.15s;">
                   <%= chip %>
                 </button>
               <% end %>
             </div>
 
-            <%# Text input and send button %>
-            <%= form_with url: chat_messages_path(@chat), method: :post, style: "display:flex; gap:8px; align-items:center;" do |f| %>
-              <%= f.text_field :message,
-                    name: "message[content]",
-                    id: "chat-input-#{@chat.id}",
-                    placeholder: "Ask AI a question about this document...",
-                    autocomplete: "off",
-                    required: true,
-                    style: "flex:1; font-size:14px; padding:10px 14px; border:1px solid #E5E7EB; border-radius:24px; outline:none; background:#fff; color:#1A1A2E;" %>
-              <%= f.submit "→",
-                    style: "width:38px; height:38px; background:#185FA5; color:#fff; border:none; border-radius:50%; font-size:18px; cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center;" %>
-            <% end %>
           </div>
-
         </div>
       </div>
     <% end %>
