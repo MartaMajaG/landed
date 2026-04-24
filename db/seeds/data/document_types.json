@@ -267,5 +267,367 @@
       "target_url": "https://anabin.kmk.org/anabin.html",
       "completes_task_id": "task_degree_recognition"
     }
+  },
+
+  {
+    "id": "kvr_antrag_aufenthaltstitel",
+    "name": "Antrag auf Erteilung/Verlängerung eines Aufenthaltstitels (Residence Permit Application)",
+    "category": "legal_and_work",
+    "pillar": 1,
+    "document_type": "form_to_fill",
+    "provider": "government_body",
+    "relevance": "mandatory",
+    "detection_markers": [
+      "Antrag auf Erteilung",
+      "Verlängerung eines Aufenthaltstitels",
+      "Aufenthaltserlaubnis",
+      "Kreisverwaltungsreferat",
+      "KVR",
+      "Aufenthaltszweck"
+    ],
+    "logic": {
+      "action_type": "book_appointment",
+      "target_url": "https://www.muenchen.de/rathaus/Stadtverwaltung/Kreisverwaltungsreferat/Auslaenderwesen.html",
+      "completes_task_id": "task_aufenthaltstitel_application"
+    }
+  },
+
+  {
+    "id": "kvr_zusatzblatt_ab",
+    "name": "Zusatzblatt A oder B zur Erklärung zum Beschäftigungsverhältnis",
+    "category": "legal_and_work",
+    "pillar": 1,
+    "document_type": "form_to_fill",
+    "provider": "employer",
+    "relevance": "optional",
+    "detection_markers": [
+      "Zusatzblatt A",
+      "Zusatzblatt B",
+      "Erklärung zum Beschäftigungsverhältnis",
+      "Qualifizierungsmaßnahme",
+      "Berufsanerkennung",
+      "firmeninterne Entsendung"
+    ],
+    "logic": {
+      "action_type": "download_and_send_to_employer",
+      "target_url": "https://www.arbeitsagentur.de/datei/erklaerung-beschaeftigung_ba014763.pdf",
+      "completes_task_id": "task_aufenthaltstitel_application"
+    }
+  },
+
+  {
+    "id": "kvr_versicherung_beschaeftigung",
+    "name": "Versicherung zur Ausübung der Beschäftigung",
+    "category": "legal_and_work",
+    "pillar": 1,
+    "document_type": "form_to_fill",
+    "provider": "employer",
+    "relevance": "mandatory",
+    "detection_markers": [
+      "Versicherung zur Ausübung der Beschäftigung",
+      "Beschäftigungserlaubnis",
+      "Erstantrag",
+      "Arbeitsvertrag",
+      "Bundesagentur für Arbeit"
+    ],
+    "logic": {
+      "action_type": "download_and_send_to_employer",
+      "target_url": "https://www.arbeitsagentur.de",
+      "completes_task_id": "task_aufenthaltstitel_application"
+    }
+  },
+
+  {
+    "id": "kvr_wohnraumbescheinigung",
+    "name": "Wohnraumbescheinigung (Proof of Adequate Housing Space)",
+    "category": "legal_and_work",
+    "pillar": 1,
+    "document_type": "form_to_fill",
+    "provider": "government_body",
+    "relevance": "optional",
+    "detection_markers": [
+      "Wohnraumbescheinigung",
+      "Wohnfläche",
+      "Quadratmeter",
+      "Familiennachzug",
+      "Niederlassungserlaubnis",
+      "Vermieter"
+    ],
+    "logic": {
+      "action_type": "fill_and_submit",
+      "completes_task_id": "task_aufenthaltstitel_application"
+    }
+  },
+
+  {
+    "id": "kvr_erklaerung_haeusliche_gemeinschaft",
+    "name": "Erklärung über die häusliche Gemeinschaft",
+    "category": "legal_and_work",
+    "pillar": 1,
+    "document_type": "form_to_fill",
+    "provider": "government_body",
+    "relevance": "optional",
+    "detection_markers": [
+      "häusliche Gemeinschaft",
+      "Erklärung über die häusliche Gemeinschaft",
+      "Niederlassungserlaubnis",
+      "Daueraufenthalt-EU",
+      "unbefristeter Aufenthaltstitel"
+    ],
+    "logic": {
+      "action_type": "fill_and_submit",
+      "completes_task_id": "task_aufenthaltstitel_application"
+    }
+  },
+
+  {
+    "id": "kvr_erklaerung_lebensunterhalt",
+    "name": "Erklärung zum Lebensunterhalt",
+    "category": "legal_and_work",
+    "pillar": 1,
+    "document_type": "form_to_fill",
+    "provider": "government_body",
+    "relevance": "optional",
+    "detection_markers": [
+      "Erklärung zum Lebensunterhalt",
+      "Lebensunterhalt",
+      "Niederlassungserlaubnis",
+      "Sicherung des Lebensunterhalts",
+      "Einkommensverhältnisse"
+    ],
+    "logic": {
+      "action_type": "fill_and_submit",
+      "completes_task_id": "task_aufenthaltstitel_application"
+    }
+  },
+
+  {
+    "id": "kvr_arbeitgeberbestaetigung",
+    "name": "Bestätigung über das Arbeitsverhältnis (Employer Confirmation Letter)",
+    "category": "legal_and_work",
+    "pillar": 1,
+    "document_type": "form_to_fill",
+    "provider": "employer",
+    "relevance": "optional",
+    "detection_markers": [
+      "Bestätigung über das Arbeitsverhältnis",
+      "Arbeitgeberbestätigung",
+      "unbefristetes Arbeitsverhältnis",
+      "Beschäftigungsnachweis",
+      "Firmenstempel"
+    ],
+    "logic": {
+      "action_type": "download_and_send_to_employer",
+      "completes_task_id": "task_aufenthaltstitel_application"
+    }
+  },
+
+  {
+    "id": "kvr_arbeitsvertrag",
+    "name": "Arbeitsvertrag (Employment Contract)",
+    "category": "legal_and_work",
+    "pillar": 1,
+    "document_type": "evidence",
+    "provider": "employer",
+    "relevance": "mandatory",
+    "detection_markers": [
+      "Arbeitsvertrag",
+      "Arbeitgeber",
+      "Arbeitnehmer",
+      "Gehalt",
+      "Kündigungsfrist",
+      "Arbeitsbeginn",
+      "unbefristet"
+    ],
+    "logic": {
+      "action_type": "verify_validity",
+      "completes_task_id": "task_aufenthaltstitel_application"
+    }
+  },
+
+  {
+    "id": "kvr_qualifikationsnachweise",
+    "name": "Qualifikationsnachweise (Degree / Vocational Certificates)",
+    "category": "legal_and_work",
+    "pillar": 1,
+    "document_type": "evidence",
+    "provider": "user",
+    "relevance": "mandatory",
+    "detection_markers": [
+      "Hochschulabschluss",
+      "Zeugnis",
+      "Berufsausbildung",
+      "Bachelor",
+      "Master",
+      "Diplom",
+      "Abschlusszeugnis"
+    ],
+    "logic": {
+      "action_type": "verify_validity",
+      "completes_task_id": "task_aufenthaltstitel_application"
+    }
+  },
+
+  {
+    "id": "kvr_gehaltsnachweise",
+    "name": "Gehaltsnachweise (Recent Payslips)",
+    "category": "legal_and_work",
+    "pillar": 1,
+    "document_type": "evidence",
+    "provider": "employer",
+    "relevance": "optional",
+    "detection_markers": [
+      "Gehaltsabrechnung",
+      "Lohnabrechnung",
+      "Bruttogehalt",
+      "Nettogehalt",
+      "Sozialversicherung",
+      "Lohnsteuer",
+      "Abrechnungsmonat"
+    ],
+    "logic": {
+      "action_type": "verify_validity",
+      "completes_task_id": "task_aufenthaltstitel_application"
+    }
+  },
+
+  {
+    "id": "kvr_altersvorsorge_nachweis",
+    "name": "Nachweis zur Altersvorsorge (Pension Provision Proof)",
+    "category": "legal_and_work",
+    "pillar": 1,
+    "document_type": "evidence",
+    "provider": "government_body",
+    "relevance": "optional",
+    "detection_markers": [
+      "Altersvorsorge",
+      "Rentenversicherung",
+      "Wartezeitauskunft",
+      "Deutsche Rentenversicherung",
+      "private Altersvorsorge",
+      "Rentenanspruch"
+    ],
+    "logic": {
+      "action_type": "verify_validity",
+      "target_url": "https://www.deutsche-rentenversicherung.de",
+      "completes_task_id": "task_aufenthaltstitel_application"
+    }
+  },
+
+  {
+    "id": "kvr_krankenversicherungsnachweis",
+    "name": "Krankenversicherungsnachweis (Health Insurance Certificate)",
+    "category": "legal_and_work",
+    "pillar": 1,
+    "document_type": "evidence",
+    "provider": "insurance_company",
+    "relevance": "mandatory",
+    "detection_markers": [
+      "Krankenversicherung",
+      "Mitgliedsbescheinigung",
+      "gesetzliche Krankenversicherung",
+      "private Krankenversicherung",
+      "Versicherungskarte",
+      "Krankenkasse",
+      "GKV"
+    ],
+    "logic": {
+      "action_type": "verify_validity",
+      "completes_task_id": "task_aufenthaltstitel_application"
+    }
+  },
+
+  {
+    "id": "kvr_mietvertrag",
+    "name": "Mietvertrag und Kostennachweise (Rental Contract and Cost Evidence)",
+    "category": "legal_and_work",
+    "pillar": 1,
+    "document_type": "evidence",
+    "provider": "user",
+    "relevance": "mandatory",
+    "detection_markers": [
+      "Mietvertrag",
+      "Miete",
+      "Kaltmiete",
+      "Warmmiete",
+      "Quadratmeter",
+      "Vermieter",
+      "Mieter",
+      "Mietbeginn"
+    ],
+    "logic": {
+      "action_type": "verify_validity",
+      "completes_task_id": "task_aufenthaltstitel_application"
+    }
+  },
+
+  {
+    "id": "kvr_sprachzertifikat",
+    "name": "Sprachzertifikat / Integrationsnachweis (Language / Integration Certificate)",
+    "category": "legal_and_work",
+    "pillar": 1,
+    "document_type": "evidence",
+    "provider": "government_body",
+    "relevance": "optional",
+    "detection_markers": [
+      "Sprachzertifikat",
+      "Deutschkenntnisse",
+      "Integrationskurs",
+      "A1",
+      "A2",
+      "B1",
+      "Leben in Deutschland",
+      "Goethe-Institut",
+      "telc"
+    ],
+    "logic": {
+      "action_type": "verify_validity",
+      "completes_task_id": "task_aufenthaltstitel_application"
+    }
+  },
+
+  {
+    "id": "kvr_berufsausuebungserlaubnis",
+    "name": "Berufsausübungserlaubnis (Professional Practice License)",
+    "category": "legal_and_work",
+    "pillar": 1,
+    "document_type": "evidence",
+    "provider": "government_body",
+    "relevance": "optional",
+    "detection_markers": [
+      "Berufsausübungserlaubnis",
+      "reglementierter Beruf",
+      "Approbation",
+      "Zulassung",
+      "Berufszulassung",
+      "Landesärztekammer",
+      "Rechtsanwaltskammer"
+    ],
+    "logic": {
+      "action_type": "verify_validity",
+      "completes_task_id": "task_aufenthaltstitel_application"
+    }
+  },
+
+  {
+    "id": "kvr_passfoto_biometrisch",
+    "name": "Biometrisches Passfoto (Biometric Passport Photo)",
+    "category": "legal_and_work",
+    "pillar": 1,
+    "document_type": "evidence",
+    "provider": "user",
+    "relevance": "mandatory",
+    "detection_markers": [
+      "biometrisches Passfoto",
+      "Lichtbild",
+      "Passbild",
+      "Foto-Terminal",
+      "KVR Fotostudio",
+      "biometrisch"
+    ],
+    "logic": {
+      "action_type": "book_appointment",
+      "completes_task_id": "task_aufenthaltstitel_application"
+    }
   }
 ]
