@@ -14,10 +14,10 @@
   background: #fff;
   border-radius: 12px;
   border: 0.5px solid #e2e5ec;
-  padding: 18px 24px;
+  padding: 20px 24px;
   display: flex;
-  align-items: center;
-  gap: 40px;
+  align-items: stretch;
+  gap: 0;
   margin-bottom: 28px;
 }
 
@@ -33,7 +33,7 @@
   align-items: center;
   gap: 12px;
   flex: 0 0 280px;
-  min-width: 200px;
+  padding-right: 32px;
 }
 
 .hero-avatar {
@@ -70,6 +70,12 @@
 
 .hero-progress {
   flex: 0 0 340px;
+  padding: 0 32px;
+  border-left: 0.5px solid #e2e5ec;
+  border-right: 0.5px solid #e2e5ec;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .progress-label {
@@ -114,6 +120,10 @@
 
 .hero-events {
   flex: 1;
+  padding-left: 32px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .events-header {
@@ -121,6 +131,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
+  width: 100%;
 }
 
 .events-label {
@@ -211,6 +222,27 @@
   gap: 16px;
   align-items: start;
   margin-bottom: 36px;
+}
+
+.kanban-col {
+  display: flex;
+  flex-direction: column;
+}
+
+.task-card {
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+}
+
+.card-desc {
+  flex: 1;
+}
+
+.task-card.locked {
+  opacity: 0.45;
+  pointer-events: none;
+  position: relative;
 }
 
 .col-header {
