@@ -3,7 +3,7 @@ require "net/http"
 class Chat < ApplicationRecord
   belongs_to :user
   belongs_to :checklist_item, optional: true
-
+  has_many :messages, dependent: :destroy
 
   has_one_attached :document do |attachable|
     attachable.variant :ai_ready, resize_to_limit: [2048, 2048], format: :jpeg, saver: { quality: 85 }
