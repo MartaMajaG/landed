@@ -36,9 +36,3 @@
   </div>
 <% end %>
 
-<%# 4. Activate the expanded layout by adding the chat-active class to the page container %>
-<%= turbo_stream.replace "chat-layout-container-#{@chat.id}" do %>
-  <div id="chat-layout-container-<%= @chat.id %>" class="chat-active" style="margin-top:32px;">
-    <%= render partial: "chats/chat_panel_inner", locals: { chat: @chat } %>
-  </div>
-<% end %>
