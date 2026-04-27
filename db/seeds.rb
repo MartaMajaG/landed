@@ -25,15 +25,15 @@ registration = Task.find_or_create_by!(name: "Registration (Anmeldung)", city: m
 banking = Task.find_or_create_by!(name: "Banking", city: munich)
 health = Task.find_or_create_by!(name: "Health Insurance", city: munich)
 
-ChecklistItem.find_or_create_by!(title: "Book Anmeldung appointment", task: registration) { |item| item.category = "Admin" }
-ChecklistItem.find_or_create_by!(title: "Gather required documents for Anmeldung", task: registration) { |item| item.category = "Admin" }
-ChecklistItem.find_or_create_by!(title: "Attend appointment and collect Meldebescheinigung", task: registration) { |item| item.category = "Admin" }
+ChecklistItem.find_or_create_by!(title: "Book Anmeldung appointment", task_id: 1) { |item| item.category = "Admin" }
+ChecklistItem.find_or_create_by!(title: "Gather required documents for Anmeldung", task_id: 1) { |item| item.category = "Admin" }
+ChecklistItem.find_or_create_by!(title: "Attend appointment and collect Meldebescheinigung", task_id: 1) { |item| item.category = "Admin" }
 
-ChecklistItem.find_or_create_by!(title: "Open a German bank account", task: banking) { |item| item.category = "Finance" }
-ChecklistItem.find_or_create_by!(title: "Set up online banking", task: banking) { |item| item.category = "Finance" }
+ChecklistItem.find_or_create_by!(title: "Open a German bank account", task_id: 2) { |item| item.category = "Finance" }
+ChecklistItem.find_or_create_by!(title: "Set up online banking", task_id: 2) { |item| item.category = "Finance" }
 
-ChecklistItem.find_or_create_by!(title: "Choose public or private health insurance", task: health) { |item| item.category = "Admin" }
-ChecklistItem.find_or_create_by!(title: "Submit health insurance registration", task: health) { |item| item.category = "Admin" }
+ChecklistItem.find_or_create_by!(title: "Choose public or private health insurance", task_id: 3) { |item| item.category = "Admin" }
+ChecklistItem.find_or_create_by!(title: "Submit health insurance registration", task_id: 3) { |item| item.category = "Admin" }
 
 
 # Dev user for testing (development only)
@@ -43,4 +43,3 @@ dev_user = User.find_or_create_by!(email: "dev@landed.com") do |u|
 end
 
 puts "Seeds complete. #{DocumentType.count} document types ready for matching."
-

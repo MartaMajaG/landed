@@ -6,7 +6,7 @@ class OnboardingsController < ApplicationController
   def update
     @profile = current_user.profile || current_user.build_profile
 
-    if @profile.update(onboardings_params)
+    if @profile.update(onboarding_params)
       redirect_to root_path, notice: "Onboarding complete!"
     else
       render :show, status: :unprocessable_entity
@@ -15,7 +15,7 @@ class OnboardingsController < ApplicationController
 
   private
 
-  def onboardings_params
+  def onboarding_params
     params.require(:profile).permit(:city_id, :arrival_date)
   end
 end
