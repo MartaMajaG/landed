@@ -8,16 +8,12 @@ class MessagesController < ApplicationController
     @user_message.role = "user"
 
     if @user_message.save
-      # Call AI synchronously — response takes ~5-10s, covered by the loading spinner
-      ai_response = @chat.ask_document(@user_message.content)
-
-      @ai_message = @chat.messages.create!(
-        role: "assistant",
-        content: ai_response
-      )
+      # Enqueue background job — the AI call runs in the worker process, not here.
+      # The job will broadcast the AI reply via ActionCable when it completes.
+      AiReplyJob.perform_later(@user_message.id)
 
       respond_to do |format|
-        # Turbo Stream: append both messages to the DOM without a page reload
+        # Turbo Stream: immediately returns the loading bubble to the browser
         format.turbo_stream
         # Fallback for non-Turbo clients
         format.html { redirect_to chat_path(@chat) }
