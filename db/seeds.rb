@@ -56,28 +56,53 @@ banking.update!(
 #   t.urgency = "medium"
 # end
 
-health = Task.find_or_initialize_by(name: "Health Insurance", city: munich)
-health.update!(
-  category: "Health Insurance",
-  description: "Apply for the mandatory state health insurance",
-  urgency: "low"
-)
+health = Task.find_or_create_by!(name: "Health Insurance", city: munich) do |t|
+  t.category = "Health Insurance"
+  t.description = "Apply for the mandatory state health insurance subsidy to reduce your monthly premiums before the deadline."
+  t.why_it_matters = "As an expat, choosing the right public health insurance ensures your dependents are covered at no extra cost. Securing this subsidy promptly prevents you from being placed on a default, higher-premium plan."
+end
 
-ChecklistItem.find_or_create_by!(title: "Book Anmeldung appointment", task_id: 1) { |item| item.category = "Admin" }
-ChecklistItem.find_or_create_by!(title: "Gather required documents for Anmeldung", task_id: 1) { |item| item.category = "Admin" }
-ChecklistItem.find_or_create_by!(title: "Attend appointment and collect Meldebescheinigung", task_id: 1) { |item| item.category = "Admin" }
+# Registration checklist items
+ChecklistItem.find_or_create_by!(title: "Book Anmeldung appointment", task: registration) do |item|
+  item.category = "Admin"
+end
 
-ChecklistItem.find_or_create_by!(title: "Open a German bank account", task_id: 2) { |item| item.category = "Finance" }
-ChecklistItem.find_or_create_by!(title: "Set up online banking", task_id: 2) { |item| item.category = "Finance" }
+ChecklistItem.find_or_create_by!(title: "Gather required documents for Anmeldung", task: registration) do |item|
+  item.category = "Admin"
+end
 
-ChecklistItem.find_or_create_by!(title: "Choose public or private health insurance", task_id: 3) do |item|
+ChecklistItem.find_or_create_by!(title: "Attend appointment and collect Meldebescheinigung", task: registration) do |item|
+  item.category = "Admin"
+end
+
+# Banking checklist items
+ChecklistItem.find_or_create_by!(title: "Open a German bank account", task: banking) do |item|
+  item.category = "Finance"
+end
+
+ChecklistItem.find_or_create_by!(title: "Set up online banking", task: banking) do |item|
+  item.category = "Finance"
+end
+
+# Health insurance checklist items
+ChecklistItem.find_or_create_by!(title: "Register Residence Address", task: health) do |item|
+  item.category = "Admin"
+  item.description = "Register your address at the local Bürgeramt to obtain your Meldebescheinigung."
+end
+
+ChecklistItem.find_or_create_by!(title: "Choose public or private health insurance", task: health) do |item|
   item.category = "Admin"
   item.description = "Compare public health insurance providers and submit your application along with your employment contract."
 end
 
-ChecklistItem.find_or_create_by!(title: "Submit health insurance registration", task_id: 3) do |item|
+ChecklistItem.find_or_create_by!(title: "Submit health insurance registration", task: health) do |item|
   item.category = "Admin"
   item.description = "Submit your completed application to your chosen provider and forward confirmation to your employer."
+end
+
+ChecklistItem.find_or_create_by!(title: "Submit Confirmation to Employer", task: health) do |item|
+  item.category = "Admin"
+  item.description = "Forward your insurance confirmation letter to HR so they can process your payroll deductions."
 end
 
 # Dev user for testing (development only)
