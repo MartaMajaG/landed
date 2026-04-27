@@ -1,8 +1,9 @@
 <div class="task-detail-page" data-controller="task-detail">
+  <div class="task-container">
 
   <%# ── BREADCRUMB ── %>
   <div class="task-breadcrumb">
-    <span class="badge badge--urgent">DUE IN 2 DAYS</span>
+<span class="task-badge task-badge--urgent">DUE IN 2 DAYS</span>
     <span class="breadcrumb__category">
       <%= @task.category %>
     </span>
@@ -42,10 +43,12 @@
           <span class="task-steps__label">Applying for Public Health Insurance</span>
           <span class="task-steps__count" data-task-detail-target="stepCount">Step 2 of 4</span>
         </div>
-        <div class="task-steps__progress">
-          <div class="task-steps__progress-bar" data-task-detail-target="progressBar"></div>
-        </div>
-
+          <div class="task-steps__progress">
+            <div class="task-steps__progress-bar"
+              data-task-detail-target="progressBar"
+              style="width: <%= (@checklist_items.select { |i| @user_checklist_items[i.id]&.completed }.count.to_f / @checklist_items.count * 100).round %>%">
+            </div>
+          </div>
         <%# ── STEPS LIST ── %>
         <div class="task-steps__list" data-task-detail-target="stepsList">
           <% @checklist_items.each_with_index do |item, index| %>
@@ -74,7 +77,7 @@
                 <div class="step__header">
                   <h3 class="step__title"><%= item.title %></h3>
                   <% if is_active %>
-                    <span class="badge badge--action">ACTION NEEDED</span>
+                    <span class="task-badge task-badge--action">ACTION NEEDED</span>
                   <% end %>
                 </div>
                 <p class="step__description"><%= item.description %></p>
@@ -92,7 +95,6 @@
                   <a href="#" class="step__see-others">See other providers</a>
 
                   <div class="step__footer">
-                    <span class="step__notes">💬 2 Notes</span>
                     <span class="step__files">📎 1 Attached File</span>
                     <a href="#" class="step__reminder">🕐 Set Reminder</a>
                   </div>
@@ -128,23 +130,6 @@
     <%# ── RIGHT COLUMN ── %>
     <div class="task-sidebar">
 
-      <%# ── EXPERT TIPS ── %>
-      <div class="expert-tips">
-        <span class="expert-tips__label">⚡ EXPERT TIPS</span>
-        <div class="expert-tips__item">
-          <h4>Processing Time</h4>
-          <p>Applications typically take 2-3 weeks to process. Apply immediately after registering your address.</p>
-        </div>
-        <div class="expert-tips__item">
-          <h4>Family Coverage</h4>
-          <p>If you have a non-working spouse or children, they can usually be co-insured at no additional cost.</p>
-        </div>
-        <div class="expert-tips__item">
-          <h4>Salary Threshold</h4>
-          <p>Ensure your gross salary is below €66,600 (2023 limit) to remain eligible for the standard public subsidy.</p>
-        </div>
-      </div>
-
       <%# ── QUICK GUIDES ── %>
       <div class="quick-guides">
         <div class="quick-guides__header">
@@ -175,7 +160,23 @@
           </a>
         </div>
       </div>
-
+      <%# ── EXPERT TIPS ── %>
+      <div class="expert-tips">
+        <span class="expert-tips__label">⚡ EXPERT TIPS</span>
+        <div class="expert-tips__item">
+          <h4>Processing Time</h4>
+          <p>Applications typically take 2-3 weeks to process. Apply immediately after registering your address.</p>
+        </div>
+        <div class="expert-tips__item">
+          <h4>Family Coverage</h4>
+          <p>If you have a non-working spouse or children, they can usually be co-insured at no additional cost.</p>
+        </div>
+        <div class="expert-tips__item">
+          <h4>Salary Threshold</h4>
+          <p>Ensure your gross salary is below €66,600 (2023 limit) to remain eligible for the standard public subsidy.</p>
+        </div>
+      </div>
     </div>
   </div>
+</div>
 </div>

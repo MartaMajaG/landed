@@ -6,6 +6,12 @@
   padding: 2rem;
 }
 
+.task-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
 // Two column layout
 .task-layout {
   display: grid;
@@ -25,6 +31,9 @@
   position: sticky;
   top: 2rem;
   align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 // ── Breadcrumb ────────────────────────────────────
@@ -96,8 +105,9 @@
 
 // ── Badges ────────────────────────────────────────
 
-.badge {
-  display: inline-block;
+.task-badge {
+  display: inline-flex;
+  align-items: center;
   font-size: 12px;
   font-weight: 500;
   padding: 4px 10px;
@@ -105,12 +115,120 @@
   letter-spacing: 0.04em;
 }
 
-.badge--urgent {
+.task-badge--urgent {
   background: #FEE2E2;
   color: #DC2626;
 }
 
-.badge--action {
+.task-badge--action {
   background: #FEF3C7;
   color: #D97706;
+}
+
+// ── Expert Tips ───────────────────────────────────
+
+.expert-tips {
+  background: $dark-card;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.expert-tips__label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  color: $chartreuse;
+  margin-bottom: 1.25rem;
+}
+
+.expert-tips__item {
+  margin-bottom: 1.25rem;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 0.25rem;
+  }
+
+  p {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.6;
+    margin: 0;
+  }
+}
+
+// ── Quick Guides ──────────────────────────────────
+
+.quick-guides {
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 1.25rem;
+}
+
+.quick-guides__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: $text-dark;
+    margin: 0;
+  }
+
+  a {
+    color: $text-gray;
+    text-decoration: none;
+    font-size: 14px;
+  }
+}
+
+.quick-guide__item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.625rem 0;
+  border-bottom: 1px solid #F3F4F6;
+  text-decoration: none;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.quick-guide__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+  background: #F3F4F6;
+}
+
+.quick-guide__title {
+  font-size: 13px;
+  font-weight: 500;
+  color: $text-dark;
+  margin: 0 0 2px;
+}
+
+.quick-guide__meta {
+  font-size: 12px;
+  color: $text-gray;
+  margin: 0;
 }

@@ -102,3 +102,128 @@
     color: #D1D5DB;
   }
 }
+
+// ── Steps Header ──────────────────────────────────
+
+.task-steps__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.task-steps__label {
+  font-size: 15px;
+  font-weight: 500;
+  color: $text-dark;
+}
+
+.task-steps__count {
+  font-size: 12px;
+  color: $text-gray;
+}
+
+.task-steps__progress {
+  height: 3px;
+  background: #E5E7EB;
+  border-radius: 999px;
+  margin-bottom: 1.5rem;
+}
+
+.task-steps__progress-bar {
+  height: 100%;
+  background: $blue-action;
+  border-radius: 999px;
+}
+
+// ── Recommendation Card ───────────────────────────
+
+.step__recommendation {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: #F8FAFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin: 0.75rem 0;
+}
+
+.step__recommendation-logo {
+  width: 36px;
+  height: 36px;
+  background: #E8F0FE;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: $blue-action;
+  flex-shrink: 0;
+}
+
+.step__recommendation-content {
+  flex: 1;
+}
+
+.step__recommendation-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: $text-dark;
+  margin: 0 0 2px;
+}
+
+.step__recommendation-reason {
+  font-size: 12px;
+  color: $text-gray;
+  margin: 0;
+}
+
+.step__recommended-label {
+  font-size: 12px;
+  color: $blue-action;
+  white-space: nowrap;
+}
+
+.step__see-others {
+  font-size: 13px;
+  color: $blue-action;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 0.75rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// ── Step Footer ───────────────────────────────────
+
+.step__footer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #F3F4F6;
+  font-size: 12px;
+  color: $text-gray;
+}
+
+.step__reminder {
+  margin-left: auto;
+  color: $text-gray;
+  text-decoration: none;
+  font-size: 12px;
+
+  &:hover {
+    color: $blue-action;
+  }
+}
+
+// ── Hide Mark Complete button (is handled by Stimulus later!) ──
+
+.step__toggle {
+  display: none;
+}
