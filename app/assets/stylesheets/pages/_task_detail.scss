@@ -1,0 +1,116 @@
+// ── Task Detail Page ──────────────────────────────
+
+.task-detail-page {
+  background: $page-bg;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+// Two column layout
+.task-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// Left column
+.task-main {
+  min-width: 0; // prevents grid blowout
+}
+
+// Right column
+.task-sidebar {
+  position: sticky;
+  top: 2rem;
+  align-self: start;
+}
+
+// ── Breadcrumb ────────────────────────────────────
+
+.task-breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 14px;
+  color: $text-gray;
+}
+
+.breadcrumb__divider {
+  color: $text-gray;
+}
+
+// ── Header ────────────────────────────────────────
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.task-title {
+  font-family: $headers-font;
+  font-size: 2rem;
+  font-weight: 800;
+  color: $text-dark;
+  margin-bottom: 0.5rem;
+}
+
+.task-description {
+  font-size: 14px;
+  color: $text-gray;
+  line-height: 1.6;
+}
+
+.autosave {
+  font-size: 12px;
+  color: $chartreuse;
+  white-space: nowrap;
+}
+
+// ── Why This Matters ──────────────────────────────
+
+.task-why {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+  font-size: 14px;
+  line-height: 1.6;
+  color: $text-dark;
+}
+
+.task-why__icon {
+  color: $blue-action;
+  font-size: 16px;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+// ── Badges ────────────────────────────────────────
+
+.badge {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+}
+
+.badge--urgent {
+  background: #FEE2E2;
+  color: #DC2626;
+}
+
+.badge--action {
+  background: #FEF3C7;
+  color: #D97706;
+}
