@@ -35,7 +35,8 @@ end
 
 health = Task.find_or_create_by!(name: "Health Insurance", city: munich) do |t|
   t.category = "Health Insurance"
-  t.description = "Apply for the mandatory state health insura
+  t.description = "Apply for the mandatory state health insurance"
+end
 
 ChecklistItem.find_or_create_by!(title: "Book Anmeldung appointment", task_id: 1) { |item| item.category = "Admin" }
 ChecklistItem.find_or_create_by!(title: "Gather required documents for Anmeldung", task_id: 1) { |item| item.category = "Admin" }
