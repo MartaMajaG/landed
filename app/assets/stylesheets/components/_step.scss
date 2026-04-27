@@ -199,11 +199,11 @@
 }
 
 .step__checkbox {
-  width: 20px;
-  height: 20px;
-  min-width: 20px;
-  border-radius: 4px;
-  border: 2px solid #E5E7EB;
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  border-radius: 3px;
+  border: 1.5px solid #9CA3AF;
   background: white;
   padding: 0;
   cursor: pointer;
@@ -214,6 +214,7 @@
 
   &:hover {
     border-color: $blue-action;
+    background: #EFF6FF;
   }
 }
 

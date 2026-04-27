@@ -26,29 +26,32 @@
 
         <%# ── WHY THIS MATTERS ── %>
         <div class="task-why">
-          <span class="task-why__icon">ℹ</span>
-          <p>
-            <strong>Why this matters:</strong>
-            <%= @task.why_it_matters %>
-          </p>
-        </div>
+  <svg class="task-why__icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="10"/>
+    <line x1="12" y1="8" x2="12" y2="8"/>
+    <line x1="12" y1="12" x2="12" y2="16"/>
+  </svg>
+  <p>
+    <strong>Good to know:</strong>
+    <%= @task.why_it_matters %>
+  </p>
+</div>
 
         <%# ── STEPS SECTION ── %>
         <div class="task-steps">
 
           <%# ── STEPS HEADER ── %>
-          <div class="task-steps__header">
-            <span class="task-steps__label">Applying for Public Health Insurance</span>
-            <span class="task-steps__count" data-task-detail-target="stepCount">
-              Step 2 of 4
-            </span>
-          </div>
-          <div class="task-steps__progress">
-            <div class="task-steps__progress-bar"
-                 data-task-detail-target="progressBar"
-                 style="width: <%= (@checklist_items.select { |i| @user_checklist_items[i.id]&.completed }.count.to_f / @checklist_items.count * 100).round %>%">
-            </div>
-          </div>
+          <% completed_steps = @checklist_items.select { |i| @user_checklist_items[i.id]&.completed }.count %>
+<div class="task-steps__header">
+  <span class="task-steps__label">Applying for Public Health Insurance</span>
+  <span class="task-steps__count" data-task-detail-target="stepCount">
+    <% if completed_steps == @checklist_items.count %>
+      All steps complete!
+    <% else %>
+      Step <%= completed_steps + 1 %> of <%= @checklist_items.count %>
+    <% end %>
+  </span>
+</div>
 
           <%# ── STEPS LIST ── %>
           <div class="task-steps__list" data-task-detail-target="stepsList">
@@ -92,7 +95,7 @@
 
                     <h3 class="step__title"><%= item.title %></h3>
                     <% if is_active %>
-                      <span class="task-badge task-badge--action">ACTION NEEDED</span>
+                      <span class="task-badge task-badge--action">Action required</span>
                     <% end %>
 
                   </div>
@@ -102,7 +105,9 @@
                   <%# ── ACTIVE STEP EXTRAS ── %>
                   <% if is_active %>
                     <div class="step__recommendation">
-                      <span class="step__recommendation-logo">TK</span>
+                      <span class="step__recommendation-logo">
+                        <%= image_tag "TK_logo.png", width: 40, height: 40, alt: "TK" %>
+                      </span>
                       <div class="step__recommendation-content">
                         <p class="step__recommendation-name">TK (Techniker Krankenkasse)</p>
                         <p class="step__recommendation-reason">⭐ Matches your salary bracket & offers full English support.</p>
@@ -144,35 +149,53 @@
       <div class="task-sidebar">
 
         <%# ── QUICK GUIDES ── %>
-        <div class="quick-guides">
-          <div class="quick-guides__header">
-            <h3>Quick Guides</h3>
-            <a href="#">↗</a>
-          </div>
-          <div class="quick-guides__list">
-            <a href="#" class="quick-guide__item">
-              <span class="quick-guide__icon quick-guide__icon--pdf">📄</span>
-              <div>
-                <p class="quick-guide__title">Public vs Private Insurance</p>
-                <p class="quick-guide__meta">PDF • 2.4 MB</p>
-              </div>
-            </a>
-            <a href="#" class="quick-guide__item">
-              <span class="quick-guide__icon quick-guide__icon--doc">📝</span>
-              <div>
-                <p class="quick-guide__title">Employer Notification Template</p>
-                <p class="quick-guide__meta">DOCX • 18 KB</p>
-              </div>
-            </a>
-            <a href="#" class="quick-guide__item">
-              <span class="quick-guide__icon quick-guide__icon--link">🔗</span>
-              <div>
-                <p class="quick-guide__title">Official Subsidy Calculator</p>
-                <p class="quick-guide__meta">External Link</p>
-              </div>
-            </a>
-          </div>
-        </div>
+        <%# ── QUICK GUIDES ── %>
+<div class="quick-guides">
+  <div class="quick-guides__header">
+    <h3>Quick Guides</h3>
+    <a href="#">↗</a>
+  </div>
+  <div class="quick-guides__list">
+    <a href="#" class="quick-guide__item">
+      <span class="quick-guide__icon quick-guide__icon--pdf">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+        </svg>
+      </span>
+      <div>
+        <p class="quick-guide__title">Public vs Private Insurance</p>
+        <p class="quick-guide__meta">PDF • 2.4 MB</p>
+      </div>
+    </a>
+    <a href="#" class="quick-guide__item">
+      <span class="quick-guide__icon quick-guide__icon--doc">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+      </span>
+      <div>
+        <p class="quick-guide__title">Employer Notification Template</p>
+        <p class="quick-guide__meta">DOCX • 18 KB</p>
+      </div>
+    </a>
+    <a href="#" class="quick-guide__item">
+      <span class="quick-guide__icon quick-guide__icon--link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7A9E1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+        </svg>
+      </span>
+      <div>
+        <p class="quick-guide__title">Official Subsidy Calculator</p>
+        <p class="quick-guide__meta">External Link</p>
+      </div>
+    </a>
+  </div>
+</div>
 
         <%# ── EXPERT TIPS ── %>
         <div class="expert-tips">
@@ -198,9 +221,9 @@
   <div class="completion-overlay" data-task-detail-target="completionOverlay">
     <div class="completion-overlay__card">
       <div class="completion-overlay__icon">✓</div>
-      <h2 class="completion-overlay__title">Task Complete!</h2>
-      <p class="completion-overlay__message"><%= @task.name %> is all sorted.</p>
-      <p class="completion-overlay__sub">Taking you back to your checklist...</p>
+      <h2 class="completion-overlay__title">Task Completed! 🎉</h2>
+      <p class="completion-overlay__message"><%= @task.name %> is done and dusted.</p>
+      <p class="completion-overlay__sub">Heading back to your dashboard..</p>
       <div class="completion-overlay__bar">
         <div class="completion-overlay__bar-fill"></div>
       </div>
