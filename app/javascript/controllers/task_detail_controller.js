@@ -46,9 +46,12 @@ export default class extends Controller {
 
       const completedCount = this.stepTargets.filter(s => s.classList.contains("step--completed")).length
       const totalCount = this.stepTargets.length
-      const percentage = Math.round((completedCount / totalCount) * 100)
-      this.progressBarTarget.style.width = `${percentage}%`
-      this.stepCountTarget.textContent = `Step ${completedCount + 1} of ${totalCount}`
+
+      if (completedCount === totalCount) {
+        this.stepCountTarget.textContent = `All steps complete!`
+      } else {
+        this.stepCountTarget.textContent = `Step ${completedCount + 1} of ${totalCount}`
+      }
 
       this.flashAutosave()
 
