@@ -21,9 +21,21 @@ end
 puts "Seeding complete: #{DocumentType.count} document types loaded."
 
 # Tasks & Checklists
-registration = Task.find_or_create_by!(name: "Registration (Anmeldung)", city: munich)
-banking = Task.find_or_create_by!(name: "Banking", city: munich)
-health = Task.find_or_create_by!(name: "Health Insurance", city: munich)
+registration = Task.find_or_create_by!(name: "Registration (Anmeldung)", city: munich) do |t|
+  t.category = "Admin"
+  t.description = "Register your address with the local authorities to obtain your Meldebescheinigung."
+  t.why_it_matters = "Without registration you cannot open a bank account, get health insurance, or receive official mail. It is legally required within 14 days of moving in."
+end
+
+banking = Task.find_or_create_by!(name: "Banking", city: munich) do |t|
+  t.category = "Finance"
+  t.description = "Open a German bank account to receive your salary and pay bills locally."
+  t.why_it_matters = "Most German employers require a local IBAN to process payroll. Without it your first salary payment may be delayed."
+end
+
+health = Task.find_or_create_by!(name: "Health Insurance", city: munich) do |t|
+  t.category = "Health Insurance"
+  t.description = "Apply for the mandatory state health insura
 
 ChecklistItem.find_or_create_by!(title: "Book Anmeldung appointment", task_id: 1) { |item| item.category = "Admin" }
 ChecklistItem.find_or_create_by!(title: "Gather required documents for Anmeldung", task_id: 1) { |item| item.category = "Admin" }
@@ -32,9 +44,15 @@ ChecklistItem.find_or_create_by!(title: "Attend appointment and collect Meldebes
 ChecklistItem.find_or_create_by!(title: "Open a German bank account", task_id: 2) { |item| item.category = "Finance" }
 ChecklistItem.find_or_create_by!(title: "Set up online banking", task_id: 2) { |item| item.category = "Finance" }
 
-ChecklistItem.find_or_create_by!(title: "Choose public or private health insurance", task_id: 3) { |item| item.category = "Admin" }
-ChecklistItem.find_or_create_by!(title: "Submit health insurance registration", task_id: 3) { |item| item.category = "Admin" }
+ChecklistItem.find_or_create_by!(title: "Choose public or private health insurance", task_id: 3) do |item|
+  item.category = "Admin"
+  item.description = "Compare public health insurance providers and submit your application along with your employment contract."
+end
 
+ChecklistItem.find_or_create_by!(title: "Submit health insurance registration", task_id: 3) do |item|
+  item.category = "Admin"
+  item.description = "Submit your completed application to your chosen provider and forward confirmation to your employer."
+end
 
 # Dev user for testing (development only)
 dev_user = User.find_or_create_by!(email: "dev@landed.com") do |u|

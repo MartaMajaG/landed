@@ -1,25 +1,181 @@
-<h1><%= @task.name %></h1>
-<p><%= @task.description %></p>
+<div data-controller="task-detail">
 
-<h2>Checklist</h2>
+  <%# ── BREADCRUMB ── %>
+  <div class="task-breadcrumb">
+    <span class="badge badge--urgent">DUE IN 2 DAYS</span>
+    <span class="breadcrumb__category">
+      <%= @task.category %>
+    </span>
+    <span class="breadcrumb__divider">·</span>
+    <span class="breadcrumb__position">Task 3 of 4</span>
+  </div>
 
-<% if @checklist_items.any? %>
-  <ul>
-    <% @checklist_items.each do |item| %>
-      <% progress = @user_checklist_items[item.id] %>
-      <li>
-        <strong><%= item.title %></strong>
-        <div><%= item.category %></div> <!-- image or icon for category, hence to the separate div -->
-        <%= button_to(
-              progress&.completed ? "Mark not done" : "Mark done",
-              user_checklist_item_path(item),
-              method: :patch
-            ) %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>No checklist items yet.</p>
-<% end %>
+  <%# ── MAIN LAYOUT ── %>
+  <div class="task-layout">
 
-<%= link_to "Back to tasks", tasks_path %>
+    <%# ── LEFT COLUMN ── %>
+    <div class="task-main">
+
+      <%# ── HEADER ── %>
+      <div class="task-header">
+        <div class="task-header__text">
+          <h1 class="task-title"><%= @task.name %></h1>
+          <p class="task-description"><%= @task.description %></p>
+        </div>
+        <span class="autosave" data-task-detail-target="autosave">✓ Saved</span>
+      </div>
+
+      <%# ── WHY THIS MATTERS ── %>
+      <div class="task-why">
+        <span class="task-why__icon">ℹ</span>
+        <p>
+          <strong>Why this matters:</strong>
+          <%= @task.why_it_matters %>
+        </p>
+      </div>
+
+      <%# ── STEPS SECTION ── %>
+      <div class="task-steps">
+
+        <%# ── STEPS HEADER ── %>
+        <div class="task-steps__header">
+          <span class="task-steps__label">Applying for Public Health Insurance</span>
+          <span class="task-steps__count" data-task-detail-target="stepCount">Step 2 of 4</span>
+        </div>
+        <div class="task-steps__progress">
+          <div class="task-steps__progress-bar" data-task-detail-target="progressBar"></div>
+        </div>
+
+        <%# ── STEPS LIST ── %>
+        <div class="task-steps__list" data-task-detail-target="stepsList">
+          <% @checklist_items.each_with_index do |item, index| %>
+            <% progress = @user_checklist_items[item.id] %>
+            <% completed = progress&.completed %>
+            <% is_active = !completed && @checklist_items.select { |i| @user_checklist_items[i.id]&.completed }.count == index %>
+
+            <div class="step
+                        <%= completed ? 'step--completed' : '' %>
+                        <%= is_active ? 'step--active' : '' %>
+                        <%= !completed && !is_active ? 'step--locked' : '' %>"
+                 data-task-detail-target="step"
+                 data-completed="<%= completed %>">
+
+              <%# ── STEP NUMBER / ICON ── %>
+              <div class="step__number">
+                <% if completed %>
+                  <span class="step__check">✓</span>
+                <% else %>
+                  <span><%= index + 1 %></span>
+                <% end %>
+              </div>
+
+              <%# ── STEP CONTENT ── %>
+              <div class="step__content">
+                <div class="step__header">
+                  <h3 class="step__title"><%= item.title %></h3>
+                  <% if is_active %>
+                    <span class="badge badge--action">ACTION NEEDED</span>
+                  <% end %>
+                </div>
+                <p class="step__description"><%= item.description %></p>
+
+                <%# ── ACTIVE STEP EXTRAS ── %>
+                <% if is_active %>
+                  <div class="step__recommendation">
+                    <span class="step__recommendation-logo">TK</span>
+                    <div class="step__recommendation-content">
+                      <p class="step__recommendation-name">TK (Techniker Krankenkasse)</p>
+                      <p class="step__recommendation-reason">⭐ Matches your salary bracket & offers full English support.</p>
+                    </div>
+                    <span class="step__recommended-label">✓ Recommended for you</span>
+                  </div>
+                  <a href="#" class="step__see-others">See other providers</a>
+
+                  <div class="step__footer">
+                    <span class="step__notes">💬 2 Notes</span>
+                    <span class="step__files">📎 1 Attached File</span>
+                    <a href="#" class="step__reminder">🕐 Set Reminder</a>
+                  </div>
+                <% end %>
+
+                <%# ── TOGGLE BUTTON (hidden, triggered by checkbox) ── %>
+                <% if !completed && is_active %>
+                  <%= button_to(
+                    user_checklist_item_path(item),
+                    method: :patch,
+                    class: "step__toggle",
+                    data: { "task-detail-target": "toggleBtn" }
+                  ) do %>
+                    Mark complete
+                  <% end %>
+                <% end %>
+
+              </div>
+            </div>
+
+          <% end %>
+        </div>
+
+      </div>
+
+      <%# ── SKIP FALLBACK ── %>
+      <div class="task-skip">
+        <a href="#" class="task-skip__link">Skip remaining steps and mark complete</a>
+      </div>
+
+    </div>
+
+    <%# ── RIGHT COLUMN ── %>
+    <div class="task-sidebar">
+
+      <%# ── EXPERT TIPS ── %>
+      <div class="expert-tips">
+        <span class="expert-tips__label">⚡ EXPERT TIPS</span>
+        <div class="expert-tips__item">
+          <h4>Processing Time</h4>
+          <p>Applications typically take 2-3 weeks to process. Apply immediately after registering your address.</p>
+        </div>
+        <div class="expert-tips__item">
+          <h4>Family Coverage</h4>
+          <p>If you have a non-working spouse or children, they can usually be co-insured at no additional cost.</p>
+        </div>
+        <div class="expert-tips__item">
+          <h4>Salary Threshold</h4>
+          <p>Ensure your gross salary is below €66,600 (2023 limit) to remain eligible for the standard public subsidy.</p>
+        </div>
+      </div>
+
+      <%# ── QUICK GUIDES ── %>
+      <div class="quick-guides">
+        <div class="quick-guides__header">
+          <h3>Quick Guides</h3>
+          <a href="#">↗</a>
+        </div>
+        <div class="quick-guides__list">
+          <a href="#" class="quick-guide__item">
+            <span class="quick-guide__icon quick-guide__icon--pdf">📄</span>
+            <div>
+              <p class="quick-guide__title">Public vs Private Insurance</p>
+              <p class="quick-guide__meta">PDF • 2.4 MB</p>
+            </div>
+          </a>
+          <a href="#" class="quick-guide__item">
+            <span class="quick-guide__icon quick-guide__icon--doc">📝</span>
+            <div>
+              <p class="quick-guide__title">Employer Notification Template</p>
+              <p class="quick-guide__meta">DOCX • 18 KB</p>
+            </div>
+          </a>
+          <a href="#" class="quick-guide__item">
+            <span class="quick-guide__icon quick-guide__icon--link">🔗</span>
+            <div>
+              <p class="quick-guide__title">Official Subsidy Calculator</p>
+              <p class="quick-guide__meta">External Link</p>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
