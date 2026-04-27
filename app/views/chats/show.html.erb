@@ -1,40 +1,21 @@
-<%# CSS for chat-active layout reorganization %>
+<%# Subscribe to this chat's ActionCable channel so background job broadcasts reach the browser %>
+<%= turbo_stream_from @chat %>
+
 <style>
   .chat-panel-container {
     transition: all 0.4s ease;
   }
-  /* Loading overlay */
-  #chat-loading-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(255,255,255,0.85);
-    z-index: 9999;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 16px;
-    backdrop-filter: blur(2px);
-  }
-  .chat-spinner {
-    width: 52px;
-    height: 52px;
-    border: 4px solid #E5E7EB;
-    border-top-color: #185FA5;
+  .chat-spinner-inline {
+    width: 24px;
+    height: 24px;
+    border: 3px solid #E5E7EB;
+    border-top-color: #5A9E2F;
     border-radius: 50%;
     animation: spin 0.9s linear infinite;
+    display: inline-block;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
 </style>
-
-<%# Loading overlay — shown by Stimulus on form submit, hidden on turbo:submit-end %>
-<div id="chat-loading-overlay">
-  <div class="chat-spinner"></div>
-  <div style="text-align:center;">
-    <p style="font-size:16px; font-weight:600; color:#1A1A2E; margin:0;">Analysing your document...</p>
-    <p style="font-size:13px; color:#6B7280; margin:4px 0 0;">It takes about 10 seconds...</p>
-  </div>
-</div>
 
 <div style="background:#F0F1F8; min-height:100vh; padding:48px 0;">
   <div class="container">
@@ -185,9 +166,14 @@
           </div>
         <% end %>
 
-        <%# AI Chat Panel — inside right column, same width as cards above %>
-        <% if @chat.advice.present? %>
-          <div id="chat-layout-container-<%= @chat.id %>" class="chat-panel-container">
+      </div>
+    </div>
+
+    <%# AI Chat Panel — full width, below the two-column row %>
+    <% if @chat.advice.present? %>
+      <div class="row mt-3">
+        <div class="col-12">
+          <div id="chat-layout-container-<%= @chat.id %>">
             <div style="background:#fff; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
 
               <%# Message history %>
@@ -196,7 +182,7 @@
                 <% @chat.messages.order(:created_at).each do |message| %>
                   <% if message.role == "user" %>
                     <div style="display:flex; justify-content:flex-end; margin-bottom:8px;">
-                      <div style="background:#185FA5; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 4px 16px; max-width:75%;">
+                      <div style="background:#5A9E2F; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 4px 16px; max-width:75%;">
                         <%= message.content %>
                       </div>
                     </div>
@@ -217,9 +203,9 @@
                 <%# Input row — spark icon left, text fills space, arrow pinned right %>
                 <div id="chat-input-wrapper-<%= @chat.id %>">
                   <%= form_with url: chat_messages_path(@chat), method: :post,
-                        data: { controller: "chat-form", action: "submit->chat-form#showLoader" },
+                        data: { controller: "chat-form", action: "submit->chat-form#disableSubmit" },
                         style: "display:flex; width:100%; align-items:center; gap:8px; background:#F8F9FA; border:1px solid #E5E7EB; border-radius:28px; padding:6px 8px 6px 14px; box-sizing:border-box;" do |f| %>
-                    <span style="font-size:15px; color:#185FA5; flex-shrink:0; line-height:1;">✦</span>
+                    <span style="font-size:15px; color:#5A9E2F; flex-shrink:0; line-height:1;">✦</span>
                     <%= f.text_field :message,
                           name: "message[content]",
                           id: "chat-input-#{@chat.id}",
@@ -228,7 +214,7 @@
                           required: true,
                           style: "flex:1; min-width:0; font-size:14px; border:none; outline:none; background:transparent; color:#1A1A2E; padding:4px 0;" %>
                     <%= f.submit "→",
-                          style: "flex-shrink:0; width:34px; height:34px; background:#185FA5; color:#fff; border:none; border-radius:50%; font-size:16px; cursor:pointer; line-height:1;" %>
+                          style: "flex-shrink:0; width:34px; height:34px; background:#5A9E2F; color:#fff; border:none; border-radius:50%; font-size:16px; cursor:pointer; line-height:1;" %>
                   <% end %>
                 </div>
 
@@ -247,10 +233,9 @@
               </div>
             </div>
           </div>
-        <% end %>
-
+        </div>
       </div>
-    </div>
+    <% end %>
 
 
   </div>
