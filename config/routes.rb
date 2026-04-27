@@ -1,9 +1,4 @@
 Rails.application.routes.draw do
-  get "onboardings/show"
-  get "onboardings/update"
-  get "onboarding/show"
-  get "onboarding/update"
-  get "user_checklist_items/update"
   devise_for :users
   root to: "pages#home"
 
@@ -26,8 +21,9 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  resource :onboardings, only: [:show, :update]
+  resource :onboarding, only: [:show, :update]
   resource :profile, only: [:edit, :update, :show]
+  resource :dashboard, only: :show
 
   resources :tasks, only: [:index, :show]
 end
