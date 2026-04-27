@@ -59,25 +59,28 @@
     <%# URGENT %>
     <div class="kanban-col">
       <div class="col-header">
+
         <span class="col-dot urgent-dot"></span>
         <span class="col-title">Urgent</span>
-        <span class="col-count">3</span>
+        <span class="col-count"><%= @tasks.where(urgency: "high").count %></span>
         <span class="col-menu">⋯</span>
       </div>
 
       <div class="task-card urgent-card">
+        <% @tasks.where(urgency: "high").each do |task| %>
         <div class="card-top-row">
-          <span class="urgent-badge">URGENT</span>
+          <span class="urgent-badge">Urgent</span>
           <span class="card-menu">⋯</span>
         </div>
-        <h4 class="card-title">Sign Housing Contract</h4>
-        <p class="card-desc">Review the final terms for the downtown apartment and send signed copies to the...</p>
+        <h4 class="card-title"><%= task.name %></h4>
+        <p class="card-desc"><%= task.description %></p>
         <div class="card-bottom-row">
           <span class="card-due urgent-due">⏰ Today</span>
+          <% end %>
         </div>
       </div>
 
-      <div class="task-card urgent-card">
+      <%# <div class="task-card urgent-card">
         <div class="card-top-row">
           <span class="urgent-badge">URGENT</span>
           <span class="card-menu">⋯</span>
@@ -87,7 +90,7 @@
         <div class="card-bottom-row">
           <span class="card-due urgent-due">⏰ Today</span>
         </div>
-      </div>
+      </div> %>
     </div>
 
     <%# ACTIVE %>
@@ -95,11 +98,12 @@
       <div class="col-header">
         <span class="col-dot active-dot"></span>
         <span class="col-title">Active</span>
-        <span class="col-count">4</span>
+        <span class="col-count"><%= @tasks.where(urgency: "medium").count %></span>
         <span class="col-menu">⋯</span>
       </div>
 
       <div class="task-card">
+        <% @tasks.where(urgency: "medium").each do |task| %>
         <div class="card-top">
           <div class="card-tags">
             <span class="tag tag-medium">Medium</span>
@@ -107,16 +111,17 @@
           </div>
           <span class="card-date">Oct 18</span>
         </div>
-        <h4 class="card-title">Gather Visa Documents</h4>
-        <p class="card-desc">Compare TK vs Barmer for public health insurance options.</p>
+        <h4 class="card-title"><%= task.name %></h4>
+        <p class="card-desc"><%= task.description %></p>
         <div class="card-footer">
           <span class="card-progress-label">In Progress</span>
           <span class="card-pct">75%</span>
         </div>
         <div class="card-track"><div class="card-fill" style="width: 75%;"></div></div>
+        <% end %>
       </div>
 
-      <div class="task-card">
+      <%# <div class="task-card">
         <div class="card-top">
           <div class="card-tags">
             <span class="tag tag-medium">Medium</span>
@@ -131,7 +136,7 @@
           <span class="card-pct">20%</span>
         </div>
         <div class="card-track"><div class="card-fill" style="width: 20%;"></div></div>
-      </div>
+      </div> %>
     </div>
 
     <%# UPCOMING %>

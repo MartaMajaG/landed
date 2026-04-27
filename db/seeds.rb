@@ -21,17 +21,40 @@ end
 puts "Seeding complete: #{DocumentType.count} document types loaded."
 
 # Tasks & Checklists
-registration = Task.find_or_create_by!(name: "Registration (Anmeldung)", city: munich) do |t|
-  t.category = "Admin"
-  t.description = "Register your address with the local authorities to obtain your Meldebescheinigung."
-  t.why_it_matters = "Without registration you cannot open a bank account, get health insurance, or receive official mail. It is legally required within 14 days of moving in."
-end
+# registration = Task.find_or_create_by!(name: "Registration (Anmeldung)", city: munich) do |t|
+#   t.category = "Admin"
+#   t.description = "Register your address with the local authorities to obtain your Meldebescheinigung."
+#   t.why_it_matters = "Without registration you cannot open a bank account, get health insurance, or receive official mail. It is legally required within 14 days of moving in."
+#   t.urgency = "high"
+# end
+registration = Task.find_or_initialize_by(name: "Registration (Anmeldung)", city: munich)
+registration.update!(
+  category: "Admin",
+  description: "Register your address with the local authorities to obtain your Meldebescheinigung.",
+  why_it_matters: "Without registration you cannot open a bank account, get health insurance, or receive official mail. It is legally required within 14 days of moving in.",
+  urgency: "high"
+)
 
-banking = Task.find_or_create_by!(name: "Banking", city: munich) do |t|
-  t.category = "Finance"
-  t.description = "Open a German bank account to receive your salary and pay bills locally."
-  t.why_it_matters = "Most German employers require a local IBAN to process payroll. Without it your first salary payment may be delayed."
-end
+# banking = Task.find_or_create_by!(name: "Banking", city: munich) do |t|
+#   t.category = "Finance"
+#   t.description = "Open a German bank account to receive your salary and pay bills locally."
+#   t.why_it_matters = "Most German employers require a local IBAN to process payroll. Without it your first salary payment may be delayed."
+#   t.urgency = "medium"
+# end
+#
+banking = Task.find_or_initialize_by(name: "Banking", city: munich)
+banking.update!(
+  category: "Finance",
+  description: "Open a German bank account to receive your salary and pay bills locally.",
+  why_it_matters: "Most German employers require a local IBAN to process payroll. Without it your first salary payment may be delayed.",
+  urgency: "medium"
+)
+
+# health = Task.find_or_create_by!(name: "Health Insurance", city: munich) do |t|
+#   t.category = "Health Insurance"
+#   t.description = "Apply for the mandatory state health insurance"
+#   t.urgency = "medium"
+# end
 
 health = Task.find_or_create_by!(name: "Health Insurance", city: munich) do |t|
   t.category = "Health Insurance"

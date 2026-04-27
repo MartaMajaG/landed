@@ -1,33 +1,25 @@
 import { Controller } from "@hotwired/stimulus"
 
 // Attached to the chat form.
-// Shows a loading overlay on submit, hides it when the Turbo Stream response arrives.
+// Disables the submit button on form submission to prevent double-sending,
+// and re-enables it once the Turbo Stream response (the loading bubble) arrives.
+// The actual AI reply is delivered later via ActionCable by AiReplyJob.
 export default class extends Controller {
   connect() {
-    // Listen for turbo:submit-end on the form to hide the loader after the response arrives
-    this.element.addEventListener("turbo:submit-end", this.hideLoader.bind(this))
+    // Re-enable the submit button when the Turbo Stream response is received
+    this.element.addEventListener("turbo:submit-end", this.enableSubmit.bind(this))
   }
 
   disconnect() {
-    this.element.removeEventListener("turbo:submit-end", this.hideLoader.bind(this))
+    this.element.removeEventListener("turbo:submit-end", this.enableSubmit.bind(this))
   }
 
-  showLoader(event) {
-    const overlay = document.getElementById("chat-loading-overlay")
-    if (overlay) {
-      overlay.style.display = "flex"
-    }
-    // Disable submit button to prevent double-submission
+  disableSubmit(event) {
     const submitButton = this.element.querySelector("[type=submit]")
     if (submitButton) submitButton.disabled = true
   }
 
-  hideLoader() {
-    const overlay = document.getElementById("chat-loading-overlay")
-    if (overlay) {
-      overlay.style.display = "none"
-    }
-    // Re-enable submit button
+  enableSubmit() {
     const submitButton = this.element.querySelector("[type=submit]")
     if (submitButton) submitButton.disabled = false
   }
