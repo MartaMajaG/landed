@@ -597,3 +597,143 @@
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
+
+// ── PILLAR PILL TAG ────────────────────────────────
+.tag-pillar {
+  background: #ede9fe;
+  color: #5b21b6;
+}
+
+// ── PILLARS SECTION ────────────────────────────────
+.pillars-section {
+  margin-top: 36px;
+}
+
+.pillars-section__header {
+  margin-bottom: 16px;
+}
+
+.pillars-section__sub {
+  font-size: 13px;
+  color: #7a7f8e;
+  margin: 4px 0 0;
+}
+
+.pillars-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+
+  @media (min-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.pillar-summary-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #fff;
+  border: 0.5px solid #e2e5ec;
+  border-radius: 12px;
+  padding: 16px;
+  text-decoration: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+
+  &:hover {
+    border-color: $indigo-landed;
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.1);
+    transform: translateY(-2px);
+  }
+
+  &--done {
+    border-color: #d1fae5;
+    background: #f0fdf4;
+  }
+}
+
+.pillar-summary-card__icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: $indigo-landed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  i {
+    font-size: 1rem;
+    color: white;
+  }
+
+  .pillar-summary-card--done & {
+    background: #10b981;
+  }
+}
+
+.pillar-summary-card__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.pillar-summary-card__top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.pillar-summary-card__name {
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1d23;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pillar-summary-card__count {
+  font-size: 11px;
+  color: #9ca3af;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.pillar-summary-card__done {
+  font-size: 11px;
+  font-weight: 600;
+  color: #065f46;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.pillar-summary-card__desc {
+  font-size: 11px;
+  color: #7a7f8e;
+  line-height: 1.5;
+  margin: 0 0 10px;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.pillar-summary-card__track {
+  height: 3px;
+  background: #e9ecef;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.pillar-summary-card__fill {
+  height: 100%;
+  background: $indigo-landed;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+
+  .pillar-summary-card--done & {
+    background: #10b981;
+  }
+}
