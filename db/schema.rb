@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_28_111948) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_28_112122) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -268,10 +268,12 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_111948) do
     t.datetime "created_at", null: false
     t.text "description"
     t.string "name"
+    t.bigint "pillar_id"
     t.datetime "updated_at", null: false
     t.string "urgency"
     t.text "why_it_matters"
     t.index ["city_id"], name: "index_tasks_on_city_id"
+    t.index ["pillar_id"], name: "index_tasks_on_pillar_id"
   end
 
   create_table "user_checklist_items", force: :cascade do |t|
@@ -313,6 +315,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_111948) do
   add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "tasks", "cities"
+  add_foreign_key "tasks", "pillars"
   add_foreign_key "user_checklist_items", "checklist_items"
   add_foreign_key "user_checklist_items", "users"
 end
