@@ -3,10 +3,11 @@
 .task-detail-page {
   background: $page-bg;
   min-height: 100vh;
+  padding: 48px 0;
 }
 
 .task-container {
-  padding-top: 24px;
+  padding-top: 0px;
   padding-bottom: 24px;
 }
 
@@ -27,12 +28,26 @@
   position: sticky;
   top: 2rem;
   align-self: start;
+  padding-top: 4rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
 // ── Breadcrumb ────────────────────────────────────
+
+.task-back-link {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 500;
+  color: $text-gray;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+
+  &:hover {
+    color: $blue-action;
+  }
+}
 
 .task-breadcrumb {
   display: flex;
@@ -301,4 +316,104 @@
   border-radius: 999px;
   width: 0%;
   transition: width 3s linear;
+}
+
+// ── Step Title Row (title + badges) ──────────────────
+
+.step__title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex: 1;
+  gap: 0.5rem;
+}
+
+.step__badges {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  flex-shrink: 0;
+}
+
+// ── Optional Badge ─────────────────────────────────────
+
+.step__badge {
+  display: inline-flex;
+  align-items: center;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 20px;
+  letter-spacing: 0.04em;
+
+  &--optional {
+    background: #FEF3C7;
+    color: #92400E;
+  }
+}
+
+// ── Soft-Lock State ────────────────────────────────────
+
+.step--soft-locked {
+  background: #F9FAFB;
+  border-color: #E5E7EB;
+  opacity: 0.85;
+
+  .step__number {
+    background: #F3F4F6;
+    border-color: #E5E7EB;
+    color: $text-gray;
+  }
+
+  .step__lock-icon {
+    font-size: 14px;
+    opacity: 0.5;
+  }
+
+  .step__title {
+    color: $text-gray;
+  }
+
+  .step__description {
+    color: #9CA3AF;
+  }
+}
+
+// ── Soft-Lock Overlay ─────────────────────────────────
+
+.step__soft-lock {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #F0F4FF;
+  border: 1px solid #C7D2FE;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.step__soft-lock__hint {
+  font-size: 12px;
+  color: $text-gray;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.step__soft-lock__btn {
+  font-size: 11px;
+  font-weight: 600;
+  color: $indigo-landed;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  white-space: nowrap;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+
+  &:hover {
+    color: darken(#4F46E5, 10%);
+  }
 }

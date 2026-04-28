@@ -1,6 +1,10 @@
 <div class="task-detail-page" data-controller="task-detail">
   <div class="container task-container">
 
+    <div class="d-flex justify-content-end mb-2">
+        <%= link_to "← Back", root_path, class: "task-back-link" %>
+    </div>
+
     <%# ── MAIN LAYOUT ── %>
     <div class="task-layout">
 
@@ -56,20 +60,25 @@
           <%# ── STEPS LIST ── %>
           <div class="task-steps__list" data-task-detail-target="stepsList">
             <% @checklist_items.each_with_index do |item, index| %>
-              <% progress = @user_checklist_items[item.id] %>
-              <% completed = progress&.completed %>
-              <% is_active = !completed && @checklist_items.select { |i| @user_checklist_items[i.id]&.completed }.count == index %>
+              <% progress   = @user_checklist_items[item.id] %>
+              <% completed  = progress&.completed %>
+              <% soft_locked = !completed && item.soft_locked_for?(@user_checklist_items, @manually_unlocked_ids, @checklist_items.to_a) %>
+              <% is_active  = !completed && !soft_locked && @checklist_items.select { |i| @user_checklist_items[i.id]&.completed }.count == index %>
 
-              <div class="step <%= completed ? 'step--completed' : '' %> <%= is_active ? 'step--active' : '' %> <%= !completed && !is_active ? 'step--locked' : '' %>"
+              <div class="step <%= completed ? 'step--completed' : '' %> <%= soft_locked ? 'step--soft-locked' : '' %> <%= is_active ? 'step--active' : '' %> <%= !completed && !soft_locked && !is_active ? 'step--locked' : '' %>"
                    data-task-detail-target="step"
+                   data-position="<%= item.position %>"
+                   data-unlock-after-position="<%= item.unlock_after_position %>"
                    data-completed="<%= completed %>">
 
                 <%# ── STEP NUMBER ── %>
                 <div class="step__number">
                   <% if completed %>
                     <span class="step__check">✓</span>
+                  <% elsif soft_locked %>
+                    <span class="step__lock-icon">🔒</span>
                   <% else %>
-                    <span><%= index + 1 %></span>
+                    <span><%= item.position %></span>
                   <% end %>
                 </div>
 
@@ -77,51 +86,61 @@
                 <div class="step__content">
                   <div class="step__header">
 
-<%# ── CHECKBOX (all incomplete steps) ── %>
-<% unless completed %>
-  <%= button_to user_checklist_item_path(item),
-      method: :patch,
-      form: {
-        class: "step__checkbox-form",
-        data: {
-          action: "submit->task-detail#completeStep",
-          turbo: "false"
-        }
-      },
-      class: "step__checkbox" do %>
-    <span class="step__checkbox-inner"></span>
-  <% end %>
-<% end %>
-
-                    <h3 class="step__title"><%= item.title %></h3>
-                    <% if is_active %>
-                      <span class="task-badge task-badge--action">Action required</span>
+                    <%# ── CHECKBOX (active non-soft-locked steps only) ── %>
+                    <% unless completed || soft_locked %>
+                      <%= button_to user_checklist_item_path(item),
+                          method: :patch,
+                          form: {
+                            class: "step__checkbox-form",
+                            data: {
+                              action: "submit->task-detail#completeStep",
+                              turbo: "false"
+                            }
+                          },
+                          class: "step__checkbox" do %>
+                        <span class="step__checkbox-inner"></span>
+                      <% end %>
                     <% end %>
+
+                    <div class="step__title-row">
+                      <h3 class="step__title"><%= item.title %></h3>
+                      <div class="step__badges">
+                        <% if item.is_optional %>
+                          <span class="step__badge step__badge--optional">Optional</span>
+                        <% end %>
+                        <% if is_active %>
+                          <span class="task-badge task-badge--action">Action required</span>
+                        <% end %>
+                      </div>
+                    </div>
 
                   </div>
 
                   <p class="step__description"><%= item.description %></p>
 
+                  <%# ── SOFT-LOCK OVERLAY ── %>
+                  <% if soft_locked %>
+                    <div class="step__soft-lock">
+                      <p class="step__soft-lock__hint">
+                        💡 We recommend completing Step<%= item.unlock_after_position == 1 ? " 1" : "s 1–#{item.unlock_after_position}" %> first for the best experience.
+                      </p>
+                      <button class="step__soft-lock__btn"
+                              data-action="click->task-detail#unlockStep"
+                              data-unlock-url="<%= unlock_user_checklist_item_path(item) %>">
+                        Unlock this step manually anyway →
+                      </button>
+                    </div>
+                  <% end %>
+
                   <%# ── ACTIVE STEP EXTRAS ── %>
                   <% if is_active %>
-                    <div class="step__recommendation">
-                      <span class="step__recommendation-logo">
-                        <%= image_tag "TK_logo.png", width: 40, height: 40, alt: "TK" %>
-                      </span>
-                      <div class="step__recommendation-content">
-                        <p class="step__recommendation-name">TK (Techniker Krankenkasse)</p>
-                        <p class="step__recommendation-reason">⭐ Matches your salary bracket & offers full English support.</p>
-                      </div>
-                      <span class="step__recommended-label">✓ Recommended for you</span>
-                    </div>
-                    <a href="#" class="step__see-others">See other providers</a>
                     <div class="step__footer">
                       <span class="step__files">📎 1 Attached File</span>
                       <a href="#" class="step__reminder">🕐 Set Reminder</a>
                     </div>
                   <% end %>
 
-                  <%# ── HIDDEN TOGGLE (fallback) ── %>
+                  <%# ── MARK COMPLETE TOGGLE (active fallback) ── %>
                   <% if !completed && is_active %>
                     <%= button_to user_checklist_item_path(item),
                         method: :patch,

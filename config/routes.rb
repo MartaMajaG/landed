@@ -3,10 +3,14 @@ Rails.application.routes.draw do
   root to: "pages#home"
 
   # Route to update the status (e.g., toggle completed) of user checklist items
-  resources :user_checklist_items, only: [:update]
+  resources :user_checklist_items, only: [:update] do
+    member do
+      patch :unlock  # soft-lock override: manually_unlocked = true
+    end
+  end
 
   # Routes for chat functionality and PDF document uploads
-  resources :chats, only: [:index, :show, :new, :create] do
+  resources :chats, only: [:index, :show, :new, :create, :destroy] do
     # Messages are nested within chats as child resources
     resources :messages, only: [:create]
   end
@@ -25,5 +29,7 @@ Rails.application.routes.draw do
   resource :profile, only: [:edit, :update, :show]
   resource :dashboard, only: :show
 
+  # 3-tier hierarchy: Pillar → Main Task (Task) → Subtask (ChecklistItem)
+  resources :pillars, only: [:show]
   resources :tasks, only: [:index, :show]
 end

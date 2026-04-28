@@ -44,6 +44,10 @@ export default class extends Controller {
         if (nextCheckbox) nextCheckbox.style.display = "block"
       }
 
+      // After completing a step, check if any soft-locked step's prerequisites are now met
+      // and automatically lift the soft-lock visual if so
+      this._refreshSoftLocks()
+
       const completedCount = this.stepTargets.filter(s => s.classList.contains("step--completed")).length
       const totalCount = this.stepTargets.length
 
@@ -59,6 +63,61 @@ export default class extends Controller {
         this.celebrate()
       }
     }
+  }
+
+  // Called when user clicks "Unlock this step manually" on a soft-locked step
+  async unlockStep(event) {
+    event.preventDefault()
+
+    const btn = event.currentTarget
+    const url = btn.dataset.unlockUrl
+
+    const response = await fetch(url, {
+      method: "PATCH",
+      headers: {
+        "X-CSRF-Token": document.querySelector('meta[name="csrf-token"]').content,
+        "Accept": "application/json"
+      }
+    })
+
+    if (response.ok) {
+      const stepEl = btn.closest(".step")
+
+      // Remove soft-lock state and activate the step
+      stepEl.classList.remove("step--soft-locked")
+      stepEl.classList.add("step--active")
+
+      // Show the checkbox/action and hide the soft-lock overlay
+      const softLockOverlay = stepEl.querySelector(".step__soft-lock")
+      if (softLockOverlay) softLockOverlay.remove()
+
+      const checkboxForm = stepEl.querySelector(".step__checkbox-form")
+      if (checkboxForm) checkboxForm.style.display = "block"
+    }
+  }
+
+  // Re-evaluate soft-lock state after a step is completed
+  _refreshSoftLocks() {
+    this.stepTargets.forEach(stepEl => {
+      if (!stepEl.classList.contains("step--soft-locked")) return
+
+      const requiredPositions = stepEl.dataset.unlockAfterPosition
+      if (!requiredPositions) return
+
+      const maxPos = parseInt(requiredPositions)
+      const allDone = this.stepTargets
+        .filter(s => parseInt(s.dataset.position) <= maxPos)
+        .every(s => s.classList.contains("step--completed"))
+
+      if (allDone) {
+        stepEl.classList.remove("step--soft-locked")
+        stepEl.classList.add("step--active")
+        const overlay = stepEl.querySelector(".step__soft-lock")
+        if (overlay) overlay.remove()
+        const checkboxForm = stepEl.querySelector(".step__checkbox-form")
+        if (checkboxForm) checkboxForm.style.display = "block"
+      }
+    })
   }
 
   flashAutosave() {
@@ -105,7 +164,7 @@ export default class extends Controller {
     }, 800)
 
     setTimeout(() => {
-      window.location.href = "/dashboard"
+      window.location.href = "/"
     }, 4000)
   }
 }

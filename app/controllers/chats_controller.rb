@@ -3,7 +3,7 @@ class ChatsController < ApplicationController
 
   def index
     # Load all chats for the current user, most recent first
-    @chats = current_user.chats.order(created_at: :desc)
+    @chats = current_user.chats.joins(:document_attachment).order(created_at: :desc)
   end
 
   def show
@@ -45,4 +45,11 @@ class ChatsController < ApplicationController
     # Strong parameters permitting the checklist item ID and the attached document (PDF or image files)
     params.require(:chat).permit(:checklist_item_id, :document)
   end
+
+  def destroy
+  @chat = current_user.chats.find(params[:id])
+  @chat.destroy
+  redirect_to chats_path, notice: "Document deleted."
+  end
+
 end
