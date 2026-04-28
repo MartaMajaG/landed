@@ -97,18 +97,67 @@ puts "Tasks seeded: #{Task.count} total."
 # SUBTASKS  (ChecklistItems per Main Task)
 # ─────────────────────────────────────────────────────────────────────────────
 
-# Registration subtasks
-ChecklistItem.find_or_create_by!(title: "Book Anmeldung appointment", task: registration) do |item|
-  item.category = "housing_and_registration"
+# Pillar 2, Task 1 — Registration (Anmeldung): 6 structured subtasks
+# Destroy old items + their dependent chats first (FK constraint on chats table)
+old_item_ids = ChecklistItem.where(task: registration).pluck(:id)
+Chat.where(checklist_item_id: old_item_ids).destroy_all
+ChecklistItem.where(task: registration).destroy_all
+
+registration_steps = [
+  {
+    position:              1,
+    title:                 "Get landlord confirmation (Wohnungsgeberbestätigung)",
+    description:           "Ask your landlord to fill and sign the official Wohnungsgeberbestätigung form. A standard rental contract is no longer legally sufficient for the Anmeldung.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              2,
+    title:                 "Gather identity documents",
+    description:           "Prepare your valid passport or national ID. Non-EU citizens must also bring the original visa or electronic residence permit (eAT).",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              3,
+    title:                 "Prepare civil status certificates + translations (if applicable)",
+    description:           "If you were married or had children abroad, bring original marriage/birth certificates. If not in CIEC multilingual format, a certified translation by a German sworn translator is required — an apostille may also be needed.",
+    category:              "housing_and_registration",
+    is_optional:           true,   # Optional badge — only needed for some users
+    unlock_after_position: nil
+  },
+  {
+    position:              4,
+    title:                 "Book Bürgerbüro appointment",
+    description:           "Book your Anmeldung appointment online at the Munich Bürgerbüro (KVR). Slots fill quickly — book as soon as you have your Wohnungsgeberbestätigung.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: 2   # Soft-locked: recommended after Steps 1 & 2 are done
+  },
+  {
+    position:              5,
+    title:                 "Attend appointment & collect Meldebescheinigung",
+    description:           "Attend your Bürgerbüro appointment in person — all documents must be presented as originals, not scanned copies. You will receive your Meldebescheinigung on the spot.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: 4   # Soft-locked: only sensible after appointment is booked (Step 4)
+  },
+  {
+    position:              6,
+    title:                 "Prepare Vollmacht (Power of Attorney) if sending someone else",
+    description:           "If you cannot attend the appointment in person, prepare and sign a Vollmacht (Power of Attorney) for the person attending on your behalf. Must be an original signature.",
+    category:              "housing_and_registration",
+    is_optional:           true,  # Optional badge — only needed if user cannot attend
+    unlock_after_position: nil
+  }
+]
+
+registration_steps.each do |attrs|
+  ChecklistItem.create!(task: registration, **attrs)
 end
 
-ChecklistItem.find_or_create_by!(title: "Gather required documents for Anmeldung", task: registration) do |item|
-  item.category = "housing_and_registration"
-end
-
-ChecklistItem.find_or_create_by!(title: "Attend appointment and collect Meldebescheinigung", task: registration) do |item|
-  item.category = "housing_and_registration"
-end
 
 # Banking subtasks
 ChecklistItem.find_or_create_by!(title: "Open a German bank account", task: banking) do |item|
@@ -119,7 +168,49 @@ ChecklistItem.find_or_create_by!(title: "Set up online banking", task: banking) 
   item.category = "finance_and_banking"
 end
 
-# Health insurance subtasks
+# ─────────────────────────────────────────────────────────────────────────────
+# Pillar 2, Task 2 — Set Up Household Utilities
+# ─────────────────────────────────────────────────────────────────────────────
+household = Task.find_or_initialize_by(name: "Set Up Household Utilities", city: munich)
+household.update!(
+  pillar:         pillar_housing,
+  category:       "housing_and_registration",
+  description:    "Register for the broadcasting fee, set up your electricity contract, and arrange your internet connection.",
+  why_it_matters: "The Rundfunkbeitrag is legally mandatory for every household. Signing your own electricity contract prevents you from being billed at the expensive default SWM Grundversorgung tariff.",
+  urgency:        "medium"
+)
+
+household_steps = [
+  {
+    position:              1,
+    title:                 "Register for broadcasting fee (Rundfunkbeitrag)",
+    description:           "Register your household with ARD ZDF Deutschlandradio Beitragsservice to pay the €18.36/month broadcasting fee. In shared flats (WGs), ask the main tenant for their Beitragsnummer — you can be added as a co-occupant instead of creating a new account.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              2,
+    title:                 "Set up electricity contract",
+    description:           "Sign up with a private electricity provider to avoid the expensive SWM Grundversorgung default tariff. You will need your meter reading (Zählerstand) and meter number (Zählernummer) from move-in day.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              3,
+    title:                 "Set up internet/broadband contract",
+    description:           "Sign a broadband internet contract with a provider such as Deutsche Telekom, Vodafone, or O2. You will need your passport and IBAN. Lead times can be 2–4 weeks — book early.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: nil
+  }
+]
+
+household_steps.each do |attrs|
+  ChecklistItem.create!(task: household, **attrs)
+end
+
 ChecklistItem.find_or_create_by!(title: "Register Residence Address", task: health) do |item|
   item.category    = "health_and_insurance"
   item.description = "Register your address at the local Bürgeramt to obtain your Meldebescheinigung."

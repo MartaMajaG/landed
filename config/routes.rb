@@ -3,7 +3,11 @@ Rails.application.routes.draw do
   root to: "pages#home"
 
   # Route to update the status (e.g., toggle completed) of user checklist items
-  resources :user_checklist_items, only: [:update]
+  resources :user_checklist_items, only: [:update] do
+    member do
+      patch :unlock  # soft-lock override: manually_unlocked = true
+    end
+  end
 
   # Routes for chat functionality and PDF document uploads
   resources :chats, only: [:index, :show, :new, :create, :destroy] do
