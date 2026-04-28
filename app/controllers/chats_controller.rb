@@ -3,7 +3,7 @@ class ChatsController < ApplicationController
 
   def index
     # Load all chats for the current user, most recent first
-    @chats = current_user.chats.order(created_at: :desc)
+    @chats = current_user.chats.joins(:document_attachment).order(created_at: :desc)
   end
 
   def show
@@ -19,7 +19,7 @@ class ChatsController < ApplicationController
   # Save the chat, trigger AI analysis if a document was attached, then redirect to results
   def create
     @chat = current_user.chats.build(chat_params)
-    @chat.checklist_item_id ||= ChecklistItem.first.id 
+    @chat.checklist_item_id ||= ChecklistItem.first.id
 
     if @chat.save
       if @chat.document.attached?
