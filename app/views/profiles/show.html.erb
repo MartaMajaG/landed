@@ -1,10 +1,19 @@
-<h1>Here is your profile page</h1>
+<div class="onboarding-page profile-page">
+  <div class="onboarding-shell">
+    <div class="profile-heading">
+      <h1>Your profile</h1>
+      <p>Your relocation details in one place.</p>
+    </div>
 
-<p><strong>First name:</strong> <%= @profile.first_name %></p>
-<p><strong>Last name:</strong> <%= @profile.last_name %></p>
-<p><strong>City:</strong> <%= @profile.city.name %></p>
-<p><strong>Country:</strong> <%= @profile.city.country%></p>
-<p><strong>Arrival Date:</strong> <%= @profile.arrival_date %></p>
+    <div class="onboarding-panel profile-card">
+      <p><strong>Name:</strong> <%= [@profile.first_name, @profile.last_name].compact_blank.join(" ").presence || "Not added yet" %></p>
+      <p><strong>City:</strong> <%= @profile.city&.name || "Not selected yet" %></p>
+      <p><strong>Country:</strong> <%= @profile.city&.country || "Germany" %></p>
+      <p><strong>Arrival date:</strong> <%= @profile.arrival_date || "Skipped for now" %></p>
+      <p><strong>Visa status:</strong> <%= @profile.visa_status&.humanize || "Not selected yet" %></p>
+      <p><strong>Home:</strong> <%= @profile.has_home.nil? ? "Not selected yet" : (@profile.has_home ? "Yes" : "No") %></p>
 
-
-<%= link_to "Edit Profile", edit_profile_path %>
+      <%= link_to "Edit Profile", edit_profile_path, class: "onboarding-button profile-button" %>
+    </div>
+  </div>
+</div>

@@ -7,6 +7,7 @@ class ProfilesController < ApplicationController
 
   def edit
     @profile = current_user.profile || current_user.create_profile
+    @cities = City.where(country: "Germany").order(:name)
   end
 
   def update
@@ -21,6 +22,6 @@ class ProfilesController < ApplicationController
   private
 
   def profile_params
-    params.require(:profile).permit(:first_name, :last_name, :city_id)
+    params.require(:profile).permit(:first_name, :last_name, :city_id, :arrival_date, :visa_status, :has_home)
   end
 end
