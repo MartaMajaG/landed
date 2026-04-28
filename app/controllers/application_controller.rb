@@ -4,6 +4,8 @@ class ApplicationController < ActionController::Base
 
   def redirect_if_onboarding_incomplete
     return unless user_signed_in?
+    return if devise_controller?
+    return if request.path.start_with?("/onboarding")
 
     profile = current_user.profile
     if profile.nil?
@@ -11,8 +13,8 @@ class ApplicationController < ActionController::Base
       return redirect_to onboarding_path
     end
 
-    return unless profile.city_id.blank? || profile.arrival_date.blank?
+    return if profile.onboardings_complete?
 
-    redirect_to onboarding_path unless request.path == onboarding_path
+    redirect_to onboarding_path
   end
 end

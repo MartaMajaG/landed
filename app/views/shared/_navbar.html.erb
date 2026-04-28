@@ -1,3 +1,5 @@
+<% onboarding_page = controller_name == "onboardings" %>
+
 <nav class="navbar navbar-expand-sm navbar-light navbar-lewagon">
   <div class="container">
     <%= link_to "Landed", root_path, class: "navbar-brand" %>
@@ -9,28 +11,24 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto ps-5">
         <% if user_signed_in? %>
-          <li class="nav-item <%= 'active' if current_page?(root_path) %>">
-            <%= link_to "Dashboard", root_path, class: "nav-link" %>
-          </li>
-            <li class="nav-item <%= 'active' if current_page?(chats_path) %>">
-              <%= link_to "Document", chats_path, class: "nav-link" %>
-            </li>
-              <li class="nav-item <%= 'active' if current_page?('#') %>">
-                <%= link_to "Community", "#", class: "nav-link" %>
-              </li>
-                <% end %>
+  <li class="nav-item <%= 'active' if current_page?(root_path) %>">
+    <%= link_to "Dashboard", root_path, class: "nav-link" %>
+  </li>
+  <li class="nav-item <%= 'active' if current_page?(chats_path) %>">
+    <%= link_to "Document", chats_path, class: "nav-link" %>
+  </li>
+  <li class="nav-item <%= 'active' if current_page?('#') %>">
+    <%= link_to "Community", "#", class: "nav-link" %>
+  </li>
+<% end %> 
       </ul>
 
-<%# Removed search bar for now, can be added back later if needed %>
-      <%# <% if user_signed_in? %>
-        <%# <form class="d-flex me-4 navbar-search" role="search">
-          <%# <i class="fa-solid fa-magnifying-glass navbar-search-icon"></i>
-          <%# <input class="form-control rounded-pill" type="search" placeholder="Search" aria-label="Search"> %>
-        <%# </form> %>
-      <%# <% end %>
-
       <ul class="navbar-nav ms-auto">
-        <% if user_signed_in? %>
+        <% if onboarding_page %>
+          <li class="nav-item">
+            <%= link_to "Help", "#", class: "nav-link" %>
+          </li>
+        <% elsif user_signed_in? %>
           <li class="nav-item me-3 d-flex align-items-center">
             <%= image_tag "icon.svg", style: "height: 26px; width: auto;" %>
           </li>
@@ -43,7 +41,7 @@
           </li>
         <% else %>
           <li class="nav-item">
-            <%= link_to "Login", new_user_session_path, class: "nav-link" %>
+            <%= link_to "Sign in", new_user_session_path, class: "nav-link" %>
           </li>
         <% end %>
       </ul>

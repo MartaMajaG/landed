@@ -25,12 +25,12 @@ class ChatsController < ApplicationController
       if @chat.document.attached?
         ai_data = @chat.analyze_document
         @chat.update(
-          title:         ai_data["title"],
-          amount:        ai_data["amount"],
-          deadline:      ai_data["deadline"],
-          urgency:       ai_data["urgency"],
+          title: ai_data["title"],
+          amount: ai_data["amount"],
+          deadline: ai_data["deadline"],
+          urgency: ai_data["urgency"],
           document_type: ai_data["document_type"],
-          advice:        ai_data["advice"]
+          advice: ai_data["advice"]
         )
       end
       redirect_to chat_path(@chat), notice: "Document scanned and analyzed!"
@@ -38,7 +38,6 @@ class ChatsController < ApplicationController
       render :new, status: :unprocessable_entity
     end
   end
-
 
   private
 

@@ -6,8 +6,16 @@ class TasksController < ApplicationController
 
   def show
     @checklist_items = @task.checklist_items.order(:position)
+    item_ids         = @checklist_items.pluck(:id)
 
-    @user_checklist_items = current_user.user_checklist_items.where(checklist_item_id: @checklist_items.pluck(:id)).index_by(&:checklist_item_id)
+    @user_checklist_items = current_user.user_checklist_items
+                                        .where(checklist_item_id: item_ids)
+                                        .index_by(&:checklist_item_id)
+
+    # IDs of steps the user has manually unlocked (overrides soft-lock)
+    @manually_unlocked_ids = current_user.user_checklist_items
+                                         .where(checklist_item_id: item_ids, manually_unlocked: true)
+                                         .pluck(:checklist_item_id).to_set
   end
 
   private

@@ -1,0 +1,58 @@
+.profile-page {
+  padding-top: 32px;
+}
+
+.profile-heading {
+  max-width: 640px;
+  margin: 0 auto 24px;
+  text-align: center;
+}
+
+.profile-heading h1 {
+  margin: 0;
+  color: $text-dark;
+  font-family: $headers-font;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.18;
+}
+
+.profile-heading p {
+  max-width: 560px;
+  margin: 12px auto 0;
+  color: $text-gray;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.profile-card {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.profile-card p {
+  margin-bottom: 12px;
+  color: $text-gray;
+  font-size: 14px;
+}
+
+.profile-card strong {
+  color: $text-dark;
+}
+
+.onboarding-select-wrap--date::after {
+  display: none;
+}
+
+.onboarding-select-wrap--date input[type="date"] {
+  appearance: auto;
+  -webkit-appearance: auto;
+  padding-right: 16px;
+}
+
+.profile-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
