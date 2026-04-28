@@ -629,5 +629,124 @@
       "action_type": "book_appointment",
       "completes_task_id": "task_aufenthaltstitel_application"
     }
+  },
+
+  {
+    "id": "bzst_steuer_id_brief",
+    "name": "Steueridentifikationsnummer (Tax ID Letter from BZSt)",
+    "category": "finance_and_banking",
+    "pillar": 3,
+    "document_type": "confirmation",
+    "provider": "government_body",
+    "relevance": "mandatory",
+    "detection_markers": [
+      "Steuer-Identifikationsnummer",
+      "Bundeszentralamt für Steuern",
+      "BZSt",
+      "IdNr",
+      "steuerliche Identifikation",
+      "§ 139b AO",
+      "Identifikationsnummer"
+    ],
+    "logic": {
+      "action_type": "verify_validity",
+      "target_url": "https://www.bzst.de/DE/Privatpersonen/SteuerlicheIdentifikationsnummer/steuerlicheidentifikationsnummer_node.html",
+      "completes_task_id": "task_steuer_id_receipt"
+    }
+  },
+
+  {
+    "id": "finanzamt_steuerklassenwechsel",
+    "name": "Antrag auf Steuerklassenwechsel bei Ehegatten (Tax Class Change Application)",
+    "category": "finance_and_banking",
+    "pillar": 3,
+    "document_type": "form_to_fill",
+    "provider": "government_body",
+    "relevance": "optional",
+    "detection_markers": [
+      "Antrag auf Steuerklassenwechsel",
+      "Steuerklassenwechsel bei Ehegatten",
+      "Steuerklasse III",
+      "Steuerklasse IV",
+      "Faktorverfahren",
+      "Steuer-Identifikationsnummer",
+      "Finanzamt"
+    ],
+    "logic": {
+      "action_type": "fill_and_submit",
+      "target_url": "https://www.elster.de/eportal/start",
+      "completes_task_id": "task_steuerklasse_change"
+    }
+  },
+
+  {
+    "id": "finanzamt_einkommensteuererklaerung",
+    "name": "Einkommensteuererklärung (Annual Income Tax Return)",
+    "category": "finance_and_banking",
+    "pillar": 3,
+    "document_type": "form_to_fill",
+    "provider": "government_body",
+    "relevance": "optional",
+    "detection_markers": [
+      "Einkommensteuererklärung",
+      "Steuerpflichtiger",
+      "Veranlagungszeitraum",
+      "Anlage N",
+      "Bruttoarbeitslohn",
+      "ELSTER",
+      "Finanzamt"
+    ],
+    "logic": {
+      "action_type": "fill_and_submit",
+      "target_url": "https://www.elster.de/eportal/start",
+      "completes_task_id": "task_annual_tax_return"
+    }
+  },
+
+  {
+    "id": "finanzamt_steuerbescheid",
+    "name": "Einkommensteuerbescheid (Tax Assessment Notice)",
+    "category": "finance_and_banking",
+    "pillar": 3,
+    "document_type": "notice",
+    "provider": "government_body",
+    "relevance": "optional",
+    "detection_markers": [
+      "Einkommensteuerbescheid",
+      "Steuerbescheid",
+      "Festsetzung der Einkommensteuer",
+      "Steuernummer",
+      "Erstattungsbetrag",
+      "Nachzahlungsbetrag",
+      "Einspruch"
+    ],
+    "logic": {
+      "action_type": "verify_validity",
+      "completes_task_id": "task_annual_tax_return"
+    }
+  },
+
+  {
+    "id": "bank_kontoeinrichtung",
+    "name": "Kontoeinrichtungsbestätigung / IBAN-Mitteilung (Bank Account Confirmation)",
+    "category": "finance_and_banking",
+    "pillar": 3,
+    "document_type": "confirmation",
+    "provider": "government_body",
+    "relevance": "mandatory",
+    "detection_markers": [
+      "Kontonummer",
+      "IBAN",
+      "BIC",
+      "Girokonto",
+      "Kontoinhaber",
+      "Sparkasse",
+      "Deutsche Bank",
+      "Commerzbank"
+    ],
+    "logic": {
+      "action_type": "verify_validity",
+      "completes_task_id": "task_bank_account_opening"
+    }
   }
 ]
