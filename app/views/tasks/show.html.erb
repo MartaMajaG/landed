@@ -9,6 +9,7 @@
 
         <%# ── BREADCRUMB ── %>
         <div class="task-breadcrumb">
+          <%= link_to "← Back", root_path, class: "task-back-link" %>
           <span class="task-badge task-badge--urgent">DUE IN 2 DAYS</span>
           <span class="breadcrumb__category"><%= @task.category %></span>
           <span class="breadcrumb__divider">·</span>
