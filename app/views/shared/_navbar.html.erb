@@ -1,3 +1,5 @@
+<% onboarding_page = controller_name == "onboardings" %>
+
 <nav class="navbar navbar-expand-sm navbar-light navbar-lewagon">
   <div class="container">
     <%= link_to "Landed", root_path, class: "navbar-brand" %>
@@ -8,7 +10,7 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto ps-5">
-        <% if user_signed_in? %>
+        <% if user_signed_in? && !onboarding_page %>
           <li class="nav-item active">
             <%= link_to "Dashboard", root_path, class: "nav-link" %>
           </li>
@@ -30,7 +32,11 @@
       <%# <% end %>
 
       <ul class="navbar-nav ms-auto">
-        <% if user_signed_in? %>
+        <% if onboarding_page %>
+          <li class="nav-item">
+            <%= link_to "Help", "#", class: "nav-link" %>
+          </li>
+        <% elsif user_signed_in? %>
           <li class="nav-item me-3 d-flex align-items-center">
             <%= image_tag "icon.svg", style: "height: 26px; width: auto;" %>
           </li>
