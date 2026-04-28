@@ -105,7 +105,7 @@ export default class extends Controller {
     }, 800)
 
     setTimeout(() => {
-      window.location.href = "/dashboard"
+      window.location.href = "/"
     }, 4000)
   }
 }
