@@ -237,6 +237,10 @@
   box-shadow: 0 0 0 3px rgba($blue-action, 0.12);
 }
 
+.onboarding-choice--row {
+  flex-direction: row;
+}
+
 .onboarding-choice--card {
   min-height: 150px;
   flex-direction: column;
@@ -455,5 +459,4 @@
     min-width: 0;
   }
 }
-
 

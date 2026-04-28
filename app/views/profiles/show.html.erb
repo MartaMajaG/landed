@@ -12,7 +12,9 @@
       <p><strong>Arrival date:</strong> <%= @profile.arrival_date || "Skipped for now" %></p>
       <p><strong>Visa status:</strong> <%= @profile.visa_status&.humanize || "Not selected yet" %></p>
       <p><strong>Home:</strong> <%= @profile.has_home.nil? ? "Not selected yet" : (@profile.has_home ? "Yes" : "No") %></p>
+    </div>
 
+    <div class="onboarding-actions">
       <%= link_to "Edit Profile", edit_profile_path, class: "onboarding-button profile-button" %>
     </div>
   </div>

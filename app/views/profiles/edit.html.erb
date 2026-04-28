@@ -35,7 +35,9 @@
 
         <div class="onboarding-field">
           <%= f.label :arrival_date, "Arrival date", class: "onboarding-label" %>
-          <%= f.date_field :arrival_date, class: "onboarding-select" %>
+          <div class="onboarding-select-wrap onboarding-select-wrap--date">
+            <%= f.date_field :arrival_date, class: "onboarding-select" %>
+          </div>
         </div>
 
         <div class="onboarding-field">
@@ -58,10 +60,11 @@
           </div>
         </div>
 
-        <div class="onboarding-actions" style="justify-content: flex-start; margin-top: 8px;">
-          <%= f.submit "Save changes", class: "onboarding-button profile-button" %>
-          <%= link_to "Cancel", profile_path, class: "onboarding-button onboarding-button--secondary profile-button" %>
-        </div>
+      </div>
+
+      <div class="onboarding-actions">
+        <%= f.submit "Save changes", class: "onboarding-button profile-button" %>
+        <%= link_to "Cancel", profile_path, class: "onboarding-button onboarding-button--secondary profile-button" %>
       </div>
     <% end %>
   </div>
