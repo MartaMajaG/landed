@@ -3,10 +3,11 @@
 .task-detail-page {
   background: $page-bg;
   min-height: 100vh;
+  padding: 48px 0;
 }
 
 .task-container {
-  padding-top: 24px;
+  padding-top: 0px;
   padding-bottom: 24px;
 }
 
@@ -27,12 +28,26 @@
   position: sticky;
   top: 2rem;
   align-self: start;
+  padding-top: 4rem;
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
 // ── Breadcrumb ────────────────────────────────────
+
+.task-back-link {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: 500;
+  color: $text-gray;
+  text-decoration: none;
+  margin-bottom: 0.5rem;
+
+  &:hover {
+    color: $blue-action;
+  }
+}
 
 .task-breadcrumb {
   display: flex;
