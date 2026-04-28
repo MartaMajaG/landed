@@ -1,52 +1,204 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50">
-  <div class="bg-white w-full max-w-lg p-8 rounded-xl shadow-lg">
+<% city_details = {
+  "Berlin" => { icon: "bi-buildings", description: "Capital city, startup energy, fast-moving admin." },
+  "Munich" => { icon: "bi-bank", description: "Bavarian base, strong employers, calm pace." },
+  "Hamburg" => { icon: "bi-water", description: "Harbor city, international, practical access." }
+} %>
 
-    <!-- Progress / Header -->
-    <div class="mb-6">
-      <h1 class="text-2xl font-bold text-gray-800">Welcome! Let's get you set up</h1>
-      <p class="text-gray-500 mt-1">We just need a few details to personalise your tasks.</p>
-    </div>
-
-    <!-- Form -->
-    <form action="/onboarding" method="patch" class="space-y-6">
-
-      <!-- Country -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Country</label>
-        <select name="profile[country]" class="w-full border rounded-lg p-3">
-          <option value="">Select a country</option>
-          <% City.distinct.order(:country).pluck(:country).each do |country| %>
-          <option value="<%= country %>"><%= country %></option>
-          <% end %>
-          <!-- Loop countries -->
-        </select>
+<div class="onboarding-page">
+  <div class="onboarding-shell">
+    <%= form_with model: @profile,
+              url: onboarding_path,
+              method: :patch,
+              class: "onboarding-form",
+              data: {
+                controller: "onboarding",
+                onboarding_current_step_value: 1,
+                onboarding_total_steps_value: 4
+              } do |f| %>
+      <div class="onboarding-progress">
+        <div class="onboarding-progress__labels">
+          <span data-onboarding-target="stepLabel">STEP 1 OF 4</span>
+          <span data-onboarding-target="percentLabel">25% COMPLETE</span>
+        </div>
+        <div class="onboarding-progress__track">
+          <div class="onboarding-progress__bar" style="width: 25%;" data-onboarding-target="progressBar"></div>
+        </div>
       </div>
 
-      <!-- City -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
-        <select name="profile[city_id]" class="w-full border rounded-lg p-3">
-          <option value="">Select a city</option>
-          <% City.order(:name).each do |city| %>
-          <option value="<%= city.id %>"><%= city.name %></option>
-        <% end %>
-          <!-- Loop cities -->
-        </select>
-      </div>
+      <% if @profile.errors.any? %>
+        <div class="onboarding-alert" role="alert">
+          <%= @profile.errors.full_messages.to_sentence %>
+        </div>
+      <% end %>
 
-      <!-- Arrival Date -->
-      <div>
-        <label class="block text-sm font-medium text-gray-700 mb-1">Arrival Date</label>
-        <input type="date" name="profile[arrival_date]" class="w-full border rounded-lg p-3">
-      </div>
+      <section class="onboarding-step" data-onboarding-target="step">
+        <div class="onboarding-heading">
+          <h1>Where are you moving to?</h1>
+          <p>Let's find the perfect location for your new chapter.</p>
+        </div>
 
-      <!-- Submit -->
-      <button
-        type="submit"
-        class="w-full bg-blue-600 text-white py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition">
-        Continue
-      </button>
+        <div class="onboarding-panel onboarding-panel--narrow">
+          <div class="onboarding-field">
+            <%= label_tag :country, "Country", class: "onboarding-label" %>
+            <div class="onboarding-select-wrap">
+              <%= select_tag :country,
+                             options_for_select([["Germany", "Germany"]]),
+                             prompt: "Select country",
+                             required: true,
+                             class: "onboarding-select" %>
+            </div>
+          </div>
 
-    </form>
+          <fieldset class="onboarding-fieldset">
+            <legend>City</legend>
+
+            <div class="onboarding-choice-list">
+              <% @city_names.each do |city_name| %>
+                <% city = @cities_by_name[city_name] %>
+                <% details = city_details.fetch(city_name) %>
+                <% input_id = "profile_city_id_#{city_name.parameterize}" %>
+
+                <div class="onboarding-choice-wrap">
+                  <%= f.radio_button :city_id,
+                                     city&.id,
+                                     id: input_id,
+                                     required: true,
+                                     disabled: city.nil?,
+                                     class: "onboarding-option-input" %>
+
+                  <label class="onboarding-choice onboarding-choice--row" for="<%= input_id %>">
+                    <span class="onboarding-choice__icon">
+                      <i class="bi <%= details[:icon] %>" aria-hidden="true"></i>
+                    </span>
+                    <span class="onboarding-choice__body">
+                      <span class="onboarding-choice__title"><%= city_name %></span>
+                      <span class="onboarding-choice__description"><%= details[:description] %></span>
+                    </span>
+                  </label>
+                </div>
+              <% end %>
+            </div>
+          </fieldset>
+        </div>
+
+        <div class="onboarding-actions">
+          <button type="button" class="onboarding-button" data-action="onboarding#next">Continue</button>
+        </div>
+      </section>
+
+        <section class="onboarding-step" data-onboarding-target="step" hidden>
+        <div class="onboarding-heading">
+          <h1>When are you moving?</h1>
+          <p>Select your estimated moving date so we can time your checklist around German deadlines.</p>
+        </div>
+
+        <div class="onboarding-calendar-card">
+          <%= f.hidden_field :arrival_date, data: { onboarding_target: "dateInput" } %>
+
+          <div class="onboarding-calendar-header">
+            <button type="button" class="onboarding-calendar-nav" aria-label="Previous month" data-action="onboarding#previousMonth">
+              <i class="bi bi-chevron-left" aria-hidden="true"></i>
+            </button>
+
+            <h2 data-onboarding-target="monthLabel"></h2>
+
+            <button type="button" class="onboarding-calendar-nav" aria-label="Next month" data-action="onboarding#nextMonth">
+              <i class="bi bi-chevron-right" aria-hidden="true"></i>
+            </button>
+          </div>
+
+          <div class="onboarding-calendar-weekdays">
+            <% %w[Sun Mon Tue Wed Thu Fri Sat].each do |day| %>
+              <span><%= day %></span>
+            <% end %>
+          </div>
+
+          <div class="onboarding-calendar-grid" data-onboarding-target="calendarGrid"></div>
+        </div>
+
+        <div class="onboarding-actions">
+          <button type="button" class="onboarding-button onboarding-button--secondary" data-action="onboarding#previous">Back</button>
+          <button type="button" class="onboarding-button" data-action="onboarding#next">Continue</button>
+        </div>
+
+        <button type="button" class="onboarding-skip-link" data-action="onboarding#skipDate">Skip for now</button>
+      </section>
+
+      <section class="onboarding-step" data-onboarding-target="step" hidden>
+        <div class="onboarding-heading">
+          <h1>What is your visa status?</h1>
+          <p>Tell us where you are in your visa journey so your checklist starts in the right place.</p>
+        </div>
+
+        <fieldset class="onboarding-fieldset onboarding-fieldset--grid">
+          <legend>Visa status</legend>
+
+          <div class="onboarding-card-grid">
+            <% @visa_options.each do |option| %>
+              <% input_id = "profile_visa_status_#{option[:value]}" %>
+
+              <div class="onboarding-choice-wrap">
+                <%= f.radio_button :visa_status,
+                                  option[:value],
+                                  id: input_id,
+                                  required: true,
+                                  class: "onboarding-option-input" %>
+
+                <label class="onboarding-choice onboarding-choice--card" for="<%= input_id %>">
+                  <span class="onboarding-choice__icon">
+                    <i class="bi <%= option[:icon] %>" aria-hidden="true"></i>
+                  </span>
+                  <span class="onboarding-choice__title"><%= option[:title] %></span>
+                  <span class="onboarding-choice__description"><%= option[:description] %></span>
+                </label>
+              </div>
+            <% end %>
+          </div>
+        </fieldset>
+
+        <div class="onboarding-actions">
+          <button type="button" class="onboarding-button onboarding-button--secondary" data-action="onboarding#previous">Back</button>
+          <button type="button" class="onboarding-button" data-action="onboarding#next">Continue</button>
+        </div>
+      </section>
+
+      <section class="onboarding-step" data-onboarding-target="step" hidden>
+        <div class="onboarding-heading">
+          <h1>Do you have a home yet?</h1>
+          <p>Tell us where you are in your housing journey so we can tailor your first German admin tasks.</p>
+        </div>
+
+        <fieldset class="onboarding-fieldset onboarding-fieldset--grid">
+          <legend>Housing status</legend>
+
+          <div class="onboarding-card-grid onboarding-card-grid--two">
+            <% @home_options.each do |option| %>
+              <% input_id = "profile_has_home_#{option[:value]}" %>
+
+              <div class="onboarding-choice-wrap">
+                <%= f.radio_button :has_home,
+                                  option[:value],
+                                  id: input_id,
+                                  required: true,
+                                  class: "onboarding-option-input" %>
+
+                <label class="onboarding-choice onboarding-choice--card onboarding-choice--large" for="<%= input_id %>">
+                  <span class="onboarding-choice__icon">
+                    <i class="bi <%= option[:icon] %>" aria-hidden="true"></i>
+                  </span>
+                  <span class="onboarding-choice__title"><%= option[:title] %></span>
+                  <span class="onboarding-choice__description"><%= option[:description] %></span>
+                </label>
+              </div>
+            <% end %>
+          </div>
+        </fieldset>
+
+        <div class="onboarding-actions">
+          <button type="button" class="onboarding-button onboarding-button--secondary" data-action="onboarding#previous">Back</button>
+          <%= f.submit "Complete Onboarding", class: "onboarding-button" %>
+        </div>
+      </section>
+    <% end %>
   </div>
 </div>

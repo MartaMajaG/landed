@@ -115,9 +115,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_133642) do
     t.bigint "city_id"
     t.datetime "created_at", null: false
     t.string "first_name"
+    t.boolean "has_home"
     t.string "last_name"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
+    t.string "visa_status"
     t.index ["city_id"], name: "index_profiles_on_city_id"
     t.index ["user_id"], name: "index_profiles_on_user_id"
   end

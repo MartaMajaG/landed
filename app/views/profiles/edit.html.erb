@@ -1,22 +1,71 @@
-<h1>Edit Your Profile</h1>
+<div class="onboarding-page profile-page">
+  <div class="onboarding-shell">
+    <div class="profile-heading">
+      <h1>Edit your profile</h1>
+      <p>Update your relocation details at any time.</p>
+    </div>
 
-<%= form_with model: @profile, url: profile_path, method: :patch do |f| %>
-  <div>
-    <%= f.label :first_name %><br>
-    <%= f.text_field :first_name %>
-  </div>
+    <%= form_with model: @profile, url: profile_path, method: :patch, class: "onboarding-form" do |f| %>
+      <div class="onboarding-panel profile-card">
 
-  <div>
-    <%= f.label :last_name %><br>
-    <%= f.text_field :last_name %>
-  </div>
+        <% if @profile.errors.any? %>
+          <div class="onboarding-alert" role="alert">
+            <%= @profile.errors.full_messages.to_sentence %>
+          </div>
+        <% end %>
 
-  <div>
-    <%= f.label :city_id, "City" %><br>
-    <%= f.collection_select :city_id, City.all, :id, :name, prompt: "Select a city" %>
-  </div>
+        <div class="onboarding-field">
+          <%= f.label :first_name, "First name", class: "onboarding-label" %>
+          <%= f.text_field :first_name, class: "onboarding-select" %>
+        </div>
 
-  <div>
-    <%= f.submit "Update Profile" %>
+        <div class="onboarding-field">
+          <%= f.label :last_name, "Last name", class: "onboarding-label" %>
+          <%= f.text_field :last_name, class: "onboarding-select" %>
+        </div>
+
+        <div class="onboarding-field">
+          <%= f.label :city_id, "City", class: "onboarding-label" %>
+          <div class="onboarding-select-wrap">
+            <%= f.collection_select :city_id, @cities, :id, :name,
+                { prompt: "Select a city" },
+                class: "onboarding-select" %>
+          </div>
+        </div>
+
+        <div class="onboarding-field">
+          <%= f.label :arrival_date, "Arrival date", class: "onboarding-label" %>
+          <div class="onboarding-select-wrap onboarding-select-wrap--date">
+            <%= f.date_field :arrival_date, class: "onboarding-select" %>
+          </div>
+        </div>
+
+        <div class="onboarding-field">
+          <%= f.label :visa_status, "Visa status", class: "onboarding-label" %>
+          <div class="onboarding-select-wrap">
+            <%= f.select :visa_status,
+                Profile::VISA_STATUSES.map { |s| [s.humanize, s] },
+                { prompt: "Select visa status" },
+                class: "onboarding-select" %>
+          </div>
+        </div>
+
+        <div class="onboarding-field">
+          <%= f.label :has_home, "Do you have accommodation?", class: "onboarding-label" %>
+          <div class="onboarding-select-wrap">
+            <%= f.select :has_home,
+                [["Yes", true], ["No", false]],
+                { prompt: "Select housing status", include_blank: @profile.has_home.nil? },
+                class: "onboarding-select" %>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="onboarding-actions">
+        <%= f.submit "Save changes", class: "onboarding-button profile-button" %>
+        <%= link_to "Cancel", profile_path, class: "onboarding-button onboarding-button--secondary profile-button" %>
+      </div>
+    <% end %>
   </div>
-<% end %>
+</div>

@@ -1,0 +1,462 @@
+.onboarding-page {
+  min-height: 100vh;
+  background: $page-bg;
+  color: $text-dark;
+  padding: 24px 20px 40px;
+}
+
+.onboarding-shell {
+  max-width: 920px;
+  margin: 0 auto;
+}
+
+.onboarding-form {
+  width: 100%;
+}
+
+.onboarding-progress {
+  max-width: 580px;
+  margin: 0 auto 24px;
+}
+
+.onboarding-progress__labels {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: rgba($text-gray, 0.7);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.onboarding-progress__labels span:last-child {
+  color: $blue-action;
+}
+
+.onboarding-progress__track {
+  height: 5px;
+  margin-top: 8px;
+  border-radius: 3px;
+  background: rgba($text-gray, 0.14);
+  overflow: hidden;
+}
+
+.onboarding-progress__bar {
+  height: 100%;
+  border-radius: inherit;
+  background: $blue-action;
+}
+
+.onboarding-alert {
+  max-width: 580px;
+  margin: 0 auto 20px;
+  border: 0.5px solid rgba($urgent-red, 0.28);
+  border-radius: 8px;
+  background: rgba($urgent-red, 0.08);
+  color: $urgent-red;
+  padding: 12px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.onboarding-step {
+  text-align: center;
+}
+
+.onboarding-step[hidden] {
+  display: none !important;
+}
+
+.onboarding-heading {
+  max-width: 640px;
+  margin: 0 auto 24px;
+}
+
+.onboarding-heading h1 {
+  margin: 0;
+  color: $text-dark;
+  font-family: $headers-font;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.18;
+}
+
+.onboarding-heading p {
+  max-width: 560px;
+  margin: 12px auto 0;
+  color: $text-gray;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.onboarding-panel,
+.onboarding-calendar-card {
+  background: $gray-bg;
+  border: 0.5px solid rgba($text-gray, 0.18);
+  border-radius: 12px;
+}
+
+.onboarding-panel {
+  padding: 20px;
+  text-align: left;
+}
+
+.onboarding-panel--narrow {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.onboarding-field {
+  margin-bottom: 20px;
+}
+
+.onboarding-label,
+.onboarding-fieldset legend {
+  display: block;
+  margin-bottom: 8px;
+  color: rgba($text-gray, 0.7);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.onboarding-select-wrap {
+  position: relative;
+}
+
+.onboarding-select-wrap::after {
+  content: "\F282";
+  position: absolute;
+  top: 50%;
+  right: 18px;
+  transform: translateY(-50%);
+  color: $text-dark;
+  font-family: "bootstrap-icons";
+  font-size: 13px;
+  pointer-events: none;
+}
+
+.onboarding-select {
+  width: 100%;
+  height: 44px;
+  border: 0.5px solid rgba($text-gray, 0.18);
+  border-radius: 8px;
+  appearance: none;
+  -webkit-appearance: none;
+  background: rgba($page-bg, 0.58);
+  color: $text-dark;
+  font-size: 14px;
+  padding: 0 54px 0 16px;
+}
+
+.onboarding-select:focus {
+  border-color: $blue-action;
+  box-shadow: 0 0 0 3px rgba($blue-action, 0.14);
+  outline: none;
+}
+
+.onboarding-fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.onboarding-fieldset--grid {
+  max-width: 860px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.onboarding-fieldset--grid legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.onboarding-choice-list,
+.onboarding-card-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.onboarding-card-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.onboarding-card-grid--two {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.onboarding-choice-wrap {
+  position: relative;
+}
+
+.onboarding-option-input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.onboarding-choice {
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+  border: 0.5px solid rgba($text-gray, 0.18);
+  border-radius: 10px;
+  background: $gray-bg;
+  padding: 14px;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+}
+
+.onboarding-choice:hover {
+  border-color: rgba($text-gray, 0.32);
+  background: rgba($page-bg, 0.45);
+}
+
+.onboarding-option-input:focus-visible + .onboarding-choice {
+  outline: 3px solid rgba($blue-action, 0.18);
+  outline-offset: 3px;
+}
+
+.onboarding-option-input:checked + .onboarding-choice {
+  border-color: $blue-action;
+  box-shadow: 0 0 0 3px rgba($blue-action, 0.12);
+}
+
+.onboarding-choice--row {
+  flex-direction: row;
+}
+
+.onboarding-choice--card {
+  min-height: 150px;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 18px;
+}
+
+.onboarding-choice--large {
+  min-height: 168px;
+  justify-content: center;
+}
+
+.onboarding-choice__icon {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: rgba($success-text, 0.14);
+  color: $success-text;
+  font-size: 16px;
+}
+
+.onboarding-choice__body {
+  min-width: 0;
+}
+
+.onboarding-choice__title {
+  display: block;
+  color: $text-dark;
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.onboarding-choice__description {
+  display: block;
+  margin-top: 6px;
+  color: $text-gray;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.onboarding-calendar-card {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 16px 18px 18px;
+  text-align: left;
+}
+
+.onboarding-calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.onboarding-calendar-header h2 {
+  margin: 0;
+  color: $text-dark;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.onboarding-calendar-nav {
+  width: 28px;
+  height: 28px;
+  border: 0.5px solid rgba($text-gray, 0.18);
+  border-radius: 6px;
+  background: rgba($page-bg, 0.58);
+  color: $text-gray;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+.onboarding-calendar-nav:hover,
+.onboarding-calendar-nav:focus {
+  border-color: rgba($text-gray, 0.32);
+  background: rgba($page-bg, 0.9);
+  color: $text-dark;
+}
+
+.onboarding-calendar-weekdays,
+.onboarding-calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.onboarding-calendar-weekdays {
+  margin-bottom: 6px;
+  color: rgba($text-gray, 0.75);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.onboarding-calendar-grid {
+  gap: 4px;
+}
+
+.onboarding-calendar-day {
+  aspect-ratio: 1;
+  min-height: 32px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: $text-dark;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.onboarding-calendar-day:hover,
+.onboarding-calendar-day:focus {
+  background: rgba($page-bg, 0.72);
+}
+
+.onboarding-calendar-day:focus-visible {
+  outline: 3px solid rgba($blue-action, 0.18);
+  outline-offset: 2px;
+}
+
+.onboarding-calendar-day.is-selected {
+  background: $blue-action;
+  color: $gray-bg;
+}
+
+.onboarding-step-error {
+  margin: 0 auto 8px;
+  color: $urgent-red;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.onboarding-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.onboarding-button {
+  min-width: 220px;
+  min-height: 46px;
+  border: 0;
+  border-radius: 8px;
+  background: $blue-action;
+  color: $gray-bg;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.onboarding-button:hover,
+.onboarding-button:focus {
+  background: rgba($blue-action, 0.8);
+  color: $gray-bg;
+}
+
+.onboarding-button--secondary {
+  min-width: 120px;
+  background: $gray-bg;
+  color: $text-gray;
+  border: 0.5px solid rgba($text-gray, 0.18);
+}
+
+.onboarding-button--secondary:hover,
+.onboarding-button--secondary:focus {
+  background: rgba($page-bg, 0.58);
+  color: $text-dark;
+}
+
+.onboarding-skip-link {
+  display: block;
+  margin: 14px auto 0;
+  border: 0;
+  background: transparent;
+  color: $success-text;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.onboarding-skip-link:hover,
+.onboarding-skip-link:focus {
+  color: $chartreuse;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 767px) {
+  .onboarding-page {
+    padding: 22px 14px 32px;
+  }
+
+  .onboarding-heading h1 {
+    font-size: 1.75rem;
+  }
+
+  .onboarding-card-grid,
+  .onboarding-card-grid--two {
+    grid-template-columns: 1fr;
+  }
+
+  .onboarding-choice--card,
+  .onboarding-choice--large {
+    min-height: auto;
+  }
+
+  .onboarding-button {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
