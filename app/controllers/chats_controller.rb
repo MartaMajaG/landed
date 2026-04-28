@@ -46,4 +46,11 @@ class ChatsController < ApplicationController
     # Strong parameters permitting the checklist item ID and the attached document (PDF or image files)
     params.require(:chat).permit(:checklist_item_id, :document)
   end
+
+  def destroy
+  @chat = current_user.chats.find(params[:id])
+  @chat.destroy
+  redirect_to chats_path, notice: "Document deleted."
+  end
+
 end

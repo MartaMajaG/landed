@@ -6,7 +6,7 @@ Rails.application.routes.draw do
   resources :user_checklist_items, only: [:update]
 
   # Routes for chat functionality and PDF document uploads
-  resources :chats, only: [:index, :show, :new, :create] do
+  resources :chats, only: [:index, :show, :new, :create, :destroy] do
     # Messages are nested within chats as child resources
     resources :messages, only: [:create]
   end
