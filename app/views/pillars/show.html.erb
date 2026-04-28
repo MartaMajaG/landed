@@ -1,0 +1,81 @@
+<div class="pillar-page">
+  <div class="container pillar-container">
+
+    <%# ── BREADCRUMB ── %>
+    <div class="pillar-breadcrumb">
+      <%= link_to "Dashboard", dashboard_path, class: "breadcrumb__link" %>
+      <span class="breadcrumb__divider">·</span>
+      <span class="breadcrumb__current"><%= @pillar.name %></span>
+    </div>
+
+    <%# ── HEADER ── %>
+    <div class="pillar-header">
+      <div class="pillar-header__icon">
+        <i class="fa-solid <%= @pillar.icon %>"></i>
+      </div>
+      <div class="pillar-header__text">
+        <h1 class="pillar-title"><%= @pillar.name %></h1>
+        <p class="pillar-description"><%= @pillar.description %></p>
+      </div>
+    </div>
+
+    <%# ── TASKS GRID ── %>
+    <div class="pillar-tasks-header">
+      <h2 class="pillar-tasks-label">Main Tasks</h2>
+      <span class="pillar-tasks-count">
+        <%= @tasks.count %> task<%= @tasks.count == 1 ? "" : "s" %>
+      </span>
+    </div>
+
+    <div class="pillar-tasks-grid">
+      <% @tasks.each do |task| %>
+        <%
+          subtasks        = task.checklist_items.order(:position)
+          total           = subtasks.count
+          done            = subtasks.count { |s| @user_progress[s.id]&.completed }
+          pct             = total.zero? ? 0 : (done.to_f / total * 100).round
+          all_done        = done == total && total > 0
+        %>
+
+        <%= link_to task_path(task), class: "task-card-link" do %>
+          <div class="pillar-task-card <%= all_done ? 'pillar-task-card--done' : '' %>">
+
+            <%# ── URGENCY BADGE ── %>
+            <div class="pillar-task-card__top">
+              <% if task.urgency == "high" %>
+                <span class="task-badge task-badge--urgent">Urgent</span>
+              <% elsif task.urgency == "medium" %>
+                <span class="task-badge task-badge--medium">Active</span>
+              <% else %>
+                <span class="task-badge task-badge--low">Upcoming</span>
+              <% end %>
+              <% if all_done %>
+                <span class="pillar-task-card__done-check">✓ Done</span>
+              <% end %>
+            </div>
+
+            <%# ── TITLE & DESCRIPTION ── %>
+            <h3 class="pillar-task-card__title"><%= task.name %></h3>
+            <p class="pillar-task-card__desc"><%= task.description %></p>
+
+            <%# ── PROGRESS BAR ── %>
+            <div class="pillar-task-card__footer">
+              <div class="pillar-task-card__progress-label">
+                <% if all_done %>
+                  <span class="progress-label--done">All steps complete!</span>
+                <% else %>
+                  <span><%= done %> of <%= total %> steps done</span>
+                <% end %>
+              </div>
+              <div class="pillar-task-card__track">
+                <div class="pillar-task-card__fill" style="width: <%= pct %>%;"></div>
+              </div>
+            </div>
+
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+  </div>
+</div>
