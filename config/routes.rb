@@ -25,5 +25,7 @@ Rails.application.routes.draw do
   resource :profile, only: [:edit, :update, :show]
   resource :dashboard, only: :show
 
+  # 3-tier hierarchy: Pillar → Main Task (Task) → Subtask (ChecklistItem)
+  resources :pillars, only: [:show]
   resources :tasks, only: [:index, :show]
 end
