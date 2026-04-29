@@ -38,9 +38,7 @@
     color: #1A1A2E;
     padding: 0;
   }
-  .chat-input-field::placeholder {
-    color: #9CA3AF;
-  }
+  .chat-input-field::placeholder { color: #9CA3AF; }
   .chat-send-btn {
     flex-shrink: 0;
     width: 32px;
@@ -83,9 +81,7 @@
     cursor: pointer;
     user-select: none;
   }
-  .chat-panel-header:hover {
-    background: #F9FAFB;
-  }
+  .chat-panel-header:hover { background: #F9FAFB; }
 </style>
 
 <div style="background:#F0F1F8; min-height:100vh; padding:48px 0;">
@@ -97,42 +93,32 @@
     </div>
 
     <%# ── HEADER ── %>
-    <div class="mb-4">
-      <p style="font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#7A9E1F; margin-bottom:6px;">Document Analysis</p>
-      <h1 style="font-size:28px; font-weight:700; color:#1A1A2E; margin-bottom:8px;">
+    <div style="margin-bottom:2rem;">
+      <p style="font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#7A9E1F; margin-bottom:4px;">Document Analysis</p>
+      <h1 style="font-size:28px; font-weight:700; color:#1A1A2E; margin:0 0 10px;">
         <%= @chat.title || @chat.document.filename %>
       </h1>
       <div class="d-flex align-items-center gap-2 flex-wrap">
         <small style="color:#6B7280;">Processed on <%= @chat.created_at.strftime("%b %d, %Y") %></small>
-
         <% if @chat.is_mandatory? || @chat.is_mandatory.nil? %>
           <span style="background:#E6F0FB; color:#185FA5; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">Mandatory</span>
         <% else %>
           <span style="background:#F3F4F6; color:#6B7280; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">Optional</span>
         <% end %>
-
         <% if @chat.document_type.present? %>
           <span style="background:#E6F0FB; color:#185FA5; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">
             <%= @chat.document_type %>
-          </span>
-        <% end %>
-
-        <% if @chat.urgency.present? %>
-          <% badge_bg    = { "high" => "#FEE8E8", "medium" => "#FEF3CD", "low" => "#EBF5E0" }[@chat.urgency] %>
-          <% badge_color = { "high" => "#A32D2D", "medium" => "#7C4A00", "low" => "#3B6D11" }[@chat.urgency] %>
-          <span style="background:<%= badge_bg %>; color:<%= badge_color %>; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">
-            <%= @chat.urgency.capitalize %> urgency
           </span>
         <% end %>
       </div>
     </div>
 
     <%# ── TWO COLUMNS ── %>
-    <div class="row g-4 align-items-start">
+    <div class="row g-4 align-items-stretch">
 
       <%# ── LEFT: document preview ── %>
       <div class="col-12 col-md-5">
-        <div style="background:#fff; border:1px solid #E5E7EB; border-radius:12px; padding:16px; display:flex; align-items:center; justify-content:center; min-height:320px;">
+        <div style="background:#fff; border-radius:12px; padding:16px; display:flex; align-items:center; justify-content:center; height:100%;">
           <% if @chat.document.attached? && @chat.document.content_type.start_with?("image/") %>
             <%= image_tag url_for(@chat.document), style:"max-width:100%; max-height:480px; width:auto; height:auto; border-radius:8px; display:block;" %>
           <% elsif @chat.document.attached? %>
@@ -152,17 +138,23 @@
           <% both = @chat.deadline.present? && @chat.amount.present? %>
           <div class="row g-3">
 
+            <%# ── DEADLINE CARD ── %>
             <% if @chat.deadline.present? %>
+              <% days_left = (@chat.deadline - Date.today).to_i %>
               <div class="<%= both ? 'col-6' : 'col-12' %>">
-                <div style="background:#FEE8E8; border:1px solid #FCA5A5; border-radius:10px; padding:16px; height:100%;">
-                  <div style="font-size:28px; line-height:1; margin-bottom:8px;"><%= @chat.urgency == "high" ? "🚨" : "📅" %></div>
-                  <p style="font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#A32D2D; margin-bottom:6px;">
-                    <%= @chat.urgency == "high" ? "Critical Deadline" : "Deadline" %>
+                <div style="background:#fff; border-radius:12px; padding:20px; height:100%;">
+                  <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+                    <i class="fa-solid fa-calendar-xmark" style="font-size:16px; color:<%= @chat.urgency == 'high' ? '#A32D2D' : '#246DD5' %>;"></i>
+                    <p style="font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:<%= @chat.urgency == 'high' ? '#A32D2D' : '#374151' %>; margin:0;">
+                      <%= @chat.urgency == "high" ? "Critical Deadline" : "Deadline" %>
+                    </p>
+                  </div>
+                  <p style="font-size:22px; font-weight:700; color:#1A1A2E; margin:0 0 4px;">
+                    <%= @chat.deadline.strftime("%b %d, %Y") %>
                   </p>
-                  <p style="font-size:20px; font-weight:700; color:#791F1F; margin-bottom:4px;"><%= @chat.deadline.strftime("%b %d, %Y") %></p>
-                  <% days_left = (@chat.deadline - Date.today).to_i %>
-                  <small style="color:#A32D2D;">
+                  <small style="color:<%= days_left < 0 ? '#A32D2D' : '#6B7280' %>;">
                     <% if days_left < 0 %>Passed <%= days_left.abs %> days ago
+                    <% elsif days_left == 0 %>Due today
                     <% else %><%= days_left %> days remaining
                     <% end %>
                   </small>
@@ -170,28 +162,29 @@
               </div>
             <% end %>
 
+            <%# ── AMOUNT CARD ── %>
             <% if @chat.amount.present? %>
               <div class="<%= both ? 'col-6' : 'col-12' %>">
-                <% if @chat.amount <= 0 %>
-                  <% amt_bg = "#EBF5E0"; amt_border = "#C0DD97"; amt_label_color = "#3B6D11"; amt_value_color = "#27500A" %>
-                  <% amt_icon  = @chat.amount < 0 ? "💰" : "✅" %>
-                  <% amt_label = @chat.amount < 0 ? "Potential Refund" : "No Payment Required" %>
-                  <% amt_sub   = @chat.amount < 0 ? "You may receive this back" : "Nothing to pay here" %>
+                <% if @chat.amount < 0 %>
+                  <% amt_icon = "fa-money-bill-transfer"; amt_color = "#3B6D11"; amt_label = "Potential Refund"; amt_sub = "You may receive this back" %>
+                <% elsif @chat.amount == 0 %>
+                  <% amt_icon = "fa-circle-check"; amt_color = "#3B6D11"; amt_label = "No Payment Required"; amt_sub = "Nothing to pay here" %>
                 <% else %>
-                  <% amt_bg = "#FEE8E8"; amt_border = "#FCA5A5"; amt_label_color = "#A32D2D"; amt_value_color = "#791F1F" %>
-                  <% amt_icon = "💸"; amt_label = "Amount Owed"; amt_sub = "See advice below" %>
+                  <% amt_icon = "fa-circle-exclamation"; amt_color = "#A32D2D"; amt_label = "Amount Owed"; amt_sub = "See advice below" %>
                 <% end %>
-                <div style="background:<%= amt_bg %>; border:1px solid <%= amt_border %>; border-radius:10px; padding:16px; height:100%;">
-                  <div style="font-size:28px; line-height:1; margin-bottom:8px;"><%= amt_icon %></div>
-                  <p style="font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:<%= amt_label_color %>; margin-bottom:6px;">
-                    <%= amt_label %>
-                  </p>
+                <div style="background:#fff; border-radius:12px; padding:20px; height:100%;">
+                  <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+                    <i class="fa-solid <%= amt_icon %>" style="font-size:16px; color:<%= amt_color %>;"></i>
+                    <p style="font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:<%= amt_color %>; margin:0;">
+                      <%= amt_label %>
+                    </p>
+                  </div>
                   <% if @chat.amount != 0 %>
-                    <p style="font-size:20px; font-weight:700; color:<%= amt_value_color %>; margin-bottom:4px;">
+                    <p style="font-size:22px; font-weight:700; color:#1A1A2E; margin:0 0 4px;">
                       €<%= number_with_precision(@chat.amount.abs, precision: 2) %>
                     </p>
                   <% end %>
-                  <small style="color:<%= amt_label_color %>;"><%= amt_sub %></small>
+                  <small style="color:#6B7280;"><%= amt_sub %></small>
                 </div>
               </div>
             <% end %>
@@ -199,10 +192,11 @@
           </div>
         <% end %>
 
+        <%# ── WHAT THIS MEANS ── %>
         <% if @chat.advice.present? %>
-          <div style="background:#fff; border:1px solid #E5E7EB; border-radius:12px; padding:20px;">
-            <h5 style="font-size:15px; font-weight:600; color:#1A1A2E; margin-bottom:14px;">
-              <span style="font-size:18px; line-height:1; margin-right:6px;">⚡</span>What this means
+          <div style="background:#fff; border-radius:12px; padding:24px;">
+            <h5 style="font-size:15px; font-weight:600; color:#1A1A2E; margin-bottom:14px; display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-bolt" style="color:#F59E0B; font-size:14px;"></i> What this means
             </h5>
             <ul style="font-size:14px; color:#4B5563; line-height:1.8; padding-left:18px; margin-bottom:0;">
               <% @chat.advice.split(/(?<=\.)\s+/).reject(&:blank?).each do |point| %>
@@ -210,7 +204,7 @@
               <% end %>
             </ul>
             <% if @chat.document.attached? %>
-              <div style="margin-top:14px;">
+              <div style="margin-top:16px;">
                 <%= link_to url_for(@chat.document), target: "_blank", style: "display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:500; color:#4B5563; text-decoration:none; padding:6px 12px; border:1px solid #E5E7EB; border-radius:6px; background:#F9FAFB;" do %>
                   <i class="fa-solid fa-file-pdf" style="color:#E24B4A;"></i> View full document
                 <% end %>
@@ -219,10 +213,11 @@
           </div>
         <% end %>
 
+        <%# ── NEXT STEPS ── %>
         <% if @chat.description.present? %>
-          <div style="background:#fff; border:1px solid #E5E7EB; border-radius:12px; padding:20px;">
-            <h5 style="font-size:15px; font-weight:600; color:#1A1A2E; margin-bottom:14px;">
-              <span style="font-size:18px; line-height:1; margin-right:6px;">📋</span>Next steps
+          <div style="background:#fff; border-radius:12px; padding:24px;">
+            <h5 style="font-size:15px; font-weight:600; color:#1A1A2E; margin-bottom:14px; display:flex; align-items:center; gap:8px;">
+              <i class="fa-solid fa-list-check" style="color:#246DD5; font-size:14px;"></i> Next steps
             </h5>
             <ul style="font-size:14px; color:#4B5563; line-height:1.8; padding-left:18px; margin-bottom:0;">
               <% @chat.description.split("\n").reject(&:blank?).each do |step| %>
@@ -322,7 +317,6 @@
                     </button>
                   <% end %>
                 </div>
-
               </div>
             </div>
 
