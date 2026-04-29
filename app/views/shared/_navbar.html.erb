@@ -11,13 +11,14 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto ps-5">
         <% if user_signed_in? %>
+
           <li class="nav-item">
-            <%= link_to "Dashboard", root_path, class: "nav-link #{'active' if current_page?(root_path)}" %>
+            <%= link_to "Dashboard", dashboard_path, class: "nav-link #{'active' if current_page?(dashboard_path)}" %>
           </li>
           <li class="nav-item">
-           <%= link_to "Documents", chats_path, class: "nav-link #{'active' if current_page?(chats_path)}" %>
+            <%= link_to "Documents", chats_path, class: "nav-link #{'active' if current_page?(chats_path)}" %>
           </li>
-          <li class="nav-item">
+          <%# <li class="nav-item">
             <%= link_to "Community", "#", class: "nav-link #{'active' if current_page?('#')}" %>
           </li>
         <% end %>

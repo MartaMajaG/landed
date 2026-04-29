@@ -49,7 +49,8 @@ class OnboardingsController < ApplicationController
   def show; end
 
   def update
-    if @profile.update(onboarding_params) && @profile.onboardings_complete?
+    if @profile.update(onboarding_params)
+      @profile.update(onboardings_complete: true)
       redirect_to dashboard_path, notice: "Onboarding complete!"
     else
       @profile.errors.add(:base, "Please complete the required onboarding steps.") if @profile.errors.empty?

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_04_28_133642) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_29_092706) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -117,6 +117,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_133642) do
     t.string "first_name"
     t.boolean "has_home"
     t.string "last_name"
+    t.boolean "onboardings_complete"
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.string "visa_status"
@@ -271,6 +272,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_133642) do
     t.bigint "city_id", null: false
     t.datetime "created_at", null: false
     t.text "description"
+    t.jsonb "expert_tips", default: [], null: false
     t.string "name"
     t.bigint "pillar_id"
     t.datetime "updated_at", null: false

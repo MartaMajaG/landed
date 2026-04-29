@@ -6,7 +6,16 @@ class DashboardsController < ApplicationController
     @profile = current_user.profile
     city_id  = current_user.profile.city_id
 
-    # Eager-load pillar so pill tags read task.pillar.name without N+1
+    # Kanban columns — max 2 cards shown per column, total count for badge + "see more"
+    @urgent_tasks   = @profile.tasks.includes(:pillar).where(urgency: "high").limit(2)
+    @active_tasks   = @profile.tasks.includes(:pillar).where(urgency: "medium").limit(2)
+    @upcoming_tasks = @profile.tasks.includes(:pillar).where(urgency: "low").limit(2)
+
+    @urgent_count   = @profile.tasks.where(urgency: "high").count
+    @active_count   = @profile.tasks.where(urgency: "medium").count
+    @upcoming_count = @profile.tasks.where(urgency: "low").count
+
+    # @tasks kept for the Pillar Cards progress section (all tasks, no limit)
     @tasks = @profile.tasks.includes(:pillar)
 
     # Pillar cards section — ordered by position (1–4)
@@ -27,5 +36,6 @@ class DashboardsController < ApplicationController
       @pillar_progress[pillar_id][:done]  += 1 if completed_ids.include?(ci_id)
     end
   end
+
 end
 
