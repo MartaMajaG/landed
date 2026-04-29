@@ -47,7 +47,16 @@
 
   <%# ── TASKS ── %>
   <div class="tasks-header">
-    <h2 class="tasks-label">Tasks</h2>
+    <div class="tasks-title-group">
+      <h2 class="tasks-label">Tasks</h2>
+      <% if @active_pillar %>
+        <a href="<%= pillar_path(@active_pillar) %>"
+           class="tasks-pillar-pill tag-pillar--<%= @active_pillar.slug %>">
+          <%= @active_pillar.name %>
+          <span class="tasks-pillar-pill__arrow">→</span>
+        </a>
+      <% end %>
+    </div>
     <div class="tasks-controls">
       <div class="tasks-toggle">
         <button class="toggle-btn active">All Tasks</button>
@@ -134,11 +143,9 @@
             <div class="card-tags">
               <span class="tag tag-medium">Medium</span>
               <% if task.pillar %>
-                <a href="<%= dashboard_path(pillar: task.pillar.slug) %>"
-                   class="tag tag-pillar--<%= task.pillar.slug %> tag--clickable"
-                   onclick="event.stopPropagation()">
+                <span class="tag tag-pillar--<%= task.pillar.slug %>">
                   <%= task.pillar.name %>
-                </a>
+                </span>
               <% end %>
             </div>
             <span class="card-date">Oct 18</span>
@@ -175,11 +182,9 @@
             <div class="card-tags">
               <span class="tag tag-low">Low</span>
               <% if task.pillar %>
-                <a href="<%= dashboard_path(pillar: task.pillar.slug) %>"
-                   class="tag tag-pillar--<%= task.pillar.slug %> tag--clickable"
-                   onclick="event.stopPropagation()">
+                <span class="tag tag-pillar--<%= task.pillar.slug %>">
                   <%= task.pillar.name %>
-                </a>
+                </span>
               <% end %>
             </div>
             <span class="card-date">Oct 25</span>
