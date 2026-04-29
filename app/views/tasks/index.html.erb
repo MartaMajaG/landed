@@ -1,9 +1,11 @@
+<% content_for :meta_title, "Landed | Tasks" %>
+
 <h1>Actions</h1>
 
 <% if @tasks.any? %>
-  <ul>
+  <ul class="tasks-list">
     <% @tasks.each do |task| %>
-      <li>
+      <li class="task-card">
         <h2><%= task.name %></h2>
         <p><%= task.description %></p>
         <%= link_to "View Details", task_path(task) %>

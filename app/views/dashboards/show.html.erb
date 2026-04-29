@@ -1,331 +1,189 @@
+<% content_for :meta_title, "Landed | Dashboard" %>
+
 <div class="dashboard-bg">
   <div class="container dashboard-wrapper">
-  <%# ── HERO STRIP ── %>
-  <div class="dashboard-hero">
-    <div class="hero-greeting">
-      <img src="https://i.pravatar.cc/48?img=47" alt="Alex" class="hero-avatar" />
-      <div>
-        <h1 class="hero-name">Good morning, <%= current_user.profile.first_name %></h1>
-        <p class="hero-stage">Current Stage: <span class="stage-badge">PRE-DEPARTURE</span></p>
-      </div>
-    </div>
 
-
-    <div class="hero-progress">
-      <p class="progress-label">MILESTONE PROGRESS</p>
-      <div class="progress-title-row">
-        <span class="progress-title">Visa &amp; Documentation</span>
-        <span class="progress-pct">65%</span>
-      </div>
-      <div class="progress-track">
-        <div class="progress-fill" style="width: 65%;"></div>
-      </div>
-    </div>
-
-
-    <div class="hero-events">
-      <div class="events-header">
-        <span class="events-label">UPCOMING EVENTS</span>
-        <a href="#" class="events-viewall">View All</a>
-      </div>
-      <div class="event-item">
-        <span class="event-dot" style="background: #246DD5;"></span>
+    <%# ── HERO STRIP ── %>
+    <div class="dashboard-hero">
+      <div class="hero-greeting">
+        <img src="https://i.pravatar.cc/48?img=47" alt="Alex" class="hero-avatar" />
         <div>
-          <p class="event-name">HR Onboarding Call</p>
-          <p class="event-time">Today, 09:30 am</p>
+          <h1 class="hero-name">Good morning, <%= current_user.profile.first_name %></h1>
+          <p class="hero-stage">Current Stage: <span class="stage-badge">PRE-DEPARTURE</span></p>
         </div>
       </div>
-      <div class="event-item">
-        <span class="event-dot" style="background: #7c3aed;"></span>
-        <div>
-          <p class="event-name">Local Expat Meetup</p>
-          <p class="event-time">Today, 06:00 pm</p>
+
+      <div class="hero-progress">
+        <p class="progress-label">MILESTONE PROGRESS</p>
+        <div class="progress-title-row">
+          <span class="progress-title">Visa &amp; Documentation</span>
+          <span class="progress-pct">65%</span>
+        </div>
+        <div class="progress-track">
+          <div class="progress-fill" style="width: 65%;"></div>
+        </div>
+      </div>
+
+      <div class="hero-events">
+        <div class="events-header">
+          <span class="events-label">UPCOMING EVENTS</span>
+          <a href="#" class="events-viewall">View All</a>
+        </div>
+        <div class="event-item">
+          <span class="event-dot" style="background: #246DD5;"></span>
+          <div>
+            <p class="event-name">HR Onboarding Call</p>
+            <p class="event-time">Today, 09:30 am</p>
+          </div>
+        </div>
+        <div class="event-item">
+          <span class="event-dot" style="background: #7c3aed;"></span>
+          <div>
+            <p class="event-name">Local Expat Meetup</p>
+            <p class="event-time">Today, 06:00 pm</p>
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <%# ── TASKS ── %>
-  <div class="tasks-header">
-    <div class="tasks-title-group">
-      <h2 class="tasks-label">Tasks</h2>
-      <% if @active_pillar %>
-        <a href="<%= pillar_path(@active_pillar) %>"
-           class="tasks-pillar-pill tag-pillar--<%= @active_pillar.slug %>">
-          <%= @active_pillar.name %>
-          <span class="tasks-pillar-pill__arrow">→</span>
-        </a>
-      <% end %>
-    </div>
-    <div class="tasks-controls">
-      <div class="tasks-toggle">
-        <button class="toggle-btn active">All Tasks</button>
-        <button class="toggle-btn">Completed</button>
-      </div>
+    <%# ── TASKS ── %>
+    <div class="tasks-section"
+         data-controller="task-tabs"
+         data-task-tabs-url-value="<%= dashboard_path %>">
 
-      <%# Pillar filter icon + dropdown %>
-      <div class="pillar-filter" id="pillarFilter">
-        <button class="pillar-filter__btn <%= 'pillar-filter__btn--active' if @active_pillar %>"
-                id="pillarFilterBtn"
-                title="Filter by pillar">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-          </svg>
+      <div class="tasks-header">
+        <div class="tasks-title-group">
+          <h2 class="tasks-label">Tasks</h2>
           <% if @active_pillar %>
-            <span class="pillar-filter__label"><%= @active_pillar.name %></span>
-          <% end %>
-        </button>
-
-        <div class="pillar-filter__dropdown" id="pillarFilterDropdown">
-          <a href="<%= dashboard_path %>" class="pillar-filter__option <%= 'active' unless @active_pillar %>">
-            <span class="pillar-filter__dot" style="background:#9ca3af;"></span>
-            All Pillars
-          </a>
-          <% @pillars.each do |pillar| %>
-            <% progress = @pillar_progress[pillar.id] %>
-            <a href="<%= dashboard_path(pillar: pillar.slug) %>"
-               class="pillar-filter__option <%= 'active' if @active_pillar&.id == pillar.id %>">
-              <span class="pillar-filter__dot tag-pillar--<%= pillar.slug %>"></span>
-              <%= pillar.name %>
-              <span class="pillar-filter__count"><%= progress[:done] %>/<%= progress[:total] %></span>
+            <a href="<%= pillar_path(@active_pillar) %>"
+               class="tasks-pillar-pill tag-pillar--<%= @active_pillar.slug %>">
+              <%= @active_pillar.name %>
+              <span class="tasks-pillar-pill__arrow">→</span>
             </a>
           <% end %>
         </div>
-      </div>
-    </div>
-  </div>
 
-  <div class="kanban">
-
-    <%# ── URGENT COLUMN ── %>
-    <div class="kanban-col">
-      <div class="col-header">
-        <span class="col-dot urgent-dot"></span>
-        <span class="col-title">Urgent</span>
-        <span class="col-count"><%= @urgent_count %></span>
-        <span class="col-menu">⋯</span>
-      </div>
-
-      <% @urgent_tasks.each do |task| %>
-        <div class="task-card urgent-card" data-href="<%= task_path(task) %>" style="cursor: pointer;">
-          <div class="card-top-row">
-            <span class="urgent-badge">Urgent</span>
-            <span class="card-menu">⋯</span>
+        <div class="tasks-controls">
+          <div class="tasks-toggle">
+            <button class="toggle-btn active"
+                    data-action="click->task-tabs#switchTab"
+                    data-tab="">
+              All Tasks
+            </button>
+            <button class="toggle-btn"
+                    data-action="click->task-tabs#switchTab"
+                    data-tab="completed">
+              Completed
+            </button>
           </div>
-          <h4 class="card-title"><%= task.name %></h4>
-          <p class="card-desc"><%= task.description %></p>
-          <div class="card-bottom-row">
-            <span class="card-due urgent-due">⏰ Today</span>
-          </div>
-        </div>
-      <% end %>
 
-      <% if @urgent_count > 2 %>
-        <div class="col-see-more">
-          <a href="#" class="col-see-more__link">See all <%= @urgent_count %> urgent tasks →</a>
-        </div>
-      <% end %>
-    </div>
-
-    <%# ── ACTIVE COLUMN ── %>
-    <div class="kanban-col">
-      <div class="col-header">
-        <span class="col-dot active-dot"></span>
-        <span class="col-title">Active</span>
-        <span class="col-count"><%= @active_count %></span>
-        <span class="col-menu">⋯</span>
-      </div>
-
-      <% @active_tasks.each do |task| %>
-        <div class="task-card" data-href="<%= task_path(task) %>" style="cursor: pointer;">
-          <div class="card-top">
-            <div class="card-tags">
-              <span class="tag tag-medium">Medium</span>
-              <% if task.pillar %>
-                <span class="tag tag-pillar--<%= task.pillar.slug %>">
-                  <%= task.pillar.name %>
-                </span>
+          <div class="pillar-filter" id="pillarFilter">
+            <button class="pillar-filter__btn <%= 'pillar-filter__btn--active' if @active_pillar %>"
+                    id="pillarFilterBtn"
+                    title="Filter by category">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                   stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+              </svg>
+              <% if @active_pillar %>
+                <span class="pillar-filter__label"><%= @active_pillar.name %></span>
+              <% end %>
+            </button>
+            <div class="pillar-filter__dropdown" id="pillarFilterDropdown">
+              <a href="<%= dashboard_path %>" class="pillar-filter__option <%= 'active' unless @active_pillar %>">
+                <span class="pillar-filter__dot" style="background:#9ca3af;"></span>
+                All Categories
+              </a>
+              <% @pillars.each do |pillar| %>
+                <% progress = @pillar_progress[pillar.id] %>
+                <a href="<%= dashboard_path(pillar: pillar.slug) %>"
+                   class="pillar-filter__option <%= 'active' if @active_pillar&.id == pillar.id %>">
+                  <span class="pillar-filter__dot tag-pillar--<%= pillar.slug %>"></span>
+                  <%= pillar.name %>
+                  <span class="pillar-filter__count"><%= progress[:done] %>/<%= progress[:total] %></span>
+                </a>
               <% end %>
             </div>
-            <span class="card-date">Oct 18</span>
           </div>
-          <h4 class="card-title"><%= task.name %></h4>
-          <p class="card-desc"><%= task.description %></p>
-          <div class="card-footer">
-            <span class="card-progress-label">In Progress</span>
-            <span class="card-pct">75%</span>
-          </div>
-          <div class="card-track"><div class="card-fill" style="width: 75%;"></div></div>
         </div>
-      <% end %>
-
-      <% if @active_count > 2 %>
-        <div class="col-see-more">
-          <a href="#" class="col-see-more__link">See all <%= @active_count %> active tasks →</a>
-        </div>
-      <% end %>
-    </div>
-
-    <%# ── UPCOMING COLUMN ── %>
-    <div class="kanban-col">
-      <div class="col-header">
-        <span class="col-dot upcoming-dot"></span>
-        <span class="col-title">Upcoming</span>
-        <span class="col-count"><%= @upcoming_count %></span>
-        <span class="col-menu">⋯</span>
       </div>
 
-      <% @upcoming_tasks.each do |task| %>
-        <div class="task-card" data-href="<%= task_path(task) %>" style="cursor: pointer;">
-          <div class="card-top">
-            <div class="card-tags">
-              <span class="tag tag-low">Low</span>
-              <% if task.pillar %>
-                <span class="tag tag-pillar--<%= task.pillar.slug %>">
-                  <%= task.pillar.name %>
-                </span>
-              <% end %>
-            </div>
-            <span class="card-date">Oct 25</span>
-          </div>
-          <h4 class="card-title"><%= task.name %></h4>
-          <p class="card-desc"><%= task.description %></p>
-          <div class="card-footer">
-            <span class="card-progress-label">Not started</span>
-            <span class="card-pct">0%</span>
-          </div>
-          <div class="card-track"><div class="card-fill" style="width: 0%;"></div></div>
-        </div>
-      <% end %>
+      <div class="kanban" data-task-tabs-target="board">
+        <%= render "kanban", urgent_tasks: @urgent_tasks, active_tasks: @active_tasks,
+                             upcoming_tasks: @upcoming_tasks, urgent_count: @urgent_count,
+                             active_count: @active_count, upcoming_count: @upcoming_count %>
+      </div>
+    </div>
 
-      <%# Hardcoded placeholder card if no upcoming tasks exist yet %>
-      <% if @upcoming_tasks.empty? %>
-        <div class="task-card locked">
-          <div class="card-top">
-            <div class="card-tags">
-              <span class="tag tag-low">Low</span>
-              <span class="tag tag-pillar--legal_and_work">Travel</span>
-            </div>
-            <div style="display:flex; align-items:center; gap:6px;">
-              <span class="card-date">Oct 25</span>
-              <span style="font-size:11px;">🔒</span>
-            </div>
+    <%# ── CALENDAR ── %>
+    <div class="calendar-section">
+      <h2 class="tasks-label">Calendar</h2>
+      <div class="calendar-card">
+        <div class="cal-toolbar">
+          <div class="cal-view-toggle">
+            <button class="cal-view-btn active">Month</button>
+            <button class="cal-view-btn">Week</button>
+            <button class="cal-view-btn">Day</button>
           </div>
-          <h4 class="card-title">Book Flight Tickets</h4>
-          <p class="card-desc">Find best routes to BER arriving before the 1st of November.</p>
-          <div class="card-footer">
-            <span class="card-progress-label">Not started</span>
-            <span class="card-pct">0%</span>
+          <div class="cal-legend">
+            <span class="leg-item"><span class="leg-dot" style="background:#f97316;"></span>Housing</span>
+            <span class="leg-item"><span class="leg-dot" style="background:#246DD5;"></span>Visa</span>
+            <span class="leg-item"><span class="leg-dot" style="background:#eab308;"></span>Logistics</span>
+            <span class="leg-item"><span class="leg-dot" style="background:#ec4899;"></span>Medical</span>
           </div>
-          <div class="card-track"><div class="card-fill" style="width: 0%;"></div></div>
+          <div class="cal-nav">
+            <span class="cal-month-title">October 2026</span>
+            <button class="cal-nav-btn">‹</button>
+            <button class="cal-nav-btn">›</button>
+          </div>
         </div>
-      <% end %>
-
-      <% if @upcoming_count > 2 %>
-        <div class="col-see-more">
-          <a href="#" class="col-see-more__link">See all <%= @upcoming_count %> upcoming tasks →</a>
+        <div class="cal-grid">
+          <div class="cal-dow">Monday</div>
+          <div class="cal-dow">Tuesday</div>
+          <div class="cal-dow">Wednesday</div>
+          <div class="cal-dow">Thursday</div>
+          <div class="cal-dow">Friday</div>
+          <div class="cal-dow">Saturday</div>
+          <div class="cal-dow">Sunday</div>
+          <div class="cal-cell"></div>
+          <div class="cal-cell"><span class="cal-date">22</span><div class="cal-event visa">Visa Appointment</div></div>
+          <div class="cal-cell"><span class="cal-date">23</span><div class="cal-event logistics">Sign Lease</div><div class="cal-event logistics">Flight Booking</div></div>
+          <div class="cal-cell"><span class="cal-date">24</span></div>
+          <div class="cal-cell"><span class="cal-date">25</span><div class="cal-event medical">Health Check</div></div>
+          <div class="cal-cell"><span class="cal-date">26</span></div>
+          <div class="cal-cell"><span class="cal-date">27</span></div>
+          <div class="cal-cell"><span class="cal-date">28</span></div>
+          <div class="cal-cell"><span class="cal-date">29</span><div class="cal-event visa">Document Scan Due</div></div>
+          <div class="cal-cell"><span class="cal-date today-num">30</span></div>
+          <div class="cal-cell"><span class="cal-date">31</span><div class="cal-event housing">Movers Arrive</div></div>
+          <div class="cal-cell"><span class="cal-date muted">1</span></div>
+          <div class="cal-cell"><span class="cal-date muted">2</span></div>
+          <div class="cal-cell"><span class="cal-date muted">3</span></div>
         </div>
-      <% end %>
+      </div>
     </div>
 
   </div>
+</div>
 
-  <%# Card click navigation — navigates to task_path on card click %>
-  <script>
-    // Card click → task detail page
-    document.querySelectorAll('.task-card[data-href]').forEach(function(card) {
-      card.addEventListener('click', function() {
-        window.location.href = card.dataset.href;
-      });
+<script>
+  // Card click → task detail page
+  document.querySelectorAll('.task-card[data-href]').forEach(function(card) {
+    card.addEventListener('click', function() {
+      window.location.href = card.dataset.href;
     });
+  });
 
-    // Pillar filter dropdown toggle
-    var filterBtn = document.getElementById('pillarFilterBtn');
-    var filterDropdown = document.getElementById('pillarFilterDropdown');
-    if (filterBtn && filterDropdown) {
-      filterBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        var isOpen = filterDropdown.classList.contains('pillar-filter__dropdown--open');
-        filterDropdown.classList.toggle('pillar-filter__dropdown--open', !isOpen);
-      });
-      document.addEventListener('click', function() {
-        filterDropdown.classList.remove('pillar-filter__dropdown--open');
-      });
-    }
-  </script>
-
-  <%# ── CALENDAR ── %>
-  <div class="calendar-section">
-    <h2 class="tasks-label">Calendar</h2>
-
-    <div class="calendar-card">
-      <div class="cal-toolbar">
-        <div class="cal-view-toggle">
-          <button class="cal-view-btn active">Month</button>
-          <button class="cal-view-btn">Week</button>
-          <button class="cal-view-btn">Day</button>
-        </div>
-        <div class="cal-legend">
-          <span class="leg-item"><span class="leg-dot" style="background:#f97316;"></span>Housing</span>
-          <span class="leg-item"><span class="leg-dot" style="background:#246DD5;"></span>Visa</span>
-          <span class="leg-item"><span class="leg-dot" style="background:#eab308;"></span>Logistics</span>
-          <span class="leg-item"><span class="leg-dot" style="background:#ec4899;"></span>Medical</span>
-        </div>
-        <div class="cal-nav">
-          <span class="cal-month-title">October 2026</span>
-          <button class="cal-nav-btn">‹</button>
-          <button class="cal-nav-btn">›</button>
-        </div>
-      </div>
-
-      <div class="cal-grid">
-        <div class="cal-dow">Monday</div>
-        <div class="cal-dow">Tuesday</div>
-        <div class="cal-dow">Wednesday</div>
-        <div class="cal-dow">Thursday</div>
-        <div class="cal-dow">Friday</div>
-        <div class="cal-dow">Saturday</div>
-        <div class="cal-dow">Sunday</div>
-
-        <%# Week 1 — Oct 21-27 %>
-        <div class="cal-cell"></div>
-        <div class="cal-cell">
-          <span class="cal-date">22</span>
-          <div class="cal-event visa">Visa Appointment</div>
-        </div>
-        <div class="cal-cell">
-          <span class="cal-date">23</span>
-          <div class="cal-event logistics">Sign Lease</div>
-          <div class="cal-event logistics">Flight Booking</div>
-        </div>
-        <div class="cal-cell"><span class="cal-date">24</span></div>
-        <div class="cal-cell">
-          <span class="cal-date">25</span>
-          <div class="cal-event medical">Health Check</div>
-        </div>
-        <div class="cal-cell"><span class="cal-date">26</span></div>
-        <div class="cal-cell"><span class="cal-date">27</span></div>
-
-        <%# Week 2 — Oct 28 - Nov 3 %>
-        <div class="cal-cell"><span class="cal-date">28</span></div>
-        <div class="cal-cell">
-          <span class="cal-date">29</span>
-          <div class="cal-event visa">Document Scan Due</div>
-        </div>
-        <div class="cal-cell"><span class="cal-date today-num">30</span></div>
-        <div class="cal-cell">
-          <span class="cal-date">31</span>
-          <div class="cal-event housing">Movers Arrive</div>
-        </div>
-        <div class="cal-cell"><span class="cal-date muted">1</span></div>
-        <div class="cal-cell"><span class="cal-date muted">2</span></div>
-        <div class="cal-cell"><span class="cal-date muted">3</span></div>
-      </div>
-    </div>
-  </div>
-
-  <%# ── PILLARS SECTION ── removed: pillar filter now in Tasks header %>
-
-</div>
-</div>
+  // Pillar filter dropdown toggle
+  var filterBtn = document.getElementById('pillarFilterBtn');
+  var filterDropdown = document.getElementById('pillarFilterDropdown');
+  if (filterBtn && filterDropdown) {
+    filterBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      filterDropdown.classList.toggle('pillar-filter__dropdown--open');
+    });
+    document.addEventListener('click', function() {
+      filterDropdown.classList.remove('pillar-filter__dropdown--open');
+    });
+  }
+</script>
