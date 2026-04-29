@@ -14,14 +14,14 @@ class DashboardsController < ApplicationController
     base_tasks = @profile.tasks.includes(:pillar)
     base_tasks = base_tasks.where(pillar_id: @active_pillar.id) if @active_pillar
 
-    # Kanban columns — max 2 cards shown, full count for badge + "see more"
-    @urgent_tasks   = base_tasks.where(urgency: "high").limit(2)
-    @active_tasks   = base_tasks.where(urgency: "medium").limit(2)
-    @upcoming_tasks = base_tasks.where(urgency: "low").limit(2)
+    # Kanban columns — all tasks loaded, column scrolls when count exceeds visible area
+    @urgent_tasks   = base_tasks.where(urgency: "high")
+    @active_tasks   = base_tasks.where(urgency: "medium")
+    @upcoming_tasks = base_tasks.where(urgency: "low")
 
-    @urgent_count   = base_tasks.where(urgency: "high").count
-    @active_count   = base_tasks.where(urgency: "medium").count
-    @upcoming_count = base_tasks.where(urgency: "low").count
+    @urgent_count   = @urgent_tasks.size
+    @active_count   = @active_tasks.size
+    @upcoming_count = @upcoming_tasks.size
 
     # Pillar progress — aggregate subtask completion per pillar (3 queries, no N+1)
     ci_rows = ChecklistItem.joins(:task)

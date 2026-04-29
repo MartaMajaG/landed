@@ -376,6 +376,30 @@
   flex-direction: column;
 }
 
+// Scrollable card container inside each Kanban column.
+// max-height of ~2.5 cards creates a clear scroll affordance.
+.kanban-col__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 520px;
+  overflow-y: auto;
+  padding-right: 4px; // breathing room for scrollbar
+
+  // Thin, subtle scrollbar (WebKit / Chrome / Safari)
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: #d1d5db;
+    border-radius: 4px;
+    &:hover { background: #9ca3af; }
+  }
+}
+
 .task-card {
   min-height: 160px;
   display: flex;
