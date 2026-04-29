@@ -6,22 +6,24 @@ class DashboardsController < ApplicationController
     @profile = current_user.profile
     city_id  = current_user.profile.city_id
 
-    # Kanban columns — max 2 cards shown per column, total count for badge + "see more"
-    @urgent_tasks   = @profile.tasks.includes(:pillar).where(urgency: "high").limit(2)
-    @active_tasks   = @profile.tasks.includes(:pillar).where(urgency: "medium").limit(2)
-    @upcoming_tasks = @profile.tasks.includes(:pillar).where(urgency: "low").limit(2)
+    # Pillar filter — optional URL param (?pillar=housing_and_registration)
+    @pillars       = Pillar.where(city_id: city_id).order(:position)
+    @active_pillar = params[:pillar].present? ? @pillars.find_by(slug: params[:pillar]) : nil
 
-    @urgent_count   = @profile.tasks.where(urgency: "high").count
-    @active_count   = @profile.tasks.where(urgency: "medium").count
-    @upcoming_count = @profile.tasks.where(urgency: "low").count
+    # Base task scope — filtered by pillar if one is selected
+    base_tasks = @profile.tasks.includes(:pillar)
+    base_tasks = base_tasks.where(pillar_id: @active_pillar.id) if @active_pillar
 
-    # @tasks kept for the Pillar Cards progress section (all tasks, no limit)
-    @tasks = @profile.tasks.includes(:pillar)
+    # Kanban columns — max 2 cards shown, full count for badge + "see more"
+    @urgent_tasks   = base_tasks.where(urgency: "high").limit(2)
+    @active_tasks   = base_tasks.where(urgency: "medium").limit(2)
+    @upcoming_tasks = base_tasks.where(urgency: "low").limit(2)
 
-    # Pillar cards section — ordered by position (1–4)
-    @pillars = Pillar.where(city_id: city_id).order(:position)
+    @urgent_count   = base_tasks.where(urgency: "high").count
+    @active_count   = base_tasks.where(urgency: "medium").count
+    @upcoming_count = base_tasks.where(urgency: "low").count
 
-    # Aggregate subtask progress per pillar in 3 queries (no N+1)
+    # Pillar progress — aggregate subtask completion per pillar (3 queries, no N+1)
     ci_rows = ChecklistItem.joins(:task)
                            .where(tasks: { city_id: city_id })
                            .pluck(:id, "tasks.pillar_id")
@@ -36,6 +38,5 @@ class DashboardsController < ApplicationController
       @pillar_progress[pillar_id][:done]  += 1 if completed_ids.include?(ci_id)
     end
   end
-
 end
 
