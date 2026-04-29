@@ -2,7 +2,7 @@
   <div class="container task-container">
 
     <div class="d-flex justify-content-end mb-2">
-      <%= link_to "← Back", root_path, class: "task-back-link" %>
+      <%= link_to "← Back", @task.pillar ? pillar_path(@task.pillar) : root_path, class: "task-back-link" %>
     </div>
 
     <%# ── MAIN LAYOUT ── %>
@@ -15,7 +15,7 @@
         <div class="task-breadcrumb">
           <span class="task-badge task-badge--urgent">DUE IN 2 DAYS</span>
           <% if @task.pillar %>
-            <span class="tag tag-pillar--<%= @task.pillar.slug %>"><%= @task.pillar.name %></span>
+            <span class="tag tag-pillar--<%= @task.pillar.slug %> breadcrumb__pillar-tag"><%= @task.pillar.name %></span>
           <% end %>
           <span class="breadcrumb__divider">·</span>
           <span class="breadcrumb__position">Task <%= @task_position %> of <%= @pillar_tasks_count %></span>
