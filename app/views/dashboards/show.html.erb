@@ -69,13 +69,13 @@
         </button>
 
         <div class="pillar-filter__dropdown" id="pillarFilterDropdown">
-          <a href="<%= root_path %>" class="pillar-filter__option <%= 'active' unless @active_pillar %>">
+          <a href="<%= dashboard_path %>" class="pillar-filter__option <%= 'active' unless @active_pillar %>">
             <span class="pillar-filter__dot" style="background:#9ca3af;"></span>
             All Pillars
           </a>
           <% @pillars.each do |pillar| %>
             <% progress = @pillar_progress[pillar.id] %>
-            <a href="<%= root_path(pillar: pillar.slug) %>"
+            <a href="<%= dashboard_path(pillar: pillar.slug) %>"
                class="pillar-filter__option <%= 'active' if @active_pillar&.id == pillar.id %>">
               <span class="pillar-filter__dot tag-pillar--<%= pillar.slug %>"></span>
               <%= pillar.name %>
@@ -134,7 +134,7 @@
             <div class="card-tags">
               <span class="tag tag-medium">Medium</span>
               <% if task.pillar %>
-                <a href="<%= root_path(pillar: task.pillar.slug) %>"
+                <a href="<%= dashboard_path(pillar: task.pillar.slug) %>"
                    class="tag tag-pillar--<%= task.pillar.slug %> tag--clickable"
                    onclick="event.stopPropagation()">
                   <%= task.pillar.name %>
@@ -175,7 +175,7 @@
             <div class="card-tags">
               <span class="tag tag-low">Low</span>
               <% if task.pillar %>
-                <a href="<%= root_path(pillar: task.pillar.slug) %>"
+                <a href="<%= dashboard_path(pillar: task.pillar.slug) %>"
                    class="tag tag-pillar--<%= task.pillar.slug %> tag--clickable"
                    onclick="event.stopPropagation()">
                   <%= task.pillar.name %>
