@@ -155,7 +155,9 @@ registration_steps = [
 ]
 
 registration_steps.each do |attrs|
-  ChecklistItem.create!(task: registration, **attrs)
+  ChecklistItem.find_or_create_by!(task: registration, title: attrs[:title]) do |item|
+    item.assign_attributes(attrs.except(:title))
+  end
 end
 
 
@@ -208,7 +210,9 @@ household_steps = [
 ]
 
 household_steps.each do |attrs|
-  ChecklistItem.create!(task: household, **attrs)
+  ChecklistItem.find_or_create_by!(task: household, title: attrs[:title]) do |item|
+    item.assign_attributes(attrs.except(:title))
+  end
 end
 
 # =============================================================================
