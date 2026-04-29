@@ -84,7 +84,7 @@ Rails.application.configure do
   config.hosts = [
     "landed.world",
     "www.landed.world",
-    "landed-relo-app.herokuapp.com"
+    "landed-relo-app-53662142742c.herokuapp.com"
   ]
   # Skip DNS rebinding protection for the default health check endpoint.
   config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
