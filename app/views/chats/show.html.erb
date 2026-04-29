@@ -2,54 +2,121 @@
 <%= turbo_stream_from @chat %>
 
 <style>
-  .chat-panel-container {
-    transition: all 0.4s ease;
-  }
   .chat-spinner-inline {
     width: 24px;
     height: 24px;
     border: 3px solid #E5E7EB;
-    border-top-color: #5A9E2F;
+    border-top-color: #246DD5;
     border-radius: 50%;
     animation: spin 0.9s linear infinite;
     display: inline-block;
+    vertical-align: middle;
   }
   @keyframes spin { to { transform: rotate(360deg); } }
+
+  .chat-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #F8F9FA;
+    border: 1.5px solid #E5E7EB;
+    border-radius: 16px;
+    padding: 10px 14px;
+    transition: border-color 0.15s;
+  }
+  .chat-input-row:focus-within {
+    border-color: #246DD5;
+    background: #fff;
+  }
+  .chat-input-field {
+    flex: 1;
+    min-width: 0;
+    font-size: 14px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: #1A1A2E;
+    padding: 0;
+  }
+  .chat-input-field::placeholder {
+    color: #9CA3AF;
+  }
+  .chat-send-btn {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: #246DD5;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+  .chat-send-btn:hover { background: #1a56b0; }
+  .chat-send-btn:disabled { background: #9CA3AF; cursor: not-allowed; }
+  .chat-chip {
+    font-size: 12px;
+    color: #374151;
+    background: #F3F4F6;
+    border: 1px solid #E5E7EB;
+    border-radius: 20px;
+    padding: 5px 14px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.12s;
+  }
+  .chat-chip:hover {
+    background: #E6F0FB;
+    border-color: #246DD5;
+    color: #246DD5;
+  }
+  .chat-panel-header {
+    padding: 14px 20px;
+    border-bottom: 1px solid #F3F4F6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    user-select: none;
+  }
+  .chat-panel-header:hover {
+    background: #F9FAFB;
+  }
 </style>
 
 <div style="background:#F0F1F8; min-height:100vh; padding:48px 0;">
   <div class="container">
 
-    <%# Full width header %>
+    <%# ── BACK BUTTON ── %>
     <div class="d-flex justify-content-end mb-2">
       <%= link_to "← Back", chats_path, class: "task-back-link" %>
     </div>
+
+    <%# ── HEADER ── %>
     <div class="mb-4">
-      <h1 style="font-size:22px; font-weight:700; color:#1A1A2E; margin-bottom:6px;">
+      <p style="font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#7A9E1F; margin-bottom:6px;">Document Analysis</p>
+      <h1 style="font-size:28px; font-weight:700; color:#1A1A2E; margin-bottom:8px;">
         <%= @chat.title || @chat.document.filename %>
       </h1>
       <div class="d-flex align-items-center gap-2 flex-wrap">
         <small style="color:#6B7280;">Processed on <%= @chat.created_at.strftime("%b %d, %Y") %></small>
+
         <% if @chat.is_mandatory? || @chat.is_mandatory.nil? %>
-          <span style="background:#E6F0FB; color:#185FA5; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">MANDATORY</span>
+          <span style="background:#E6F0FB; color:#185FA5; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">Mandatory</span>
         <% else %>
-          <span style="background:#F3F4F6; color:#6B7280; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">OPTIONAL</span>
+          <span style="background:#F3F4F6; color:#6B7280; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">Optional</span>
         <% end %>
 
         <% if @chat.document_type.present? %>
-          <%
-            pillar_icon = case @chat.document_type
-            when /Housing|Registration/i then "<i class='fa-solid fa-house'></i>".html_safe
-            when /Finance|Banking|Bank/i then "<i class='fa-solid fa-building-columns'></i>".html_safe
-            when /Health|Insurance/i then "<i class='fa-solid fa-notes-medical'></i>".html_safe
-            when /Work|Employment/i then "<i class='fa-solid fa-briefcase'></i>".html_safe
-            else "<i class='fa-solid fa-folder'></i>".html_safe
-            end
-          %>
           <span style="background:#E6F0FB; color:#185FA5; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">
-            <%= pillar_icon %> <%= @chat.document_type %>
+            <%= @chat.document_type %>
           </span>
         <% end %>
+
         <% if @chat.urgency.present? %>
           <% badge_bg    = { "high" => "#FEE8E8", "medium" => "#FEF3CD", "low" => "#EBF5E0" }[@chat.urgency] %>
           <% badge_color = { "high" => "#A32D2D", "medium" => "#7C4A00", "low" => "#3B6D11" }[@chat.urgency] %>
@@ -60,10 +127,10 @@
       </div>
     </div>
 
-    <%# Two columns %>
+    <%# ── TWO COLUMNS ── %>
     <div class="row g-4 align-items-start">
 
-      <%# Left: document preview %>
+      <%# ── LEFT: document preview ── %>
       <div class="col-12 col-md-5">
         <div style="background:#fff; border:1px solid #E5E7EB; border-radius:12px; padding:16px; display:flex; align-items:center; justify-content:center; min-height:320px;">
           <% if @chat.document.attached? && @chat.document.content_type.start_with?("image/") %>
@@ -78,7 +145,7 @@
         </div>
       </div>
 
-      <%# Right: AI results %>
+      <%# ── RIGHT: AI results ── %>
       <div class="col-12 col-md-7 d-flex flex-column gap-3">
 
         <% if @chat.deadline.present? || @chat.amount.present? %>
@@ -143,9 +210,9 @@
               <% end %>
             </ul>
             <% if @chat.document.attached? %>
-              <div style="margin-top: 14px;">
-                <%= link_to url_for(@chat.document), target: "_blank", style: "display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: #4B5563; text-decoration: none; padding: 6px 12px; border: 1px solid #E5E7EB; border-radius: 6px; background: #F9FAFB;" do %>
-                  <i class="fa-solid fa-file-pdf" style="color: #E24B4A;"></i> View full document
+              <div style="margin-top:14px;">
+                <%= link_to url_for(@chat.document), target: "_blank", style: "display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:500; color:#4B5563; text-decoration:none; padding:6px 12px; border:1px solid #E5E7EB; border-radius:6px; background:#F9FAFB;" do %>
+                  <i class="fa-solid fa-file-pdf" style="color:#E24B4A;"></i> View full document
                 <% end %>
               </div>
             <% end %>
@@ -168,26 +235,50 @@
       </div>
     </div>
 
-    <%# AI Chat Panel — full width, below the two-column row %>
+    <%# ── AI CHAT PANEL ── %>
     <% if @chat.advice.present? %>
-      <div class="row mt-3">
+      <div class="row mt-4">
         <div class="col-12">
-          <div id="chat-layout-container-<%= @chat.id %>">
-            <div style="background:#fff; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden; box-shadow:0 1px 4px rgba(0,0,0,0.06);">
+          <div style="background:#fff; border:1px solid #E5E7EB; border-radius:16px; overflow:hidden;">
 
-              <%# Message history %>
+            <%# ── COLLAPSIBLE HEADER ── %>
+            <div class="chat-panel-header"
+                 onclick="
+                   const body = document.getElementById('chat-body-<%= @chat.id %>');
+                   const arrow = document.getElementById('chat-arrow-<%= @chat.id %>');
+                   if (body.style.display === 'none') {
+                     body.style.display = 'block';
+                     arrow.textContent = '▲';
+                   } else {
+                     body.style.display = 'none';
+                     arrow.textContent = '▼';
+                   }">
+              <div style="display:flex; align-items:center; gap:8px;">
+                <div style="width:28px; height:28px; background:#E6F0FB; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:13px;">✦</div>
+                <p style="font-size:13px; font-weight:600; color:#1A1A2E; margin:0;">Ask about this document</p>
+                <% if @chat.messages.any? %>
+                  <span style="font-size:11px; color:#6B7280; font-weight:400;"><%= @chat.messages.count %> messages</span>
+                <% end %>
+              </div>
+              <span id="chat-arrow-<%= @chat.id %>" style="font-size:11px; color:#6B7280;">▼</span>
+            </div>
+
+            <%# ── COLLAPSIBLE BODY ── %>
+            <div id="chat-body-<%= @chat.id %>" style="display:none;">
+
+              <%# ── MESSAGE HISTORY ── %>
               <div id="chat-messages-<%= @chat.id %>"
-                   style="padding: <%= @chat.messages.any? ? '16px 20px' : '0' %>; display:flex; flex-direction:column; max-height:400px; overflow-y:auto;">
+                   style="padding:<%= @chat.messages.any? ? '16px 20px' : '0' %>; display:flex; flex-direction:column; gap:8px; max-height:400px; overflow-y:auto;">
                 <% @chat.messages.order(:created_at).each do |message| %>
                   <% if message.role == "user" %>
-                    <div style="display:flex; justify-content:flex-end; margin-bottom:8px;">
-                      <div style="background:#5A9E2F; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 4px 16px; max-width:75%;">
+                    <div style="display:flex; justify-content:flex-end;">
+                      <div style="background:#246DD5; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 4px 16px; max-width:75%;">
                         <%= message.content %>
                       </div>
                     </div>
                   <% else %>
-                    <div style="display:flex; justify-content:flex-start; gap:8px; align-items:flex-start; margin-bottom:8px;">
-                      <div style="width:28px; height:28px; background:#F0F1F8; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:13px;">✦</div>
+                    <div style="display:flex; justify-content:flex-start; gap:8px; align-items:flex-start;">
+                      <div style="width:28px; height:28px; background:#E6F0FB; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:13px;">✦</div>
                       <div style="background:#F3F4F6; color:#1A1A2E; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 16px 4px; max-width:75%;">
                         <%= message.content %>
                       </div>
@@ -196,34 +287,37 @@
                 <% end %>
               </div>
 
-              <%# Input area %>
-              <div style="padding: 14px 16px; border-top: 1px solid #F3F4F6; background:#fff;">
-
-                <%# Input row — spark icon left, text fills space, arrow pinned right %>
+              <%# ── INPUT AREA ── %>
+              <div style="padding:14px 16px; border-top:1px solid #F3F4F6;">
                 <div id="chat-input-wrapper-<%= @chat.id %>">
                   <%= form_with url: chat_messages_path(@chat), method: :post,
-                        data: { controller: "chat-form", action: "submit->chat-form#disableSubmit" },
-                        style: "display:flex; width:100%; align-items:center; gap:8px; background:#F8F9FA; border:1px solid #E5E7EB; border-radius:28px; padding:6px 8px 6px 14px; box-sizing:border-box;" do |f| %>
-                    <span style="font-size:15px; color:#5A9E2F; flex-shrink:0; line-height:1;">✦</span>
-                    <%= f.text_field :message,
-                          name: "message[content]",
-                          id: "chat-input-#{@chat.id}",
-                          placeholder: "Ask AI a question about this document...",
-                          autocomplete: "off",
-                          required: true,
-                          style: "flex:1; min-width:0; font-size:14px; border:none; outline:none; background:transparent; color:#1A1A2E; padding:4px 0;" %>
-                    <%= f.submit "→",
-                          style: "flex-shrink:0; width:34px; height:34px; background:#5A9E2F; color:#fff; border:none; border-radius:50%; font-size:16px; cursor:pointer; line-height:1;" %>
+                        data: { controller: "chat-form", action: "submit->chat-form#disableSubmit" } do |f| %>
+                    <div class="chat-input-row">
+                      <%= f.text_field :message,
+                            name: "message[content]",
+                            id: "chat-input-#{@chat.id}",
+                            placeholder: "Ask a question about this document...",
+                            autocomplete: "off",
+                            required: true,
+                            class: "chat-input-field" %>
+                      <%= f.submit "→", class: "chat-send-btn" %>
+                    </div>
                   <% end %>
                 </div>
 
-                <%# Quick-question chips %>
+                <%# ── QUICK CHIPS ── %>
                 <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
                   <% ["What is the deadline?", "What do I need to bring?", "Is there a penalty if I miss it?"].each do |chip| %>
                     <button
                       type="button"
-                      onclick="document.getElementById('chat-input-<%= @chat.id %>').value = '<%= chip %>'"
-                      style="font-size:12px; color:#374151; background:#F3F4F6; border:1px solid #E5E7EB; border-radius:20px; padding:4px 12px; cursor:pointer; font-weight:500;">
+                      class="chat-chip"
+                      onclick="
+                        const body = document.getElementById('chat-body-<%= @chat.id %>');
+                        const arrow = document.getElementById('chat-arrow-<%= @chat.id %>');
+                        body.style.display = 'block';
+                        arrow.textContent = '▲';
+                        document.getElementById('chat-input-<%= @chat.id %>').value = '<%= chip %>';
+                      ">
                       <%= chip %>
                     </button>
                   <% end %>
@@ -231,11 +325,11 @@
 
               </div>
             </div>
+
           </div>
         </div>
       </div>
     <% end %>
-
 
   </div>
 </div>
