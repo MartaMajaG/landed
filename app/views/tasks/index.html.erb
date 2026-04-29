@@ -1,9 +1,18 @@
-<h1>Actions</h1>
+<div class="tasks-header">
+  <h1>Tasks</h1>
+
+  <div class="tasks-tabs">
+    <%= link_to "All Tasks", tasks_path,
+        class: "tab-btn #{params[:tab].nil? ? 'active' : ''}" %>
+    <%= link_to "Completed", tasks_path(tab: "completed"),
+        class: "tab-btn #{params[:tab] == 'completed' ? 'active' : ''}" %>
+  </div>
+</div>
 
 <% if @tasks.any? %>
-  <ul>
+  <ul class="tasks-list">
     <% @tasks.each do |task| %>
-      <li>
+      <li class="task-card">
         <h2><%= task.name %></h2>
         <p><%= task.description %></p>
         <%= link_to "View Details", task_path(task) %>
