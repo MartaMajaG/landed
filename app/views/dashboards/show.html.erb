@@ -47,10 +47,52 @@
 
   <%# ── TASKS ── %>
   <div class="tasks-header">
-    <h2 class="tasks-label">Tasks</h2>
-    <div class="tasks-toggle">
-      <button class="toggle-btn active">All Tasks</button>
-      <button class="toggle-btn">Completed</button>
+    <div class="tasks-title-group">
+      <h2 class="tasks-label">Tasks</h2>
+      <% if @active_pillar %>
+        <a href="<%= pillar_path(@active_pillar) %>"
+           class="tasks-pillar-pill tag-pillar--<%= @active_pillar.slug %>">
+          <%= @active_pillar.name %>
+          <span class="tasks-pillar-pill__arrow">→</span>
+        </a>
+      <% end %>
+    </div>
+    <div class="tasks-controls">
+      <div class="tasks-toggle">
+        <button class="toggle-btn active">All Tasks</button>
+        <button class="toggle-btn">Completed</button>
+      </div>
+
+      <%# Pillar filter icon + dropdown %>
+      <div class="pillar-filter" id="pillarFilter">
+        <button class="pillar-filter__btn <%= 'pillar-filter__btn--active' if @active_pillar %>"
+                id="pillarFilterBtn"
+                title="Filter by pillar">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+          </svg>
+          <% if @active_pillar %>
+            <span class="pillar-filter__label"><%= @active_pillar.name %></span>
+          <% end %>
+        </button>
+
+        <div class="pillar-filter__dropdown" id="pillarFilterDropdown">
+          <a href="<%= dashboard_path %>" class="pillar-filter__option <%= 'active' unless @active_pillar %>">
+            <span class="pillar-filter__dot" style="background:#9ca3af;"></span>
+            All Pillars
+          </a>
+          <% @pillars.each do |pillar| %>
+            <% progress = @pillar_progress[pillar.id] %>
+            <a href="<%= dashboard_path(pillar: pillar.slug) %>"
+               class="pillar-filter__option <%= 'active' if @active_pillar&.id == pillar.id %>">
+              <span class="pillar-filter__dot tag-pillar--<%= pillar.slug %>"></span>
+              <%= pillar.name %>
+              <span class="pillar-filter__count"><%= progress[:done] %>/<%= progress[:total] %></span>
+            </a>
+          <% end %>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -101,7 +143,9 @@
             <div class="card-tags">
               <span class="tag tag-medium">Medium</span>
               <% if task.pillar %>
-                <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
+                <span class="tag tag-pillar--<%= task.pillar.slug %>">
+                  <%= task.pillar.name %>
+                </span>
               <% end %>
             </div>
             <span class="card-date">Oct 18</span>
@@ -138,7 +182,9 @@
             <div class="card-tags">
               <span class="tag tag-low">Low</span>
               <% if task.pillar %>
-                <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
+                <span class="tag tag-pillar--<%= task.pillar.slug %>">
+                  <%= task.pillar.name %>
+                </span>
               <% end %>
             </div>
             <span class="card-date">Oct 25</span>
@@ -187,11 +233,26 @@
 
   <%# Card click navigation — navigates to task_path on card click %>
   <script>
+    // Card click → task detail page
     document.querySelectorAll('.task-card[data-href]').forEach(function(card) {
       card.addEventListener('click', function() {
         window.location.href = card.dataset.href;
       });
     });
+
+    // Pillar filter dropdown toggle
+    var filterBtn = document.getElementById('pillarFilterBtn');
+    var filterDropdown = document.getElementById('pillarFilterDropdown');
+    if (filterBtn && filterDropdown) {
+      filterBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var isOpen = filterDropdown.classList.contains('pillar-filter__dropdown--open');
+        filterDropdown.classList.toggle('pillar-filter__dropdown--open', !isOpen);
+      });
+      document.addEventListener('click', function() {
+        filterDropdown.classList.remove('pillar-filter__dropdown--open');
+      });
+    }
   </script>
 
   <%# ── CALENDAR ── %>
@@ -264,43 +325,7 @@
     </div>
   </div>
 
-  <%# ── PILLARS SECTION ── %>
-  <div class="pillars-section">
-    <div class="pillars-section__header">
-      <h2 class="tasks-label">Your Relocation Pillars</h2>
-      <p class="pillars-section__sub">Each pillar groups related tasks for your move to <%= @profile.city&.name %>.</p>
-    </div>
-
-    <div class="pillars-grid">
-      <% @pillars.each do |pillar| %>
-        <% progress = @pillar_progress[pillar.id] %>
-        <% total    = progress[:total] %>
-        <% done     = progress[:done] %>
-        <% pct      = total.zero? ? 0 : (done.to_f / total * 100).round %>
-        <% all_done = done == total && total > 0 %>
-
-        <%= link_to pillar_path(pillar), class: "pillar-summary-card #{'pillar-summary-card--done' if all_done}" do %>
-          <div class="pillar-summary-card__icon">
-            <i class="fa-solid <%= pillar.icon %>"></i>
-          </div>
-          <div class="pillar-summary-card__body">
-            <div class="pillar-summary-card__top">
-              <h3 class="pillar-summary-card__name"><%= pillar.name %></h3>
-              <% if all_done %>
-                <span class="pillar-summary-card__done">✓ Done</span>
-              <% else %>
-                <span class="pillar-summary-card__count"><%= done %>/<%= total %></span>
-              <% end %>
-            </div>
-            <p class="pillar-summary-card__desc"><%= pillar.description %></p>
-            <div class="pillar-summary-card__track">
-              <div class="pillar-summary-card__fill" style="width: <%= pct %>%;"></div>
-            </div>
-          </div>
-        <% end %>
-      <% end %>
-    </div>
-  </div>
+  <%# ── PILLARS SECTION ── removed: pillar filter now in Tasks header %>
 
 </div>
 </div>
