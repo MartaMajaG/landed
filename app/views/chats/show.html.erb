@@ -258,7 +258,7 @@
 
             <%# ── INPUT AREA ── %>
             <div style="padding:14px 16px; border-top:1px solid #F3F4F6;">
-
+              <div id="chat-input-wrapper-<%= @chat.id %>">
               <%= form_with url: chat_messages_path(@chat), method: :post,
                     data: { controller: "chat-form", action: "submit->chat-form#disableSubmit" } do |f| %>
 
@@ -274,7 +274,7 @@
                 </div>
 
               <% end %>
-
+              </div>
               <%# ── QUICK CHIPS ── %>
               <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:10px;">
                 <% ["What is the deadline?", "What do I need to bring?", "Is there a penalty if I miss it?"].each do |chip| %>

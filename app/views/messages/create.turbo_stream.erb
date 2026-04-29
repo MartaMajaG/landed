@@ -1,39 +1,38 @@
-<%# 1. Append the user's message bubble to the message history %>
+<%# 1. Append the user's message bubble %>
 <%= turbo_stream.append "chat-messages-#{@chat.id}" do %>
-  <div style="display:flex; justify-content:flex-end; margin-bottom:8px;">
-    <div style="background:#5A9E2F; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 4px 16px; max-width:75%;">
+  <div style="display:flex; justify-content:flex-end;">
+    <div style="background:#246DD5; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 4px 16px; max-width:75%;">
       <%= @user_message.content %>
     </div>
   </div>
 <% end %>
 
-<%# 2. Append a loading bubble — the AiReplyJob will broadcast_replace this with the real answer %>
+<%# 2. Append loading bubble %>
 <%= turbo_stream.append "chat-messages-#{@chat.id}" do %>
   <div id="ai-loading-<%= @user_message.id %>"
-       style="display:flex; justify-content:flex-start; gap:8px; align-items:flex-start; margin-bottom:8px;">
-    <div style="width:28px; height:28px; background:#F0F1F8; border-radius:50%; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:13px;">✦</div>
+       style="display:flex; justify-content:flex-start; gap:8px; align-items:flex-start;">
+    <div style="width:28px; height:28px; background:#E6F0FB; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:13px;">✦</div>
     <div style="background:#F3F4F6; padding:12px 14px; border-radius:16px 16px 16px 4px;">
       <div class="chat-spinner-inline"></div>
     </div>
   </div>
 <% end %>
 
-<%# 3. Clear the text input field %>
+<%# 3. Clear and reset the input form %>
 <%= turbo_stream.replace "chat-input-wrapper-#{@chat.id}" do %>
   <div id="chat-input-wrapper-<%= @chat.id %>">
     <%= form_with url: chat_messages_path(@chat), method: :post,
-          data: { controller: "chat-form", action: "submit->chat-form#disableSubmit" },
-          style: "display:flex; width:100%; align-items:center; gap:8px; background:#F8F9FA; border:1px solid #E5E7EB; border-radius:28px; padding:6px 8px 6px 14px; box-sizing:border-box;" do |f| %>
-      <span style="font-size:15px; color:#5A9E2F; flex-shrink:0; line-height:1;">✦</span>
-      <%= f.text_field :message,
-            name: "message[content]",
-            id: "chat-input-#{@chat.id}",
-            placeholder: "Ask AI a question about this document...",
-            autocomplete: "off",
-            required: true,
-            style: "flex:1; min-width:0; font-size:14px; border:none; outline:none; background:transparent; color:#1A1A2E; padding:4px 0;" %>
-      <%= f.submit "→",
-            style: "flex-shrink:0; width:34px; height:34px; background:#5A9E2F; color:#fff; border:none; border-radius:50%; font-size:16px; cursor:pointer; line-height:1;" %>
+          data: { controller: "chat-form", action: "submit->chat-form#disableSubmit" } do |f| %>
+      <div class="chat-input-row">
+        <%= f.text_field :message,
+              name: "message[content]",
+              id: "chat-input-#{@chat.id}",
+              placeholder: "Ask a question about this document...",
+              autocomplete: "off",
+              required: true,
+              class: "chat-input-field" %>
+        <%= f.submit "→", class: "chat-send-btn" %>
+      </div>
     <% end %>
   </div>
 <% end %>
