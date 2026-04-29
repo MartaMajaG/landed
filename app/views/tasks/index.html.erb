@@ -1,13 +1,6 @@
-<div class="tasks-header">
-  <h1>Tasks</h1>
+<% content_for :meta_title, "Landed | Tasks" %>
 
-  <div class="tasks-tabs">
-    <%= link_to "All Tasks", tasks_path,
-        class: "tab-btn #{params[:tab].nil? ? 'active' : ''}" %>
-    <%= link_to "Completed", tasks_path(tab: "completed"),
-        class: "tab-btn #{params[:tab] == 'completed' ? 'active' : ''}" %>
-  </div>
-</div>
+<h1>Actions</h1>
 
 <% if @tasks.any? %>
   <ul class="tasks-list">
