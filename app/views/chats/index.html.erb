@@ -91,18 +91,18 @@
             </div>
 
             <%# ── DATE SCANNED + DELETE ── %>
-<div style="display:flex; justify-content:space-between; align-items:center;">
-  <p style="font-size:12px; color:#6B7280; margin:0;"><%= chat.created_at.strftime("%b %d, %Y") %></p>
-  <%= button_to "Delete", chat_path(chat),
-      method: :delete,
-      form: {
-        data: { turbo_confirm: "Are you sure you want to delete this document?" },
-        onclick: "event.stopPropagation();"
-      },
-      style: "background:none; border:1px solid #E5E7EB; border-radius:6px; font-size:12px; font-weight:500; color:#6B7280; cursor:pointer; padding:4px 10px;",
-      onmouseover: "this.style.borderColor='#A32D2D'; this.style.color='#A32D2D'",
-      onmouseout: "this.style.borderColor='#E5E7EB'; this.style.color='#6B7280'" %>
-</div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <p style="font-size:12px; color:#6B7280; margin:0;"><%= chat.created_at.strftime("%b %d, %Y") %></p>
+              <div onclick="event.stopPropagation();">
+                <%= button_to "Delete", chat_path(chat),
+    method: :delete,
+    form: { data: { turbo: false } },
+    onclick: "return confirm('Are you sure you want to delete this document?');",
+    style: "background:none; border:1px solid #E5E7EB; border-radius:6px; font-size:12px; font-weight:500; color:#6B7280; cursor:pointer; padding:4px 10px;",
+    onmouseover: "this.style.borderColor='#A32D2D'; this.style.color='#A32D2D'",
+    onmouseout: "this.style.borderColor='#E5E7EB'; this.style.color='#6B7280'" %>
+              </div>
+            </div>
 
           <% end %>
         <% end %>
