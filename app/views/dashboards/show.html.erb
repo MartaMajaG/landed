@@ -66,7 +66,7 @@
       </div>
 
       <% @urgent_tasks.each do |task| %>
-        <div class="task-card urgent-card">
+        <div class="task-card urgent-card" data-href="<%= task_path(task) %>" style="cursor: pointer;">
           <div class="card-top-row">
             <span class="urgent-badge">Urgent</span>
             <span class="card-menu">⋯</span>
@@ -96,7 +96,7 @@
       </div>
 
       <% @active_tasks.each do |task| %>
-        <div class="task-card">
+        <div class="task-card" data-href="<%= task_path(task) %>" style="cursor: pointer;">
           <div class="card-top">
             <div class="card-tags">
               <span class="tag tag-medium">Medium</span>
@@ -133,7 +133,7 @@
       </div>
 
       <% @upcoming_tasks.each do |task| %>
-        <div class="task-card">
+        <div class="task-card" data-href="<%= task_path(task) %>" style="cursor: pointer;">
           <div class="card-top">
             <div class="card-tags">
               <span class="tag tag-low">Low</span>
@@ -184,6 +184,15 @@
     </div>
 
   </div>
+
+  <%# Card click navigation — navigates to task_path on card click %>
+  <script>
+    document.querySelectorAll('.task-card[data-href]').forEach(function(card) {
+      card.addEventListener('click', function() {
+        window.location.href = card.dataset.href;
+      });
+    });
+  </script>
 
   <%# ── CALENDAR ── %>
   <div class="calendar-section">
