@@ -274,7 +274,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_29_092706) do
     t.text "description"
     t.jsonb "expert_tips", default: [], null: false
     t.string "name"
-    t.bigint "pillar_id"
+    t.bigint "pillar_id", null: false
     t.datetime "updated_at", null: false
     t.string "urgency"
     t.text "why_it_matters"
