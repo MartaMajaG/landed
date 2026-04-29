@@ -1,8 +1,13 @@
 class TasksController < ApplicationController
   def index
-    @tasks = Task.where(city_id: current_user.profile.city_id)
-  end
+  city_tasks = Task.where(city_id: current_user.profile.city_id)
 
+  if params[:tab] == "completed"
+    @tasks = city_tasks.select { |task| task.completed_by?(current_user) }
+  else
+    @tasks = city_tasks.reject { |task| task.completed_by?(current_user) }
+  end
+end
   def show
     @task = Task.includes(:pillar).find_by!(
       id: params[:id],
