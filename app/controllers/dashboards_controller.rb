@@ -5,6 +5,9 @@ class DashboardsController < ApplicationController
     @user    = current_user
     @profile = current_user.profile
     city_id  = current_user.profile.city_id
+    @date = params[:month] ? Date.parse(params[:month]) : Date.today
+    @arrival_date = current_user.profile.arrival_date
+    @task_deadline = @arrival_date + 3.weeks if @arrival_date
 
     # Pillar filter — optional URL param (?pillar=housing_and_registration)
     @pillars       = Pillar.where(city_id: city_id).order(:position)
@@ -39,4 +42,3 @@ class DashboardsController < ApplicationController
     end
   end
 end
-
