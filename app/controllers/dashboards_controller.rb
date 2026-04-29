@@ -47,26 +47,22 @@ class DashboardsController < ApplicationController
 if params[:partial]
   if params[:tab] == "completed"
     completed = all_tasks.select { |t| t.completed_by?(current_user) }
-    render partial: "kanban",
-           locals: {
-             urgent_tasks:   completed.select { |t| t.urgency == "high" }.first(2),
-             active_tasks:   completed.select { |t| t.urgency == "medium" }.first(2),
-             upcoming_tasks: completed.select { |t| t.urgency == "low" }.first(2),
-             urgent_count:   completed.count  { |t| t.urgency == "high" },
-             active_count:   completed.count  { |t| t.urgency == "medium" },
-             upcoming_count: completed.count  { |t| t.urgency == "low" }
-           }
+    render partial: "kanban", locals: {
+      completed_tasks: completed,
+      urgent_tasks: [], active_tasks: [], upcoming_tasks: [],
+      urgent_count: 0, active_count: 0, upcoming_count: 0
+    }
   else
-    render partial: "kanban",
-           locals: {
-             urgent_tasks:   @urgent_tasks,
-             active_tasks:   @active_tasks,
-             upcoming_tasks: @upcoming_tasks,
-             urgent_count:   @urgent_count,
-             active_count:   @active_count,
-             upcoming_count: @upcoming_count
-           }
-  end  # closes if params[:tab] == "completed"
-end    # closes if params[:partial]
-  end    # closes def show
-end    # closes class DashboardsController
+    render partial: "kanban", locals: {
+      completed_tasks: nil,
+      urgent_tasks:   @urgent_tasks,
+      active_tasks:   @active_tasks,
+      upcoming_tasks: @upcoming_tasks,
+      urgent_count:   @urgent_count,
+      active_count:   @active_count,
+      upcoming_count: @upcoming_count
+    }
+  end
+end
+end
+end

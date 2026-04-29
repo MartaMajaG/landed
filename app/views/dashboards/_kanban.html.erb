@@ -1,73 +1,99 @@
-<%# URGENT %>
-<div class="kanban-col">
-  <div class="col-header">
-    <span class="col-dot urgent-dot"></span>
-    <span class="col-title">Urgent</span>
-    <span class="col-count"><%= urgent_count %></span>
-    <span class="col-menu">⋯</span>
-  </div>
+<% completed_tasks ||= nil %>
 
-  <% urgent_tasks.each do |task| %>
-    <div class="task-card urgent-card" data-href="<%= task_path(task) %>" style="cursor:pointer;">
-      <div class="card-top-row">
-        <span class="urgent-badge">Urgent</span>
-        <span class="card-menu">⋯</span>
-      </div>
-      <h4 class="card-title"><%= task.name %></h4>
-      <p class="card-desc"><%= task.description %></p>
-      <div class="card-bottom-row">
-        <span class="card-due urgent-due">⏰ Today</span>
-      </div>
+<% if completed_tasks %>
+
+  <%# COMPLETED FLAT GRID %>
+  <% if completed_tasks.empty? %>
+    <p class="no-tasks">No completed tasks yet — keep going! 💪</p>
+  <% else %>
+    <div class="completed-grid">
+      <% completed_tasks.each do |task| %>
+        <div class="task-card task-card--done" data-href="<%= task_path(task) %>" style="cursor:pointer;">
+          <div class="card-top">
+            <div class="card-tags">
+              <% if task.pillar %>
+                <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
+              <% end %>
+            </div>
+          </div>
+          <h4 class="card-title"><%= task.name %></h4>
+          <p class="card-desc"><%= task.description %></p>
+        </div>
+      <% end %>
     </div>
   <% end %>
-</div>
 
-<%# ACTIVE %>
-<div class="kanban-col">
-  <div class="col-header">
-    <span class="col-dot active-dot"></span>
-    <span class="col-title">Active</span>
-    <span class="col-count"><%= active_count %></span>
-    <span class="col-menu">⋯</span>
-  </div>
+<% else %>
 
-  <% active_tasks.each do |task| %>
-    <div class="task-card" data-href="<%= task_path(task) %>" style="cursor:pointer;">
-      <div class="card-top">
-        <div class="card-tags">
-          <span class="tag tag-medium">Medium</span>
-          <% if task.pillar %>
-            <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
-          <% end %>
+  <%# URGENT %>
+  <div class="kanban-col">
+    <div class="col-header">
+      <span class="col-dot urgent-dot"></span>
+      <span class="col-title">Urgent</span>
+      <span class="col-count"><%= urgent_count %></span>
+      <span class="col-menu">⋯</span>
+    </div>
+    <% urgent_tasks.each do |task| %>
+      <div class="task-card urgent-card" data-href="<%= task_path(task) %>" style="cursor:pointer;">
+        <div class="card-top-row">
+          <span class="urgent-badge">Urgent</span>
+          <span class="card-menu">⋯</span>
+        </div>
+        <h4 class="card-title"><%= task.name %></h4>
+        <p class="card-desc"><%= task.description %></p>
+        <div class="card-bottom-row">
+          <span class="card-due urgent-due">⏰ Today</span>
         </div>
       </div>
-      <h4 class="card-title"><%= task.name %></h4>
-      <p class="card-desc"><%= task.description %></p>
-    </div>
-  <% end %>
-</div>
-
-<%# UPCOMING %>
-<div class="kanban-col">
-  <div class="col-header">
-    <span class="col-dot upcoming-dot"></span>
-    <span class="col-title">Upcoming</span>
-    <span class="col-count"><%= upcoming_count %></span>
-    <span class="col-menu">⋯</span>
+    <% end %>
   </div>
 
-  <% upcoming_tasks.each do |task| %>
-    <div class="task-card" data-href="<%= task_path(task) %>" style="cursor:pointer;">
-      <div class="card-top">
-        <div class="card-tags">
-          <span class="tag tag-low">Low</span>
-          <% if task.pillar %>
-            <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
-          <% end %>
-        </div>
-      </div>
-      <h4 class="card-title"><%= task.name %></h4>
-      <p class="card-desc"><%= task.description %></p>
+  <%# ACTIVE %>
+  <div class="kanban-col">
+    <div class="col-header">
+      <span class="col-dot active-dot"></span>
+      <span class="col-title">Active</span>
+      <span class="col-count"><%= active_count %></span>
+      <span class="col-menu">⋯</span>
     </div>
-  <% end %>
-</div>
+    <% active_tasks.each do |task| %>
+      <div class="task-card" data-href="<%= task_path(task) %>" style="cursor:pointer;">
+        <div class="card-top">
+          <div class="card-tags">
+            <span class="tag tag-medium">Medium</span>
+            <% if task.pillar %>
+              <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
+            <% end %>
+          </div>
+        </div>
+        <h4 class="card-title"><%= task.name %></h4>
+        <p class="card-desc"><%= task.description %></p>
+      </div>
+    <% end %>
+  </div>
+
+  <%# UPCOMING %>
+  <div class="kanban-col">
+    <div class="col-header">
+      <span class="col-dot upcoming-dot"></span>
+      <span class="col-title">Upcoming</span>
+      <span class="col-count"><%= upcoming_count %></span>
+      <span class="col-menu">⋯</span>
+    </div>
+    <% upcoming_tasks.each do |task| %>
+  <div class="task-card locked" data-href="<%= task_path(task) %>">
+    <div class="card-top">
+      <div class="card-tags">
+        <span class="tag tag-low">Low</span>
+        <% if task.pillar %>
+          <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
+        <% end %>
+      </div>
+    </div>
+    <h4 class="card-title"><%= task.name %></h4>
+    <p class="card-desc"><%= task.description %></p>
+  </div>
+<% end %>
+  </div>
+
+<% end %>

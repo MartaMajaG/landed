@@ -919,3 +919,28 @@
     background: #10b981;
   }
 }
+
+// ── COMPLETED GRID
+.completed-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-top: 44px; // matches col-header height
+  gap: 16px;
+  align-items: start;
+}
+
+.task-card--done {
+  opacity: 0.75;
+  border-left: 3px solid #10b981;
+}
+
+.no-tasks {
+  color: #9ca3af;
+  font-size: 13px;
+  text-align: center;
+  padding: 40px 0;
+}
+
+.kanban:has(.completed-grid) {
+  display: block;
+}
