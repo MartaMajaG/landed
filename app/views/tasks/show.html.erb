@@ -14,9 +14,11 @@
         <%# ── BREADCRUMB ── %>
         <div class="task-breadcrumb">
           <span class="task-badge task-badge--urgent">DUE IN 2 DAYS</span>
-          <span class="breadcrumb__category"><%= @task.category %></span>
+          <% if @task.pillar %>
+            <span class="tag tag-pillar--<%= @task.pillar.slug %>"><%= @task.pillar.name %></span>
+          <% end %>
           <span class="breadcrumb__divider">·</span>
-          <span class="breadcrumb__position">Task 3 of 4</span>
+          <span class="breadcrumb__position">Task <%= @task_position %> of <%= @pillar_tasks_count %></span>
         </div>
 
         <%# ── HEADER ── %>
@@ -69,13 +71,22 @@
                    data-completed="<%= completed %>">
 
                 <%# ── STEP NUMBER ── %>
-                <div class="step__number">
-                  <% if completed %>
-                    <span class="step__check">✓</span>
-                  <% else %>
+                <% if completed %>
+                  <%# Completed: number circle becomes clickable undo button %>
+                  <div class="step__number step__number--done">
+                    <%= button_to user_checklist_item_path(item),
+                        method: :patch,
+                        form: { data: { turbo: "false" } },
+                        class: "step__undo-btn",
+                        title: "Mark as incomplete" do %>
+                      <span class="step__check">✓</span>
+                    <% end %>
+                  </div>
+                <% else %>
+                  <div class="step__number">
                     <span><%= index + 1 %></span>
-                  <% end %>
-                </div>
+                  </div>
+                <% end %>
 
                 <%# ── STEP CONTENT ── %>
                 <div class="step__content">
@@ -141,6 +152,23 @@
       <%# ── RIGHT COLUMN ── %>
       <div class="task-sidebar">
 
+        <%# ── EXPERT TIPS — shown first, aligned with Good to Know div ── %>
+        <div class="expert-tips">
+          <span class="expert-tips__label">⚡ EXPERT TIPS</span>
+          <% if @task.expert_tips.present? %>
+            <% @task.expert_tips.each do |tip| %>
+              <div class="expert-tips__item">
+                <h4><%= tip["title"] %></h4>
+                <p><%= tip["body"] %></p>
+              </div>
+            <% end %>
+          <% else %>
+            <div class="expert-tips__item">
+              <p style="color: rgba(255,255,255,0.5); font-size: 13px;">Expert tips are being generated…</p>
+            </div>
+          <% end %>
+        </div>
+
         <%# ── QUICK GUIDES ── %>
         <div class="quick-guides">
           <div class="quick-guides__header">
@@ -187,23 +215,6 @@
               </div>
             </a>
           </div>
-        </div>
-
-        <%# ── EXPERT TIPS ── %>
-        <div class="expert-tips">
-          <span class="expert-tips__label">⚡ EXPERT TIPS</span>
-          <% if @task.expert_tips.present? %>
-            <% @task.expert_tips.each do |tip| %>
-              <div class="expert-tips__item">
-                <h4><%= tip["title"] %></h4>
-                <p><%= tip["body"] %></p>
-              </div>
-            <% end %>
-          <% else %>
-            <div class="expert-tips__item">
-              <p style="color: rgba(255,255,255,0.5); font-size: 13px;">Expert tips are being generated…</p>
-            </div>
-          <% end %>
         </div>
 
       </div>
