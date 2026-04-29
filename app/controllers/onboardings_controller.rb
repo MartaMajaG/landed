@@ -50,7 +50,7 @@ class OnboardingsController < ApplicationController
 
   def update
     if @profile.update(onboarding_params) && @profile.onboardings_complete?
-      redirect_to root_path, notice: "Onboarding complete!"
+      redirect_to dashboard_path, notice: "Onboarding complete!"
     else
       @profile.errors.add(:base, "Please complete the required onboarding steps.") if @profile.errors.empty?
       render :show, status: :unprocessable_entity

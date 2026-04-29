@@ -272,7 +272,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_04_28_133642) do
     t.datetime "created_at", null: false
     t.text "description"
     t.string "name"
-    t.bigint "pillar_id", null: false
+    t.bigint "pillar_id"
     t.datetime "updated_at", null: false
     t.string "urgency"
     t.text "why_it_matters"

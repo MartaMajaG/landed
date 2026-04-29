@@ -1,12 +1,7 @@
 class PagesController < ApplicationController
-  before_action :authenticate_user!, only: [:home]
-
+  skip_before_action :authenticate_user!, only: [:index]
+  
   def index
-    @user = current_user
-    @profile = current_user.profile
-    @tasks = @profile.tasks
-  end
-
-  def home
+    redirect_to dashboard_path if user_signed_in?
   end
 end

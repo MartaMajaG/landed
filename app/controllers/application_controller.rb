@@ -17,4 +17,8 @@ class ApplicationController < ActionController::Base
 
     redirect_to onboarding_path
   end
+
+  def after_sign_in_path_for(_user)
+    dashboard_path
+  end
 end

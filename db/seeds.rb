@@ -233,13 +233,4 @@ end
 
 puts "Subtasks seeded: #{ChecklistItem.count} total."
 
-# ─────────────────────────────────────────────────────────────────────────────
-# DEV USER  (development only)
-# ─────────────────────────────────────────────────────────────────────────────
-User.find_or_create_by!(email: "dev@landed.com") do |u|
-  u.password              = "password"
-  u.password_confirmation = "password"
-end
-
 puts "Seeds complete. #{DocumentType.count} document types | #{Pillar.count} pillars | #{Task.count} tasks | #{ChecklistItem.count} subtasks."
-
