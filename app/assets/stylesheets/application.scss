@@ -12,3 +12,7 @@
 @import "pages/index";
 @import "documents";
 @import "pages/home";
+
+html {
+  scroll-behavior: auto;
+}

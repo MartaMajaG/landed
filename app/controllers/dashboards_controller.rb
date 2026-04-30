@@ -9,24 +9,29 @@ class DashboardsController < ApplicationController
     @arrival_date = current_user.profile.arrival_date
     @task_deadline = @arrival_date + 3.weeks if @arrival_date
 
-    # Pillar filter — optional URL param (?pillar=housing_and_registration)
+    # Pillar filter
     @pillars       = Pillar.where(city_id: city_id).order(:position)
     @active_pillar = params[:pillar].present? ? @pillars.find_by(slug: params[:pillar]) : nil
 
-    # Base task scope — filtered by pillar if one is selected
-    base_tasks = @profile.tasks.includes(:pillar)
+    # Base task scope
+    base_tasks = @profile.tasks.includes(:pillar, :checklist_items)
     base_tasks = base_tasks.where(pillar_id: @active_pillar.id) if @active_pillar
 
-    # Kanban columns — max 2 cards shown, full count for badge + "see more"
-    @urgent_tasks   = base_tasks.where(urgency: "high").limit(2)
-    @active_tasks   = base_tasks.where(urgency: "medium").limit(2)
-    @upcoming_tasks = base_tasks.where(urgency: "low").limit(2)
+    # Split completed vs incomplete
+    all_tasks        = base_tasks.to_a
+    incomplete       = all_tasks.reject { |t| t.completed_by?(current_user) }
+    @completed_tasks = all_tasks.select { |t| t.completed_by?(current_user) }
 
-    @urgent_count   = base_tasks.where(urgency: "high").count
-    @active_count   = base_tasks.where(urgency: "medium").count
-    @upcoming_count = base_tasks.where(urgency: "low").count
+    # Kanban columns from incomplete tasks only
+    @urgent_tasks   = incomplete.select { |t| t.urgency == "high" }.first(2)
+    @active_tasks   = incomplete.select { |t| t.urgency == "medium" }.first(2)
+    @upcoming_tasks = incomplete.select { |t| t.urgency == "low" }.first(2)
 
-    # Pillar progress — aggregate subtask completion per pillar (3 queries, no N+1)
+    @urgent_count   = incomplete.count { |t| t.urgency == "high" }
+    @active_count   = incomplete.count { |t| t.urgency == "medium" }
+    @upcoming_count = incomplete.count { |t| t.urgency == "low" }
+
+    # Pillar progress
     ci_rows = ChecklistItem.joins(:task)
                            .where(tasks: { city_id: city_id })
                            .pluck(:id, "tasks.pillar_id")
@@ -39,6 +44,28 @@ class DashboardsController < ApplicationController
     ci_rows.each do |ci_id, pillar_id|
       @pillar_progress[pillar_id][:total] += 1
       @pillar_progress[pillar_id][:done]  += 1 if completed_ids.include?(ci_id)
+    end
+
+    # Respond to AJAX tab switches
+    return unless params[:partial]
+
+    if params[:tab] == "completed"
+      completed = all_tasks.select { |t| t.completed_by?(current_user) }
+      render partial: "kanban", locals: {
+        completed_tasks: completed,
+        urgent_tasks: [], active_tasks: [], upcoming_tasks: [],
+        urgent_count: 0, active_count: 0, upcoming_count: 0
+      }
+    else
+      render partial: "kanban", locals: {
+        completed_tasks: nil,
+        urgent_tasks: @urgent_tasks,
+        active_tasks: @active_tasks,
+        upcoming_tasks: @upcoming_tasks,
+        urgent_count: @urgent_count,
+        active_count: @active_count,
+        upcoming_count: @upcoming_count
+      }
     end
   end
 end

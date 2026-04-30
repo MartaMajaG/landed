@@ -5,8 +5,16 @@ export default class extends Controller {
 
   connect() {
     console.log("Task detail controller connected")
+    const sidebar = document.querySelector('.task-sidebar')
+    const stepsEl = document.querySelector('.task-why')
+    if (sidebar && stepsEl) {
+      requestAnimationFrame(() => {
+        const sidebarRect = sidebar.getBoundingClientRect()
+        sidebar.style.left = sidebarRect.left + 'px'
+        sidebar.style.width = sidebarRect.width + 'px'
+      })
+    }
   }
-
   async completeStep(event) {
     event.preventDefault()
 

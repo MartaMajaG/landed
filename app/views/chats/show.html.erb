@@ -1,3 +1,5 @@
+<% content_for :meta_title, "Landed | #{@chat.title || @chat.document.filename}" %>
+
 <%# Subscribe to this chat's ActionCable channel so background job broadcasts reach the browser %>
 <%= turbo_stream_from @chat %>
 
