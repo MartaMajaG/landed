@@ -11,11 +11,11 @@ class DashboardsController < ApplicationController
 
     @calendar_tasks = {
       Date.new(2026, 5, 1) => [
-        { name: "Personal Liability Insurance (Privathaftpflicht)", category: "logistics" }
+        { name: "Personal Liability Insurance (Privathaftpflicht)", category: "admin" }
       ],
       Date.new(2026, 5, 12) => [
         { name: "Registration (Anmeldung)", category: "housing" },
-        { name: "Open Bank Account", category: "visa" }
+        { name: "Open Bank Account", category: "financial" }
       ],
       Date.new(2026, 5, 4) => [
         { name: "Set Up Utilities", category: "Housing" }
