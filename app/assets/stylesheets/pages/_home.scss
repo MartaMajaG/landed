@@ -14,9 +14,9 @@
   background: #fff;
   border-radius: 12px;
   border: 0.5px solid #e2e5ec;
-  padding: 20px 24px;
+  padding: 12px 16px;
   display: flex;
-  align-items: stretch;
+  align-items: center;
   gap: 0;
   margin-bottom: 28px;
 }
@@ -66,16 +66,18 @@
   border-radius: 4px;
   padding: 2px 6px;
   letter-spacing: 0.05em;
+  display: inline;
 }
 
 .hero-progress {
   flex: 0 0 340px;
-  padding: 0 32px;
+  padding: 0 20px;
   border-left: 0.5px solid #e2e5ec;
   border-right: 0.5px solid #e2e5ec;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-top: 0px;
 }
 
 .progress-label {
@@ -120,10 +122,11 @@
 
 .hero-events {
   flex: 1;
-  padding-left: 32px;
+  padding-left: 20px;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  padding-top: 0px;
 }
 
 .events-header {

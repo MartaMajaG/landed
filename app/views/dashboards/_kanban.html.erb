@@ -68,6 +68,13 @@
         </div>
         <h4 class="card-title"><%= task.name %></h4>
         <p class="card-desc"><%= task.description %></p>
+        <div class="card-footer">
+  <span class="card-progress-label">No progress yet</span>
+  <span class="card-pct">0%</span>
+</div>
+<div class="card-track">
+  <div class="card-fill" style="width: 0%;"></div>
+</div>
       </div>
     <% end %>
   </div>
@@ -81,19 +88,26 @@
       <span class="col-menu">⋯</span>
     </div>
     <% upcoming_tasks.each do |task| %>
-  <div class="task-card locked" data-href="<%= task_path(task) %>">
-    <div class="card-top">
-      <div class="card-tags">
-        <span class="tag tag-low">Low</span>
-        <% if task.pillar %>
-          <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
-        <% end %>
+      <div class="task-card locked" data-href="<%= task_path(task) %>">
+        <div class="card-top">
+          <div class="card-tags">
+            <span class="tag tag-low">Low</span>
+            <% if task.pillar %>
+              <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
+            <% end %>
+          </div>
+        </div>
+        <h4 class="card-title"><%= task.name %></h4>
+        <p class="card-desc"><%= task.description %></p>
+        <div class="card-footer">
+  <span class="card-progress-label">No progress yet</span>
+  <span class="card-pct">0%</span>
+</div>
+<div class="card-track">
+  <div class="card-fill" style="width: 0%;"></div>
+</div>
       </div>
-    </div>
-    <h4 class="card-title"><%= task.name %></h4>
-    <p class="card-desc"><%= task.description %></p>
-  </div>
-<% end %>
+    <% end %>
   </div>
 
 <% end %>
