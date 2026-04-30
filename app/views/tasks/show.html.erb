@@ -76,14 +76,15 @@
                 <% if completed %>
                   <%# Completed: number circle becomes clickable undo button %>
                   <div class="step__number step__number--done">
-                    <%= button_to user_checklist_item_path(item),
-                        method: :patch,
-                        form: { data: { turbo: "false" } },
-                        class: "step__undo-btn",
-                        title: "Mark as incomplete" do %>
-                      <span class="step__check">✓</span>
-                    <% end %>
-                  </div>
+  <%= button_to user_checklist_item_path(item),
+      method: :patch,
+      form: { data: { turbo: "false" } },
+      class: "step__undo-btn",
+      data: { action: "click->task-detail#undoStep" },
+      title: "Mark as incomplete" do %>
+    <span class="step__check">✓</span>
+  <% end %>
+</div>
                 <% else %>
                   <div class="step__number">
                     <span><%= index + 1 %></span>
