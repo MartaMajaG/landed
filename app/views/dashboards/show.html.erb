@@ -151,44 +151,18 @@
                 <%= day.day %>
               </span>
 
+              <% if @calendar_tasks[day] %>
+                <% @calendar_tasks[day].each do |task| %>
+                  <div class="cal-event tag-pillar--<%= task[:category].downcase %>">
+                    <%= task[:name] %>
+                  </div>
+                <% end %>
+              <% end %>
+
               <%# Example: show events for this day %>
 
             </div>
           <% end %>
-          <%# Week 1 — Oct 21-27 %>
-          <%# <div class="cal-cell"></div>
-          <div class="cal-cell">
-            <span class="cal-date">22</span>
-            <div class="cal-event visa">Visa Appointment</div>
-          </div>
-          <div class="cal-cell">
-            <span class="cal-date">23</span>
-            <div class="cal-event logistics">Sign Lease</div>
-            <div class="cal-event logistics">Flight Booking</div>
-          </div>
-          <div class="cal-cell"><span class="cal-date">24</span></div>
-          <div class="cal-cell">
-            <span class="cal-date">25</span>
-            <div class="cal-event medical">Health Check</div>
-          </div>
-          <div class="cal-cell"><span class="cal-date">26</span></div>
-          <div class="cal-cell"><span class="cal-date">27</span></div>
-
-          <%# Week 2 — Oct 28 - Nov 3 %>
-          <%# <div class="cal-cell"><span class="cal-date">28</span></div>
-          <div class="cal-cell">
-            <span class="cal-date">29</span>
-            <div class="cal-event visa">Document Scan Due</div>
-          </div>
-          <div class="cal-cell"><span class="cal-date today-num">30</span></div>
-          <div class="cal-cell">
-            <span class="cal-date">31</span>
-            <div class="cal-event housing">Movers Arrive</div>
-          </div> %>
-          <%# <div class="cal-cell"><span class="cal-date muted">1</span></div>
-          <div class="cal-cell"><span class="cal-date muted">2</span></div>
-          <div class="cal-cell"><span class="cal-date muted">3</span></div> %>
-        </div>
       </div>
     </div>
   </turbo-frame>
