@@ -44,8 +44,7 @@
             <%= label_tag :country, "Country", class: "onboarding-label" %>
             <div class="onboarding-select-wrap">
               <%= select_tag :country,
-                             options_for_select([["Germany", "Germany"]]),
-                             prompt: "Select country",
+                             options_for_select([["Germany", "Germany"]], "Germany"),
                              required: true,
                              class: "onboarding-select" %>
             </div>
