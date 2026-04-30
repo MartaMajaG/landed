@@ -5,6 +5,9 @@ class DashboardsController < ApplicationController
     @user    = current_user
     @profile = current_user.profile
     city_id  = current_user.profile.city_id
+    @date = params[:month] ? Date.parse(params[:month]) : Date.today
+    @arrival_date = current_user.profile.arrival_date
+    @task_deadline = @arrival_date + 3.weeks if @arrival_date
 
     # Pillar filter
     @pillars       = Pillar.where(city_id: city_id).order(:position)
@@ -44,25 +47,25 @@ class DashboardsController < ApplicationController
     end
 
     # Respond to AJAX tab switches
-if params[:partial]
-  if params[:tab] == "completed"
-    completed = all_tasks.select { |t| t.completed_by?(current_user) }
-    render partial: "kanban", locals: {
-      completed_tasks: completed,
-      urgent_tasks: [], active_tasks: [], upcoming_tasks: [],
-      urgent_count: 0, active_count: 0, upcoming_count: 0
-    }
-  else
-    render partial: "kanban", locals: {
-      completed_tasks: nil,
-      urgent_tasks:   @urgent_tasks,
-      active_tasks:   @active_tasks,
-      upcoming_tasks: @upcoming_tasks,
-      urgent_count:   @urgent_count,
-      active_count:   @active_count,
-      upcoming_count: @upcoming_count
-    }
+    return unless params[:partial]
+
+    if params[:tab] == "completed"
+      completed = all_tasks.select { |t| t.completed_by?(current_user) }
+      render partial: "kanban", locals: {
+        completed_tasks: completed,
+        urgent_tasks: [], active_tasks: [], upcoming_tasks: [],
+        urgent_count: 0, active_count: 0, upcoming_count: 0
+      }
+    else
+      render partial: "kanban", locals: {
+        completed_tasks: nil,
+        urgent_tasks: @urgent_tasks,
+        active_tasks: @active_tasks,
+        upcoming_tasks: @upcoming_tasks,
+        urgent_count: @urgent_count,
+        active_count: @active_count,
+        upcoming_count: @upcoming_count
+      }
+    end
   end
-end
-end
 end

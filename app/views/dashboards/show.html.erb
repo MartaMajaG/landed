@@ -116,14 +116,15 @@
     </div>
 
     <%# ── CALENDAR ── %>
+     <turbo-frame id="calendar">
     <div class="calendar-section">
       <h2 class="tasks-label">Calendar</h2>
+
       <div class="calendar-card">
         <div class="cal-toolbar">
           <div class="cal-view-toggle">
-            <button class="cal-view-btn active">Month</button>
-            <button class="cal-view-btn">Week</button>
-            <button class="cal-view-btn">Day</button>
+            <%# <button class="cal-view-btn active">Month</button> %>
+
           </div>
           <div class="cal-legend">
             <span class="leg-item"><span class="leg-dot" style="background:#f97316;"></span>Housing</span>
@@ -132,38 +133,69 @@
             <span class="leg-item"><span class="leg-dot" style="background:#ec4899;"></span>Medical</span>
           </div>
           <div class="cal-nav">
-            <span class="cal-month-title">October 2026</span>
-            <button class="cal-nav-btn">‹</button>
-            <button class="cal-nav-btn">›</button>
+            <span class="cal-month-title"><%= @date.strftime("%B %Y") %></span>
+
+            <%= link_to "‹", dashboard_path(month: @date.prev_month), class: "cal-nav-btn", data: { turbo_frame: "calendar" } %>
+            <%= link_to "›", dashboard_path(month: @date.next_month), class: "cal-nav-btn", data: { turbo_frame: "calendar" } %>
           </div>
         </div>
+
         <div class="cal-grid">
-          <div class="cal-dow">Monday</div>
-          <div class="cal-dow">Tuesday</div>
-          <div class="cal-dow">Wednesday</div>
-          <div class="cal-dow">Thursday</div>
-          <div class="cal-dow">Friday</div>
-          <div class="cal-dow">Saturday</div>
-          <div class="cal-dow">Sunday</div>
-          <div class="cal-cell"></div>
-          <div class="cal-cell"><span class="cal-date">22</span><div class="cal-event visa">Visa Appointment</div></div>
-          <div class="cal-cell"><span class="cal-date">23</span><div class="cal-event logistics">Sign Lease</div><div class="cal-event logistics">Flight Booking</div></div>
+          <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].each do |day| %>
+            <div class="cal-dow"><%= day %></div>
+          <% end %>
+
+          <% calendar_days(@date).each do |day| %>
+            <div class="cal-cell <%= 'muted' if day.month != @date.month %>">
+              <span class="cal-date <%= 'today-num' if day == Date.today %>">
+                <%= day.day %>
+              </span>
+
+              <%# Example: show events for this day %>
+
+            </div>
+          <% end %>
+          <%# Week 1 — Oct 21-27 %>
+          <%# <div class="cal-cell"></div>
+          <div class="cal-cell">
+            <span class="cal-date">22</span>
+            <div class="cal-event visa">Visa Appointment</div>
+          </div>
+          <div class="cal-cell">
+            <span class="cal-date">23</span>
+            <div class="cal-event logistics">Sign Lease</div>
+            <div class="cal-event logistics">Flight Booking</div>
+          </div>
           <div class="cal-cell"><span class="cal-date">24</span></div>
-          <div class="cal-cell"><span class="cal-date">25</span><div class="cal-event medical">Health Check</div></div>
+          <div class="cal-cell">
+            <span class="cal-date">25</span>
+            <div class="cal-event medical">Health Check</div>
+          </div>
           <div class="cal-cell"><span class="cal-date">26</span></div>
           <div class="cal-cell"><span class="cal-date">27</span></div>
-          <div class="cal-cell"><span class="cal-date">28</span></div>
-          <div class="cal-cell"><span class="cal-date">29</span><div class="cal-event visa">Document Scan Due</div></div>
+
+          <%# Week 2 — Oct 28 - Nov 3 %>
+          <%# <div class="cal-cell"><span class="cal-date">28</span></div>
+          <div class="cal-cell">
+            <span class="cal-date">29</span>
+            <div class="cal-event visa">Document Scan Due</div>
+          </div>
           <div class="cal-cell"><span class="cal-date today-num">30</span></div>
-          <div class="cal-cell"><span class="cal-date">31</span><div class="cal-event housing">Movers Arrive</div></div>
-          <div class="cal-cell"><span class="cal-date muted">1</span></div>
+          <div class="cal-cell">
+            <span class="cal-date">31</span>
+            <div class="cal-event housing">Movers Arrive</div>
+          </div> %>
+          <%# <div class="cal-cell"><span class="cal-date muted">1</span></div>
           <div class="cal-cell"><span class="cal-date muted">2</span></div>
-          <div class="cal-cell"><span class="cal-date muted">3</span></div>
+          <div class="cal-cell"><span class="cal-date muted">3</span></div> %>
         </div>
       </div>
     </div>
+  </turbo-frame>
 
-  </div>
+  <%# ── PILLARS SECTION ── removed: pillar filter now in Tasks header %>
+
+</div>
 </div>
 
 <script>
@@ -174,16 +206,17 @@
     });
   });
 
-  // Pillar filter dropdown toggle
-  var filterBtn = document.getElementById('pillarFilterBtn');
-  var filterDropdown = document.getElementById('pillarFilterDropdown');
-  if (filterBtn && filterDropdown) {
-    filterBtn.addEventListener('click', function(e) {
-      e.stopPropagation();
-      filterDropdown.classList.toggle('pillar-filter__dropdown--open');
-    });
-    document.addEventListener('click', function() {
-      filterDropdown.classList.remove('pillar-filter__dropdown--open');
-    });
-  }
-</script>
+    // Pillar filter dropdown toggle
+    var filterBtn = document.getElementById('pillarFilterBtn');
+    var filterDropdown = document.getElementById('pillarFilterDropdown');
+    if (filterBtn && filterDropdown) {
+      filterBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var isOpen = filterDropdown.classList.contains('pillar-filter__dropdown--open');
+        filterDropdown.classList.toggle('pillar-filter__dropdown--open', !isOpen);
+      });
+      document.addEventListener('click', function() {
+        filterDropdown.classList.remove('pillar-filter__dropdown--open');
+      });
+    }
+  </script>
