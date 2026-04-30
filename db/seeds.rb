@@ -82,13 +82,14 @@ banking.update!(
 )
 
 # Pillar 4 — Health & Insurance
-health = Task.find_or_initialize_by(name: "Health Insurance", city: munich)
+# Key: final canonical name so re-seeds always find the existing record
+health = Task.find_or_initialize_by(name: "Health Insurance (Krankenversicherung)", city: munich, pillar: pillar_health)
 health.update!(
   pillar:         pillar_health,
   category:       "health_and_insurance",
-  description:    "Apply for the mandatory state health insurance subsidy to reduce your monthly premiums before the deadline.",
-  why_it_matters: "As an expat, choosing the right public health insurance ensures your dependents are covered at no extra cost. Securing this subsidy promptly prevents you from being placed on a default, higher-premium plan.",
-  urgency:        "medium"
+  description:    "Choose between public (GKV) and private (PKV) health insurance and complete your enrolment before starting work.",
+  why_it_matters: "Health insurance is legally required for everyone in Germany. Registering with a GKV automatically triggers your lifelong Sozialversicherungsnummer, which your employer needs for payroll.",
+  urgency:        "high"
 )
 
 puts "Tasks seeded: #{Task.count} total."
@@ -223,7 +224,7 @@ end
 # =============================================================================
 
 # ── Task 1: Health Insurance (Krankenversicherung) ───────────────────────────
-# Rename existing record in-place to preserve Task ID + any user progress.
+# Name/attributes already fully set above — just ensure data stays current
 health.update!(
   name:           "Health Insurance (Krankenversicherung)",
   pillar:         pillar_health,
