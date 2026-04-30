@@ -10,15 +10,18 @@ class DashboardsController < ApplicationController
     @task_deadline = @arrival_date + 3.weeks if @arrival_date
 
     @calendar_tasks = {
+      Date.new(2026, 5, 1) => [
+        { name: "Personal Liability Insurance (Privathaftpflicht)", category: "logistics" }
+      ],
       Date.new(2026, 5, 12) => [
-        { name: "Registration (Anmeldung)", category: "Admin" },
-        { name: "Open Bank Account", category: "Finance" }
+        { name: "Registration (Anmeldung)", category: "housing" },
+        { name: "Open Bank Account", category: "visa" }
       ],
       Date.new(2026, 5, 4) => [
         { name: "Set Up Utilities", category: "Housing" }
       ],
       Date.new(2026, 5, 19) => [
-        { name: "Health Insurance Registration", category: "Health" }
+        { name: "Health Insurance Registration", category: "medical" }
       ]
     }
 

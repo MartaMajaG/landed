@@ -128,8 +128,8 @@
           </div>
           <div class="cal-legend">
             <span class="leg-item"><span class="leg-dot" style="background:#f97316;"></span>Housing</span>
-            <span class="leg-item"><span class="leg-dot" style="background:#246DD5;"></span>Visa</span>
-            <span class="leg-item"><span class="leg-dot" style="background:#eab308;"></span>Logistics</span>
+            <span class="leg-item"><span class="leg-dot" style="background:#246DD5;"></span>Financial</span>
+            <span class="leg-item"><span class="leg-dot" style="background:#eab308;"></span>Admin</span>
             <span class="leg-item"><span class="leg-dot" style="background:#ec4899;"></span>Medical</span>
           </div>
           <div class="cal-nav">
@@ -153,7 +153,7 @@
 
               <% if @calendar_tasks[day] %>
                 <% @calendar_tasks[day].each do |task| %>
-                  <div class="cal-event tag-pillar--<%= task[:category].downcase %>">
+                  <div class="cal-event <%= task[:category].parameterize %>">
                     <%= task[:name] %>
                   </div>
                 <% end %>
