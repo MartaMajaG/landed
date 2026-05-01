@@ -9,6 +9,22 @@ class DashboardsController < ApplicationController
     @arrival_date = current_user.profile.arrival_date
     @task_deadline = @arrival_date + 3.weeks if @arrival_date
 
+    @calendar_tasks = {
+      Date.new(2026, 5, 1) => [
+        { name: "Personal Liability Insurance (Privathaftpflicht)", category: "admin" }
+      ],
+      Date.new(2026, 5, 12) => [
+        { name: "Registration (Anmeldung)", category: "housing" },
+        { name: "Open Bank Account", category: "financial" }
+      ],
+      Date.new(2026, 5, 4) => [
+        { name: "Set Up Utilities", category: "Housing" }
+      ],
+      Date.new(2026, 5, 19) => [
+        { name: "Health Insurance Registration", category: "medical" }
+      ]
+    }
+
     # Pillar filter
     @pillars       = Pillar.where(city_id: city_id).order(:position)
     @active_pillar = params[:pillar].present? ? @pillars.find_by(slug: params[:pillar]) : nil
