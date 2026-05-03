@@ -76,8 +76,8 @@
   border-right: 0.5px solid #e2e5ec;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding-top: 0px;
+  justify-content: flex-start;  // ← change from center
+  padding-top: 4px;             // ← small top offset for visual balance
 }
 
 .progress-label {
@@ -125,8 +125,8 @@
   padding-left: 20px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding-top: 0px;
+  justify-content: flex-start;  // ← change from center
+  padding-top: 4px;             // ← match hero-progress
 }
 
 .events-header {
@@ -742,11 +742,6 @@
   &.admin     { background: #fef9c3; color: #854d0e; }
   &.medical   { background: #fce7f3; color: #9d174d; }
 }
-
-.hero-progress {
-  flex: 0 0 380px;
-}
-
 // Spinner animation for loading state
 
 @keyframes spin {
@@ -951,4 +946,11 @@
 
 .kanban:has(.completed-grid) {
   display: block;
+}
+
+#{ '[id^="chat-messages-"]' } {
+  &:empty {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+  }
 }

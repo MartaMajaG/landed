@@ -289,7 +289,7 @@
 <% end %>
 
               <%# ── INPUT AREA ── %>
-              <div style="padding:14px 16px; border-top:1px solid #F3F4F6;">
+              <div style="padding:14px 16px; border-top:<%= @chat.messages.any? ? '1px solid #F3F4F6' : 'none' %>;">
                 <div id="chat-input-wrapper-<%= @chat.id %>">
                   <%= form_with url: chat_messages_path(@chat), method: :post,
                         data: { controller: "chat-form", action: "submit->chat-form#disableSubmit" } do |f| %>
