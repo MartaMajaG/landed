@@ -3,6 +3,18 @@
 <%# Subscribe to this chat's ActionCable channel so background job broadcasts reach the browser %>
 <%= turbo_stream_from @chat %>
 
+<%# ── PARSE TITLE INTO ENGLISH + GERMAN PARTS ── %>
+<%
+  raw_title = @chat.title || @chat.document.filename.to_s
+  if raw_title.match(/\A(.+?)\s*\((.+)\)\z/)
+    english_title = $1.strip
+    german_title  = $2.strip
+  else
+    english_title = raw_title
+    german_title  = nil
+  end
+%>
+
 <style>
   .chat-spinner-inline {
     width: 24px;
@@ -86,23 +98,38 @@
   .chat-panel-header:hover { background: #F9FAFB; }
 </style>
 
-<div style="background:#F0F1F8; min-height:100vh; padding:24px 0;">
-  <div class="container">
+<div style="background:#F0F1F8; min-height:100vh; padding-bottom:48px;">
 
-    <%# ── BREADCRUMB ── %>
-    <div style="display:flex; align-items:center; gap:6px; font-size:13px; color:#6B7280; margin-bottom:3rem;">
-  <%= link_to "Documents", chats_path, style:"color:#6B7280; text-decoration:none; font-weight:400;" %>
-  <span style="color:#9CA3AF;">/</span>
-  <span style="color:#1A1A2E; font-weight:500;"><%= @chat.title || @chat.document.filename %></span>
-</div>
+  <%# ── BREADCRUMB ── %>
+  <div style="padding:14px 0; background:#F0F1F8;">
+    <div class="container-xl">
+      <nav>
+        <ol style="list-style:none; padding:0; margin:0; display:flex; align-items:center; gap:8px; font-size:13px;">
+          <li>
+            <%= link_to "Documents", chats_path, style: "color:#246DD5; text-decoration:none; font-weight:500;" %>
+          </li>
+          <li style="color:#9CA3AF;">›</li>
+          <li style="color:#6B7280; font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width:600px;">
+            <%= english_title %>
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+
+  <%# ── PAGE CONTENT ── %>
+  <div class="container-xl" style="padding-top:28px;">
 
     <%# ── HEADER ── %>
     <div style="margin-bottom:2rem;">
       <p style="font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#7A9E1F; margin-bottom:4px;">Document Analysis</p>
-      <h1 style="font-size:22px; font-weight:700; color:#1A1A2E; margin:0 0 10px; word-break: normal;">
-        <%= @chat.title || @chat.document.filename %>
+      <h1 style="font-size:28px; font-weight:700; color:#1A1A2E; margin:0 0 4px;">
+        <%= english_title %>
       </h1>
-      <div class="d-flex align-items-center gap-2 flex-wrap">
+      <% if german_title.present? %>
+        <p style="font-size:14px; color:#9CA3AF; font-weight:400; margin:0 0 12px;"><%= german_title %></p>
+      <% end %>
+      <div class="d-flex align-items-center gap-2 flex-wrap" style="margin-top:8px;">
         <small style="color:#6B7280;">Processed on <%= @chat.created_at.strftime("%b %d, %Y") %></small>
         <% if @chat.is_mandatory? || @chat.is_mandatory.nil? %>
           <span style="background:#E6F0FB; color:#185FA5; font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:3px 8px; border-radius:20px;">Mandatory</span>
@@ -203,19 +230,55 @@
           </div>
         <% end %>
 
-        <%# ── WHAT THIS MEANS ── %>
+<%# ── WHAT THIS MEANS ── %>
         <% if @chat.advice.present? %>
+          <% adv = @chat.parsed_advice %>
+          <% vague = ["unknown", "varies", "n/a", "none", "tbd", "variable", "see document"] %>
+          <% concrete_stats = adv["stats"]&.reject { |s| vague.include?(s["value"].to_s.downcase.strip) } %>
+
           <div style="background:#fff; border-radius:12px; padding:24px;">
             <h5 style="font-size:15px; font-weight:600; color:#1A1A2E; margin-bottom:14px; display:flex; align-items:center; gap:8px;">
-              <i class="fa-solid fa-bolt" style="color:#F59E0B; font-size:14px;"></i> What this means
+              <i class="fa-solid fa-lightbulb" style="color:#F59E0B; font-size:16px;"></i> What this means
             </h5>
-            <ul style="font-size:14px; color:#4B5563; line-height:1.8; padding-left:12px; margin-bottom:0; max-width:680px;">
-              <% @chat.advice.split(/(?<=[.!?])\s+/).reject(&:blank?).select { |p| p.length > 10 }.each do |point| %>
-                <li style="margin-bottom:6px;"><%= point.strip %></li>
-              <% end %>
-            </ul>
+
+            <% if adv["summary"].present? %>
+              <p style="font-size:13px; color:#9CA3AF; line-height:1.6; margin-bottom:8px;">
+                <%= adv["summary"] %>
+              </p>
+            <% end %>
+
+            <% if adv["explanation"].present? %>
+              <p style="font-size:14px; color:#4B5563; line-height:1.8; margin-bottom:20px;">
+                <%= adv["explanation"] %>
+              </p>
+            <% end %>
+
+            <% if concrete_stats.present? %>
+              <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:20px;">
+                <% concrete_stats.each do |stat| %>
+                  <div style="border:1px solid #E5E7EB; border-radius:10px; padding:14px 16px; display:flex; flex-direction:column; justify-content:flex-start; min-width:160px; max-width:220px; flex:1;">
+                    <p style="font-size:10px; font-weight:700; letter-spacing:0.07em; text-transform:uppercase; color:#6B7280; margin:0 0 6px;"><%= stat["label"] %></p>
+                    <p style="font-size:14px; font-weight:700; color:#1A1A2E; margin:0 0 2px; word-break:break-word; hyphens:auto; line-height:1.3;"><%= stat["value"] %></p>
+                    <p style="font-size:12px; color:#6B7280; margin:0;"><%= stat["sub"] %></p>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+
+            <% if adv["key_facts"].present? %>
+              <p style="font-size:10px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#9CA3AF; margin:0 0 10px;">Key Facts</p>
+              <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:16px;">
+                <% adv["key_facts"].each do |fact| %>
+                  <div style="display:flex; align-items:flex-start; gap:12px;">
+                    <span style="min-width:22px; height:22px; background:#E6F0FB; color:#246DD5; border-radius:50%; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;"><%= fact["n"] %></span>
+                    <p style="font-size:14px; color:#4B5563; line-height:1.6; margin:0;"><%= fact["text"] %></p>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+
             <% if @chat.document.attached? %>
-              <div style="margin-top:16px;">
+              <div style="margin-top:4px;">
                 <%= link_to url_for(@chat.document), target: "_blank", style: "display:inline-flex; align-items:center; gap:6px; font-size:13px; font-weight:500; color:#4B5563; text-decoration:none; padding:6px 12px; border:1px solid #E5E7EB; border-radius:6px; background:#F9FAFB;" do %>
                   <i class="fa-solid fa-file-pdf" style="color:#E24B4A;"></i> View full document
                 <% end %>
@@ -223,7 +286,7 @@
             <% end %>
           </div>
         <% end %>
-
+        
         <%# ── NEXT STEPS ── %>
         <% if @chat.description.present? %>
           <div style="background:#fff; border-radius:12px; padding:24px;">
@@ -272,30 +335,29 @@
             <%# ── COLLAPSIBLE BODY ── %>
             <div id="chat-body-<%= @chat.id %>" style="display:none;">
 
-              <%# ── MESSAGE HISTORY ── %>
               <% if @chat.messages.any? %>
-  <div id="chat-messages-<%= @chat.id %>"
-      style="padding:16px 20px; display:flex; flex-direction:column; gap:8px; max-height:400px; overflow-y:auto;">
-    <% @chat.messages.order(:created_at).each do |message| %>
-                  <% if message.role == "user" %>
-                    <div style="display:flex; justify-content:flex-end;">
-                      <div style="background:#246DD5; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 4px 16px; max-width:75%;">
-                        <%= message.content %>
+                <div id="chat-messages-<%= @chat.id %>"
+                     style="padding:16px 20px; display:flex; flex-direction:column; gap:8px; max-height:400px; overflow-y:auto;">
+                  <% @chat.messages.order(:created_at).each do |message| %>
+                    <% if message.role == "user" %>
+                      <div style="display:flex; justify-content:flex-end;">
+                        <div style="background:#246DD5; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 4px 16px; max-width:75%;">
+                          <%= message.content %>
+                        </div>
                       </div>
-                    </div>
-                  <% else %>
-                    <div style="display:flex; justify-content:flex-start; gap:8px; align-items:flex-start;">
-                      <div style="width:28px; height:28px; background:#E6F0FB; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:13px;">✦</div>
-                      <div style="background:#F3F4F6; color:#1A1A2E; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 16px 4px; max-width:75%;">
-                        <%= message.content %>
+                    <% else %>
+                      <div style="display:flex; justify-content:flex-start; gap:8px; align-items:flex-start;">
+                        <div style="width:28px; height:28px; background:#E6F0FB; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:13px;">✦</div>
+                        <div style="background:#F3F4F6; color:#1A1A2E; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 16px 4px; max-width:75%;">
+                          <%= message.content %>
+                        </div>
                       </div>
-                    </div>
+                    <% end %>
                   <% end %>
-                <% end %>
-  </div>
-<% else %>
-  <div id="chat-messages-<%= @chat.id %>" style="padding:16px 20px; display:flex; flex-direction:column; gap:8px; max-height:400px; overflow-y:auto;"></div>
-<% end %>
+                </div>
+              <% else %>
+                <div id="chat-messages-<%= @chat.id %>" style="padding:16px 20px; display:flex; flex-direction:column; gap:8px; max-height:400px; overflow-y:auto;"></div>
+              <% end %>
 
               <%# ── INPUT AREA ── %>
               <div style="padding:14px 16px; border-top:<%= @chat.messages.any? ? '1px solid #F3F4F6' : 'none' %>;">

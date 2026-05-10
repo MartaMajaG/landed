@@ -6,9 +6,9 @@
 <%# ── HEADER ── %>
 <div class="d-flex justify-content-between align-items-center mb-4">
   <div>
-    <h1 style="font-size:28px; font-weight:700; color:#1A1A2E; margin:0 0 4px;">My Documents</h1>
+    <h1 style="font-size:22px; font-weight:700; color:#1A1A2E; margin:0 0 4px;">My Documents</h1>
     <% if @chats.any? %>
-      <p style="font-size:14px; color:#6B7280; margin:0;"><%= @chats.size %> documents scanned</p>
+      <p style="font-size:14px; color:#6B7280; margin:0;"><%= pluralize(@chats.size, "document") %> scanned</p>
     <% end %>
   </div>
   <% if @chats.any? %>
