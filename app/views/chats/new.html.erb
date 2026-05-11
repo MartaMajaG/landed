@@ -1,79 +1,69 @@
 <% content_for :meta_title, "Landed | Scan a document" %>
 
-<div style="background:#F0F1F8; min-height:100vh; padding:48px 0;">
-  <div class="container">
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-7 col-lg-5">
+<div style="min-height:100vh; padding-bottom:48px; position:relative; overflow:hidden; background:#F5F3FF;">
+  <div style="pointer-events:none; position:absolute; inset:0; z-index:0; background: radial-gradient(ellipse at 10% 15%, rgba(120,100,245,0.04) 0%, transparent 52%), radial-gradient(ellipse at 90% 85%, rgba(255,150,180,0.05) 0%, transparent 52%);"></div>
 
-        <div class="mb-4">
-          <p style="font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#7A9E1F; margin-bottom:6px;">Document Scanner</p>
-          <h1 style="font-size:22px; font-weight:700; color:#1A1A2E; margin-bottom:4px;">Scan a document</h1>
-          <p style="font-size:14px; color:#6B7280; margin-bottom:0;">Got a German letter you can't read? Plain-English summary in seconds.</p>
+  <div style="padding:14px 0; position:relative; z-index:1;">
+    <div class="container-xl">
+      <ol style="list-style:none; padding:0; margin:0; display:flex; align-items:center; gap:8px; font-size:13px;">
+        <li><%= link_to "Documents", chats_path, style:"color:#5B50E8; text-decoration:none; font-weight:500;" %></li>
+        <li style="color:#9CA3AF;">›</li>
+        <li style="color:#6B7280; font-weight:500;">Scan a document</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="container-xl" style="padding-top:20px; position:relative; z-index:1;">
+    <div class="row justify-content-center">
+      <div class="col-12 col-md-6 col-lg-5">
+        <div style="margin-bottom:24px;">
+          <p style="font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#5B50E8; margin-bottom:6px;">Document Scanner</p>
+          <h1 style="font-size:26px; font-weight:600 !important; font-family:inherit !important; color:#1A1A2E; margin-bottom:6px; letter-spacing:-0.4px;">Scan a document</h1>
+          <p style="font-size:14px; color:#8B8FA8; margin-bottom:0;">Got a German letter? Plain-English summary in seconds.</p>
         </div>
 
-        <div style="background:#fff; border:1px solid #E5E7EB; border-radius:12px; padding:28px;">
-
+        <div style="background:#fff; border-radius:14px; padding:28px;">
           <% if @chat.errors.any? %>
             <div class="alert alert-danger mb-4">
-              <ul class="mb-0">
-                <% @chat.errors.full_messages.each do |msg| %>
-                  <li style="font-size:14px;"><%= msg %></li>
-                <% end %>
-              </ul>
+              <ul class="mb-0"><% @chat.errors.full_messages.each do |msg| %><li style="font-size:14px;"><%= msg %></li><% end %></ul>
             </div>
           <% end %>
 
           <%= form_with model: @chat, local: true, multipart: true, data: { controller: "loading", action: "submit->loading#submit" } do |f| %>
-
-            <%# FORM STATE — visible by default %>
             <div data-loading-target="form">
-
               <div class="mb-4" data-controller="uploadpreview">
-                <label style="font-size:14px; font-weight:600; color:#1A1A2E; display:block; margin-bottom:8px;">Document</label>
-
-                <div style="border:2px dashed #D1D5DB; border-radius:10px; padding:32px 20px; text-align:center; background:#F9FAFB;">
-                  <i class="fa-solid fa-cloud-arrow-up" style="font-size:28px; color:#9CA3AF; margin-bottom:12px; display:block;"></i>
-                  <p style="font-size:14px; color:#6B7280; margin-bottom:16px;">Upload a photo or file</p>
+                <label style="font-size:14px; font-weight:600; color:#1A1A2E; display:block; margin-bottom:10px;">Document</label>
+                <div style="border:2px dashed #DDD9FF; border-radius:10px; padding:32px 20px; text-align:center; background:#FAF9FF;">
+                  <div style="width:44px; height:44px; background:#EEECFF; border-radius:10px; display:flex; align-items:center; justify-content:center; margin:0 auto 14px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5B50E8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+                  </div>
+                  <p style="font-size:14px; color:#6B7280; margin-bottom:16px;">Upload a photo or PDF</p>
                   <div class="d-flex justify-content-center gap-2">
-                    <label style="background:#246DD5; color:#fff; border-radius:8px; padding:8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" for="chat_document_upload">
-                      <i class="fa-solid fa-upload" style="font-size:12px;"></i> Upload file
+                    <label style="background:#5B50E8; color:#fff; border-radius:8px; padding:8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" for="chat_document_upload">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                      Upload file
                     </label>
-                    <label class="camera-only" style="background:#fff; color:#246DD5; border:1.5px solid #246DD5; border-radius:8px; padding:8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" for="chat_document_camera">
-                      <i class="fa-solid fa-camera" style="font-size:12px;"></i> Take photo
+                    <label style="background:#fff; color:#5B50E8; border:1.5px solid #5B50E8; border-radius:8px; padding:8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" for="chat_document_camera">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                      Take photo
                     </label>
                   </div>
                 </div>
-
-                <%= f.file_field :document, id: "chat_document_upload",
-                      class: "d-none", accept: "image/*,application/pdf",
-                      data: { action: "change->uploadpreview#show", uploadpreview_target: "input" } %>
-
-                <input type="file" id="chat_document_camera" name="chat[document]"
-                  accept="image/*" capture="environment" class="d-none"
-                  data-action="change->uploadpreview#show"
-                  data-uploadpreview-target="input" />
-
+                <%= f.file_field :document, id:"chat_document_upload", class:"d-none", accept:"image/*,application/pdf", data:{ action:"change->uploadpreview#show", uploadpreview_target:"input" } %>
+                <input type="file" id="chat_document_camera" name="chat[document]" accept="image/*" capture="environment" class="d-none" data-action="change->uploadpreview#show" data-uploadpreview-target="input" />
                 <img data-uploadpreview-target="preview" class="img-fluid rounded mt-3 d-none" style="max-height:200px;" />
-                <p data-uploadpreview-target="filename" class="mt-3 d-none" style="font-size:13px; color:#6B7280;">
-                  <i class="fa-solid fa-file-pdf me-1" style="color:#E24B4A;"></i>
-                </p>
+                <p data-uploadpreview-target="filename" class="mt-3 d-none" style="font-size:13px; color:#6B7280;"></p>
               </div>
-
-              <%= f.submit "Scan document", style:"width:100%; padding:11px; background:#246DD5; color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer;" %>
-
-            </div><%# end form target %>
-
-            <%# LOADER STATE — hidden by default %>
-            <div data-loading-target="loader" class="d-none" style="text-align:center; padding:32px 0;">
-              <div style="width:48px; height:48px; border:4px solid #E5E7EB; border-top-color:#246DD5; border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px;"></div>
-              <p style="font-size:15px; font-weight:600; color:#1A1A2E; margin-bottom:4px;">Analysing your document...</p>
-              <p style="font-size:13px; color:#6B7280;">It takes about 10 seconds...</p>
+              <%= f.submit "Scan document", style:"width:100%; padding:11px; background:#5B50E8; color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer;" %>
             </div>
-
+            <div data-loading-target="loader" class="d-none" style="text-align:center; padding:32px 0;">
+              <div style="width:44px; height:44px; border:3px solid #DDD9FF; border-top-color:#5B50E8; border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px;"></div>
+              <p style="font-size:15px; font-weight:500; color:#1A1A2E; margin-bottom:4px;">Analysing your document...</p>
+              <p style="font-size:13px; color:#9CA3AF;">This takes about 10 seconds</p>
+            </div>
+            <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
           <% end %>
-
-          <%= link_to "Cancel", root_path, style:"display:block; text-align:center; margin-top:14px; font-size:14px; color:#6B7280; text-decoration:none;" %>
-
+          <%= link_to "Cancel", chats_path, style:"display:block; text-align:center; margin-top:14px; font-size:14px; color:#9CA3AF; text-decoration:none;" %>
         </div>
       </div>
     </div>

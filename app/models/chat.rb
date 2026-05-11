@@ -9,9 +9,6 @@ class Chat < ApplicationRecord
     attachable.variant :ai_ready, resize_to_limit: [2048, 2048], format: :jpeg, saver: { quality: 85 }
   end
 
-  # Answers a free-text user question about this document using already-extracted context.
-  # Does not re-send the image — uses title, document_type, and advice as system context.
-  # Returns a plain English string.
   def ask_document(question)
     return "No document context available." unless advice.present?
 
@@ -34,11 +31,9 @@ class Chat < ApplicationRecord
     end
   end
 
-  # Sends the attached image to GitHub Models and returns extracted fields as a hash.
-  # Stores advice as a JSON string so it can be parsed into a structured layout.
   def analyze_document
     return unless document.attached?
-    return unless document.content_type.start_with?("image/")
+    return unless document.content_type.start_with?("image/") || document.content_type == "application/pdf"
 
     begin
       response = call_github_models
@@ -52,7 +47,6 @@ class Chat < ApplicationRecord
     end
   end
 
-  # Parses the stored advice JSON string back into a hash for use in views.
   def parsed_advice
     return {} unless advice.present?
     begin
@@ -64,9 +58,8 @@ class Chat < ApplicationRecord
 
   private
 
-  # Builds the Q&A payload using parsed advice as plain-text context.
   def qa_settings(question)
-    adv = parsed_advice
+    adv         = parsed_advice
     summary     = adv.dig("summary") || ""
     explanation = adv.dig("explanation") || ""
     facts       = adv.dig("key_facts")&.map { |f| f["text"] }&.join(" ") || ""
@@ -91,7 +84,6 @@ class Chat < ApplicationRecord
     }
   end
 
-  # Makes the HTTP POST request to GitHub Models and returns the parsed response body.
   def call_github_models
     uri = URI("https://models.inference.ai.azure.com/chat/completions")
     http = Net::HTTP.new(uri.host, uri.port)
@@ -106,7 +98,6 @@ class Chat < ApplicationRecord
     JSON.parse(response.body)
   end
 
-  # Builds the payload sent to the AI: model, system persona, image, and extraction instructions.
   def ai_settings
     {
       model: "gpt-4o-mini",
@@ -131,9 +122,9 @@ class Chat < ApplicationRecord
                      4. 'urgency' (high, medium, low)
                      5. 'document_type' (e.g., 'Krankenkasse', 'Finanzamt', 'Steuer')
                      6. 'advice' as a nested object with:
-                        - 'summary': one plain-English sentence, just the document type and core action required
+                        - 'summary': one plain-English action sentence telling the user what they need to do — not a document definition, not a description, but a direct action prompt (e.g. 'You need to submit this form to confirm your address with the Munich authorities.')
                         - 'explanation': write 3-4 sentences directly to the user as if you are a knowledgeable friend helping them navigate German bureaucracy. Be warm, specific, and reassuring. Tell them what this document means for their situation, what they should do next, and what to watch out for. Use you and your throughout. Never be generic.
-                        - 'stats': array of up to 4 objects, each with 'label', 'value', 'sub', and optional 'highlight' (warn or critical). The value must be short — maximum 3 words, no sentences. Always prioritise these categories in this order if present in the document: amount or fee owed, deadline or due date, penalty for missing deadline, contest or appeal window. Only use other categories if none of these apply. Labels must be short and clear in plain English — never use German institution names as a value.
+                        - 'stats': array of up to 4 objects, each with 'label', 'value', 'sub', and optional 'highlight' (warn or critical). The value must be short — maximum 3 words, no sentences. Always prioritise these categories in this order if present in the document: amount or fee owed, deadline or due date, penalty for missing deadline, contest or appeal window. Only use other categories if none of these apply. Labels must be short and clear in plain English — never use German institution names as a value. Always format currency values with the euro symbol before the number with no space (e.g. the symbol comes first, then the digits).
                         - 'key_facts': array of 3 objects with 'n' (1,2,3) and 'text' (warm and friendly, written directly to the user using you and your, like helping a friend navigate German bureaucracy — be reassuring and practical, not robotic)"
             }
           ]
@@ -142,18 +133,33 @@ class Chat < ApplicationRecord
     }
   end
 
-  # Wraps the image as a base64 data URL.
   def content_block
-    {
-      type: "image_url",
-      image_url: {
-        url: "data:#{document.content_type};base64,#{encoded_file}"
+    if document.content_type == "application/pdf"
+      {
+        type: "text",
+        text: "Note: this is a PDF document. Extracted content: #{extract_pdf_text}"
       }
-    }
+    else
+      {
+        type: "image_url",
+        image_url: {
+          url: "data:#{document.content_type};base64,#{encoded_file}"
+        }
+      }
+    end
   end
 
-  # Downloads the file from Active Storage and encodes it to base64 for the API.
   def encoded_file
     Base64.strict_encode64(document.download)
+  end
+
+  def extract_pdf_text
+    reader = PDF::Reader.new(StringIO.new(document.download))
+    reader.pages.map.with_index(1) do |page, i|
+      "--- Page #{i} ---\n#{page.text}"
+    end.join("\n")
+  rescue => e
+    Rails.logger.error "PDF extraction failed: #{e.message}"
+    "Could not extract text from PDF."
   end
 end
