@@ -1,114 +1,83 @@
 <% content_for :meta_title, "Landed | Documents" %>
 
-<div style="background:#F0F1F8; min-height:100vh; padding:48px 0;">
-  <div class="container">
+<div style="min-height:100vh; padding-bottom:48px; position:relative; overflow:hidden; background:#F5F3FF;">
+  <div style="pointer-events:none; position:absolute; inset:0; z-index:0; background: radial-gradient(ellipse at 10% 15%, rgba(120,100,245,0.04) 0%, transparent 52%), radial-gradient(ellipse at 90% 85%, rgba(255,150,180,0.05) 0%, transparent 52%);"></div>
 
-<%# ── HEADER ── %>
-<div class="d-flex justify-content-between align-items-center mb-4">
-  <div>
-    <h1 style="font-size:22px; font-weight:700; color:#1A1A2E; margin:0 0 4px;">My Documents</h1>
-    <% if @chats.any? %>
-      <p style="font-size:14px; color:#6B7280; margin:0;"><%= pluralize(@chats.size, "document") %> scanned</p>
-    <% end %>
-  </div>
-  <% if @chats.any? %>
-    <%= link_to "＋ Scan new document", new_chat_path,
-        style: "background:#246DD5; color:#fff; font-size:14px; font-weight:500; padding:10px 20px; border-radius:8px; text-decoration:none;" %>
-  <% end %>
-</div>
+  <div class="container-xl" style="padding-top:40px; position:relative; z-index:1;">
 
-<% if @chats.empty? %>
-  <div style="text-align:center; padding:80px 0;">
-    <p style="font-size:48px; margin-bottom:16px;">📄</p>
-    <h2 style="font-size:20px; font-weight:600; color:#1A1A2E; margin-bottom:8px;">No documents yet</h2>
-    <p style="font-size:14px; color:#6B7280; margin-bottom:24px;">Scan your first German document to get started.</p>
-    <%= link_to "Scan your first document", new_chat_path,
-        style: "background:#246DD5; color:#fff; font-size:14px; font-weight:500; padding:10px 20px; border-radius:8px; text-decoration:none;" %>
-  </div>
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:24px;">
+      <div>
+        <p style="font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#5B50E8; margin:0 0 6px;">Document Vault</p>
+        <h1 style="font-size:26px; font-weight:600 !important; font-family:inherit !important; color:#1A1A2E; margin:0 0 4px; letter-spacing:-0.4px;">My Documents</h1>
+        <% if @chats.any? %><p style="font-size:13px; color:#9CA3AF; margin:0;"><%= pluralize(@chats.size, "document") %> scanned</p><% end %>
+      </div>
+      <% if @chats.any? %>
+        <%= link_to new_chat_path, style:"background:#5B50E8; color:#fff; font-size:13px; font-weight:500; padding:9px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Scan new document
+        <% end %>
+      <% end %>
+    </div>
 
-<% else %>
-  <div style="background:#fff; border:1px solid #E5E7EB; border-radius:12px; overflow:hidden;">
-
-        <%# ── TABLE HEADER ── %>
-        <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:12px 20px; background:#F9FAFB; border-bottom:1px solid #E5E7EB;">
-          <span style="font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#6B7280;">Document</span>
-          <span style="font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#6B7280;">Type</span>
-          <span style="font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#6B7280;">Deadline</span>
-          <span style="font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#6B7280;">Scanned</span>
+    <% if @chats.empty? %>
+      <div style="background:#fff; border-radius:14px; padding:80px 40px; text-align:center;">
+        <div style="width:56px; height:56px; background:#EEECFF; border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5B50E8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         </div>
-
-        <%# ── ROWS ── %>
+        <h2 style="font-size:18px; font-weight:600; color:#1A1A2E; margin-bottom:8px;">No documents yet</h2>
+        <p style="font-size:14px; color:#9CA3AF; margin-bottom:28px; max-width:320px; margin-left:auto; margin-right:auto;">Scan your first German document and get a plain-English summary in seconds.</p>
+        <%= link_to new_chat_path, style:"background:#5B50E8; color:#fff; font-size:13px; font-weight:500; padding:10px 20px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Scan your first document
+        <% end %>
+      </div>
+    <% else %>
+      <div style="background:#fff; border-radius:14px; overflow:hidden;">
+        <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:11px 20px; background:#FAF9FF; border-bottom:1px solid #F0EEFF;">
+          <span style="font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#9CA3AF;">Document</span>
+          <span style="font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#9CA3AF;">Type</span>
+          <span style="font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#9CA3AF;">Deadline</span>
+          <span style="font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#9CA3AF;">Scanned</span>
+        </div>
         <% @chats.each do |chat| %>
-          <%= link_to chat_path(chat),
-              style: "display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:16px 20px; border-bottom:1px solid #F3F4F6; align-items:center; text-decoration:none; color:inherit; cursor:pointer; transition:background 0.15s;",
-              onmouseover: "this.style.background='#F9FAFB'",
-              onmouseout: "this.style.background=''" do %>
-
-            <%# ── DOCUMENT TITLE + URGENCY ── %>
+          <%= link_to chat_path(chat), style:"display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:14px 20px; border-bottom:1px solid #FAF9FF; align-items:center; text-decoration:none; color:inherit; transition:background 0.12s;", onmouseover:"this.style.background='#FAF9FF'", onmouseout:"this.style.background=''" do %>
             <div style="display:flex; align-items:center; gap:12px;">
-              <div style="width:36px; height:36px; background:#E6F0FB; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
-                <span style="font-size:16px;">📄</span>
+              <div style="width:34px; height:34px; background:#F6F5FF; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
               </div>
               <div>
-                <p style="font-size:14px; font-weight:600; color:#1A1A2E; margin:0 0 2px;">
-                  <%= chat.title || chat.document.filename %>
-                </p>
+                <p style="font-size:13px; font-weight:500; color:#1A1A2E; margin:0 0 3px;"><%= chat.title || chat.document.filename %></p>
                 <% if chat.urgency.present? %>
-                  <% badge_bg    = { "high" => "#FEE8E8", "medium" => "#FEF3CD", "low" => "#EBF5E0" }[chat.urgency] %>
-                  <% badge_color = { "high" => "#A32D2D", "medium" => "#7C4A00", "low" => "#3B6D11" }[chat.urgency] %>
-                  <span style="font-size:10px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; background:<%= badge_bg %>; color:<%= badge_color %>; padding:2px 6px; border-radius:20px;">
-                    <%= chat.urgency %>
-                  </span>
+                  <%
+                    badge_bg    = { "high" => "#FEE8E8", "medium" => "#FEF3CD", "low" => "#EBF5E0" }[chat.urgency]
+                    badge_color = { "high" => "#C0392B", "medium" => "#7C4A00", "low" => "#3B6D11" }[chat.urgency]
+                  %>
+                  <span style="font-size:10px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; background:<%= badge_bg %>; color:<%= badge_color %>; padding:2px 6px; border-radius:20px;"><%= chat.urgency %></span>
                 <% end %>
               </div>
             </div>
-
-            <%# ── DOCUMENT TYPE ── %>
-            <div>
-              <% if chat.document_type.present? %>
-                <span style="font-size:12px; font-weight:600; background:#E6F0FB; color:#185FA5; padding:3px 8px; border-radius:20px;">
-                  <%= chat.document_type %>
-                </span>
-              <% else %>
-                <span style="font-size:12px; color:#9CA3AF;">—</span>
-              <% end %>
-            </div>
-
-            <%# ── DEADLINE ── %>
+            <% if chat.document_type.present? %>
+              <span style="font-size:11px; font-weight:600; background:#EEECFF; color:#5B50E8; padding:3px 8px; border-radius:20px;"><%= chat.document_type %></span>
+            <% else %>
+              <span style="font-size:12px; color:#D1D5DB;">—</span>
+            <% end %>
             <div>
               <% if chat.deadline.present? %>
                 <% days_left = (chat.deadline - Date.today).to_i %>
-                <p style="font-size:13px; font-weight:500; color:<%= days_left < 7 ? '#A32D2D' : '#374151' %>; margin:0;">
-                  <%= chat.deadline.strftime("%b %d, %Y") %>
-                </p>
-                <p style="font-size:11px; color:#9CA3AF; margin:0;">
-                  <% if days_left < 0 %>Overdue
-                  <% elsif days_left == 0 %>Today
-                  <% else %><%= days_left %> days left
-                  <% end %>
-                </p>
+                <p style="font-size:13px; font-weight:500; color:<%= days_left < 0 ? '#C0392B' : '#374151' %>; margin:0;"><%= chat.deadline.strftime("%b %d, %Y") %></p>
+                <p style="font-size:11px; color:#9CA3AF; margin:0;"><% if days_left < 0 %>Overdue<% elsif days_left == 0 %>Today<% else %><%= days_left %> days left<% end %></p>
               <% else %>
-                <span style="font-size:12px; color:#9CA3AF;">—</span>
+                <span style="font-size:12px; color:#D1D5DB;">—</span>
               <% end %>
             </div>
-
-            <%# ── DATE SCANNED + DELETE ── %>
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <p style="font-size:12px; color:#6B7280; margin:0;"><%= chat.created_at.strftime("%b %d, %Y") %></p>
+              <p style="font-size:12px; color:#9CA3AF; margin:0;"><%= chat.created_at.strftime("%b %d, %Y") %></p>
               <div onclick="event.stopPropagation();">
-                <%= button_to "Delete", chat_path(chat),
-    method: :delete,
-    form: { data: { turbo: false } },
-    onclick: "return confirm('Are you sure you want to delete this document?');",
-    style: "background:none; border:1px solid #E5E7EB; border-radius:6px; font-size:12px; font-weight:500; color:#6B7280; cursor:pointer; padding:4px 10px;",
-    onmouseover: "this.style.borderColor='#A32D2D'; this.style.color='#A32D2D'",
-    onmouseout: "this.style.borderColor='#E5E7EB'; this.style.color='#6B7280'" %>
+                <%= button_to "Delete", chat_path(chat), method: :delete, form: { data: { turbo: false } }, onclick: "return confirm('Delete this document?');", style:"background:none; border:1px solid #E5E7EB; border-radius:6px; font-size:11px; font-weight:500; color:#9CA3AF; cursor:pointer; padding:3px 9px;" %>
               </div>
             </div>
-
           <% end %>
         <% end %>
-
       </div>
     <% end %>
 
