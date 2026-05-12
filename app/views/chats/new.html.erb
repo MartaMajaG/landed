@@ -1,71 +1,240 @@
-<% content_for :meta_title, "Landed | Scan a document" %>
+<% content_for :meta_title, "Landed | Documents" %>
+
+<style>
+  .doc-row { cursor: pointer; transition: background 0.1s; }
+
+  /* Icon wrapper — checkbox overlays on top of the file icon */
+  .doc-icon-wrap {
+    position: relative;
+    width: 34px; height: 34px;
+    flex-shrink: 0;
+  }
+  .doc-icon {
+    width: 34px; height: 34px;
+    background: #F6F5FF;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    transition: opacity 0.15s;
+  }
+  .row-checkbox {
+    position: absolute;
+    inset: 0; margin: auto;
+    width: 15px; height: 15px;
+    opacity: 0;
+    transition: opacity 0.15s;
+    accent-color: #5B50E8;
+    cursor: pointer;
+    z-index: 2;
+  }
+  /* Show checkbox, fade icon on row hover */
+  .doc-row:hover .row-checkbox { opacity: 1; }
+  .doc-row:hover .doc-icon { opacity: 0 !important; }
+
+  /* Keep checkbox visible, hide icon when checked */
+  .doc-row.is-selected .row-checkbox { opacity: 1; }
+  .doc-row.is-selected .doc-icon { opacity: 0 !important; }
+
+  /* Row tint */
+  .doc-row.is-selected { background: #E4E0FF !important; border-bottom-color: #DDD8FF !important; }
+  .doc-row.is-selected:hover { background: #DDD8FF !important; }
+
+  /* Hide individual deletes in selection mode */
+  .selection-active .single-delete { display: none !important; }
+
+  /* Header select-all — hidden until header hovered or active */
+  #select-all {
+    width: 15px; height: 15px;
+    accent-color: #5B50E8; cursor: pointer;
+    opacity: 0; transition: opacity 0.15s;
+    flex-shrink: 0;
+  }
+  .table-header:hover #select-all,
+  #select-all:checked,
+  #select-all:indeterminate { opacity: 1; }
+
+  /* Header tints when selection active */
+  .selection-active .table-header { background: #F0EEFF !important; border-bottom-color: #E4E0FF !important; }
+
+  /* Fixed floating bulk bar */
+  #bulk-bar {
+    position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+    z-index: 100; background: #1A1A2E; border-radius: 12px;
+    padding: 12px 16px; display: none; align-items: center; gap: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12);
+    min-width: 340px; white-space: nowrap;
+  }
+</style>
 
 <div style="min-height:100vh; padding-bottom:48px; position:relative; overflow:hidden; background:#F5F3FF;">
   <div style="pointer-events:none; position:absolute; inset:0; z-index:0; background: radial-gradient(ellipse at 10% 15%, rgba(120,100,245,0.04) 0%, transparent 52%), radial-gradient(ellipse at 90% 85%, rgba(255,150,180,0.05) 0%, transparent 52%);"></div>
 
-  <div style="padding:14px 0; position:relative; z-index:1;">
-    <div class="container-xl">
-      <ol style="list-style:none; padding:0; margin:0; display:flex; align-items:center; gap:8px; font-size:13px;">
-        <li><%= link_to "Documents", chats_path, style:"color:#5B50E8; text-decoration:none; font-weight:500;" %></li>
-        <li style="color:#9CA3AF;">›</li>
-        <li style="color:#6B7280; font-weight:500;">Scan a document</li>
-      </ol>
-    </div>
-  </div>
+  <div class="container-xl" style="padding-top:40px; position:relative; z-index:1;">
 
-  <div class="container-xl" style="padding-top:20px; position:relative; z-index:1;">
-    <div class="row justify-content-center">
-      <div class="col-12 col-md-6 col-lg-5">
-        <div style="margin-bottom:24px;">
-          <p style="font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#5B50E8; margin-bottom:6px;">Document Scanner</p>
-          <h1 style="font-size:26px; font-weight:600 !important; font-family:inherit !important; color:#1A1A2E; margin-bottom:6px; letter-spacing:-0.4px;">Scan a document</h1>
-          <p style="font-size:14px; color:#8B8FA8; margin-bottom:0;">Got a German letter? Plain-English summary in seconds.</p>
-        </div>
-
-        <div style="background:#fff; border-radius:14px; padding:28px;">
-          <% if @chat.errors.any? %>
-            <div class="alert alert-danger mb-4">
-              <ul class="mb-0"><% @chat.errors.full_messages.each do |msg| %><li style="font-size:14px;"><%= msg %></li><% end %></ul>
-            </div>
-          <% end %>
-
-          <%= form_with model: @chat, local: true, multipart: true, data: { controller: "loading", action: "submit->loading#submit" } do |f| %>
-            <div data-loading-target="form">
-              <div class="mb-4" data-controller="uploadpreview">
-                <label style="font-size:14px; font-weight:600; color:#1A1A2E; display:block; margin-bottom:10px;">Document</label>
-                <div style="border:2px dashed #DDD9FF; border-radius:10px; padding:32px 20px; text-align:center; background:#FAF9FF;">
-                  <div style="width:44px; height:44px; background:#EEECFF; border-radius:10px; display:flex; align-items:center; justify-content:center; margin:0 auto 14px;">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5B50E8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
-                  </div>
-                  <p style="font-size:14px; color:#6B7280; margin-bottom:16px;">Upload a photo or PDF</p>
-                  <div class="d-flex justify-content-center gap-2">
-                    <label style="background:#5B50E8; color:#fff; border-radius:8px; padding:8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" for="chat_document_upload">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                      Upload file
-                    </label>
-                    <label style="background:#fff; color:#5B50E8; border:1.5px solid #5B50E8; border-radius:8px; padding:8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" for="chat_document_camera">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                      Take photo
-                    </label>
-                  </div>
-                </div>
-                <%= f.file_field :document, id:"chat_document_upload", class:"d-none", accept:"image/*,application/pdf", data:{ action:"change->uploadpreview#show", uploadpreview_target:"input" } %>
-                <input type="file" id="chat_document_camera" name="chat[document]" accept="image/*" capture="environment" class="d-none" data-action="change->uploadpreview#show" data-uploadpreview-target="input" />
-                <img data-uploadpreview-target="preview" class="img-fluid rounded mt-3 d-none" style="max-height:200px;" />
-                <p data-uploadpreview-target="filename" class="mt-3 d-none" style="font-size:13px; color:#6B7280;"></p>
-              </div>
-              <%= f.submit "Scan document", style:"width:100%; padding:11px; background:#5B50E8; color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer;" %>
-            </div>
-            <div data-loading-target="loader" class="d-none" style="text-align:center; padding:32px 0;">
-              <div style="width:44px; height:44px; border:3px solid #DDD9FF; border-top-color:#5B50E8; border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px;"></div>
-              <p style="font-size:15px; font-weight:500; color:#1A1A2E; margin-bottom:4px;">Analysing your document...</p>
-              <p style="font-size:13px; color:#9CA3AF;">This takes about 10 seconds</p>
-            </div>
-            <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
-          <% end %>
-          <%= link_to "Cancel", chats_path, style:"display:block; text-align:center; margin-top:14px; font-size:14px; color:#9CA3AF; text-decoration:none;" %>
-        </div>
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:24px;">
+      <div>
+        <p style="font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#5B50E8; margin:0 0 6px;">Document Vault</p>
+        <h1 style="font-size:30px; font-weight:600 !important; font-family:inherit !important; color:#1A1A2E; margin:0 0 4px; letter-spacing:-0.4px;">My Documents</h1>
+        <% if @chats.any? %><p style="font-size:13px; color:#9CA3AF; margin:0;"><%= pluralize(@chats.size, "document") %> scanned</p><% end %>
       </div>
+      <% if @chats.any? %>
+        <%= link_to new_chat_path, style:"background:#5B50E8; color:#fff; font-size:13px; font-weight:500; padding:9px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Scan new document
+        <% end %>
+      <% end %>
     </div>
+
+    <% if @chats.empty? %>
+      <div style="background:#fff; border-radius:14px; padding:80px 40px; text-align:center;">
+        <div style="width:56px; height:56px; background:#EEECFF; border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5B50E8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <h2 style="font-size:18px; font-weight:600; color:#1A1A2E; margin-bottom:8px;">No documents yet</h2>
+        <p style="font-size:14px; color:#9CA3AF; margin-bottom:28px; max-width:320px; margin-left:auto; margin-right:auto;">Scan your first German document and get a plain-English summary in seconds.</p>
+        <%= link_to new_chat_path, style:"background:#5B50E8; color:#fff; font-size:13px; font-weight:500; padding:10px 20px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Scan your first document
+        <% end %>
+      </div>
+    <% else %>
+
+      <div id="doc-table" style="background:#fff; border-radius:14px; overflow:hidden;">
+
+        <%# Header — 4 columns, no dedicated checkbox column %>
+        <div class="table-header" style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:11px 20px; background:#FAF9FF; border-bottom:1px solid #F0EEFF; align-items:center;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" id="select-all" onchange="toggleAll(this)">
+            <span style="font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#9CA3AF;">Document</span>
+          </div>
+          <span style="font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#9CA3AF;">Type</span>
+          <span style="font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#9CA3AF;">Deadline</span>
+          <span style="font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#9CA3AF;">Scanned</span>
+        </div>
+
+        <% @chats.each do |chat| %>
+          <div class="doc-row"
+               data-href="<%= chat_path(chat) %>"
+               onclick="handleRowClick(event, this)"
+               onmouseover="this.style.background='#FAF9FF'"
+               onmouseout="if(!this.classList.contains('is-selected')) this.style.background=''"
+               style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:14px 20px; border-bottom:1px solid #FAF9FF; align-items:center;">
+
+            <%# Document cell — checkbox overlays the file icon %>
+            <div style="display:flex; align-items:center; gap:12px; min-width:0;">
+              <div class="doc-icon-wrap" onclick="event.stopPropagation();">
+                <div class="doc-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                </div>
+                <input type="checkbox" class="row-checkbox" value="<%= chat.id %>" onchange="updateBulkBar(); toggleRowTint(this);">
+              </div>
+              <div style="min-width:0;">
+                <p style="font-size:13px; font-weight:500; color:#1A1A2E; margin:0 0 3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><%= chat.title || chat.document.filename %></p>
+                <% if chat.urgency.present? %>
+                  <%
+                    badge_bg    = { "high" => "#FEE8E8", "medium" => "#FEF3CD", "low" => "#EBF5E0" }[chat.urgency]
+                    badge_color = { "high" => "#C0392B", "medium" => "#7C4A00", "low" => "#3B6D11" }[chat.urgency]
+                  %>
+                  <span style="display:inline-block; width:fit-content; font-size:10px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; background:<%= badge_bg %>; color:<%= badge_color %>; padding:3px 10px; border-radius:20px;"><%= chat.urgency %></span>
+                <% end %>
+              </div>
+            </div>
+
+            <div>
+              <% if chat.document_type.present? %>
+                <span style="display:inline-block; width:fit-content; font-size:11px; font-weight:600; background:#EEECFF; color:#5B50E8; padding:4px 10px; border-radius:20px;"><%= chat.document_type %></span>
+              <% else %>
+                <span style="font-size:12px; color:#D1D5DB;">—</span>
+              <% end %>
+            </div>
+
+            <div>
+              <% if chat.deadline.present? %>
+                <% days_left = (chat.deadline - Date.today).to_i %>
+                <p style="font-size:13px; font-weight:500; color:<%= days_left < 0 ? '#C0392B' : '#374151' %>; margin:0;"><%= chat.deadline.strftime("%b %d, %Y") %></p>
+                <p style="font-size:11px; color:#9CA3AF; margin:0;"><% if days_left < 0 %>Overdue<% elsif days_left == 0 %>Today<% else %><%= days_left %> days left<% end %></p>
+              <% else %>
+                <span style="font-size:12px; color:#D1D5DB;">—</span>
+              <% end %>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <p style="font-size:12px; color:#9CA3AF; margin:0;"><%= chat.created_at.strftime("%b %d, %Y") %></p>
+              <div class="single-delete" onclick="event.stopPropagation();">
+                <%= button_to "Delete", chat_path(chat), method: :delete, form: { data: { turbo: false } }, onclick: "return confirm('Delete this document?');", style:"background:none; border:1px solid #E5E7EB; border-radius:6px; font-size:11px; font-weight:500; color:#9CA3AF; cursor:pointer; padding:3px 9px;" %>
+              </div>
+            </div>
+
+          </div>
+        <% end %>
+      </div>
+
+    <% end %>
   </div>
 </div>
+
+<%# Floating bulk bar %>
+<div id="bulk-bar">
+  <span id="bulk-count" style="font-size:13px; font-weight:500; color:#fff; flex:1;"></span>
+  <button onclick="clearSelection()" style="background:none; border:1px solid rgba(255,255,255,0.25); border-radius:6px; font-size:12px; font-weight:500; color:rgba(255,255,255,0.75); cursor:pointer; padding:5px 14px;">Clear</button>
+  <%= button_to "Delete", bulk_destroy_chats_path, method: :delete, form: { id: "bulk-delete-form", data: { turbo: false } }, onclick: "return injectBulkIds(event)", style:"background:#C0392B; border:none; border-radius:6px; font-size:12px; font-weight:600; color:#fff; cursor:pointer; padding:5px 16px;" %>
+</div>
+
+<script>
+  function handleRowClick(event, row) {
+    window.location = row.dataset.href;
+  }
+
+  function toggleRowTint(checkbox) {
+    checkbox.closest('.doc-row').classList.toggle('is-selected', checkbox.checked);
+  }
+
+  function toggleAll(source) {
+    document.querySelectorAll('.row-checkbox').forEach(cb => {
+      cb.checked = source.checked;
+      toggleRowTint(cb);
+    });
+    updateBulkBar();
+  }
+
+  function updateBulkBar() {
+    const checked = document.querySelectorAll('.row-checkbox:checked');
+    const total   = document.querySelectorAll('.row-checkbox').length;
+    const bar     = document.getElementById('bulk-bar');
+    const sa      = document.getElementById('select-all');
+    const table   = document.getElementById('doc-table');
+
+    bar.style.display = checked.length > 0 ? 'flex' : 'none';
+    table.classList.toggle('selection-active', checked.length > 0);
+    document.getElementById('bulk-count').textContent =
+      checked.length === 1 ? '1 document selected' : `${checked.length} documents selected`;
+
+    sa.checked       = checked.length === total;
+    sa.indeterminate = checked.length > 0 && checked.length < total;
+    sa.style.opacity = (sa.checked || sa.indeterminate) ? '1' : '';
+  }
+
+  function clearSelection() {
+    document.querySelectorAll('.row-checkbox').forEach(cb => {
+      cb.checked = false;
+      toggleRowTint(cb);
+    });
+    const sa = document.getElementById('select-all');
+    sa.checked = false; sa.indeterminate = false; sa.style.opacity = '';
+    document.getElementById('bulk-bar').style.display = 'none';
+    document.getElementById('doc-table').classList.remove('selection-active');
+  }
+
+  function injectBulkIds(event) {
+    const checked = document.querySelectorAll('.row-checkbox:checked');
+    if (checked.length === 0) return false;
+    if (!confirm(`Delete ${checked.length} document${checked.length > 1 ? 's' : ''}?`)) return false;
+    const form = document.getElementById('bulk-delete-form');
+    form.querySelectorAll('input[name="ids[]"]').forEach(i => i.remove());
+    checked.forEach(cb => {
+      const inp = document.createElement('input');
+      inp.type = 'hidden'; inp.name = 'ids[]'; inp.value = cb.value;
+      form.appendChild(inp);
+    });
+    return true;
+  }
+</script>
