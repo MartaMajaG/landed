@@ -1,5 +1,63 @@
 <% content_for :meta_title, "Landed | Documents" %>
 
+<style>
+  .doc-row { cursor: pointer; transition: background 0.1s; }
+
+  /* Recessive checkboxes by default — visible on hover or when checked */
+  .row-checkbox {
+    width: 15px; height: 15px;
+    accent-color: #5B50E8;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .doc-row:hover .row-checkbox,
+  .row-checkbox:checked { opacity: 1; }
+
+  /* Selected row tint — stronger so it reads at a glance */
+  .doc-row.is-selected { background: #E4E0FF !important; border-bottom-color: #DDD8FF !important; }
+  .doc-row.is-selected:hover { background: #DDD8FF !important; }
+
+  /* Icon background adapts to row tint so it doesn't look stuck on */
+  .doc-row.is-selected .doc-icon { background: #D8D3FF !important; }
+
+  /* Header tints subtly when selection is active to unify the card */
+  .selection-active .table-header { background: #F0EEFF !important; border-bottom-color: #E4E0FF !important; }
+
+  /* Hide individual deletes when anything is selected */
+  .selection-active .single-delete { display: none !important; }
+
+  /* Fixed bottom bulk bar */
+  #bulk-bar {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    background: #1A1A2E;
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: none;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12);
+    min-width: 340px;
+    white-space: nowrap;
+  }
+
+  /* Header select-all: hidden by default, reveals on header row hover or when active */
+  #select-all {
+    width: 15px; height: 15px;
+    accent-color: #5B50E8;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+  .table-header:hover #select-all,
+  #select-all:checked { opacity: 1; }
+  #select-all:indeterminate { opacity: 1; }
+</style>
+
 <div style="min-height:100vh; padding-bottom:48px; position:relative; overflow:hidden; background:#F5F3FF;">
   <div style="pointer-events:none; position:absolute; inset:0; z-index:0; background: radial-gradient(ellipse at 10% 15%, rgba(120,100,245,0.04) 0%, transparent 52%), radial-gradient(ellipse at 90% 85%, rgba(255,150,180,0.05) 0%, transparent 52%);"></div>
 
@@ -8,7 +66,7 @@
     <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:24px;">
       <div>
         <p style="font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#5B50E8; margin:0 0 6px;">Document Vault</p>
-        <h1 style="font-size:26px; font-weight:600 !important; font-family:inherit !important; color:#1A1A2E; margin:0 0 4px; letter-spacing:-0.4px;">My Documents</h1>
+        <h1 style="font-size:30px; font-weight:500 !important; font-family:inherit !important; color:#1A1A2E; margin:0 0 4px; letter-spacing:-0.4px;">My Documents</h1>
         <% if @chats.any? %><p style="font-size:13px; color:#9CA3AF; margin:0;"><%= pluralize(@chats.size, "document") %> scanned</p><% end %>
       </div>
       <% if @chats.any? %>
@@ -32,35 +90,56 @@
         <% end %>
       </div>
     <% else %>
-      <div style="background:#fff; border-radius:14px; overflow:hidden;">
-        <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:11px 20px; background:#FAF9FF; border-bottom:1px solid #F0EEFF;">
+
+      <div id="doc-table" style="background:#fff; border-radius:14px; overflow:hidden;">
+
+        <%# Header %>
+        <div class="table-header" style="display:grid; grid-template-columns:44px 2fr 1fr 1fr 1fr; gap:16px; padding:11px 20px; background:#FAF9FF; border-bottom:1px solid #F0EEFF; align-items:center;">
+          <div style="display:flex; align-items:center;">
+            <input type="checkbox" id="select-all" onchange="toggleAll(this)">
+          </div>
           <span style="font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#9CA3AF;">Document</span>
           <span style="font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#9CA3AF;">Type</span>
           <span style="font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#9CA3AF;">Deadline</span>
           <span style="font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#9CA3AF;">Scanned</span>
         </div>
+
         <% @chats.each do |chat| %>
-          <%= link_to chat_path(chat), style:"display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:14px 20px; border-bottom:1px solid #FAF9FF; align-items:center; text-decoration:none; color:inherit; transition:background 0.12s;", onmouseover:"this.style.background='#FAF9FF'", onmouseout:"this.style.background=''" do %>
-            <div style="display:flex; align-items:center; gap:12px;">
-              <div style="width:34px; height:34px; background:#F6F5FF; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <div class="doc-row"
+               data-href="<%= chat_path(chat) %>"
+               onclick="handleRowClick(event, this)"
+               onmouseover="this.querySelector('.row-checkbox').style.opacity=1"
+               onmouseout="if(!this.querySelector('.row-checkbox').checked) this.querySelector('.row-checkbox').style.opacity=0"
+               style="display:grid; grid-template-columns:44px 2fr 1fr 1fr 1fr; gap:16px; padding:14px 20px; border-bottom:1px solid #FAF9FF; align-items:center;">
+
+            <div style="display:flex; align-items:center;" onclick="event.stopPropagation();">
+              <input type="checkbox" class="row-checkbox" value="<%= chat.id %>" onchange="updateBulkBar(); toggleRowTint(this);">
+            </div>
+
+            <div style="display:flex; align-items:center; gap:12px; min-width:0;">
+              <div class="doc-icon" style="width:34px; height:34px; background:#F6F5FF; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
                 <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
               </div>
-              <div>
-                <p style="font-size:13px; font-weight:500; color:#1A1A2E; margin:0 0 3px;"><%= chat.title || chat.document.filename %></p>
+              <div style="min-width:0;">
+                <p style="font-size:13px; font-weight:500; color:#1A1A2E; margin:0 0 3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><%= chat.title || chat.document.filename %></p>
                 <% if chat.urgency.present? %>
                   <%
                     badge_bg    = { "high" => "#FEE8E8", "medium" => "#FEF3CD", "low" => "#EBF5E0" }[chat.urgency]
                     badge_color = { "high" => "#C0392B", "medium" => "#7C4A00", "low" => "#3B6D11" }[chat.urgency]
                   %>
-                  <span style="font-size:10px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; background:<%= badge_bg %>; color:<%= badge_color %>; padding:2px 6px; border-radius:20px;"><%= chat.urgency %></span>
+                  <span style="display:inline-block; width:fit-content; font-size:10px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; background:<%= badge_bg %>; color:<%= badge_color %>; padding:3px 10px; border-radius:20px;"><%= chat.urgency %></span>
                 <% end %>
               </div>
             </div>
-            <% if chat.document_type.present? %>
-              <span style="font-size:11px; font-weight:600; background:#EEECFF; color:#5B50E8; padding:3px 8px; border-radius:20px;"><%= chat.document_type %></span>
-            <% else %>
-              <span style="font-size:12px; color:#D1D5DB;">—</span>
-            <% end %>
+
+            <div>
+              <% if chat.document_type.present? %>
+                <span style="display:inline-block; width:fit-content; font-size:11px; font-weight:600; background:#EEECFF; color:#5B50E8; padding:4px 10px; border-radius:20px;"><%= chat.document_type %></span>
+              <% else %>
+                <span style="font-size:12px; color:#D1D5DB;">—</span>
+              <% end %>
+            </div>
+
             <div>
               <% if chat.deadline.present? %>
                 <% days_left = (chat.deadline - Date.today).to_i %>
@@ -70,16 +149,97 @@
                 <span style="font-size:12px; color:#D1D5DB;">—</span>
               <% end %>
             </div>
+
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <p style="font-size:12px; color:#9CA3AF; margin:0;"><%= chat.created_at.strftime("%b %d, %Y") %></p>
-              <div onclick="event.stopPropagation();">
+              <div class="single-delete" onclick="event.stopPropagation();">
                 <%= button_to "Delete", chat_path(chat), method: :delete, form: { data: { turbo: false } }, onclick: "return confirm('Delete this document?');", style:"background:none; border:1px solid #E5E7EB; border-radius:6px; font-size:11px; font-weight:500; color:#9CA3AF; cursor:pointer; padding:3px 9px;" %>
               </div>
             </div>
-          <% end %>
+
+          </div>
         <% end %>
       </div>
-    <% end %>
 
+    <% end %>
   </div>
 </div>
+
+<%# Fixed floating bulk bar %>
+<div id="bulk-bar">
+  <span id="bulk-count" style="font-size:13px; font-weight:500; color:#fff; flex:1;"></span>
+  <button onclick="clearSelection()" style="background:none; border:1px solid rgba(255,255,255,0.25); border-radius:6px; font-size:12px; font-weight:500; color:rgba(255,255,255,0.75); cursor:pointer; padding:5px 14px;">Clear</button>
+  <%= button_to "Delete selected", bulk_destroy_chats_path, method: :delete, form: { id: "bulk-delete-form", data: { turbo: false } }, onclick: "return injectBulkIds(event)", style:"background:#C0392B; border:none; border-radius:6px; font-size:12px; font-weight:600; color:#fff; cursor:pointer; padding:5px 16px;" %>
+</div>
+
+<script>
+  function handleRowClick(event, row) {
+    window.location = row.dataset.href;
+  }
+
+  function toggleRowTint(checkbox) {
+    const row = checkbox.closest('.doc-row');
+    if (checkbox.checked) {
+      row.classList.add('is-selected');
+    } else {
+      row.classList.remove('is-selected');
+    }
+  }
+
+  function toggleAll(source) {
+    document.querySelectorAll('.row-checkbox').forEach(cb => {
+      cb.checked = source.checked;
+      cb.style.opacity = source.checked ? '1' : '0';
+      toggleRowTint(cb);
+    });
+    updateBulkBar();
+  }
+
+  function updateBulkBar() {
+    const checked = document.querySelectorAll('.row-checkbox:checked');
+    const total   = document.querySelectorAll('.row-checkbox').length;
+    const bar     = document.getElementById('bulk-bar');
+    const sa      = document.getElementById('select-all');
+    const table   = document.getElementById('doc-table');
+
+    if (checked.length > 0) {
+      bar.style.display = 'flex';
+      table.classList.add('selection-active');
+      document.getElementById('bulk-count').textContent =
+        checked.length === 1 ? '1 document selected' : `${checked.length} documents selected`;
+    } else {
+      bar.style.display = 'none';
+      table.classList.remove('selection-active');
+    }
+
+    sa.checked       = checked.length === total;
+    sa.indeterminate = checked.length > 0 && checked.length < total;
+    sa.style.opacity = (sa.checked || sa.indeterminate) ? '1' : '';
+  }
+
+  function clearSelection() {
+    document.querySelectorAll('.row-checkbox').forEach(cb => {
+      cb.checked = false;
+      cb.style.opacity = '0';
+      cb.closest('.doc-row').classList.remove('is-selected');
+    });
+    const sa = document.getElementById('select-all');
+    sa.checked = false; sa.indeterminate = false; sa.style.opacity = '';
+    document.getElementById('bulk-bar').style.display = 'none';
+    document.getElementById('doc-table').classList.remove('selection-active');
+  }
+
+  function injectBulkIds(event) {
+    const checked = document.querySelectorAll('.row-checkbox:checked');
+    if (checked.length === 0) return false;
+    if (!confirm(`Delete ${checked.length} document${checked.length > 1 ? 's' : ''}?`)) return false;
+    const form = document.getElementById('bulk-delete-form');
+    form.querySelectorAll('input[name="ids[]"]').forEach(i => i.remove());
+    checked.forEach(cb => {
+      const inp = document.createElement('input');
+      inp.type = 'hidden'; inp.name = 'ids[]'; inp.value = cb.value;
+      form.appendChild(inp);
+    });
+    return true;
+  }
+</script>
