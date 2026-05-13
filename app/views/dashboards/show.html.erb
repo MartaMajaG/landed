@@ -1,49 +1,118 @@
 <% content_for :meta_title, "Landed | Dashboard" %>
 
+<%
+  stages = [
+    { key: "pre_departure", label: "Pre-departure", icon: "plane" },
+    { key: "arrival",       label: "Arrival",       icon: "home"  },
+    { key: "settling_in",   label: "Settling in",   icon: "building" },
+    { key: "established",   label: "Established",   icon: "star"  }
+  ]
+  stage_keys    = stages.map { |s| s[:key] }
+  current_index = stage_keys.index(@current_stage) || 0
+  connector_pct = [0, 33, 66, 100][current_index]
+%>
+
 <div class="dashboard-bg">
   <div class="container dashboard-wrapper">
 
-    <%# ── HERO STRIP ── %>
+    <%# ── HERO ── %>
     <div class="dashboard-hero">
+
+      <%# Left: greeting %>
       <div class="hero-greeting">
-        <img src="https://i.pravatar.cc/48?img=47" alt="Alex" class="hero-avatar" />
+        <img src="https://i.pravatar.cc/48?img=47" alt="Avatar" class="hero-avatar" />
         <div>
-          <h1 class="hero-name">Good morning, <%= current_user.profile.first_name %></h1>
-          <p class="hero-stage">Current Stage: <span class="stage-badge">PRE-DEPARTURE</span></p>
+          <p class="hero-name">Good morning<%= current_user.profile&.first_name.present? ? ", #{current_user.profile.first_name}" : "" %></p>
+          <p class="hero-stage">
+            Moving to <strong><%= @profile.city&.name || "Berlin" %></strong>
+          </p>
+          <% if @days_to_arrival %>
+            <span class="arrival-chip">
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <% if @days_to_arrival > 0 %>
+                <%= @days_to_arrival %> days to arrival
+              <% elsif @days_to_arrival == 0 %>
+                Arrival day!
+              <% else %>
+                Arrived <%= @days_to_arrival.abs %> days ago
+              <% end %>
+            </span>
+          <% end %>
         </div>
       </div>
 
-      <div class="hero-progress">
-        <p class="progress-label">MILESTONE PROGRESS</p>
-        <div class="progress-title-row">
-          <span class="progress-title">Insurance &amp; Liability</span>
-          <span class="progress-pct">0%</span>
+      <%# Centre: journey stepper + stats %>
+      <div class="hero-journey">
+        <p class="journey-label">Relocation journey</p>
+
+        <div class="journey-stepper">
+          <div class="journey-track">
+            <div class="journey-track-fill" style="width:<%= connector_pct %>%;"></div>
+          </div>
+          <% stages.each_with_index do |stage, i| %>
+            <%
+              state = if i < current_index then "done"
+                      elsif i == current_index then "active"
+                      else "future" end
+            %>
+            <div class="journey-step journey-step--<%= state %>">
+              <div class="journey-dot">
+                <% if state == "done" %>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+                <% elsif stage[:icon] == "plane" %>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21 4 19 4c-2 0-1.5-.5-3.5 1.5L12 9 4.8 6.2c-.5-.2-1.1 0-1.4.5l-.3.5c-.2.5-.1 1.1.3 1.4L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.9.5 1.4.3l.5-.3c.5-.3.6-.9.4-1.3z"/></svg>
+                <% elsif stage[:icon] == "home" %>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                <% elsif stage[:icon] == "building" %>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><path d="M9 22v-4h6v4"/><path d="M8 6h.01M16 6h.01M12 6h.01M12 10h.01M8 10h.01M16 10h.01M12 14h.01M8 14h.01M16 14h.01"/></svg>
+                <% else %>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                <% end %>
+              </div>
+              <span class="journey-step-label"><%= stage[:label] %></span>
+            </div>
+          <% end %>
         </div>
-        <div class="progress-track">
-          <div class="progress-fill" style="width: 0%;"></div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat__label">Open tasks</span>
+          <span class="hero-stat__value"><%= @total_active_count %></span>
+        </div>
+          <div class="hero-stat">
+  <span class="hero-stat__label">Docs scanned</span>
+  <span class="hero-stat__value"><%= @docs_count || 0 %></span>
+</div>
+          <div class="hero-stat hero-stat--accent">
+            <span class="hero-stat__label">Completed</span>
+            <span class="hero-stat__value"><%= @completion_pct %>%</span>
+          </div>
         </div>
       </div>
 
-      <div class="hero-events">
-        <div class="events-header">
-          <span class="events-label">UPCOMING EVENTS</span>
-          <a href="#" class="events-viewall">View All</a>
+      <%# Right: today's agenda %>
+      <div class="hero-today">
+        <div class="hero-today__header">
+          <span class="hero-today__label">Today</span>
+          <a href="#" class="hero-today__link">View all</a>
         </div>
-        <div class="event-item">
-          <span class="event-dot" style="background: #246DD5;"></span>
-          <div>
-            <p class="event-name">HR Onboarding Call</p>
-            <p class="event-time">Today, 09:30 am</p>
+        <div class="hero-today__events">
+          <div class="today-event">
+            <span class="today-event__dot" style="background:#246DD5;"></span>
+            <div>
+              <p class="today-event__name">HR Onboarding Call</p>
+              <p class="today-event__time">09:30 am</p>
+            </div>
           </div>
-        </div>
-        <div class="event-item">
-          <span class="event-dot" style="background: #7c3aed;"></span>
-          <div>
-            <p class="event-name">Local Expat Meetup</p>
-            <p class="event-time">Today, 06:00 pm</p>
+          <div class="today-event">
+            <span class="today-event__dot" style="background:#7c3aed;"></span>
+            <div>
+              <p class="today-event__name">Local Expat Meetup</p>
+              <p class="today-event__time">06:00 pm</p>
+            </div>
           </div>
         </div>
       </div>
+
     </div>
 
     <%# ── TASKS ── %>
@@ -55,49 +124,29 @@
         <div class="tasks-title-group">
           <h2 class="tasks-label">Tasks</h2>
           <% if @active_pillar %>
-            <a href="<%= pillar_path(@active_pillar) %>"
-               class="tasks-pillar-pill tag-pillar--<%= @active_pillar.slug %>">
+            <a href="<%= pillar_path(@active_pillar) %>" class="tasks-pillar-pill tag-pillar--<%= @active_pillar.slug %>">
               <%= @active_pillar.name %>
               <span class="tasks-pillar-pill__arrow">→</span>
             </a>
           <% end %>
         </div>
-
         <div class="tasks-controls">
           <div class="tasks-toggle">
-            <button class="toggle-btn active"
-                    data-action="click->task-tabs#switchTab"
-                    data-tab="">
-              All Tasks
-            </button>
-            <button class="toggle-btn"
-                    data-action="click->task-tabs#switchTab"
-                    data-tab="completed">
-              Completed
-            </button>
+            <button class="toggle-btn active" data-action="click->task-tabs#switchTab" data-tab="">All Tasks</button>
+            <button class="toggle-btn" data-action="click->task-tabs#switchTab" data-tab="completed">Completed</button>
           </div>
-
           <div class="pillar-filter" id="pillarFilter">
-            <button class="pillar-filter__btn <%= 'pillar-filter__btn--active' if @active_pillar %>"
-                    id="pillarFilterBtn"
-                    title="Filter by category">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                   stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-              </svg>
-              <% if @active_pillar %>
-                <span class="pillar-filter__label"><%= @active_pillar.name %></span>
-              <% end %>
+            <button class="pillar-filter__btn <%= 'pillar-filter__btn--active' if @active_pillar %>" id="pillarFilterBtn" title="Filter by category">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+              <% if @active_pillar %><span class="pillar-filter__label"><%= @active_pillar.name %></span><% end %>
             </button>
             <div class="pillar-filter__dropdown" id="pillarFilterDropdown">
               <a href="<%= dashboard_path %>" class="pillar-filter__option <%= 'active' unless @active_pillar %>">
-                <span class="pillar-filter__dot" style="background:#9ca3af;"></span>
-                All Categories
+                <span class="pillar-filter__dot" style="background:#9ca3af;"></span>All Categories
               </a>
               <% @pillars.each do |pillar| %>
                 <% progress = @pillar_progress[pillar.id] %>
-                <a href="<%= dashboard_path(pillar: pillar.slug) %>"
-                   class="pillar-filter__option <%= 'active' if @active_pillar&.id == pillar.id %>">
+                <a href="<%= dashboard_path(pillar: pillar.slug) %>" class="pillar-filter__option <%= 'active' if @active_pillar&.id == pillar.id %>">
                   <span class="pillar-filter__dot tag-pillar--<%= pillar.slug %>"></span>
                   <%= pillar.name %>
                   <span class="pillar-filter__count"><%= progress[:done] %>/<%= progress[:total] %></span>
@@ -109,88 +158,71 @@
       </div>
 
       <div class="kanban" data-task-tabs-target="board">
-        <%= render "kanban", urgent_tasks: @urgent_tasks, active_tasks: @active_tasks,
-                             upcoming_tasks: @upcoming_tasks, urgent_count: @urgent_count,
-                             active_count: @active_count, upcoming_count: @upcoming_count %>
-      </div>
+  <%= render "kanban", completed_tasks: nil,
+                       urgent_tasks: @urgent_tasks,
+                       active_tasks: @active_tasks,
+                       upcoming_tasks: @upcoming_tasks,
+                       urgent_count: @urgent_count,
+                       active_count: @active_count,
+                       upcoming_count: @upcoming_count %>
+</div>
     </div>
 
     <%# ── CALENDAR ── %>
-     <turbo-frame id="calendar">
-    <div class="calendar-section">
-      <h2 class="tasks-label">Calendar</h2>
-
-      <div class="calendar-card">
-        <div class="cal-toolbar">
-          <div class="cal-view-toggle">
-            <%# <button class="cal-view-btn active">Month</button> %>
-
+    <turbo-frame id="calendar">
+      <div class="calendar-section">
+        <h2 class="tasks-label">Calendar</h2>
+        <div class="calendar-card">
+          <div class="cal-toolbar">
+            <div class="cal-view-toggle"></div>
+            <div class="cal-legend">
+              <span class="leg-item"><span class="leg-dot" style="background:#f97316;"></span>Housing</span>
+              <span class="leg-item"><span class="leg-dot" style="background:#246DD5;"></span>Financial</span>
+              <span class="leg-item"><span class="leg-dot" style="background:#eab308;"></span>Admin</span>
+              <span class="leg-item"><span class="leg-dot" style="background:#ec4899;"></span>Medical</span>
+            </div>
+            <div class="cal-nav">
+              <span class="cal-month-title"><%= @date.strftime("%B %Y") %></span>
+              <%= link_to "‹", dashboard_path(month: @date.prev_month), class: "cal-nav-btn", data: { turbo_frame: "calendar" } %>
+              <%= link_to "›", dashboard_path(month: @date.next_month), class: "cal-nav-btn", data: { turbo_frame: "calendar" } %>
+            </div>
           </div>
-          <div class="cal-legend">
-            <span class="leg-item"><span class="leg-dot" style="background:#f97316;"></span>Housing</span>
-            <span class="leg-item"><span class="leg-dot" style="background:#246DD5;"></span>Financial</span>
-            <span class="leg-item"><span class="leg-dot" style="background:#eab308;"></span>Admin</span>
-            <span class="leg-item"><span class="leg-dot" style="background:#ec4899;"></span>Medical</span>
-          </div>
-          <div class="cal-nav">
-            <span class="cal-month-title"><%= @date.strftime("%B %Y") %></span>
-
-            <%= link_to "‹", dashboard_path(month: @date.prev_month), class: "cal-nav-btn", data: { turbo_frame: "calendar" } %>
-            <%= link_to "›", dashboard_path(month: @date.next_month), class: "cal-nav-btn", data: { turbo_frame: "calendar" } %>
+          <div class="cal-grid">
+            <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].each do |day| %>
+              <div class="cal-dow"><%= day %></div>
+            <% end %>
+            <% calendar_days(@date).each do |day| %>
+              <div class="cal-cell <%= 'muted' if day.month != @date.month %> <%= 'weekend' if day.saturday? || day.sunday? %>">
+                <span class="cal-date <%= 'today-num' if day == Date.today %>"><%= day.day %></span>
+                <% if @calendar_tasks[day] %>
+                  <% @calendar_tasks[day].each do |task| %>
+                    <div class="cal-event <%= task[:category].parameterize %>"><%= task[:name] %></div>
+                  <% end %>
+                <% end %>
+              </div>
+            <% end %>
           </div>
         </div>
-
-        <div class="cal-grid">
-          <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].each do |day| %>
-            <div class="cal-dow"><%= day %></div>
-          <% end %>
-
-          <% calendar_days(@date).each do |day| %>
-            <div class="cal-cell <%= 'muted' if day.month != @date.month %>">
-              <span class="cal-date <%= 'today-num' if day == Date.today %>">
-                <%= day.day %>
-              </span>
-
-              <% if @calendar_tasks[day] %>
-                <% @calendar_tasks[day].each do |task| %>
-                  <div class="cal-event <%= task[:category].parameterize %>">
-                    <%= task[:name] %>
-                  </div>
-                <% end %>
-              <% end %>
-
-              <%# Example: show events for this day %>
-
-            </div>
-          <% end %>
       </div>
-    </div>
-  </turbo-frame>
+    </turbo-frame>
 
-  <%# ── PILLARS SECTION ── removed: pillar filter now in Tasks header %>
-
-</div>
+  </div>
 </div>
 
 <script>
-  // Card click → task detail page
   document.querySelectorAll('.task-card[data-href]').forEach(function(card) {
-    card.addEventListener('click', function() {
-      window.location.href = card.dataset.href;
-    });
+    card.addEventListener('click', function() { window.location.href = card.dataset.href; });
   });
-
-    // Pillar filter dropdown toggle
-    var filterBtn = document.getElementById('pillarFilterBtn');
-    var filterDropdown = document.getElementById('pillarFilterDropdown');
-    if (filterBtn && filterDropdown) {
-      filterBtn.addEventListener('click', function(e) {
-        e.stopPropagation();
-        var isOpen = filterDropdown.classList.contains('pillar-filter__dropdown--open');
-        filterDropdown.classList.toggle('pillar-filter__dropdown--open', !isOpen);
-      });
-      document.addEventListener('click', function() {
-        filterDropdown.classList.remove('pillar-filter__dropdown--open');
-      });
-    }
-  </script>
+  var filterBtn = document.getElementById('pillarFilterBtn');
+  var filterDropdown = document.getElementById('pillarFilterDropdown');
+  if (filterBtn && filterDropdown) {
+    filterBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      filterDropdown.classList.toggle('pillar-filter__dropdown--open',
+        !filterDropdown.classList.contains('pillar-filter__dropdown--open'));
+    });
+    document.addEventListener('click', function() {
+      filterDropdown.classList.remove('pillar-filter__dropdown--open');
+    });
+  }
+</script>

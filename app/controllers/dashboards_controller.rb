@@ -45,7 +45,9 @@ class DashboardsController < ApplicationController
 
     @urgent_count   = incomplete.count { |t| t.urgency == "high" }
     @active_count   = incomplete.count { |t| t.urgency == "medium" }
+    @docs_count = current_user.chats.with_attached_document.count
     @upcoming_count = incomplete.count { |t| t.urgency == "low" }
+    @total_active_count = incomplete.count { |t| t.urgency == "high" || t.urgency == "medium" }
 
     # Pillar progress
     ci_rows = ChecklistItem.joins(:task)
@@ -60,6 +62,20 @@ class DashboardsController < ApplicationController
     ci_rows.each do |ci_id, pillar_id|
       @pillar_progress[pillar_id][:total] += 1
       @pillar_progress[pillar_id][:done]  += 1 if completed_ids.include?(ci_id)
+      total_items    = @pillar_progress.values.sum { |p| p[:total] }
+      completed_items = @pillar_progress.values.sum { |p| p[:done] }
+      @completion_pct = total_items > 0 ? ((completed_items.to_f / total_items) * 100).round : 0
+      @current_stage = if @arrival_date.nil?
+  "pre_departure"
+elsif Date.today < @arrival_date
+  "pre_departure"
+elsif Date.today < @arrival_date + 30.days
+  "arrival"
+elsif Date.today < @arrival_date + 6.months
+  "settling_in"
+else
+  "established"
+end
     end
 
     # Respond to AJAX tab switches

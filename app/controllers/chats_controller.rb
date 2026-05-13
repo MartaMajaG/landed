@@ -44,6 +44,11 @@ class ChatsController < ApplicationController
   redirect_to chats_path, notice: "Document deleted."
   end
 
+  def bulk_destroy
+  Chat.where(id: params[:ids]).destroy_all
+  redirect_to chats_path, notice: "Documents deleted."
+end
+
   private
 
   def chat_params

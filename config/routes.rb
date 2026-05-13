@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   resources :chats, only: [:index, :show, :new, :create, :destroy] do
     # Messages are nested within chats as child resources
     resources :messages, only: [:create]
+    collection do
+    delete :bulk_destroy
+    end
   end
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
