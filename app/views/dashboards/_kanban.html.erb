@@ -1,4 +1,4 @@
-<% completed_tasks ||= nil %>
+<% completed_tasks = local_assigns.fetch(:completed_tasks, nil) %>
 
 <% if completed_tasks %>
 
@@ -37,12 +37,14 @@
       <div class="task-card urgent-card" data-href="<%= task_path(task) %>" style="cursor:pointer;">
         <div class="card-top-row">
           <span class="urgent-badge">Urgent</span>
-          <span class="card-menu">⋯</span>
         </div>
         <h4 class="card-title"><%= task.name %></h4>
         <p class="card-desc"><%= task.description %></p>
         <div class="card-bottom-row">
-          <span class="card-due urgent-due">⏰ Today</span>
+          <span class="card-due urgent-due" style="display:inline-flex; align-items:center; gap:4px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Today
+          </span>
         </div>
       </div>
     <% end %>
@@ -69,12 +71,12 @@
         <h4 class="card-title"><%= task.name %></h4>
         <p class="card-desc"><%= task.description %></p>
         <div class="card-footer">
-  <span class="card-progress-label">No progress yet</span>
-  <span class="card-pct">0%</span>
-</div>
-<div class="card-track">
-  <div class="card-fill" style="width: 0%;"></div>
-</div>
+          <span class="card-progress-label">No progress yet</span>
+          <span class="card-pct">0%</span>
+        </div>
+        <div class="card-track">
+          <div class="card-fill" style="width: 0%;"></div>
+        </div>
       </div>
     <% end %>
   </div>
@@ -100,12 +102,12 @@
         <h4 class="card-title"><%= task.name %></h4>
         <p class="card-desc"><%= task.description %></p>
         <div class="card-footer">
-  <span class="card-progress-label">No progress yet</span>
-  <span class="card-pct">0%</span>
-</div>
-<div class="card-track">
-  <div class="card-fill" style="width: 0%;"></div>
-</div>
+          <span class="card-progress-label">No progress yet</span>
+          <span class="card-pct">0%</span>
+        </div>
+        <div class="card-track">
+          <div class="card-fill" style="width: 0%;"></div>
+        </div>
       </div>
     <% end %>
   </div>
