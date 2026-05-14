@@ -4,6 +4,7 @@ class DashboardsController < ApplicationController
   def show
     @user    = current_user
     @profile = current_user.profile
+    Task.assign_due_dates(@profile)
     city_id  = current_user.profile.city_id
     @date = params[:month] ? Date.parse(params[:month]) : Date.today
     @arrival_date = current_user.profile.arrival_date
@@ -11,7 +12,7 @@ class DashboardsController < ApplicationController
 
     task_events = @profile.tasks
                       .where.not(due_date: nil)
-                      .map { |t| { name: t.name, category: t.pillar&.slug || "admin", due_date: t.due_date, source: :task } }
+                      .map { |t| { name: t.name, category: t.calendar_category, due_date: t.due_date, source: :task } }
                       .group_by { |e| e[:due_date] }
 
     doc_events = current_user.chats
