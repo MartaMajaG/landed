@@ -195,10 +195,15 @@
               <div class="cal-cell <%= 'muted' if day.month != @date.month %> <%= 'weekend' if day.saturday? || day.sunday? %>">
                 <span class="cal-date <%= 'today-num' if day == Date.today %>"><%= day.day %></span>
                 <% if @calendar_tasks[day] %>
-                  <% @calendar_tasks[day].each do |task| %>
-                    <div class="cal-event <%= task[:category].parameterize %>"><%= task[:name] %></div>
-                  <% end %>
-                <% end %>
+  <% @calendar_tasks[day].each do |event| %>
+    <div class="cal-event <%= event[:category].to_s.parameterize %>"
+      data-event-name="<%= event[:name] %>"
+      data-event-date="<%= event[:due_date] %>"
+      data-event-source="<%= event[:source] %>">
+  <%= truncate(event[:name], length: 30) %>
+    </div>
+  <% end %>
+<% end %>
               </div>
             <% end %>
           </div>
@@ -207,12 +212,25 @@
     </turbo-frame>
 
   </div>
+  <div id="cal-popover" class="cal-popover" style="display:none;">
+  <p class="cal-popover__title" id="calPopoverTitle"></p>
+  <p class="cal-popover__date" id="calPopoverDate"></p>
+  <div class="cal-popover__actions">
+    <a id="calGoogleBtn" href="#" target="_blank" class="cal-popover__btn cal-popover__btn--google">
+      Add to Google Calendar
+    </a>
+    <a id="calAppleBtn" href="#" class="cal-popover__btn cal-popover__btn--apple">
+      Add to Apple Calendar
+    </a>
+  </div>
+</div>
 </div>
 
 <script>
   document.querySelectorAll('.task-card[data-href]').forEach(function(card) {
     card.addEventListener('click', function() { window.location.href = card.dataset.href; });
   });
+
   var filterBtn = document.getElementById('pillarFilterBtn');
   var filterDropdown = document.getElementById('pillarFilterDropdown');
   if (filterBtn && filterDropdown) {
@@ -225,4 +243,34 @@
       filterDropdown.classList.remove('pillar-filter__dropdown--open');
     });
   }
+
+  var popover = document.getElementById('cal-popover');
+
+  document.addEventListener('click', function(e) {
+    var el = e.target.closest('.cal-event');
+    if (el) {
+      e.stopPropagation();
+      var name = el.dataset.eventName;
+      var date = el.dataset.eventDate;
+      var parsed = new Date(date);
+      var fmt = parsed.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+      var ymd = date.replace(/-/g, '');
+
+      document.getElementById('calPopoverTitle').textContent = name.length > 45 ? name.substring(0, 45) + '…' : name;;
+      document.getElementById('calPopoverDate').textContent = fmt;
+
+      var googleUrl = 'https://calendar.google.com/calendar/r/eventedit?text='
+        + encodeURIComponent(name) + '&dates=' + ymd + '/' + ymd;
+      document.getElementById('calGoogleBtn').href = googleUrl;
+      document.getElementById('calAppleBtn').href = '/calendar_events/ics?name='
+        + encodeURIComponent(name) + '&date=' + date;
+
+      var rect = el.getBoundingClientRect();
+      popover.style.top = (rect.bottom + 8) + 'px';
+      popover.style.left = rect.left + 'px';
+      popover.style.display = 'block';
+      return;
+    }
+    if (popover) popover.style.display = 'none';
+  });
 </script>
