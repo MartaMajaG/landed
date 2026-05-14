@@ -9,21 +9,18 @@ class DashboardsController < ApplicationController
     @arrival_date = current_user.profile.arrival_date
     @task_deadline = @arrival_date + 3.weeks if @arrival_date
 
-    @calendar_tasks = {
-      Date.new(2026, 5, 1) => [
-        { name: "Personal Liability Insurance (Privathaftpflicht)", category: "admin" }
-      ],
-      Date.new(2026, 5, 12) => [
-        { name: "Registration (Anmeldung)", category: "housing" },
-        { name: "Open Bank Account", category: "financial" }
-      ],
-      Date.new(2026, 5, 4) => [
-        { name: "Set Up Utilities", category: "Housing" }
-      ],
-      Date.new(2026, 5, 19) => [
-        { name: "Health Insurance Registration", category: "medical" }
-      ]
-    }
+    task_events = @profile.tasks
+                      .where.not(due_date: nil)
+                      .map { |t| { name: t.name, category: t.pillar&.slug || "admin", due_date: t.due_date, source: :task } }
+                      .group_by { |e| e[:due_date] }
+
+    doc_events = current_user.chats
+                        .with_attached_document
+                        .where.not(deadline: nil)
+                        .map { |c| { name: c.title, category: "admin", due_date: c.deadline, source: :document } }
+                        .group_by { |e| e[:due_date] }
+
+@calendar_tasks = task_events.merge(doc_events) { |_date, a, b| a + b }
 
     # Pillar filter
     @pillars       = Pillar.where(city_id: city_id).order(:position)

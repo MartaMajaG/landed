@@ -35,4 +35,7 @@ Rails.application.routes.draw do
   # 3-tier hierarchy: Pillar → Main Task (Task) → Subtask (ChecklistItem)
   resources :pillars, only: [:show]
   resources :tasks, only: [:index, :show]
+
+  #calendar events feed in ICS format for user tasks and document deadlines
+  get '/calendar_events/ics', to: 'calendar_events#ics'
 end
