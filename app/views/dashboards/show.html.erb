@@ -164,7 +164,8 @@
                        upcoming_tasks: @upcoming_tasks,
                        urgent_count: @urgent_count,
                        active_count: @active_count,
-                       upcoming_count: @upcoming_count %>
+                       upcoming_count: @upcoming_count,
+                       completed_ids: @completed_ids %>
 </div>
     </div>
 
@@ -174,18 +175,17 @@
         <h2 class="tasks-label">Calendar</h2>
         <div class="calendar-card">
           <div class="cal-toolbar">
-            <div class="cal-view-toggle"></div>
             <div class="cal-legend">
               <span class="leg-item"><span class="leg-dot" style="background:#f97316;"></span>Housing</span>
               <span class="leg-item"><span class="leg-dot" style="background:#246DD5;"></span>Financial</span>
               <span class="leg-item"><span class="leg-dot" style="background:#eab308;"></span>Admin</span>
               <span class="leg-item"><span class="leg-dot" style="background:#ec4899;"></span>Medical</span>
             </div>
-            <div class="cal-nav">
-              <span class="cal-month-title"><%= @date.strftime("%B %Y") %></span>
-              <%= link_to "‹", dashboard_path(month: @date.prev_month), class: "cal-nav-btn", data: { turbo_frame: "calendar" } %>
-              <%= link_to "›", dashboard_path(month: @date.next_month), class: "cal-nav-btn", data: { turbo_frame: "calendar" } %>
-            </div>
+              <div class="cal-nav">
+                <span class="cal-month-title"><%= @date.strftime("%B %Y") %></span>
+                <%= link_to "‹", dashboard_path(month: @date.prev_month), class: "cal-nav-btn", data: { turbo_frame: "calendar" } %>
+                <%= link_to "›", dashboard_path(month: @date.next_month), class: "cal-nav-btn", data: { turbo_frame: "calendar" } %>
+              </div>
           </div>
           <div class="cal-grid">
             <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].each do |day| %>
@@ -197,10 +197,11 @@
                 <% if @calendar_tasks[day] %>
   <% @calendar_tasks[day].each do |event| %>
     <div class="cal-event <%= event[:category].to_s.parameterize %>"
-      data-event-name="<%= event[:name] %>"
-      data-event-date="<%= event[:due_date] %>"
-      data-event-source="<%= event[:source] %>">
-  <%= truncate(event[:name], length: 30) %>
+        data-event-name="<%= event[:name] %>"
+        data-event-date="<%= event[:due_date] %>"
+        data-event-source="<%= event[:source] %>"
+        title="<%= event[:name] %>">
+        <%= event[:name] %>
     </div>
   <% end %>
 <% end %>
