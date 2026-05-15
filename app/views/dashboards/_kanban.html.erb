@@ -1,4 +1,5 @@
 <% completed_tasks = local_assigns.fetch(:completed_tasks, nil) %>
+<% completed_ids = local_assigns.fetch(:completed_ids, Set.new) %>
 
 <% if completed_tasks %>
 
@@ -71,7 +72,6 @@
       <div class="task-card" data-href="<%= task_path(task) %>" style="cursor:pointer;">
         <div class="card-top">
           <div class="card-tags">
-            <span class="tag tag-medium">Medium</span>
             <% if task.pillar %>
               <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
             <% end %>
@@ -79,13 +79,17 @@
         </div>
         <h4 class="card-title"><%= task.name %></h4>
         <p class="card-desc"><%= task.description %></p>
-        <div class="card-footer">
-          <span class="card-progress-label">No progress yet</span>
-          <span class="card-pct">0%</span>
-        </div>
-        <div class="card-track">
-          <div class="card-fill" style="width: 0%;"></div>
-        </div>
+        <% total = task.checklist_items.size %>
+        <% done = task.checklist_items.count { |ci| completed_ids.include?(ci.id) } %>
+        <% if total > 0 %>
+          <div class="card-footer">
+            <span class="card-progress-label"><%= done == 0 ? "Not started" : "#{done}/#{total} steps" %></span>
+            <span class="card-pct"><%= done == 0 ? "" : "#{((done.to_f / total) * 100).round}%" %></span>
+          </div>
+          <div class="card-track">
+            <div class="card-fill" style="width: <%= ((done.to_f / total) * 100).round %>%;"></div>
+          </div>
+        <% end %>
       </div>
     <% end %>
   </div>
@@ -102,7 +106,6 @@
       <div class="task-card locked" data-href="<%= task_path(task) %>">
         <div class="card-top">
           <div class="card-tags">
-            <span class="tag tag-low">Low</span>
             <% if task.pillar %>
               <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
             <% end %>
@@ -110,13 +113,17 @@
         </div>
         <h4 class="card-title"><%= task.name %></h4>
         <p class="card-desc"><%= task.description %></p>
-        <div class="card-footer">
-          <span class="card-progress-label">No progress yet</span>
-          <span class="card-pct">0%</span>
-        </div>
-        <div class="card-track">
-          <div class="card-fill" style="width: 0%;"></div>
-        </div>
+        <% total = task.checklist_items.size %>
+        <% done = task.checklist_items.count { |ci| completed_ids.include?(ci.id) } %>
+        <% if total > 0 %>
+          <div class="card-footer">
+            <span class="card-progress-label"><%= done == 0 ? "Not started" : "#{done}/#{total} steps" %></span>
+            <span class="card-pct"><%= done == 0 ? "" : "#{((done.to_f / total) * 100).round}%" %></span>
+          </div>
+          <div class="card-track">
+            <div class="card-fill" style="width: <%= ((done.to_f / total) * 100).round %>%;"></div>
+          </div>
+        <% end %>
       </div>
     <% end %>
   </div>

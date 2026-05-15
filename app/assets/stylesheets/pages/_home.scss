@@ -160,15 +160,15 @@
     background: #5B50E8;
     color: #fff;
   }
-  .journey-step-label { font-weight: 500; color: #5B50E8; }
+  .journey-step-label { font-weight: 500; color: #9ca3af; }
 }
 .journey-step--future {
   .journey-dot {
     background: #fff;
-    border: 0.5px solid #DDD9FF;
+    border: 1.5px solid #C4C2E8;
     color: #C4C2E8;
   }
-  .journey-step-label { color: #C4C2E8; }
+  .journey-step-label { color: #9ca3af; }
 }
 
 // Stats row
@@ -388,7 +388,7 @@
   display: flex;
   flex-direction: column;
   box-shadow: 0 1px 3px rgba(91,80,232,0.05);
-  &.locked { opacity: 0.45; pointer-events: none; }
+  &.locked { opacity: 0.65; pointer-events: none; }
   &--done  { opacity: 0.75; border-left: 3px solid #10b981; }
 }
 .card-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
@@ -444,7 +444,7 @@
   background: transparent; color: #7a7f8e; cursor: pointer; border-radius: 6px;
   &.active { background: #fff; color: #1a1d23; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
 }
-.cal-legend { display: flex; align-items: center; gap: 14px; flex: 1; justify-content: center; }
+.cal-legend { display: flex; align-items: center; gap: 14px; }
 .leg-item   { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #7a7f8e; }
 .leg-dot    { width: 8px; height: 8px; border-radius: 50%; }
 .cal-nav    { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
@@ -462,7 +462,7 @@
 }
 .cal-cell {
   min-height: 80px; padding: 8px 10px;
-  border-right: 0.5px solid #f0f2f7; border-bottom: 0.5px solid #f0f2f7;
+  border-right: 0.5px solid #f0f2f7; border-bottom: 0.5px solid #f0f2f7; min-width: 0;
   display: flex; flex-direction: column; gap: 4px;
   &:nth-child(7n) { border-right: none; }
   &.muted .cal-date { color: #c0c4ce; }
@@ -477,7 +477,7 @@
 .cal-event {
   cursor: pointer;
   font-size: 10px; font-weight: 600; border-radius: 4px; padding: 3px 6px;
-  white-space: normal; word-wrap: break-word; display: block;
+  white-space: nowrap; word-wrap: break-word; display: block;
   max-width: 100%; line-height: 1.2; overflow: hidden; text-overflow: ellipsis;
   &.housing   { background: #ffedd5; color: #c2410c; }
   &.financial { background: #dbeafe; color: #1e40af; }

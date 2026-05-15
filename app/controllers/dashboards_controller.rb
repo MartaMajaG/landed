@@ -21,7 +21,7 @@ class DashboardsController < ApplicationController
                         .map { |c| { name: c.title, category: "admin", due_date: c.deadline, source: :document } }
                         .group_by { |e| e[:due_date] }
 
-@calendar_tasks = task_events.merge(doc_events) { |_date, a, b| a + b }
+    @calendar_tasks = task_events.merge(doc_events) { |_date, a, b| a + b }
 
     # Pillar filter
     @pillars       = Pillar.where(city_id: city_id).order(:position)
@@ -41,39 +41,40 @@ class DashboardsController < ApplicationController
     @active_tasks   = incomplete.select { |t| t.urgency == "medium" }.first(2)
     @upcoming_tasks = incomplete.select { |t| t.urgency == "low" }.first(2)
 
-    @urgent_count   = incomplete.count { |t| t.urgency == "high" }
-    @active_count   = incomplete.count { |t| t.urgency == "medium" }
-    @docs_count = current_user.chats.with_attached_document.count
-    @upcoming_count = incomplete.count { |t| t.urgency == "low" }
+    @urgent_count       = incomplete.count { |t| t.urgency == "high" }
+    @active_count       = incomplete.count { |t| t.urgency == "medium" }
+    @docs_count         = current_user.chats.with_attached_document.count
+    @upcoming_count     = incomplete.count { |t| t.urgency == "low" }
     @total_active_count = incomplete.count { |t| t.urgency == "high" || t.urgency == "medium" }
+
+    # Checklist progress
+    @completed_ids = current_user.user_checklist_items
+                                 .where(completed: true)
+                                 .pluck(:checklist_item_id).to_set
 
     # Pillar progress
     ci_rows = ChecklistItem.joins(:task)
                            .where(tasks: { city_id: city_id })
                            .pluck(:id, "tasks.pillar_id")
 
-    completed_ids = current_user.user_checklist_items
-                                .where(completed: true)
-                                .pluck(:checklist_item_id).to_set
-
     @pillar_progress = Hash.new { |h, k| h[k] = { total: 0, done: 0 } }
     ci_rows.each do |ci_id, pillar_id|
       @pillar_progress[pillar_id][:total] += 1
-      @pillar_progress[pillar_id][:done]  += 1 if completed_ids.include?(ci_id)
-      total_items    = @pillar_progress.values.sum { |p| p[:total] }
-      completed_items = @pillar_progress.values.sum { |p| p[:done] }
-      @completion_pct = total_items > 0 ? ((completed_items.to_f / total_items) * 100).round : 0
-      @current_stage = if @arrival_date.nil?
-  "pre_departure"
-elsif Date.today < @arrival_date
-  "pre_departure"
-elsif Date.today < @arrival_date + 30.days
-  "arrival"
-elsif Date.today < @arrival_date + 6.months
-  "settling_in"
-else
-  "established"
-end
+      @pillar_progress[pillar_id][:done]  += 1 if @completed_ids.include?(ci_id)
+    end
+
+    total_items     = @pillar_progress.values.sum { |p| p[:total] }
+    completed_items = @pillar_progress.values.sum { |p| p[:done] }
+    @completion_pct = total_items > 0 ? ((completed_items.to_f / total_items) * 100).round : 0
+
+    @current_stage = if @arrival_date.nil? || Date.today < @arrival_date
+      "pre_departure"
+    elsif Date.today < @arrival_date + 30.days
+      "arrival"
+    elsif Date.today < @arrival_date + 6.months
+      "settling_in"
+    else
+      "established"
     end
 
     # Respond to AJAX tab switches
@@ -84,7 +85,8 @@ end
       render partial: "kanban", locals: {
         completed_tasks: completed,
         urgent_tasks: [], active_tasks: [], upcoming_tasks: [],
-        urgent_count: 0, active_count: 0, upcoming_count: 0
+        urgent_count: 0, active_count: 0, upcoming_count: 0,
+        completed_ids: @completed_ids
       }
     else
       render partial: "kanban", locals: {
@@ -94,7 +96,8 @@ end
         upcoming_tasks: @upcoming_tasks,
         urgent_count: @urgent_count,
         active_count: @active_count,
-        upcoming_count: @upcoming_count
+        upcoming_count: @upcoming_count,
+        completed_ids: @completed_ids
       }
     end
   end
