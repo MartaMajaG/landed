@@ -377,6 +377,10 @@
 .col-count { font-size: 11px; color: #9ca3af; background: #f0f2f7; border-radius: 4px; padding: 1px 6px; }
 .col-menu { font-size: 14px; color: #c0c4ce; cursor: pointer; padding: 0 4px; }
 
+.kanban-hidden {
+  display: none !important;
+}
+
 // ── Task cards ──
 .task-card {
   background: #fff;
@@ -534,3 +538,20 @@
 .no-tasks { color: #9ca3af; font-size: 13px; text-align: center; padding: 40px 0; }
 
 @keyframes spin { to { transform: rotate(360deg); } }
+
+.col-show-more {
+  width: 100%;
+  padding: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #9ca3af;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 4px;
+
+  &:hover {
+    color: #5B50E8;
+  }
+}

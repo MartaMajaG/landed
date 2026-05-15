@@ -25,6 +25,7 @@
   <% end %>
 
 <% else %>
+
 <%# URGENT %>
 <div class="kanban-col">
   <div class="col-header">
@@ -33,8 +34,8 @@
     <span class="col-count"><%= urgent_count %></span>
     <span class="col-menu">⋯</span>
   </div>
-  <% urgent_tasks.each do |task| %>
-    <div class="task-card urgent-card" data-href="<%= task_path(task) %>" style="cursor:pointer;">
+  <% urgent_tasks.each_with_index do |task, index| %>
+    <div class="task-card urgent-card <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>" style="cursor:pointer;">
       <div class="card-top-row">
         <span class="urgent-badge">Urgent</span>
       </div>
@@ -58,74 +59,102 @@
       </div>
     </div>
   <% end %>
+  <% if urgent_tasks.size > 2 %>
+    <button class="col-show-more" onclick="toggleKanbanCol(this, <%= urgent_tasks.size - 2 %>)">
+      Show <%= urgent_tasks.size - 2 %> more
+    </button>
+  <% end %>
 </div>
 
-  <%# ACTIVE %>
-  <div class="kanban-col">
-    <div class="col-header">
-      <span class="col-dot active-dot"></span>
-      <span class="col-title">Active</span>
-      <span class="col-count"><%= active_count %></span>
-      <span class="col-menu">⋯</span>
-    </div>
-    <% active_tasks.each do |task| %>
-      <div class="task-card" data-href="<%= task_path(task) %>" style="cursor:pointer;">
-        <div class="card-top">
-          <div class="card-tags">
-            <% if task.pillar %>
-              <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
-            <% end %>
-          </div>
-        </div>
-        <h4 class="card-title"><%= task.name %></h4>
-        <p class="card-desc"><%= task.description %></p>
-        <% total = task.checklist_items.size %>
-        <% done = task.checklist_items.count { |ci| completed_ids.include?(ci.id) } %>
-        <% if total > 0 %>
-          <div class="card-footer">
-            <span class="card-progress-label"><%= done == 0 ? "Not started" : "#{done}/#{total} steps" %></span>
-            <span class="card-pct"><%= done == 0 ? "" : "#{((done.to_f / total) * 100).round}%" %></span>
-          </div>
-          <div class="card-track">
-            <div class="card-fill" style="width: <%= ((done.to_f / total) * 100).round %>%;"></div>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
+<%# ACTIVE %>
+<div class="kanban-col">
+  <div class="col-header">
+    <span class="col-dot active-dot"></span>
+    <span class="col-title">Active</span>
+    <span class="col-count"><%= active_count %></span>
+    <span class="col-menu">⋯</span>
   </div>
+  <% active_tasks.each_with_index do |task, index| %>
+    <div class="task-card <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>" style="cursor:pointer;">
+      <div class="card-top">
+        <div class="card-tags">
+          <% if task.pillar %>
+            <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
+          <% end %>
+        </div>
+      </div>
+      <h4 class="card-title"><%= task.name %></h4>
+      <p class="card-desc"><%= task.description %></p>
+      <% total = task.checklist_items.size %>
+      <% done = task.checklist_items.count { |ci| completed_ids.include?(ci.id) } %>
+      <% if total > 0 %>
+        <div class="card-footer">
+          <span class="card-progress-label"><%= done == 0 ? "Not started" : "#{done}/#{total} steps" %></span>
+          <span class="card-pct"><%= done == 0 ? "" : "#{((done.to_f / total) * 100).round}%" %></span>
+        </div>
+        <div class="card-track">
+          <div class="card-fill" style="width: <%= ((done.to_f / total) * 100).round %>%;"></div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <% if active_tasks.size > 2 %>
+    <button class="col-show-more" onclick="toggleKanbanCol(this, <%= active_tasks.size - 2 %>)">
+      Show <%= active_tasks.size - 2 %> more
+    </button>
+  <% end %>
+</div>
 
-  <%# UPCOMING %>
-  <div class="kanban-col">
-    <div class="col-header">
-      <span class="col-dot upcoming-dot"></span>
-      <span class="col-title">Upcoming</span>
-      <span class="col-count"><%= upcoming_count %></span>
-      <span class="col-menu">⋯</span>
-    </div>
-    <% upcoming_tasks.each do |task| %>
-      <div class="task-card locked" data-href="<%= task_path(task) %>">
-        <div class="card-top">
-          <div class="card-tags">
-            <% if task.pillar %>
-              <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
-            <% end %>
-          </div>
-        </div>
-        <h4 class="card-title"><%= task.name %></h4>
-        <p class="card-desc"><%= task.description %></p>
-        <% total = task.checklist_items.size %>
-        <% done = task.checklist_items.count { |ci| completed_ids.include?(ci.id) } %>
-        <% if total > 0 %>
-          <div class="card-footer">
-            <span class="card-progress-label"><%= done == 0 ? "Not started" : "#{done}/#{total} steps" %></span>
-            <span class="card-pct"><%= done == 0 ? "" : "#{((done.to_f / total) * 100).round}%" %></span>
-          </div>
-          <div class="card-track">
-            <div class="card-fill" style="width: <%= ((done.to_f / total) * 100).round %>%;"></div>
-          </div>
-        <% end %>
-      </div>
-    <% end %>
+<%# UPCOMING %>
+<div class="kanban-col">
+  <div class="col-header">
+    <span class="col-dot upcoming-dot"></span>
+    <span class="col-title">Upcoming</span>
+    <span class="col-count"><%= upcoming_count %></span>
+    <span class="col-menu">⋯</span>
   </div>
+  <% upcoming_tasks.each_with_index do |task, index| %>
+    <div class="task-card locked <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>">
+      <div class="card-top">
+        <div class="card-tags">
+          <% if task.pillar %>
+            <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
+          <% end %>
+        </div>
+      </div>
+      <h4 class="card-title"><%= task.name %></h4>
+      <p class="card-desc"><%= task.description %></p>
+      <% total = task.checklist_items.size %>
+      <% done = task.checklist_items.count { |ci| completed_ids.include?(ci.id) } %>
+      <% if total > 0 %>
+        <div class="card-footer">
+          <span class="card-progress-label"><%= done == 0 ? "Not started" : "#{done}/#{total} steps" %></span>
+          <span class="card-pct"><%= done == 0 ? "" : "#{((done.to_f / total) * 100).round}%" %></span>
+        </div>
+        <div class="card-track">
+          <div class="card-fill" style="width: <%= ((done.to_f / total) * 100).round %>%;"></div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+  <% if upcoming_tasks.size > 2 %>
+    <button class="col-show-more" onclick="toggleKanbanCol(this, <%= upcoming_tasks.size - 2 %>)">
+      Show <%= upcoming_tasks.size - 2 %> more
+    </button>
+  <% end %>
+</div>
 
 <% end %>
+
+<script>
+  function toggleKanbanCol(btn, hiddenCount) {
+    var col = btn.closest('.kanban-col');
+    var hidden = col.querySelectorAll('.kanban-hidden');
+    var isExpanded = btn.dataset.expanded === 'true';
+    hidden.forEach(function(card) {
+      card.style.display = isExpanded ? 'none' : 'flex';
+    });
+    btn.dataset.expanded = isExpanded ? 'false' : 'true';
+    btn.textContent = isExpanded ? 'Show ' + hiddenCount + ' more' : 'Show less';
+  }
+</script>

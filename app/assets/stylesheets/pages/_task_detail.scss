@@ -1,14 +1,52 @@
 // ── Task Detail Page ──────────────────────────────
 
 .task-detail-page {
-  background: $page-bg;
+  background: #F5F3FF;
   min-height: 100vh;
-  padding: 48px 0;
+  padding: 0 0 48px 0;
+  position: relative;
+  overflow: visible;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 10% 15%, rgba(120,100,245,0.04) 0%, transparent 52%),
+      radial-gradient(ellipse at 90% 85%, rgba(255,150,180,0.05) 0%, transparent 52%);
+    pointer-events: none;
+    z-index: 0;
+  }
 }
 
 .task-container {
-  padding-top: 0px;
+  padding-top: 8px;
   padding-bottom: 24px;
+  position: relative;
+  z-index: 1;
+}
+
+.task-breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.75rem;
+  font-size: 13px;
+}
+
+.breadcrumb__link {
+  color: #7a7f8e;
+  text-decoration: none;
+  &:hover { color: #5B50E8; }
+}
+
+.breadcrumb__current {
+  color: #1a1d23;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
 }
 
 // Two column layout
@@ -109,8 +147,8 @@
 
 .task-title {
   font-family: $headers-font;
-  font-size: 2rem;
-  font-weight: 800;
+  font-size: 1.75rem;
+  font-weight: 700;
   color: $text-dark;
   margin-bottom: 0.5rem;
 }
@@ -133,8 +171,8 @@
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
-  background: white;
-  border: 1px solid #E5E7EB;
+  background: #FAF9FF;
+  border: 0.5px solid #EEECFF;
   border-radius: 8px;
   padding: 1rem 1.25rem;
   margin-bottom: 2rem;
@@ -171,6 +209,19 @@
   color: #D97706;
 }
 
+.task-badge--due {
+  background: #D8D4F9 !important;
+  color: #3C3489;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 3px 8px !important;
+  border-radius: 6px !important;
+  line-height: 1.4;
+  letter-spacing: 0;
+}
 // ── Expert Tips ───────────────────────────────────
 
 .expert-tips {
