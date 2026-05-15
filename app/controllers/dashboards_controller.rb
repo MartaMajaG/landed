@@ -37,9 +37,9 @@ class DashboardsController < ApplicationController
     @completed_tasks = all_tasks.select { |t| t.completed_by?(current_user) }
 
     # Kanban columns from incomplete tasks only
-    @urgent_tasks   = incomplete.select { |t| t.urgency == "high" }.first(2)
-    @active_tasks   = incomplete.select { |t| t.urgency == "medium" }.first(2)
-    @upcoming_tasks = incomplete.select { |t| t.urgency == "low" }.first(2)
+    @urgent_tasks   = incomplete.select { |t| t.urgency == "high" }
+    @active_tasks   = incomplete.select { |t| t.urgency == "medium" }
+    @upcoming_tasks = incomplete.select { |t| t.urgency == "low" }
 
     @urgent_count       = incomplete.count { |t| t.urgency == "high" }
     @active_count       = incomplete.count { |t| t.urgency == "medium" }

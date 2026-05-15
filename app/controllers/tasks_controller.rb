@@ -10,6 +10,8 @@ class TasksController < ApplicationController
   end
 
   def show
+    Task.assign_due_dates(current_user.profile)
+
     @task = Task.includes(:pillar).find_by!(
       id: params[:id],
       city_id: current_user.profile.city_id
