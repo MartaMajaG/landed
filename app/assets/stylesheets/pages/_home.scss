@@ -43,7 +43,7 @@
   justify-content: center;
   text-align: center;
   gap: 4px;
-  padding: 16px 20px;  // was 24px, tightens card height
+  padding: 20px 20px;  // was 24px, tightens card height
   border-right: 0.5px solid #EEECFF;
 }
 
@@ -89,7 +89,7 @@
 
 // Centre column — journey + stats
 .hero-journey {
-  padding: 16px 28px;  // was 20px top/bottom
+  padding: 20px 20px;  // was 20px top/bottom
   border-right: 0.5px solid #EEECFF;
   display: flex;
   flex-direction: column;
@@ -114,13 +114,14 @@
 }
 .journey-track {
   position: absolute;
-  top: 14px;
+  top: 16px;
   left: 14px;
   right: 14px;
-  height: 2px;
+  height: 3px; // was 2px
   background: #EEECFF;
   z-index: 0;
 }
+
 .journey-track-fill {
   height: 100%;
   background: #5B50E8;
@@ -136,8 +137,8 @@
   gap: 6px;
 }
 .journey-dot {
-  width: 28px;
-  height: 28px;
+  width: 32px; // was 28px
+  height: 32px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -208,7 +209,7 @@
   padding: 20px 20px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 10px;
 }
 .hero-today__header {
@@ -438,7 +439,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 14px 20px;
+  padding: 14px 12px;
   border-bottom: 0.5px solid #e2e5ec;
   gap: 16px;
 }
