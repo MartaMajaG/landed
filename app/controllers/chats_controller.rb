@@ -14,6 +14,7 @@ class ChatsController < ApplicationController
   def new
     # Initialize a new chat instance for the upload form
     @chat = Chat.new
+    @chats = current_user.chats
   end
 
   # Save the chat, trigger AI analysis if a document was attached, then redirect to results

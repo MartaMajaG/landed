@@ -147,14 +147,25 @@
 <% end %>
 
 <script>
-  function toggleKanbanCol(btn, hiddenCount) {
-    var col = btn.closest('.kanban-col');
-    var hidden = col.querySelectorAll('.kanban-hidden');
-    var isExpanded = btn.dataset.expanded === 'true';
-    hidden.forEach(function(card) {
-      card.style.display = isExpanded ? 'none' : 'flex';
+function toggleKanbanCol(btn, hiddenCount) {
+  var col = btn.closest('.kanban-col');
+  var isExpanded = btn.dataset.expanded === 'true';
+
+  if (isExpanded) {
+    // Hide again — re-add the class
+    var cards = col.querySelectorAll('.task-card');
+    cards.forEach(function(card, index) {
+      if (index >= 2) card.classList.add('kanban-hidden');
     });
-    btn.dataset.expanded = isExpanded ? 'false' : 'true';
-    btn.textContent = isExpanded ? 'Show ' + hiddenCount + ' more' : 'Show less';
+    btn.dataset.expanded = 'false';
+    btn.textContent = 'Show ' + hiddenCount + ' more';
+  } else {
+    // Show all — remove the class
+    col.querySelectorAll('.kanban-hidden').forEach(function(card) {
+      card.classList.remove('kanban-hidden');
+    });
+    btn.dataset.expanded = 'true';
+    btn.textContent = 'Show less';
   }
+}
 </script>
