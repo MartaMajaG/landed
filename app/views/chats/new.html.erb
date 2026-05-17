@@ -63,10 +63,16 @@
     box-shadow: 0 8px 32px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12);
     min-width: 340px; white-space: nowrap;
   }
+
+  /* Upload modal */
+  #upload-modal {
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.5); z-index: 1000;
+    align-items: center; justify-content: center;
+  }
 </style>
 
-<div style="min-height:100vh; padding-bottom:48px; position:relative; overflow:hidden; background:#F5F3FF;">
-  <div style="pointer-events:none; position:absolute; inset:0; z-index:0; background: radial-gradient(ellipse at 10% 15%, rgba(120,100,245,0.04) 0%, transparent 52%), radial-gradient(ellipse at 90% 85%, rgba(255,150,180,0.05) 0%, transparent 52%);"></div>
+<div style="min-height:100vh; padding-bottom:48px; position:relative; overflow:hidden; background:#EAE8F5;">
 
   <div class="container-xl" style="padding-top:40px; position:relative; z-index:1;">
 
@@ -77,10 +83,10 @@
         <% if @chats.any? %><p style="font-size:13px; color:#9CA3AF; margin:0;"><%= pluralize(@chats.size, "document") %> scanned</p><% end %>
       </div>
       <% if @chats.any? %>
-        <%= link_to new_chat_path, style:"background:#5B50E8; color:#fff; font-size:13px; font-weight:500; padding:9px 18px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;" do %>
+        <button onclick="document.getElementById('upload-modal').style.display='flex'" style="background:#5B50E8; color:#fff; font-size:13px; font-weight:500; padding:9px 18px; border-radius:8px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Scan new document
-        <% end %>
+        </button>
       <% end %>
     </div>
 
@@ -91,14 +97,14 @@
         </div>
         <h2 style="font-size:18px; font-weight:600; color:#1A1A2E; margin-bottom:8px;">No documents yet</h2>
         <p style="font-size:14px; color:#9CA3AF; margin-bottom:28px; max-width:320px; margin-left:auto; margin-right:auto;">Scan your first German document and get a plain-English summary in seconds.</p>
-        <%= link_to new_chat_path, style:"background:#5B50E8; color:#fff; font-size:13px; font-weight:500; padding:10px 20px; border-radius:8px; text-decoration:none; display:inline-flex; align-items:center; gap:6px;" do %>
+        <button onclick="document.getElementById('upload-modal').style.display='flex'" style="background:#5B50E8; color:#fff; font-size:13px; font-weight:500; padding:10px 20px; border-radius:8px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Scan your first document
-        <% end %>
+        </button>
       </div>
     <% else %>
 
-      <div id="doc-table" style="background:#fff; border-radius:14px; overflow:hidden;">
+      <div id="doc-table" style="background:#fff; border-radius:14px; overflow:hidden; border:1px solid #D8D4EE;">
 
         <%# Header — 4 columns, no dedicated checkbox column %>
         <div class="table-header" style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:11px 20px; background:#FAF9FF; border-bottom:1px solid #F0EEFF; align-items:center;">
@@ -177,6 +183,49 @@
   <span id="bulk-count" style="font-size:13px; font-weight:500; color:#fff; flex:1;"></span>
   <button onclick="clearSelection()" style="background:none; border:1px solid rgba(255,255,255,0.25); border-radius:6px; font-size:12px; font-weight:500; color:rgba(255,255,255,0.75); cursor:pointer; padding:5px 14px;">Clear</button>
   <%= button_to "Delete", bulk_destroy_chats_path, method: :delete, form: { id: "bulk-delete-form", data: { turbo: false } }, onclick: "return injectBulkIds(event)", style:"background:#C0392B; border:none; border-radius:6px; font-size:12px; font-weight:600; color:#fff; cursor:pointer; padding:5px 16px;" %>
+</div>
+
+<%# Upload modal %>
+<div id="upload-modal">
+  <div style="background:#fff; border-radius:14px; padding:32px; width:100%; max-width:480px; margin:20px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
+      <h2 style="font-size:18px; font-weight:600; color:#1A1A2E; margin:0;">Scan new document</h2>
+      <button onclick="document.getElementById('upload-modal').style.display='none'" style="background:none; border:none; cursor:pointer; color:#9CA3AF; font-size:20px; line-height:1;">✕</button>
+    </div>
+    <%= form_with model: @chat, local: true, multipart: true, data: { controller: "loading", action: "submit->loading#submit" } do |f| %>
+      <div data-loading-target="form">
+        <div class="mb-4" data-controller="uploadpreview">
+          <div style="border:2px dashed #DDD9FF; border-radius:10px; padding:32px 20px; text-align:center; background:#FAF9FF;">
+            <div style="width:44px; height:44px; background:#EEECFF; border-radius:10px; display:flex; align-items:center; justify-content:center; margin:0 auto 14px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5B50E8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+            </div>
+            <p style="font-size:14px; color:#6B7280; margin-bottom:16px;">Upload a photo or PDF</p>
+            <div class="d-flex justify-content-center gap-2">
+              <label style="background:#5B50E8; color:#fff; border-radius:8px; padding:8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" for="chat_document_upload">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Upload file
+              </label>
+              <label style="background:#fff; color:#5B50E8; border:1.5px solid #5B50E8; border-radius:8px; padding:8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" for="chat_document_camera">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                Take photo
+              </label>
+            </div>
+          </div>
+          <%= f.file_field :document, id:"chat_document_upload", class:"d-none", accept:"image/*,application/pdf", data:{ action:"change->uploadpreview#show", uploadpreview_target:"input" } %>
+          <input type="file" id="chat_document_camera" name="chat[document]" accept="image/*" capture="environment" class="d-none" data-action="change->uploadpreview#show" data-uploadpreview-target="input" />
+          <img data-uploadpreview-target="preview" class="img-fluid rounded mt-3 d-none" style="max-height:200px;" />
+          <p data-uploadpreview-target="filename" class="mt-3 d-none" style="font-size:13px; color:#6B7280;"></p>
+        </div>
+        <%= f.submit "Scan document", style:"width:100%; padding:11px; background:#5B50E8; color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer;" %>
+      </div>
+      <div data-loading-target="loader" class="d-none" style="text-align:center; padding:32px 0;">
+        <div style="width:44px; height:44px; border:3px solid #DDD9FF; border-top-color:#5B50E8; border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px;"></div>
+        <p style="font-size:15px; font-weight:500; color:#1A1A2E; margin-bottom:4px;">Analysing your document...</p>
+        <p style="font-size:13px; color:#9CA3AF;">This takes about 10 seconds</p>
+      </div>
+      <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+    <% end %>
+  </div>
 </div>
 
 <script>
