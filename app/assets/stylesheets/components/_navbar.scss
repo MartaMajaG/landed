@@ -1,7 +1,15 @@
 .navbar-lewagon {
-  height: 80px;
+  height: 64px;
   justify-content: space-between;
-  background: white;
+  background: #1A1535;
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+body {
+  background: #EAE8F5;
+  margin: 0;
+  padding: 0;
 }
 
 .navbar-lewagon .navbar-collapse {
@@ -15,42 +23,61 @@
 
 .navbar-lewagon .navbar-brand {
   font-family: "Inter", sans-serif;
-  font-weight: 700;
+  font-weight: 700 !important;
   font-size: 20px;
   letter-spacing: 2px;
   vertical-align: middle;
-}
+  color: #FFFFFF !important;
 
-.navbar-search {
-  position: relative;
-  align-items: center;
-
-  .navbar-search-icon {
-    position: absolute;
-    left: 14px;
-    color: #64748B;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  input {
-    padding-left: 2.5rem;
+  &:hover {
+    color: #FFFFFF !important;
   }
 }
 
 .navbar-lewagon .navbar-nav .nav-link {
-  color: #64748B;
+  color: rgba(255, 255, 255, 0.75);
   font-weight: 400;
-  font-size: 16px;
+  font-size: 14px;
   padding: 0.5rem 1.3rem;
 
-  &:hover,
+
+  &:hover {
+    color: #FFFFFF;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
   &.active {
-    color: #4F46E5;
-    font-weight: 600;
-    text-decoration: underline;
-    text-decoration-color: #4F46E5;
-    text-decoration-thickness: 4px;
-    text-underline-offset: 8px;
+  color: #FFFFFF !important;
+  font-weight: 500 !important;
+  text-decoration: underline;
+  text-decoration-color: #5B50E8;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 6px;
+  }
+}
+
+.navbar-lewagon .avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.navbar-lewagon .dropdown-menu {
+  background: #1A1535;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  margin-top: 8px;
+
+  .dropdown-item {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 13px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #FFFFFF;
+    }
   }
 }
