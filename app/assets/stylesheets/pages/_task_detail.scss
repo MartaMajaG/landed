@@ -1,7 +1,7 @@
 // ── Task Detail Page ──────────────────────────────
 
 .task-detail-page {
-  background: #F5F3FF;
+  background: #EAE8F5;
   min-height: 100vh;
   padding: 0 0 48px 0;
   position: relative;
@@ -11,9 +11,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background:
-      radial-gradient(ellipse at 10% 15%, rgba(120,100,245,0.04) 0%, transparent 52%),
-      radial-gradient(ellipse at 90% 85%, rgba(255,150,180,0.05) 0%, transparent 52%);
+    background: #EAE8F5;
     pointer-events: none;
     z-index: 0;
   }
@@ -471,7 +469,7 @@
 .step__soft-lock {
   margin-top: 0.75rem;
   padding: 0.75rem 1rem;
-  background: #F0F4FF;
+  background: #EAE8F5;
   border: 1px solid #C7D2FE;
   border-radius: 8px;
   display: flex;

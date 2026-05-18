@@ -1,6 +1,6 @@
 // ── Page background ──
 .dashboard-bg {
-  background: #F5F3FF;
+  background: #F0EEF8;
   min-height: 100vh;
   position: relative;
   overflow: hidden;
@@ -15,14 +15,14 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: #EAE8F5;
+  background: #F0EEF8;
   pointer-events: none;
   z-index: 0;
 }
 
 // ── Hero card ──
 .dashboard-hero {
-  background: #FAF9FF;
+  background: #fff;
   border-radius: 14px;
   border: 1px solid #D8D4EE;
   padding: 0;
@@ -76,7 +76,7 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: #EEECFF;
+  background: #EDE8FF;
   color: #3C3489;
   font-size: 11px;
   font-weight: 600;
@@ -116,7 +116,7 @@
   left: 14px;
   right: 14px;
   height: 3px; // was 2px
-  background: #EEECFF;
+  background: #EDE8FF;
   z-index: 0;
 }
 
@@ -177,14 +177,15 @@
   gap: 8px;
 }
 .hero-stat {
-  background: #F5F3FF;
+  border: 1px solid #E8E4F4;
+  background: #F0EEF8;
   border-radius: 8px;
   padding: 8px 12px;
   display: flex;
   flex-direction: column;
   gap: 2px;
   &--accent {
-    background: #EEECFF;
+    background: #EDE8FF;
     .hero-stat__label { color: #5B50E8; }
     .hero-stat__value { color: #3C3489; }
   }
@@ -238,7 +239,7 @@
   align-items: flex-start;
   gap: 8px;
   padding: 8px 10px;
-  background: #F5F3FF;
+  background: #F0EEF8;
   border-radius: 8px;
 }
 .today-event__dot {
@@ -363,6 +364,7 @@
   gap: 16px;
   align-items: start;
   margin-bottom: 36px;
+  margin-top: 20px;
 }
 .kanban-col { display: flex; flex-direction: column; }
 .col-header { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
@@ -424,7 +426,7 @@
 .card-fill  { height: 100%; background: #5B50E8; border-radius: 2px; }
 
 // ── Calendar ──
-.calendar-section { margin-top: 8px; }
+.calendar-section { margin-top: 32px; }
 .calendar-card {
   background: #fff;
   border: 1px solid #D8D4EE;
@@ -518,7 +520,7 @@
   font-size: 11px; font-weight: 600; padding: 6px 10px;
   border-radius: 6px; text-decoration: none; text-align: center;
   display: block;
-  &--google { background: #EEECFF; color: #3C3489; }
+  &--google { background: #EDE8FF; color: #3C3489; }
   &--apple  { background: #f0f2f7; color: #1a1535; }
   }
 }
@@ -554,3 +556,4 @@
     color: #5B50E8;
   }
 }
+.tasks-section { margin-top: 32px; }

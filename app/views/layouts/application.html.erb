@@ -20,12 +20,7 @@
     <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
     <%= javascript_importmap_tags %>
   </head>
-
-  <body class="bg-light">
-    <%= render "shared/flashes" %>
+  <body>
     <%= render "shared/navbar" %>
-    <main>
-      <%= yield %>
-    </main>
-  </body>
+    <%= yield %>
 </html>
