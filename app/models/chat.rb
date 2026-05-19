@@ -98,10 +98,28 @@ class Chat < ApplicationRecord
     JSON.parse(response.body)
   end
 
+def analysis_prompt
+    <<~PROMPT
+      Analyze this document and return ONLY a JSON object with these keys:
+      1. 'title' (English with German in brackets)
+      2. 'amount' (Float)
+      3. 'deadline' (YYYY-MM-DD)
+      4. 'urgency' (high, medium, low)
+      5. 'document_type' (e.g., 'Krankenkasse', 'Finanzamt', 'Steuer')
+      6. 'advice' as a nested object with:
+         - 'summary': one plain-English action sentence telling the user what they need to do — not a document definition, not a description, but a direct action prompt (e.g. 'You need to submit this form to confirm your address with the Munich authorities.')
+         - 'explanation': write 3-4 sentences directly to the user as if you are a knowledgeable friend helping them navigate German bureaucracy. Be warm, specific, and reassuring. Tell them what this document means for their situation, what they should do next, and what to watch out for. Use you and your throughout. Never be generic.
+         - 'stats': array of up to 4 objects, each with 'label', 'value', 'sub', and optional 'highlight' (warn or critical). The value must be short — maximum 3 words, no sentences. Always prioritise these categories in this order if present in the document: amount or fee owed, deadline or due date, penalty for missing deadline, contest or appeal window. Only use other categories if none of these apply. Labels must be short and clear in plain English — never use German institution names as a value. Always format currency values with the euro symbol before the number with no space (e.g. the symbol comes first, then the digits).
+         - 'key_facts': array of 3 objects with 'n' (1,2,3) and 'text' (warm and friendly, written directly to the user using you and your, like helping a friend navigate German bureaucracy — be reassuring and practical, not robotic)
+         - 'regions': array of objects identifying which section of the document contains each key value. Each object must have: 'field' (one of: deadline, amount, recipient_name, reference_number), 'label' (short display label e.g. 'Fee', 'Deadline'), 'y' (top edge of the section as % of image height — start exactly at the section header line, e.g. the line that reads 'Gebühr', not the element above it), 'h' (height of a single line as % of image height — typically 2-3%, never more than 4%). 'y' must point to the exact line containing the printed value, not the section header above it. Always span the full width: 'x' is always 0, 'w' is always 100. If you cannot locate the exact line with confidence, omit that region entirely.
+         - 'Never start a fact with "It\'s" or "This". Every fact must open with "You", "Your", or "Make sure you".'
+         PROMPT
+  end
+
   def ai_settings
     {
       model: "gpt-4o-mini",
-      max_tokens: 1200,
+      max_tokens: 1600,
       messages: [
         {
           role: "system",
@@ -115,17 +133,7 @@ class Chat < ApplicationRecord
             content_block,
             {
               type: "text",
-              text: "Analyze this document and return ONLY a JSON object with these keys:
-                     1. 'title' (English with German in brackets)
-                     2. 'amount' (Float)
-                     3. 'deadline' (YYYY-MM-DD)
-                     4. 'urgency' (high, medium, low)
-                     5. 'document_type' (e.g., 'Krankenkasse', 'Finanzamt', 'Steuer')
-                     6. 'advice' as a nested object with:
-                        - 'summary': one plain-English action sentence telling the user what they need to do — not a document definition, not a description, but a direct action prompt (e.g. 'You need to submit this form to confirm your address with the Munich authorities.')
-                        - 'explanation': write 3-4 sentences directly to the user as if you are a knowledgeable friend helping them navigate German bureaucracy. Be warm, specific, and reassuring. Tell them what this document means for their situation, what they should do next, and what to watch out for. Use you and your throughout. Never be generic.
-                        - 'stats': array of up to 4 objects, each with 'label', 'value', 'sub', and optional 'highlight' (warn or critical). The value must be short — maximum 3 words, no sentences. Always prioritise these categories in this order if present in the document: amount or fee owed, deadline or due date, penalty for missing deadline, contest or appeal window. Only use other categories if none of these apply. Labels must be short and clear in plain English — never use German institution names as a value. Always format currency values with the euro symbol before the number with no space (e.g. the symbol comes first, then the digits).
-                        - 'key_facts': array of 3 objects with 'n' (1,2,3) and 'text' (warm and friendly, written directly to the user using you and your, like helping a friend navigate German bureaucracy — be reassuring and practical, not robotic)"
+              text: analysis_prompt
             }
           ]
         }
