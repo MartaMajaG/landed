@@ -36,8 +36,12 @@
   </div>
   <% urgent_tasks.each_with_index do |task, index| %>
     <div class="task-card urgent-card <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>" style="cursor:pointer;">
-      <div class="card-top-row">
-        <span class="urgent-badge">Urgent</span>
+      <div class="card-top">
+        <div class="card-tags">
+          <% if task.pillar %>
+            <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
+          <% end %>
+        </div>
       </div>
       <h4 class="card-title"><%= task.name %></h4>
       <p class="card-desc"><%= task.description %></p>
