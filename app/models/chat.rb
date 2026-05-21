@@ -1,6 +1,13 @@
 require "net/http"
 
 class Chat < ApplicationRecord
+  ANALYSIS_FALLBACK = {
+    "title" => "Manual Review Required",
+    "urgency" => "medium",
+    "document_type" => "manual_review",
+    "advice" => "We could not automatically analyze this document. Please upload a clear image of the letter, or review it manually."
+  }.freeze
+
   belongs_to :user
   belongs_to :checklist_item, optional: true
   has_many :messages, dependent: :destroy
@@ -36,8 +43,8 @@ class Chat < ApplicationRecord
 
   # Sends the attached image to GitHub Models and returns extracted fields as a hash
   def analyze_document
-    return unless document.attached?
-    return unless document.content_type.start_with?("image/")
+    return ANALYSIS_FALLBACK unless document.attached?
+    return unsupported_document_fallback unless document.content_type.start_with?("image/")
 
     begin
       response = call_github_models
@@ -45,11 +52,17 @@ class Chat < ApplicationRecord
       JSON.parse(raw_text.gsub(/```json\n?/, "").gsub(/```\n?/, "").strip)
     rescue => e
       Rails.logger.error "Chat AI Analysis Failed: #{e.message}"
-      { "title" => "Manual Review Required", "urgency" => "medium" }
+      ANALYSIS_FALLBACK
     end
   end
 
   private
+
+  def unsupported_document_fallback
+    ANALYSIS_FALLBACK.merge(
+      "advice" => "This scanner currently analyzes image uploads. Please upload a clear photo or image file of the document."
+    )
+  end
 
   # Builds the Q&A payload using the chat's existing text fields as context.
   # The user's question is passed as the final user message.

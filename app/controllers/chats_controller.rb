@@ -19,7 +19,7 @@ class ChatsController < ApplicationController
   # Save the chat, trigger AI analysis if a document was attached, then redirect to results
   def create
     @chat = current_user.chats.build(chat_params)
-    @chat.checklist_item_id ||= ChecklistItem.first.id
+    @chat.checklist_item_id ||= ChecklistItem.first&.id
 
     if @chat.save
       if @chat.document.attached?
@@ -33,7 +33,8 @@ class ChatsController < ApplicationController
           advice: ai_data["advice"]
         )
       end
-      redirect_to chat_path(@chat), notice: "Document scanned and analyzed!"
+      notice = @chat.advice.present? ? "Document scanned and analyzed!" : "Document uploaded for manual review."
+      redirect_to chat_path(@chat), notice: notice
     else
       render :new, status: :unprocessable_entity
     end

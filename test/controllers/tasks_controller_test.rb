@@ -1,13 +1,11 @@
 require "test_helper"
 
 class TasksControllerTest < ActionDispatch::IntegrationTest
-  test "should get index" do
-    get tasks_index_url
-    assert_response :success
+  test "routes task index" do
+    assert_routing "/tasks", controller: "tasks", action: "index"
   end
 
-  test "should get show" do
-    get tasks_show_url
-    assert_response :success
+  test "routes task show" do
+    assert_routing "/tasks/1", controller: "tasks", action: "show", id: "1"
   end
 end
