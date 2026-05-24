@@ -2,6 +2,7 @@ class ChatsController < ApplicationController
   before_action :authenticate_user!
 
   def index
+    @chat = Chat.new
     # Load all chats for the current user, most recent first
     @chats = current_user.chats.joins(:document_attachment).order(created_at: :desc)
   end

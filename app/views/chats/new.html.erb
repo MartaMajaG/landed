@@ -3,7 +3,6 @@
 <style>
   .doc-row { cursor: pointer; transition: background 0.1s; }
 
-  /* Icon wrapper — checkbox overlays on top of the file icon */
   .doc-icon-wrap {
     position: relative;
     width: 34px; height: 34px;
@@ -26,22 +25,14 @@
     cursor: pointer;
     z-index: 2;
   }
-  /* Show checkbox, fade icon on row hover */
   .doc-row:hover .row-checkbox { opacity: 1; }
   .doc-row:hover .doc-icon { opacity: 0 !important; }
-
-  /* Keep checkbox visible, hide icon when checked */
   .doc-row.is-selected .row-checkbox { opacity: 1; }
   .doc-row.is-selected .doc-icon { opacity: 0 !important; }
-
-  /* Row tint */
   .doc-row.is-selected { background: #E4E0FF !important; border-bottom-color: #DDD8FF !important; }
   .doc-row.is-selected:hover { background: #DDD8FF !important; }
-
-  /* Hide individual deletes in selection mode */
   .selection-active .single-delete { display: none !important; }
 
-  /* Header select-all — hidden until header hovered or active */
   #select-all {
     width: 15px; height: 15px;
     accent-color: #5B50E8; cursor: pointer;
@@ -51,11 +42,8 @@
   .table-header:hover #select-all,
   #select-all:checked,
   #select-all:indeterminate { opacity: 1; }
-
-  /* Header tints when selection active */
   .selection-active .table-header { background: #F0EEFF !important; border-bottom-color: #E4E0FF !important; }
 
-  /* Fixed floating bulk bar */
   #bulk-bar {
     position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
     z-index: 100; background: #1A1A2E; border-radius: 12px;
@@ -64,7 +52,6 @@
     min-width: 340px; white-space: nowrap;
   }
 
-  /* Upload modal */
   #upload-modal {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,0.5); z-index: 1000;
@@ -73,13 +60,12 @@
 </style>
 
 <div style="min-height:100vh; padding-bottom:48px; position:relative; overflow:hidden; background:#EAE8F5;">
-
   <div class="container-xl" style="padding-top:40px; position:relative; z-index:1;">
 
     <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:24px;">
       <div>
-        <p style="font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#5B50E8; margin:0 0 6px;">Document Vault</p>
-        <h1 style="font-size:30px; font-weight:600 !important; font-family:inherit !important; color:#1A1A2E; margin:0 0 4px; letter-spacing:-0.4px;">My Documents</h1>
+        <p style="font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#9B93C9; margin:0 0 6px;">Document Vault</p>
+        <h1 style="font-size:26px; font-weight:600 !important; font-family:inherit !important; color:#1A1A2E; margin:0 0 4px; letter-spacing:-0.3px;">My Documents</h1>
         <% if @chats.any? %><p style="font-size:13px; color:#9CA3AF; margin:0;"><%= pluralize(@chats.size, "document") %> scanned</p><% end %>
       </div>
       <% if @chats.any? %>
@@ -91,7 +77,7 @@
     </div>
 
     <% if @chats.empty? %>
-      <div style="background:#fff; border-radius:14px; padding:80px 40px; text-align:center;">
+      <div style="background:#fff; border-radius:14px; padding:80px 40px; text-align:center; border:1px solid #D8D4EE;">
         <div style="width:56px; height:56px; background:#EEECFF; border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5B50E8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         </div>
@@ -105,8 +91,6 @@
     <% else %>
 
       <div id="doc-table" style="background:#fff; border-radius:14px; overflow:hidden; border:1px solid #D8D4EE;">
-
-        <%# Header — 4 columns, no dedicated checkbox column %>
         <div class="table-header" style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:11px 20px; background:#FAF9FF; border-bottom:1px solid #F0EEFF; align-items:center;">
           <div style="display:flex; align-items:center; gap:8px;">
             <input type="checkbox" id="select-all" onchange="toggleAll(this)">
@@ -125,7 +109,6 @@
                onmouseout="if(!this.classList.contains('is-selected')) this.style.background=''"
                style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:14px 20px; border-bottom:1px solid #FAF9FF; align-items:center;">
 
-            <%# Document cell — checkbox overlays the file icon %>
             <div style="display:flex; align-items:center; gap:12px; min-width:0;">
               <div class="doc-icon-wrap" onclick="event.stopPropagation();">
                 <div class="doc-icon">
@@ -134,14 +117,7 @@
                 <input type="checkbox" class="row-checkbox" value="<%= chat.id %>" onchange="updateBulkBar(); toggleRowTint(this);">
               </div>
               <div style="min-width:0;">
-                <p style="font-size:13px; font-weight:500; color:#1A1A2E; margin:0 0 3px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><%= chat.title || chat.document.filename %></p>
-                <% if chat.urgency.present? %>
-                  <%
-                    badge_bg    = { "high" => "#FEE8E8", "medium" => "#FEF3CD", "low" => "#EBF5E0" }[chat.urgency]
-                    badge_color = { "high" => "#C0392B", "medium" => "#7C4A00", "low" => "#3B6D11" }[chat.urgency]
-                  %>
-                  <span style="display:inline-block; width:fit-content; font-size:10px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; background:<%= badge_bg %>; color:<%= badge_color %>; padding:3px 10px; border-radius:20px;"><%= chat.urgency %></span>
-                <% end %>
+                <p style="font-size:13px; font-weight:500; color:#1A1A2E; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><%= chat.title || chat.document.filename %></p>
               </div>
             </div>
 

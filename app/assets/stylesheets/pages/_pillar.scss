@@ -46,7 +46,7 @@
   width: 56px;
   height: 56px;
   border-radius: 14px;
-  background: $indigo-landed;
+  background: $chartreuse;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -138,7 +138,7 @@
 .pillar-task-card__done-check {
   font-size: 12px;
   font-weight: 600;
-  color: #065F46;
+  color: $chartreuse;
 }
 
 // ── Badge variants ─────────────────────────────────
@@ -190,7 +190,7 @@
 }
 
 .progress-label--done {
-  color: #065F46;
+  color: $chartreuse;
   font-weight: 600;
 }
 
@@ -203,7 +203,7 @@
 
 .pillar-task-card__fill {
   height: 100%;
-  background: $indigo-landed;
+  background: $chartreuse;
   border-radius: 999px;
   transition: width 0.4s ease;
 

@@ -163,14 +163,34 @@ end
 
 
 # Banking subtasks
-ChecklistItem.find_or_create_by!(title: "Open a German bank account", task: banking) do |item|
-  item.category = "finance_and_banking"
-end
+old_banking_ids = ChecklistItem.where(task: banking).pluck(:id)
+Chat.where(checklist_item_id: old_banking_ids).destroy_all
+ChecklistItem.where(task: banking).destroy_all
 
-ChecklistItem.find_or_create_by!(title: "Set up online banking", task: banking) do |item|
-  item.category = "finance_and_banking"
-end
+banking_steps = [
+  {
+    position:              1,
+    title:                 "Open a German bank account",
+    description:           "Choose a bank that suits expats — N26, Deutsche Bank, or Commerzbank all offer English-language onboarding. You will need your passport and Meldebescheinigung. N26 and most online banks can be opened fully digitally via video ID.",
+    category:              "finance_and_banking",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              2,
+    title:                 "Set up online banking",
+    description:           "Activate your online banking access using the credentials sent by your bank. Download the bank's app, set up your PIN, and enable two-factor authentication. Share your new IBAN with your employer's HR department as soon as possible.",
+    category:              "finance_and_banking",
+    is_optional:           false,
+    unlock_after_position: 1
+  }
+]
 
+banking_steps.each do |attrs|
+  ChecklistItem.find_or_create_by!(task: banking, title: attrs[:title]) do |item|
+    item.assign_attributes(attrs.except(:title))
+  end
+end
 # ─────────────────────────────────────────────────────────────────────────────
 # Pillar 2, Task 2 — Set Up Household Utilities
 # ─────────────────────────────────────────────────────────────────────────────

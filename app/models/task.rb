@@ -30,7 +30,7 @@ class Task < ApplicationRecord
     case pillar&.slug
     when /housing/ then "housing"
     when /finance/ then "financial"
-    when /health/  then "medical"
+    when /health/  then "health_and_insurance"
     else "admin"
     end
   end
