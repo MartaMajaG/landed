@@ -59,8 +59,8 @@
 
 .step--completed {
   .step__number {
-    background: #D1FAE5;
-    color: #065F46;
+    background: rgba(122, 158, 31, 0.15);
+    color: $chartreuse;
   }
 
   .step__title {

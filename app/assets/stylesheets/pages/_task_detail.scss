@@ -33,7 +33,7 @@
 }
 
 .breadcrumb__link {
-  color: #7a7f8e;
+  color: #4B5563;
   text-decoration: none;
   &:hover { color: #5B50E8; }
 }
@@ -56,17 +56,14 @@
 
 // Left column
 .task-main {
-  min-width: 0; // prevents grid blowout
+  min-width: 0;
 }
 
 // Right column — sticky sidebar
-// padding-top aligns Expert Tips box with the Good to Know div in the left column
-// (accounts for: Back link row + breadcrumb + h1 + p description + autosave + header margin)
 .task-sidebar {
   position: sticky;
   top: 2rem;
   align-self: start;
-  // padding-top: var(--sidebar-offset, 13rem);
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
@@ -100,7 +97,6 @@
   color: $text-gray;
 }
 
-// Pillar pill in breadcrumb — matches DUE IN 2 DAYS badge sizing
 .breadcrumb__pillar-tag {
   font-size: 11px !important;
   font-weight: 700 !important;
@@ -112,8 +108,7 @@
 }
 
 // ── Undo completed step button ────────────────────
-// Wraps the ✓ check inside a completed step circle — sends the same PATCH
-// request as the forward checkbox, which toggles completed back to false.
+
 .step__undo-btn {
   background: none;
   border: none;
@@ -159,7 +154,7 @@
 
 .autosave {
   font-size: 12px;
-  color: $chartreuse;
+  color: #1a1535;
   white-space: nowrap;
 }
 
@@ -220,10 +215,12 @@
   line-height: 1.4;
   letter-spacing: 0;
 }
+
 // ── Expert Tips ───────────────────────────────────
 
 .expert-tips {
-  background: $dark-card;
+  background: #EAE8F5;
+  border: 1px solid #D8D4EE;
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
@@ -250,13 +247,13 @@
   h4 {
     font-size: 14px;
     font-weight: 600;
-    color: white;
+    color: #1a1535;
     margin-bottom: 0.25rem;
   }
 
   p {
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.7);
+    color: #1a1d23;
     line-height: 1.6;
     margin: 0;
   }
@@ -294,39 +291,45 @@
 .quick-guide__item {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.625rem 0;
-  border-bottom: 1px solid #F3F4F6;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid #E8E4F4;
+  border-radius: 10px;
+  margin-bottom: 8px;
   text-decoration: none;
-
-  &:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-  }
+  transition: border-color 0.15s, background 0.15s;
+  &:last-child { margin-bottom: 0; }
+  &:hover { border-color: #C4BAF0; background: #F5F3FF; }
 }
 
-.quick-guide__icon {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
+.quick-guide__favicon {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: #F5F3FF;
+  border: 1px solid #E8E4F4;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
   flex-shrink: 0;
-  background: #F3F4F6;
+  img { width: 20px; height: 20px; object-fit: contain; }
 }
+
+.quick-guide__text { flex: 1; min-width: 0; }
 
 .quick-guide__title {
   font-size: 13px;
   font-weight: 500;
-  color: $text-dark;
+  color: #1a1d23;
   margin: 0 0 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .quick-guide__meta {
-  font-size: 12px;
-  color: $text-gray;
+  font-size: 11px;
+  color: #9CA3AF;
   margin: 0;
 }
 
@@ -358,8 +361,8 @@
 .completion-overlay__icon {
   width: 56px;
   height: 56px;
-  background: #D1FAE5;
-  color: #065F46;
+  background: rgba(122, 158, 31, 0.15);
+  color: $chartreuse;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -403,7 +406,7 @@
   transition: width 3s linear;
 }
 
-// ── Step Title Row (title + badges) ──────────────────
+// ── Step Title Row ──────────────────────────────────
 
 .step__title-row {
   display: flex;
@@ -501,9 +504,13 @@
   &:hover {
     color: darken(#4F46E5, 10%);
   }
+}
 
-// unchecked state
+// ── Step Done State ────────────────────────────────────
+
 .step__number--done {
+  background: rgba(122, 158, 31, 0.15);
+  color: $chartreuse;
   cursor: pointer;
   position: relative;
 
@@ -534,4 +541,145 @@
   align-items: center;
   justify-content: center;
 }
+// ─────────────────────────────────────────────────────────────────────────────
+// AUDIT FIXES — append these to the bottom of _task_detail.scss
+// Covers: FIX #1 reminder btn, FIX #2 dot stepper + step count,
+//         FIX #4 pillar tag icon, FIX #5 lightbulb icon,
+//         FIX #6 "Checklist" label, FIX #7 square checkbox
+// ─────────────────────────────────────────────────────────────────────────────
+
+
+// ── Expert tips background fix ────────────────────────────────────────────────
+// Original background was #EAE8F5 — identical to the page bg, making the card
+// invisible. Now white with a green-tinted label band to match the chartreuse
+// accent and make the card visually distinct from the page.
+
+.expert-tips {
+  background: #fff;
+  border: 1px solid #D8E8C4;
+
+  .expert-tips__label {
+    display: block;
+    background: #EFF6E0;
+    border-bottom: 1px solid #D8E8C4;
+    margin: -1.5rem -1.5rem 1.25rem;
+    padding: 10px 1.5rem;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    color: #4A6810;
+    border-radius: 12px 12px 0 0;
+  }
+}
+
+
+// ── FIX #2 — Task progress dot stepper ───────────────────────────────────────
+// Replaces the plain "Task X of Y" text counter with a dot stepper, giving it
+// a distinct visual language from the step fraction below.
+
+.task-progress-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 2px;
+}
+
+.task-progress-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #D4D2ED;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+
+  &--done {
+    background: $indigo-landed;
+  }
+
+  &--active {
+    background: $indigo-landed;
+    width: 8px;
+    height: 8px;
+  }
+}
+
+
+// ── FIX #2 — Checklist step count (subdued fraction) ─────────────────────────
+// Replaces "Step X of Y" label. Smaller and lighter than the task position
+// counter so the two progress systems are visually distinct.
+
+.task-steps__fraction {
+  font-size: 12px;
+  color: #9090A8;
+  background: #F0F0F8;
+  padding: 2px 9px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.task-steps__all-done {
+  font-size: 12px;
+  font-weight: 600;
+  color: $chartreuse;
+}
+
+
+// ── FIX #4 — Pillar tag icon support ─────────────────────────────────────────
+// Ensures the inline SVG icon in the pillar tag is sized and aligned correctly,
+// matching the icon + tinted-pill treatment on dashboard task cards.
+
+.breadcrumb__pillar-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+
+  svg {
+    width: 11px;
+    height: 11px;
+    stroke-width: 2;
+    flex-shrink: 0;
+    color: inherit;
+  }
+}
+
+
+// ── FIX #5 — "Good to know" lightbulb icon colour ────────────────────────────
+// The SVG path was changed in the ERB (info circle → lightbulb). Colour stays
+// $blue-action; this just documents the intent for future icon audits.
+
+.task-why__icon {
+  color: $blue-action; // lightbulb — consistent with doc detail "What this means"
+}
+
+
+// ── FIX #6 — Steps section label ─────────────────────────────────────────────
+// The label now reads "Checklist" (set in ERB) instead of repeating @task.name.
+// Updated styling to match a subdued section-label pattern.
+
+.task-steps__label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #8888A8;
+}
+
+
+// ── FIX #7 — Completed step indicator square ──────────────────────────────────
+// Overrides the circle shape on .step__number--done to match the square
+// .step__checkbox used for incomplete steps. Same interaction, same shape.
+
+.step__number--done {
+  border-radius: 6px !important;
+}
+
+.step__action-note {
+  margin-top: 0.5rem;
+  font-size: 13px;
+  color: #92400E;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 8px;
+  padding: 0.625rem 0.875rem;
+  line-height: 1.55;
 }
