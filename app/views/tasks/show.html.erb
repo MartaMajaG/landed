@@ -180,9 +180,11 @@
 
                   <p class="step__description"><%= item.description %></p>
 
-                  <%# FIX #1 — Set Reminder removed from here (moved to task header) %>
-                  <% if is_active && item.description.present? %>
-                    <p class="step__action-note"><%= item.description %></p>
+                  <%# FIX #1 — action_note is a dedicated column on checklist_items. %>
+                  <%# It holds a short contextual tip or warning distinct from the description. %>
+                  <%# See migration: db/migrate/TIMESTAMP_add_action_note_to_checklist_items.rb %>
+                  <% if is_active && item.action_note.present? %>
+                    <p class="step__action-note"><%= item.action_note %></p>
                   <% end %>
 
                   <% if !completed && is_active %>
@@ -255,7 +257,7 @@
               when "legal_and_work"
                 [
                   { title: "Federal Employment Agency", url: "https://www.arbeitsagentur.de", domain: "arbeitsagentur.de" },
-                  { title: "Work Visa Guide Germany", url: "https://www.make-it-in-germany.com", domain: "make-it-in-germany.com" },
+                  { title: "Work Visa Guide", url: "https://www.make-it-in-germany.com", domain: "make-it-in-germany.com" },
                   { title: "German Labour Law Overview", url: "https://www.bmas.de", domain: "bmas.de" }
                 ]
               else

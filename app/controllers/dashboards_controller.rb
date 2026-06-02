@@ -41,6 +41,9 @@ class DashboardsController < ApplicationController
     @active_tasks   = incomplete.select { |t| t.urgency == "medium" }
     @upcoming_tasks = incomplete.select { |t| t.urgency == "low" }
 
+    # Top urgent task for hero CTA
+    @top_urgent_task = @urgent_tasks.first
+
     @urgent_count       = incomplete.count { |t| t.urgency == "high" }
     @active_count       = incomplete.count { |t| t.urgency == "medium" }
     @docs_count         = current_user.chats.with_attached_document.count
