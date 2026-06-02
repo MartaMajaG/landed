@@ -41,7 +41,7 @@
         </div>
       </div>
 
-      <%# Centre: journey stepper + stats %>
+      <%# Centre: journey stepper + stats + priority CTA %>
       <div class="hero-journey">
         <p class="journey-label">Relocation journey</p>
         <div class="journey-stepper">
@@ -73,9 +73,7 @@
           <% end %>
         </div>
 
-        <%# ── STATS ── %>
-        <%# Fix 2: show completed task count instead of % so early-stage users
-            see a positive "tasks done" number rather than a demoralising low % %>
+        <%# Stats %>
         <% completed_count = @completed_ids&.count || 0 %>
         <div class="hero-stats">
           <div class="hero-stat">
@@ -93,11 +91,23 @@
             </span>
           </div>
         </div>
+
+        <%# Priority CTA — only shown when urgent tasks exist %>
+        <% if @top_urgent_task %>
+          <div class="hero-priority-row">
+            <div class="hero-priority-left">
+              <span class="hero-priority-dot"></span>
+              <div>
+                <p class="hero-priority-title"><%= @top_urgent_task.name %></p>
+                <p class="hero-priority-sub"><%= @top_urgent_task.pillar&.name %> · <%= @top_urgent_task.due_date&.past? ? "Overdue" : @top_urgent_task.due_date&.strftime("Due %b %d") || "Urgent" %></p>
+              </div>
+            </div>
+            <%= link_to "Start now →", task_path(@top_urgent_task), class: "hero-priority-btn" %>
+          </div>
+        <% end %>
       </div>
 
       <%# Right: today's agenda %>
-      <%# Fix 1: only show "all clear" when there are genuinely no overdue tasks.
-          When overdue tasks exist, show a nudge instead of the celebration. %>
       <div class="hero-today">
         <div class="hero-today__header">
           <span class="hero-today__label">Today</span>
