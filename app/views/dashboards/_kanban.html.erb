@@ -1,5 +1,4 @@
 <% completed_tasks = local_assigns.fetch(:completed_tasks, nil) %>
-<% completed_ids = local_assigns.fetch(:completed_ids, Set.new) %>
 
 <% if completed_tasks %>
 
@@ -7,204 +6,170 @@
   <% if completed_tasks.empty? %>
     <p class="no-tasks">No completed tasks yet — keep going! 💪</p>
   <% else %>
-    <div class="col-header" style="margin-bottom: 10px;">
-      <span class="col-dot" style="background: #10b981;"></span>
-      <span class="col-title">Completed</span>
-      <span class="col-count"><%= completed_tasks.size %></span>
-    </div>
     <div class="completed-grid">
       <% completed_tasks.each do |task| %>
         <div class="task-card task-card--done" data-href="<%= task_path(task) %>" style="cursor:pointer;">
           <div class="card-top">
             <div class="card-tags">
-              <%= pillar_chip(task) %>
+              <% if task.pillar %>
+                <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
+              <% end %>
             </div>
           </div>
           <h4 class="card-title"><%= task.name %></h4>
           <p class="card-desc"><%= task.description %></p>
-          <div class="card-footer-group">
-            <div class="card-footer" style="visibility:hidden;"><span class="card-progress-label">–</span></div>
-            <div class="card-track" style="visibility:hidden;"></div>
-            <div class="card-bottom-row" style="visibility:hidden;"><span class="card-due">–</span></div>
-          </div>
         </div>
       <% end %>
     </div>
   <% end %>
 
 <% else %>
-
 <%# URGENT %>
 <div class="kanban-col">
   <div class="col-header">
     <span class="col-dot urgent-dot"></span>
     <span class="col-title">Urgent</span>
     <span class="col-count"><%= urgent_count %></span>
+    <span class="col-menu">⋯</span>
   </div>
-  <% urgent_tasks.each_with_index do |task, index| %>
-    <div class="task-card urgent-card <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>" style="cursor:pointer;">
-      <div class="card-top">
-        <div class="card-tags">
-          <%= pillar_chip(task) %>
-        </div>
+<<<<<<< Updated upstream
+  <% urgent_tasks.each do |task| %>
+    <div class="task-card urgent-card" data-href="<%= task_path(task) %>" style="cursor:pointer;">
+      <div class="card-top-row">
+        <span class="urgent-badge">Urgent</span>
       </div>
       <h4 class="card-title"><%= task.name %></h4>
       <p class="card-desc"><%= task.description %></p>
-      <% total = task.checklist_items.size %>
-      <% done = task.checklist_items.count { |ci| completed_ids.include?(ci.id) } %>
-      <div class="card-footer-group">
-        <div class="card-footer">
-          <span class="card-progress-label"><%= done == 0 ? "Not started" : "#{done}/#{total} steps" %></span>
-          <span class="card-pct"><%= (total > 0 && done > 0) ? "#{((done.to_f / total) * 100).round}%" : "" %></span>
-        </div>
-        <div class="card-track">
-          <div class="card-fill" style="width: <%= total > 0 ? ((done.to_f / total) * 100).round : 0 %>%;"></div>
-        </div>
-        <div class="card-bottom-row">
-          <span class="card-due urgent-due" style="display:inline-flex; align-items:center; gap:4px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <%= if task.due_date == Date.today
-                  "Today"
-                elsif task.due_date == Date.today + 1.day
-                  "Tomorrow"
-                elsif task.due_date == Date.today - 1.day
-                  "Yesterday"
-                elsif task.due_date&.< Date.today
-                  "Overdue"
-                else
-                  task.due_date&.strftime("%b %d")
-                end %>
-          </span>
-        </div>
+      <div class="card-bottom-row">
+        <span class="card-due urgent-due" style="display:inline-flex; align-items:center; gap:4px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <%= if task.due_date == Date.today
+                "Today"
+              elsif task.due_date == Date.today + 1.day
+                "Tomorrow"
+              elsif task.due_date == Date.today - 1.day
+                "Yesterday"
+              elsif task.due_date&.< Date.today
+                "Overdue"
+              else
+                task.due_date&.strftime("%b %d")
+              end %>
+        </span>
       </div>
     </div>
-  <% end %>
-  <% if urgent_tasks.size > 2 %>
-    <button class="col-show-more" onclick="toggleKanbanCol(this, <%= urgent_tasks.size - 2 %>)">
-      Show <%= urgent_tasks.size - 2 %> more
-    </button>
+=======
+  <% if urgent_tasks.empty? %>
+    <div style="padding: 16px 12px; text-align: center; border: 1.5px dashed #FECACA; border-radius: 16px; color: #9ca3af; font-size: 12px; font-weight: 500; line-height: 1.5;">
+      No urgent tasks —<br>you're on track 👍
+    </div>
+  <% else %>
+    <% urgent_tasks.each_with_index do |task, index| %>
+      <div class="task-card urgent-card <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>" style="cursor:pointer;">
+        <div class="card-top">
+          <div class="card-tags">
+            <%= pillar_chip(task) %>
+          </div>
+        </div>
+        <h4 class="card-title"><%= task.name %></h4>
+        <p class="card-desc"><%= task.description %></p>
+        <% total = task.checklist_items.size %>
+        <% done = task.checklist_items.count { |ci| completed_ids.include?(ci.id) } %>
+        <div class="card-footer-group">
+          <div class="card-footer">
+            <span class="card-progress-label"><%= done == 0 ? "Not started" : "#{done}/#{total} steps" %></span>
+            <span class="card-pct"><%= (total > 0 && done > 0) ? "#{((done.to_f / total) * 100).round}%" : "" %></span>
+          </div>
+          <div class="card-track">
+            <div class="card-fill" style="width: <%= total > 0 ? ((done.to_f / total) * 100).round : 0 %>%;"></div>
+          </div>
+          <div class="card-bottom-row">
+            <span class="card-due urgent-due" style="display:inline-flex; align-items:center; gap:4px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <%= if task.due_date == Date.today
+                    "Today"
+                  elsif task.due_date == Date.today + 1.day
+                    "Tomorrow"
+                  elsif task.due_date == Date.today - 1.day
+                    "Yesterday"
+                  elsif task.due_date&.< Date.today
+                    "Overdue"
+                  else
+                    task.due_date&.strftime("%b %d")
+                  end %>
+            </span>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <% if urgent_tasks.size > 2 %>
+      <button class="col-show-more" onclick="toggleKanbanCol(this, <%= urgent_tasks.size - 2 %>)">
+        Show <%= urgent_tasks.size - 2 %> more
+      </button>
+    <% end %>
+>>>>>>> Stashed changes
   <% end %>
 </div>
 
-<%# ACTIVE %>
-<div class="kanban-col">
-  <div class="col-header">
-    <span class="col-dot active-dot"></span>
-    <span class="col-title">Active</span>
-    <span class="col-count"><%= active_count %></span>
-  </div>
-  <% active_tasks.each_with_index do |task, index| %>
-    <div class="task-card <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>" style="cursor:pointer;">
-      <div class="card-top">
-        <div class="card-tags">
-          <%= pillar_chip(task) %>
+  <%# ACTIVE %>
+  <div class="kanban-col">
+    <div class="col-header">
+      <span class="col-dot active-dot"></span>
+      <span class="col-title">Active</span>
+      <span class="col-count"><%= active_count %></span>
+      <span class="col-menu">⋯</span>
+    </div>
+    <% active_tasks.each do |task| %>
+      <div class="task-card" data-href="<%= task_path(task) %>" style="cursor:pointer;">
+        <div class="card-top">
+          <div class="card-tags">
+            <span class="tag tag-medium">Medium</span>
+            <% if task.pillar %>
+              <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
+            <% end %>
+          </div>
         </div>
-      </div>
-      <h4 class="card-title"><%= task.name %></h4>
-      <p class="card-desc"><%= task.description %></p>
-      <% total = task.checklist_items.size %>
-      <% done = task.checklist_items.count { |ci| completed_ids.include?(ci.id) } %>
-      <div class="card-footer-group">
+        <h4 class="card-title"><%= task.name %></h4>
+        <p class="card-desc"><%= task.description %></p>
         <div class="card-footer">
-          <span class="card-progress-label"><%= done == 0 ? "Not started" : "#{done}/#{total} steps" %></span>
-          <span class="card-pct"><%= (total > 0 && done > 0) ? "#{((done.to_f / total) * 100).round}%" : "" %></span>
+          <span class="card-progress-label">No progress yet</span>
+          <span class="card-pct">0%</span>
         </div>
         <div class="card-track">
-          <div class="card-fill" style="width: <%= total > 0 ? ((done.to_f / total) * 100).round : 0 %>%;"></div>
-        </div>
-        <div class="card-bottom-row" <%= ('style="display:none;"').html_safe unless task.due_date %>>
-          <span class="card-due" style="display:inline-flex; align-items:center; gap:4px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <%= task.due_date&.strftime("%b %d") %>
-          </span>
+          <div class="card-fill" style="width: 0%;"></div>
         </div>
       </div>
-    </div>
-  <% end %>
-  <% if active_tasks.size > 2 %>
-    <button class="col-show-more" onclick="toggleKanbanCol(this, <%= active_tasks.size - 2 %>)">
-      Show <%= active_tasks.size - 2 %> more
-    </button>
-  <% end %>
-</div>
+    <% end %>
+  </div>
 
-<%# UPCOMING %>
-<div class="kanban-col">
-  <div class="col-header">
-    <span class="col-dot upcoming-dot"></span>
-    <span class="col-title">Upcoming</span>
-    <span class="col-count"><%= upcoming_count %></span>
-  </div>
-  <% upcoming_tasks.each_with_index do |task, index| %>
-    <div class="task-card locked <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>">
-      <div class="card-top">
-        <div class="card-tags">
-          <%= pillar_chip(task) %>
+  <%# UPCOMING %>
+  <div class="kanban-col">
+    <div class="col-header">
+      <span class="col-dot upcoming-dot"></span>
+      <span class="col-title">Upcoming</span>
+      <span class="col-count"><%= upcoming_count %></span>
+      <span class="col-menu">⋯</span>
+    </div>
+    <% upcoming_tasks.each do |task| %>
+      <div class="task-card locked" data-href="<%= task_path(task) %>">
+        <div class="card-top">
+          <div class="card-tags">
+            <span class="tag tag-low">Low</span>
+            <% if task.pillar %>
+              <span class="tag tag-pillar--<%= task.pillar.slug %>"><%= task.pillar.name %></span>
+            <% end %>
+          </div>
         </div>
-      </div>
-      <h4 class="card-title"><%= task.name %></h4>
-      <p class="card-desc"><%= task.description %></p>
-      <% total = task.checklist_items.size %>
-      <% done = task.checklist_items.count { |ci| completed_ids.include?(ci.id) } %>
-      <div class="card-footer-group">
+        <h4 class="card-title"><%= task.name %></h4>
+        <p class="card-desc"><%= task.description %></p>
         <div class="card-footer">
-          <span class="card-progress-label"><%= done == 0 ? "Not started" : "#{done}/#{total} steps" %></span>
-          <span class="card-pct"><%= (total > 0 && done > 0) ? "#{((done.to_f / total) * 100).round}%" : "" %></span>
+          <span class="card-progress-label">No progress yet</span>
+          <span class="card-pct">0%</span>
         </div>
         <div class="card-track">
-          <div class="card-fill" style="width: <%= total > 0 ? ((done.to_f / total) * 100).round : 0 %>%;"></div>
-        </div>
-        <div class="card-bottom-row" <%= ('style="display:none;"').html_safe unless task.due_date %>>
-          <span class="card-due" style="display:inline-flex; align-items:center; gap:4px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <%= task.due_date&.strftime("%b %d") %>
-          </span>
+          <div class="card-fill" style="width: 0%;"></div>
         </div>
       </div>
-    </div>
-  <% end %>
-  <% if upcoming_tasks.size > 2 %>
-    <button class="col-show-more" onclick="toggleKanbanCol(this, <%= upcoming_tasks.size - 2 %>)">
-      Show <%= upcoming_tasks.size - 2 %> more
-    </button>
-  <% end %>
-</div>
+    <% end %>
+  </div>
 
 <% end %>
-
-<script>
-function toggleKanbanCol(btn, hiddenCount) {
-  var col = btn.closest('.kanban-col');
-  var isExpanded = btn.dataset.expanded === 'true';
-
-  if (isExpanded) {
-    var cards = col.querySelectorAll('.task-card');
-    cards.forEach(function(card, index) {
-      if (index >= 2) card.classList.add('kanban-hidden');
-    });
-    btn.dataset.expanded = 'false';
-    btn.textContent = 'Show ' + hiddenCount + ' more';
-
-    var firstCard = col.querySelector('.task-card');
-    if (firstCard) {
-      var offset = firstCard.getBoundingClientRect().top + window.scrollY - 80;
-      window.scrollTo({ top: offset, behavior: 'smooth' });
-    }
-  } else {
-    col.querySelectorAll('.kanban-hidden').forEach(function(card) {
-      card.classList.remove('kanban-hidden');
-    });
-    btn.dataset.expanded = 'true';
-    btn.textContent = 'Show less';
-
-    setTimeout(function() {
-      var cards = col.querySelectorAll('.task-card');
-      var thirdCard = cards[2];
-      if (thirdCard) {
-        var offset = thirdCard.getBoundingClientRect().top + window.scrollY - 80;
-        window.scrollTo({ top: offset, behavior: 'smooth' });
-      }
-    }, 50);
-  }
-}
-</script>
