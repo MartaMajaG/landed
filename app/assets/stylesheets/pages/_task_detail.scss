@@ -1,9 +1,14 @@
 // ── Task Detail Page ──────────────────────────────
 
 .task-detail-page {
-  background: #EAE8F5;
+<<<<<<< Updated upstream
+  background: $page-bg;
   min-height: 100vh;
-  padding: 0 0 48px 0;
+  padding: 48px 0;
+=======
+  background: #F4F3FA;
+  min-height: 100vh;
+  padding: 0 0 32px 0;
   position: relative;
   overflow: visible;
 
@@ -11,15 +16,18 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: #EAE8F5;
+    background: #F4F3FA;
     pointer-events: none;
     z-index: 0;
   }
+>>>>>>> Stashed changes
 }
 
 .task-container {
-  padding-top: 8px;
+  padding-top: 0px;
   padding-bottom: 24px;
+<<<<<<< Updated upstream
+=======
   position: relative;
   z-index: 1;
 }
@@ -28,8 +36,8 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 1.75rem;
-  font-size: 13px;
+  margin-bottom: 1.25rem;
+  font-size: 14px;
 }
 
 .breadcrumb__link {
@@ -44,36 +52,40 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 300px;
+  max-width: 500px;
+>>>>>>> Stashed changes
 }
 
 // Two column layout
 .task-layout {
   display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 4rem;
+  grid-template-columns: 1fr 300px;
+  gap: 2rem;
 }
 
 // Left column
 .task-main {
-  min-width: 0;
+  min-width: 0; // prevents grid blowout
 }
 
 // Right column — sticky sidebar
+// padding-top aligns Expert Tips box with the Good to Know div in the left column
+// (accounts for: Back link row + breadcrumb + h1 + p description + autosave + header margin)
 .task-sidebar {
   position: sticky;
   top: 2rem;
   align-self: start;
+  // padding-top: var(--sidebar-offset, 13rem);
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 // ── Breadcrumb ────────────────────────────────────
 
 .task-back-link {
   display: inline-block;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: $text-gray;
   text-decoration: none;
@@ -97,6 +109,7 @@
   color: $text-gray;
 }
 
+// Pillar pill in breadcrumb — matches DUE IN 2 DAYS badge sizing
 .breadcrumb__pillar-tag {
   font-size: 11px !important;
   font-weight: 700 !important;
@@ -108,7 +121,8 @@
 }
 
 // ── Undo completed step button ────────────────────
-
+// Wraps the ✓ check inside a completed step circle — sends the same PATCH
+// request as the forward checkbox, which toggles completed back to false.
 .step__undo-btn {
   background: none;
   border: none;
@@ -135,15 +149,20 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .task-title {
   font-family: $headers-font;
-  font-size: 1.75rem;
-  font-weight: 700;
+<<<<<<< Updated upstream
+  font-size: 2rem;
+  font-weight: 800;
+=======
+  font-size: 1.25rem;
+  font-weight: 600;
+>>>>>>> Stashed changes
   color: $text-dark;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 .task-description {
@@ -154,7 +173,7 @@
 
 .autosave {
   font-size: 12px;
-  color: #1a1535;
+  color: $chartreuse;
   white-space: nowrap;
 }
 
@@ -162,13 +181,21 @@
 
 .task-why {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.75rem;
-  background: #FAF9FF;
-  border: 0.5px solid #EEECFF;
+<<<<<<< Updated upstream
+  background: white;
+  border: 1px solid #E5E7EB;
   border-radius: 8px;
   padding: 1rem 1.25rem;
   margin-bottom: 2rem;
+=======
+  background: #E8E5FB;
+  border: 1px solid #D0CCEE;
+  border-radius: 12px;
+  padding: 0.5rem 0.875rem;
+  margin-bottom: 1.5rem;
+>>>>>>> Stashed changes
   font-size: 14px;
   line-height: 1.6;
   color: $text-dark;
@@ -177,9 +204,12 @@
 .task-why__icon {
   color: $blue-action;
   flex-shrink: 0;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
+.task-why p {
+  margin: 0;
+}
 // ── Badges ────────────────────────────────────────
 
 .task-badge {
@@ -202,43 +232,38 @@
   color: #D97706;
 }
 
-.task-badge--due {
-  background: #D8D4F9 !important;
-  color: #3C3489;
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  padding: 3px 8px !important;
-  border-radius: 6px !important;
-  line-height: 1.4;
-  letter-spacing: 0;
-}
-
 // ── Expert Tips ───────────────────────────────────
 
 .expert-tips {
-  background: #EAE8F5;
-  border: 1px solid #D8D4EE;
+<<<<<<< Updated upstream
+  background: $dark-card;
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
+=======
+  background: #fff;
+  border: 1px solid #D8E8C4;
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+>>>>>>> Stashed changes
 }
 
 .expert-tips__label {
-  display: inline-block;
-  padding: 3px 5px;
-  font-size: 12px;
-  font-weight: 500;
+  display: block;
+  background: #EFF6E0;
+  border-bottom: 1px solid #D8E8C4;
+  margin: -1.25rem -1.25rem 1rem;
+  padding: 8px 1.25rem;
+  font-size: 11px;
+  font-weight: 700;
   letter-spacing: 0.08em;
-  color: $chartreuse;
-  background: rgba(122, 158, 31, 0.15);
-  margin-bottom: 1.25rem;
+  color: #4A6810;
+  border-radius: 16px 16px 0 0;
 }
 
 .expert-tips__item {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 
   &:last-child {
     margin-bottom: 0;
@@ -247,13 +272,18 @@
   h4 {
     font-size: 14px;
     font-weight: 600;
-    color: #1a1535;
+    color: white;
     margin-bottom: 0.25rem;
   }
 
   p {
+<<<<<<< Updated upstream
     font-size: 13px;
+    color: rgba(255, 255, 255, 0.7);
+=======
+    font-size: 14px;
     color: #1a1d23;
+>>>>>>> Stashed changes
     line-height: 1.6;
     margin: 0;
   }
@@ -264,18 +294,18 @@
 .quick-guides {
   background: white;
   border: 1px solid #E5E7EB;
-  border-radius: 12px;
-  padding: 1.25rem;
+  border-radius: 16px;
+  padding: 1rem;
 }
 
 .quick-guides__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.875rem;
 
   h3 {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     color: $text-dark;
     margin: 0;
@@ -291,45 +321,60 @@
 .quick-guide__item {
   display: flex;
   align-items: center;
+<<<<<<< Updated upstream
+  gap: 0.75rem;
+  padding: 0.625rem 0;
+  border-bottom: 1px solid #F3F4F6;
+=======
   gap: 12px;
-  padding: 10px;
+  padding: 8px 10px;
   border: 1px solid #E8E4F4;
-  border-radius: 10px;
-  margin-bottom: 8px;
+  border-radius: 12px;
+  margin-bottom: 6px;
+>>>>>>> Stashed changes
   text-decoration: none;
-  transition: border-color 0.15s, background 0.15s;
-  &:last-child { margin-bottom: 0; }
-  &:hover { border-color: #C4BAF0; background: #F5F3FF; }
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
 }
 
+<<<<<<< Updated upstream
+.quick-guide__icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+=======
 .quick-guide__favicon {
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   border-radius: 8px;
   background: #F5F3FF;
   border: 1px solid #E8E4F4;
+>>>>>>> Stashed changes
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 14px;
   flex-shrink: 0;
-  img { width: 20px; height: 20px; object-fit: contain; }
+<<<<<<< Updated upstream
+  background: #F3F4F6;
+=======
+  img { width: 18px; height: 18px; object-fit: contain; }
+>>>>>>> Stashed changes
 }
 
-.quick-guide__text { flex: 1; min-width: 0; }
-
 .quick-guide__title {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
-  color: #1a1d23;
+  color: $text-dark;
   margin: 0 0 2px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .quick-guide__meta {
-  font-size: 11px;
-  color: #9CA3AF;
+  font-size: 12px;
+  color: $text-gray;
   margin: 0;
 }
 
@@ -352,43 +397,50 @@
 .completion-overlay__card {
   background: white;
   border-radius: 16px;
-  padding: 2.5rem;
+  padding: 2rem;
   text-align: center;
-  max-width: 400px;
+  max-width: 380px;
   width: 90%;
 }
 
 .completion-overlay__icon {
+<<<<<<< Updated upstream
   width: 56px;
   height: 56px;
+  background: #D1FAE5;
+  color: #065F46;
+=======
+  width: 48px;
+  height: 48px;
   background: rgba(122, 158, 31, 0.15);
   color: $chartreuse;
+>>>>>>> Stashed changes
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 22px;
   margin: 0 auto 1rem;
 }
 
 .completion-overlay__title {
   font-family: $headers-font;
-  font-size: 1.5rem;
-  font-weight: 800;
+  font-size: 1.25rem;
+  font-weight: 700;
   color: $text-dark;
   margin-bottom: 0.5rem;
 }
 
 .completion-overlay__message {
-  font-size: 15px;
+  font-size: 14px;
   color: $text-dark;
   margin-bottom: 0.25rem;
 }
 
 .completion-overlay__sub {
-  font-size: 13px;
+  font-size: 14px;
   color: $text-gray;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .completion-overlay__bar {
@@ -406,7 +458,11 @@
   transition: width 3s linear;
 }
 
-// ── Step Title Row ──────────────────────────────────
+<<<<<<< Updated upstream
+// ── Step Title Row (title + badges) ──────────────────
+=======
+// ── Step Title Row ────────────────────────────────
+>>>>>>> Stashed changes
 
 .step__title-row {
   display: flex;
@@ -423,7 +479,7 @@
   flex-shrink: 0;
 }
 
-// ── Optional Badge ─────────────────────────────────────
+// ── Optional Badge ────────────────────────────────
 
 .step__badge {
   display: inline-flex;
@@ -440,7 +496,7 @@
   }
 }
 
-// ── Soft-Lock State ────────────────────────────────────
+// ── Soft-Lock State ───────────────────────────────
 
 .step--soft-locked {
   background: #F9FAFB;
@@ -467,14 +523,19 @@
   }
 }
 
-// ── Soft-Lock Overlay ─────────────────────────────────
+// ── Soft-Lock Overlay ─────────────────────────────
 
 .step__soft-lock {
   margin-top: 0.75rem;
+<<<<<<< Updated upstream
   padding: 0.75rem 1rem;
-  background: #EAE8F5;
+  background: #F0F4FF;
+=======
+  padding: 0.625rem 0.875rem;
+  background: #F4F3FA;
+>>>>>>> Stashed changes
   border: 1px solid #C7D2FE;
-  border-radius: 8px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -490,7 +551,7 @@
 }
 
 .step__soft-lock__btn {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   color: $indigo-landed;
   background: none;
@@ -504,15 +565,18 @@
   &:hover {
     color: darken(#4F46E5, 10%);
   }
+<<<<<<< Updated upstream
+=======
 }
 
-// ── Step Done State ────────────────────────────────────
+// ── Step Done State ───────────────────────────────
+>>>>>>> Stashed changes
 
+// unchecked state
 .step__number--done {
-  background: rgba(122, 158, 31, 0.15);
-  color: $chartreuse;
   cursor: pointer;
   position: relative;
+  border-radius: 6px !important;
 
   &:hover::after {
     content: "↩ Undo";
@@ -541,41 +605,10 @@
   align-items: center;
   justify-content: center;
 }
-// ─────────────────────────────────────────────────────────────────────────────
-// AUDIT FIXES — append these to the bottom of _task_detail.scss
-// Covers: FIX #1 reminder btn, FIX #2 dot stepper + step count,
-//         FIX #4 pillar tag icon, FIX #5 lightbulb icon,
-//         FIX #6 "Checklist" label, FIX #7 square checkbox
-// ─────────────────────────────────────────────────────────────────────────────
+<<<<<<< Updated upstream
+=======
 
-
-// ── Expert tips background fix ────────────────────────────────────────────────
-// Original background was #EAE8F5 — identical to the page bg, making the card
-// invisible. Now white with a green-tinted label band to match the chartreuse
-// accent and make the card visually distinct from the page.
-
-.expert-tips {
-  background: #fff;
-  border: 1px solid #D8E8C4;
-
-  .expert-tips__label {
-    display: block;
-    background: #EFF6E0;
-    border-bottom: 1px solid #D8E8C4;
-    margin: -1.5rem -1.5rem 1.25rem;
-    padding: 10px 1.5rem;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    color: #4A6810;
-    border-radius: 12px 12px 0 0;
-  }
-}
-
-
-// ── FIX #2 — Task progress dot stepper ───────────────────────────────────────
-// Replaces the plain "Task X of Y" text counter with a dot stepper, giving it
-// a distinct visual language from the step fraction below.
+// ── Progress dot stepper ──────────────────────────
 
 .task-progress-stepper {
   display: inline-flex;
@@ -592,21 +625,11 @@
   flex-shrink: 0;
   transition: background 0.2s ease;
 
-  &--done {
-    background: $indigo-landed;
-  }
-
-  &--active {
-    background: $indigo-landed;
-    width: 8px;
-    height: 8px;
-  }
+  &--done   { background: $indigo-landed; }
+  &--active { background: $indigo-landed; width: 8px; height: 8px; }
 }
 
-
-// ── FIX #2 — Checklist step count (subdued fraction) ─────────────────────────
-// Replaces "Step X of Y" label. Smaller and lighter than the task position
-// counter so the two progress systems are visually distinct.
+// ── Checklist step count ──────────────────────────
 
 .task-steps__fraction {
   font-size: 12px;
@@ -623,10 +646,7 @@
   color: $chartreuse;
 }
 
-
-// ── FIX #4 — Pillar tag icon support ─────────────────────────────────────────
-// Ensures the inline SVG icon in the pillar tag is sized and aligned correctly,
-// matching the icon + tinted-pill treatment on dashboard task cards.
+// ── Pillar tag icon support ───────────────────────
 
 .breadcrumb__pillar-tag {
   display: inline-flex !important;
@@ -642,19 +662,7 @@
   }
 }
 
-
-// ── FIX #5 — "Good to know" lightbulb icon colour ────────────────────────────
-// The SVG path was changed in the ERB (info circle → lightbulb). Colour stays
-// $blue-action; this just documents the intent for future icon audits.
-
-.task-why__icon {
-  color: $blue-action; // lightbulb — consistent with doc detail "What this means"
-}
-
-
-// ── FIX #6 — Steps section label ─────────────────────────────────────────────
-// The label now reads "Checklist" (set in ERB) instead of repeating @task.name.
-// Updated styling to match a subdued section-label pattern.
+// ── Steps section label ───────────────────────────
 
 .task-steps__label {
   font-size: 11px;
@@ -664,22 +672,16 @@
   color: #8888A8;
 }
 
-
-// ── FIX #7 — Completed step indicator square ──────────────────────────────────
-// Overrides the circle shape on .step__number--done to match the square
-// .step__checkbox used for incomplete steps. Same interaction, same shape.
-
-.step__number--done {
-  border-radius: 6px !important;
-}
+// ── Action note ───────────────────────────────────
 
 .step__action-note {
   margin-top: 0.5rem;
-  font-size: 13px;
+  font-size: 14px;
   color: #92400E;
   background: #FFFBEB;
   border: 1px solid #FDE68A;
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 0.625rem 0.875rem;
   line-height: 1.55;
+>>>>>>> Stashed changes
 }
