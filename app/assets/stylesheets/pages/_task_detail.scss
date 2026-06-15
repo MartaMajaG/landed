@@ -1,21 +1,66 @@
 // ── Task Detail Page ──────────────────────────────
 
 .task-detail-page {
+<<<<<<< Updated upstream
   background: $page-bg;
   min-height: 100vh;
   padding: 48px 0;
+=======
+  background: #F4F3FA;
+  min-height: 100vh;
+  padding: 0 0 32px 0;
+  position: relative;
+  overflow: visible;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: #F4F3FA;
+    pointer-events: none;
+    z-index: 0;
+  }
+>>>>>>> Stashed changes
 }
 
 .task-container {
   padding-top: 0px;
   padding-bottom: 24px;
+<<<<<<< Updated upstream
+=======
+  position: relative;
+  z-index: 1;
+}
+
+.task-breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+  font-size: 14px;
+}
+
+.breadcrumb__link {
+  color: #4B5563;
+  text-decoration: none;
+  &:hover { color: #5B50E8; }
+}
+
+.breadcrumb__current {
+  color: #1a1d23;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 500px;
+>>>>>>> Stashed changes
 }
 
 // Two column layout
 .task-layout {
   display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 4rem;
+  grid-template-columns: 1fr 300px;
+  gap: 2rem;
 }
 
 // Left column
@@ -33,14 +78,14 @@
   // padding-top: var(--sidebar-offset, 13rem);
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1rem;
 }
 
 // ── Breadcrumb ────────────────────────────────────
 
 .task-back-link {
   display: inline-block;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: $text-gray;
   text-decoration: none;
@@ -104,15 +149,20 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
 }
 
 .task-title {
   font-family: $headers-font;
+<<<<<<< Updated upstream
   font-size: 2rem;
   font-weight: 800;
+=======
+  font-size: 1.25rem;
+  font-weight: 600;
+>>>>>>> Stashed changes
   color: $text-dark;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
 }
 
 .task-description {
@@ -131,13 +181,21 @@
 
 .task-why {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 0.75rem;
+<<<<<<< Updated upstream
   background: white;
   border: 1px solid #E5E7EB;
   border-radius: 8px;
   padding: 1rem 1.25rem;
   margin-bottom: 2rem;
+=======
+  background: #E8E5FB;
+  border: 1px solid #D0CCEE;
+  border-radius: 12px;
+  padding: 0.5rem 0.875rem;
+  margin-bottom: 1.5rem;
+>>>>>>> Stashed changes
   font-size: 14px;
   line-height: 1.6;
   color: $text-dark;
@@ -146,9 +204,12 @@
 .task-why__icon {
   color: $blue-action;
   flex-shrink: 0;
-  margin-top: 2px;
+  margin-top: 1px;
 }
 
+.task-why p {
+  margin: 0;
+}
 // ── Badges ────────────────────────────────────────
 
 .task-badge {
@@ -174,25 +235,35 @@
 // ── Expert Tips ───────────────────────────────────
 
 .expert-tips {
+<<<<<<< Updated upstream
   background: $dark-card;
   border-radius: 12px;
   padding: 1.5rem;
   margin-bottom: 1.5rem;
+=======
+  background: #fff;
+  border: 1px solid #D8E8C4;
+  border-radius: 16px;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+>>>>>>> Stashed changes
 }
 
 .expert-tips__label {
-  display: inline-block;
-  padding: 3px 5px;
-  font-size: 12px;
-  font-weight: 500;
+  display: block;
+  background: #EFF6E0;
+  border-bottom: 1px solid #D8E8C4;
+  margin: -1.25rem -1.25rem 1rem;
+  padding: 8px 1.25rem;
+  font-size: 11px;
+  font-weight: 700;
   letter-spacing: 0.08em;
-  color: $chartreuse;
-  background: rgba(122, 158, 31, 0.15);
-  margin-bottom: 1.25rem;
+  color: #4A6810;
+  border-radius: 16px 16px 0 0;
 }
 
 .expert-tips__item {
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
 
   &:last-child {
     margin-bottom: 0;
@@ -206,8 +277,13 @@
   }
 
   p {
+<<<<<<< Updated upstream
     font-size: 13px;
     color: rgba(255, 255, 255, 0.7);
+=======
+    font-size: 14px;
+    color: #1a1d23;
+>>>>>>> Stashed changes
     line-height: 1.6;
     margin: 0;
   }
@@ -218,18 +294,18 @@
 .quick-guides {
   background: white;
   border: 1px solid #E5E7EB;
-  border-radius: 12px;
-  padding: 1.25rem;
+  border-radius: 16px;
+  padding: 1rem;
 }
 
 .quick-guides__header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 0.875rem;
 
   h3 {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
     color: $text-dark;
     margin: 0;
@@ -245,9 +321,17 @@
 .quick-guide__item {
   display: flex;
   align-items: center;
+<<<<<<< Updated upstream
   gap: 0.75rem;
   padding: 0.625rem 0;
   border-bottom: 1px solid #F3F4F6;
+=======
+  gap: 12px;
+  padding: 8px 10px;
+  border: 1px solid #E8E4F4;
+  border-radius: 12px;
+  margin-bottom: 6px;
+>>>>>>> Stashed changes
   text-decoration: none;
 
   &:last-child {
@@ -256,20 +340,33 @@
   }
 }
 
+<<<<<<< Updated upstream
 .quick-guide__icon {
   width: 32px;
   height: 32px;
   border-radius: 6px;
+=======
+.quick-guide__favicon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #F5F3FF;
+  border: 1px solid #E8E4F4;
+>>>>>>> Stashed changes
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 14px;
   flex-shrink: 0;
+<<<<<<< Updated upstream
   background: #F3F4F6;
+=======
+  img { width: 18px; height: 18px; object-fit: contain; }
+>>>>>>> Stashed changes
 }
 
 .quick-guide__title {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: $text-dark;
   margin: 0 0 2px;
@@ -300,43 +397,50 @@
 .completion-overlay__card {
   background: white;
   border-radius: 16px;
-  padding: 2.5rem;
+  padding: 2rem;
   text-align: center;
-  max-width: 400px;
+  max-width: 380px;
   width: 90%;
 }
 
 .completion-overlay__icon {
+<<<<<<< Updated upstream
   width: 56px;
   height: 56px;
   background: #D1FAE5;
   color: #065F46;
+=======
+  width: 48px;
+  height: 48px;
+  background: rgba(122, 158, 31, 0.15);
+  color: $chartreuse;
+>>>>>>> Stashed changes
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 24px;
+  font-size: 22px;
   margin: 0 auto 1rem;
 }
 
 .completion-overlay__title {
   font-family: $headers-font;
-  font-size: 1.5rem;
-  font-weight: 800;
+  font-size: 1.25rem;
+  font-weight: 700;
   color: $text-dark;
   margin-bottom: 0.5rem;
 }
 
 .completion-overlay__message {
-  font-size: 15px;
+  font-size: 14px;
   color: $text-dark;
   margin-bottom: 0.25rem;
 }
 
 .completion-overlay__sub {
-  font-size: 13px;
+  font-size: 14px;
   color: $text-gray;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.25rem;
 }
 
 .completion-overlay__bar {
@@ -354,7 +458,11 @@
   transition: width 3s linear;
 }
 
+<<<<<<< Updated upstream
 // ── Step Title Row (title + badges) ──────────────────
+=======
+// ── Step Title Row ────────────────────────────────
+>>>>>>> Stashed changes
 
 .step__title-row {
   display: flex;
@@ -371,7 +479,7 @@
   flex-shrink: 0;
 }
 
-// ── Optional Badge ─────────────────────────────────────
+// ── Optional Badge ────────────────────────────────
 
 .step__badge {
   display: inline-flex;
@@ -388,7 +496,7 @@
   }
 }
 
-// ── Soft-Lock State ────────────────────────────────────
+// ── Soft-Lock State ───────────────────────────────
 
 .step--soft-locked {
   background: #F9FAFB;
@@ -415,14 +523,19 @@
   }
 }
 
-// ── Soft-Lock Overlay ─────────────────────────────────
+// ── Soft-Lock Overlay ─────────────────────────────
 
 .step__soft-lock {
   margin-top: 0.75rem;
+<<<<<<< Updated upstream
   padding: 0.75rem 1rem;
   background: #F0F4FF;
+=======
+  padding: 0.625rem 0.875rem;
+  background: #F4F3FA;
+>>>>>>> Stashed changes
   border: 1px solid #C7D2FE;
-  border-radius: 8px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -438,7 +551,7 @@
 }
 
 .step__soft-lock__btn {
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
   color: $indigo-landed;
   background: none;
@@ -452,11 +565,18 @@
   &:hover {
     color: darken(#4F46E5, 10%);
   }
+<<<<<<< Updated upstream
+=======
+}
+
+// ── Step Done State ───────────────────────────────
+>>>>>>> Stashed changes
 
 // unchecked state
 .step__number--done {
   cursor: pointer;
   position: relative;
+  border-radius: 6px !important;
 
   &:hover::after {
     content: "↩ Undo";
@@ -485,4 +605,83 @@
   align-items: center;
   justify-content: center;
 }
+<<<<<<< Updated upstream
+=======
+
+// ── Progress dot stepper ──────────────────────────
+
+.task-progress-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 2px;
+}
+
+.task-progress-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #D4D2ED;
+  flex-shrink: 0;
+  transition: background 0.2s ease;
+
+  &--done   { background: $indigo-landed; }
+  &--active { background: $indigo-landed; width: 8px; height: 8px; }
+}
+
+// ── Checklist step count ──────────────────────────
+
+.task-steps__fraction {
+  font-size: 12px;
+  color: #9090A8;
+  background: #F0F0F8;
+  padding: 2px 9px;
+  border-radius: 10px;
+  font-weight: 500;
+}
+
+.task-steps__all-done {
+  font-size: 12px;
+  font-weight: 600;
+  color: $chartreuse;
+}
+
+// ── Pillar tag icon support ───────────────────────
+
+.breadcrumb__pillar-tag {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+
+  svg {
+    width: 11px;
+    height: 11px;
+    stroke-width: 2;
+    flex-shrink: 0;
+    color: inherit;
+  }
+}
+
+// ── Steps section label ───────────────────────────
+
+.task-steps__label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: #8888A8;
+}
+
+// ── Action note ───────────────────────────────────
+
+.step__action-note {
+  margin-top: 0.5rem;
+  font-size: 14px;
+  color: #92400E;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+  border-radius: 10px;
+  padding: 0.625rem 0.875rem;
+  line-height: 1.55;
+>>>>>>> Stashed changes
 }

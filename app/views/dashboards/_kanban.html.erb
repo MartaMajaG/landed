@@ -32,6 +32,7 @@
     <span class="col-count"><%= urgent_count %></span>
     <span class="col-menu">⋯</span>
   </div>
+<<<<<<< Updated upstream
   <% urgent_tasks.each do |task| %>
     <div class="task-card urgent-card" data-href="<%= task_path(task) %>" style="cursor:pointer;">
       <div class="card-top-row">
@@ -56,6 +57,56 @@
         </span>
       </div>
     </div>
+=======
+  <% if urgent_tasks.empty? %>
+    <div style="padding: 16px 12px; text-align: center; border: 1.5px dashed #FECACA; border-radius: 16px; color: #9ca3af; font-size: 12px; font-weight: 500; line-height: 1.5;">
+      No urgent tasks —<br>you're on track 👍
+    </div>
+  <% else %>
+    <% urgent_tasks.each_with_index do |task, index| %>
+      <div class="task-card urgent-card <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>" style="cursor:pointer;">
+        <div class="card-top">
+          <div class="card-tags">
+            <%= pillar_chip(task) %>
+          </div>
+        </div>
+        <h4 class="card-title"><%= task.name %></h4>
+        <p class="card-desc"><%= task.description %></p>
+        <% total = task.checklist_items.size %>
+        <% done = task.checklist_items.count { |ci| completed_ids.include?(ci.id) } %>
+        <div class="card-footer-group">
+          <div class="card-footer">
+            <span class="card-progress-label"><%= done == 0 ? "Not started" : "#{done}/#{total} steps" %></span>
+            <span class="card-pct"><%= (total > 0 && done > 0) ? "#{((done.to_f / total) * 100).round}%" : "" %></span>
+          </div>
+          <div class="card-track">
+            <div class="card-fill" style="width: <%= total > 0 ? ((done.to_f / total) * 100).round : 0 %>%;"></div>
+          </div>
+          <div class="card-bottom-row">
+            <span class="card-due urgent-due" style="display:inline-flex; align-items:center; gap:4px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <%= if task.due_date == Date.today
+                    "Today"
+                  elsif task.due_date == Date.today + 1.day
+                    "Tomorrow"
+                  elsif task.due_date == Date.today - 1.day
+                    "Yesterday"
+                  elsif task.due_date&.< Date.today
+                    "Overdue"
+                  else
+                    task.due_date&.strftime("%b %d")
+                  end %>
+            </span>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    <% if urgent_tasks.size > 2 %>
+      <button class="col-show-more" onclick="toggleKanbanCol(this, <%= urgent_tasks.size - 2 %>)">
+        Show <%= urgent_tasks.size - 2 %> more
+      </button>
+    <% end %>
+>>>>>>> Stashed changes
   <% end %>
 </div>
 
