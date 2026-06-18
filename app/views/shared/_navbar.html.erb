@@ -1,5 +1,6 @@
 <% onboarding_page = controller_name == "onboardings" %>
 
+<<<<<<< Updated upstream
 <nav class="navbar navbar-expand-sm navbar-light navbar-lewagon">
   <div class="container">
     <%= link_to "Landed", root_path, class: "navbar-brand" %>
@@ -53,7 +54,62 @@
             <%= link_to "Sign in", new_user_session_path, class: "nav-link" %>
           </li>
         <% end %>
+=======
+<% if onboarding_page %>
+  <nav class="navbar navbar-expand-sm navbar-light navbar-lewagon">
+    <div class="container">
+      <%= link_to "Landed", root_path, class: "navbar-brand" %>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item"><a href="#" class="nav-link">Help</a></li>
+>>>>>>> Stashed changes
       </ul>
     </div>
-  </div>
-</nav>
+  </nav>
+<% else %>
+  <aside class="landed-sidebar">
+
+    <div class="sidebar-logo">
+      <%= link_to root_path, class: "sidebar-brand-link" do %>
+        <span class="sidebar-logomark">L</span>
+      <% end %>
+    </div>
+
+    <% if user_signed_in? %>
+      <nav class="sidebar-nav">
+        <%= link_to dashboard_path,
+              class: "sidebar-link #{'active' if current_page?(dashboard_path)}",
+              data: { label: "Dashboard" } do %>
+          <i class="bi bi-house-door" aria-hidden="true"></i>
+        <% end %>
+
+        <%= link_to chats_path,
+              class: "sidebar-link #{'active' if controller_name == 'chats' || current_page?(chats_path)}",
+              data: { label: "Documents" } do %>
+          <i class="bi bi-file-earmark-text" aria-hidden="true"></i>
+        <% end %>
+      </nav>
+    <% end %>
+
+    <div class="sidebar-bottom">
+      <% if user_signed_in? %>
+        <button class="sidebar-link" data-label="Notifications" aria-label="Notifications">
+          <i class="bi bi-bell" aria-hidden="true"></i>
+        </button>
+
+        <div class="dropup">
+          <button class="sidebar-link" id="sidebarDropdown"
+                  data-bs-toggle="dropdown" aria-expanded="false"
+                  data-label="Profile">
+            <i class="bi bi-person-circle" aria-hidden="true"></i>
+          </button>
+          <ul class="dropdown-menu sidebar-dropdown" aria-labelledby="sidebarDropdown">
+            <li><%= link_to "My profile", profile_path, class: "dropdown-item" %></li>
+            <li><hr class="dropdown-divider" style="border-color:rgba(255,255,255,0.1);"></li>
+            <li><%= link_to "Log out", destroy_user_session_path, data: { turbo_method: :delete }, class: "dropdown-item" %></li>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+
+  </aside>
+<% end %>
