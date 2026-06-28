@@ -55,6 +55,36 @@
   margin: 0;
 }
 
+.step__number--done {
+  border-radius: 50% !important;
+  background: rgba(122, 158, 31, 0.15) !important;
+  color: $chartreuse !important;
+  overflow: hidden;
+  width: 28px !important;
+  height: 28px !important;
+  padding: 0 !important;
+
+  form {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  
+  button {
+    border-radius: 50% !important;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    background: transparent !important;
+  }
+}
+
 // ── Completed State ───────────────────────────────
 
 .step--completed {

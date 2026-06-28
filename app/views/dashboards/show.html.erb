@@ -20,36 +20,27 @@
 
       <%# Left: greeting %>
       <div class="hero-greeting">
-        <img src="https://i.pravatar.cc/48?img=47" alt="Avatar" class="hero-avatar" />
-        <div>
-          <p style="font-size:11px; color:#9ca3af; margin:0 0 2px; letter-spacing:0.06em; text-transform:uppercase;">Good morning</p>
-          <p class="hero-name"><%= current_user.profile&.first_name.present? ? current_user.profile.first_name : "there" %></p>
-          <p class="hero-stage">
-            Moving to <strong><%= @profile.city&.name || "Berlin" %></strong>
-          </p>
-          <% if @days_to_arrival %>
-            <span class="arrival-chip">
-              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-              <% if @days_to_arrival > 0 %>
-                <%= @days_to_arrival %> days to arrival
-              <% elsif @days_to_arrival == 0 %>
-                Arrival day!
-              <% else %>
-                Arrived <%= @days_to_arrival.abs %> days ago
-              <% end %>
-            </span>
-          <% end %>
-        </div>
+        <img src="https://mockmind-api.uifaces.co/content/human/219.jpg" alt="Avatar" class="hero-avatar" />
+        <p class="hero-greeting__label">Good morning</p>
+        <p class="hero-name"><%= current_user.profile&.first_name.present? ? current_user.profile.first_name : "there" %></p>
+        <p class="hero-stage">Moving to <strong><%= @profile.city&.name || "Berlin" %></strong></p>
+        <% if @days_to_arrival %>
+          <span class="arrival-chip">
+            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <% if @days_to_arrival > 0 %>
+              <%= @days_to_arrival %> days to arrival
+            <% elsif @days_to_arrival == 0 %>
+              Arrival day!
+            <% else %>
+              Arrived <%= @days_to_arrival.abs %> days ago
+            <% end %>
+          </span>
+        <% end %>
       </div>
 
-<<<<<<< Updated upstream
-      <%# Centre: journey stepper + stats %>
-=======
       <%# Centre: journey stepper %>
->>>>>>> Stashed changes
       <div class="hero-journey">
         <p class="journey-label">Relocation journey</p>
-
         <div class="journey-stepper">
           <div class="journey-track">
             <div class="journey-track-fill" style="width:<%= connector_pct %>%;"></div>
@@ -78,47 +69,6 @@
             </div>
           <% end %>
         </div>
-<<<<<<< Updated upstream
-      <div class="hero-stats">
-        <div class="hero-stat">
-          <span class="hero-stat__label">Open tasks</span>
-          <span class="hero-stat__value"><%= @total_active_count %></span>
-        </div>
-          <div class="hero-stat">
-  <span class="hero-stat__label">Docs scanned</span>
-  <span class="hero-stat__value"><%= @docs_count || 0 %></span>
-</div>
-          <div class="hero-stat hero-stat--accent">
-            <span class="hero-stat__label">Completed</span>
-            <span class="hero-stat__value"><%= @completion_pct %>%</span>
-          </div>
-        </div>
-      </div>
-
-      <%# Right: today's agenda %>
-      <div class="hero-today">
-        <div class="hero-today__header">
-          <span class="hero-today__label">Today</span>
-          <a href="#" class="hero-today__link">View all</a>
-        </div>
-        <div class="hero-today__events">
-          <div class="today-event">
-            <span class="today-event__dot" style="background:#246DD5;"></span>
-            <div>
-              <p class="today-event__name">HR Onboarding Call</p>
-              <p class="today-event__time">09:30 am</p>
-            </div>
-          </div>
-          <div class="today-event">
-            <span class="today-event__dot" style="background:#7c3aed;"></span>
-            <div>
-              <p class="today-event__name">Local Expat Meetup</p>
-              <p class="today-event__time">06:00 pm</p>
-            </div>
-          </div>
-        </div>
-=======
->>>>>>> Stashed changes
       </div>
 
     </div>
@@ -166,14 +116,15 @@
       </div>
 
       <div class="kanban" data-task-tabs-target="board">
-  <%= render "kanban", completed_tasks: nil,
-                       urgent_tasks: @urgent_tasks,
-                       active_tasks: @active_tasks,
-                       upcoming_tasks: @upcoming_tasks,
-                       urgent_count: @urgent_count,
-                       active_count: @active_count,
-                       upcoming_count: @upcoming_count %>
-</div>
+        <%= render "kanban", completed_tasks: nil,
+                             urgent_tasks: @urgent_tasks,
+                             active_tasks: @active_tasks,
+                             upcoming_tasks: @upcoming_tasks,
+                             urgent_count: @urgent_count,
+                             active_count: @active_count,
+                             upcoming_count: @upcoming_count,
+                             completed_ids: @completed_ids %>
+      </div>
     </div>
 
     <%# ── CALENDAR ── %>
@@ -182,38 +133,25 @@
         <h2 class="tasks-label">Calendar</h2>
         <div class="calendar-card">
           <div class="cal-toolbar">
-            <div class="cal-view-toggle"></div>
             <div class="cal-legend">
               <span class="leg-item"><span class="leg-dot" style="background:#f97316;"></span>Housing</span>
               <span class="leg-item"><span class="leg-dot" style="background:#246DD5;"></span>Financial</span>
               <span class="leg-item"><span class="leg-dot" style="background:#eab308;"></span>Admin</span>
-              <span class="leg-item"><span class="leg-dot" style="background:#ec4899;"></span>Medical</span>
+              <span class="leg-item"><span class="leg-dot" style="background:#ec4899;"></span>Health & Insurance</span>
             </div>
             <div class="cal-nav">
-              <span class="cal-month-title"><%= @date.strftime("%B %Y") %></span>
               <%= link_to "‹", dashboard_path(month: @date.prev_month), class: "cal-nav-btn", data: { turbo_frame: "calendar" } %>
+              <span class="cal-month-title"><%= @date.strftime("%B %Y") %></span>
               <%= link_to "›", dashboard_path(month: @date.next_month), class: "cal-nav-btn", data: { turbo_frame: "calendar" } %>
             </div>
           </div>
+
           <div class="cal-grid">
-            <% ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"].each do |day| %>
+            <% ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].each do |day| %>
               <div class="cal-dow"><%= day %></div>
             <% end %>
+
             <% calendar_days(@date).each do |day| %>
-<<<<<<< Updated upstream
-              <div class="cal-cell <%= 'muted' if day.month != @date.month %> <%= 'weekend' if day.saturday? || day.sunday? %>">
-                <span class="cal-date <%= 'today-num' if day == Date.today %>"><%= day.day %></span>
-                <% if @calendar_tasks[day] %>
-  <% @calendar_tasks[day].each do |event| %>
-    <div class="cal-event <%= event[:category].to_s.parameterize %>"
-      data-event-name="<%= event[:name] %>"
-      data-event-date="<%= event[:due_date] %>"
-      data-event-source="<%= event[:source] %>">
-  <%= truncate(event[:name], length: 30) %>
-    </div>
-  <% end %>
-<% end %>
-=======
               <div class="cal-cell
                 <%= 'muted'      if day.month != @date.month %>
                 <%= 'weekend'    if day.saturday? || day.sunday? %>
@@ -228,18 +166,17 @@
                 <% if @calendar_tasks[day]&.any? %>
                   <% day_events = @calendar_tasks[day] %>
                   <% day_events.each_with_index do |event, idx| %>
-  <div class="cal-event <%= event[:category].to_s %> <%= 'cal-event-hidden' if idx >= 2 %>"
-       style="<%= 'display:none;' if idx >= 2 %>"
-       data-task-name="<%= event[:name] %>"
-       title="<%= event[:name].gsub(/\s*\(.*\)\z/, '').strip %>">
-    <%= event[:name].gsub(/\s*\(.*\)\z/, '').strip %>
-  </div>
-<% end %>
-<% if day_events.size > 2 %>
-  <span class="cal-overflow" data-overflow-date="<%= day.to_s %>">+<%= day_events.size - 2 %> more</span>
-<% end %>
+                    <div class="cal-event <%= event[:category].to_s %> <%= 'cal-event-hidden' if idx >= 2 %>"
+                         style="<%= 'display:none;' if idx >= 2 %>"
+                         data-task-name="<%= event[:name] %>"
+                         title="<%= event[:name].gsub(/\s*\(.*\)\z/, '').strip %>">
+                      <%= event[:name].gsub(/\s*\(.*\)\z/, '').strip %>
+                    </div>
+                  <% end %>
+                  <% if day_events.size > 2 %>
+                    <span class="cal-overflow" data-overflow-date="<%= day.to_s %>">+<%= day_events.size - 2 %> more</span>
+                  <% end %>
                 <% end %>
->>>>>>> Stashed changes
               </div>
             <% end %>
           </div>
@@ -248,18 +185,6 @@
     </turbo-frame>
 
   </div>
-  <div id="cal-popover" class="cal-popover" style="display:none;">
-  <p class="cal-popover__title" id="calPopoverTitle"></p>
-  <p class="cal-popover__date" id="calPopoverDate"></p>
-  <div class="cal-popover__actions">
-    <a id="calGoogleBtn" href="#" target="_blank" class="cal-popover__btn cal-popover__btn--google">
-      Add to Google Calendar
-    </a>
-    <a id="calAppleBtn" href="#" class="cal-popover__btn cal-popover__btn--apple">
-      Add to Apple Calendar
-    </a>
-  </div>
-</div>
 </div>
 
 <script>
@@ -280,36 +205,6 @@
     });
   }
 
-<<<<<<< Updated upstream
-  var popover = document.getElementById('cal-popover');
-
-  document.addEventListener('click', function(e) {
-    var el = e.target.closest('.cal-event');
-    if (el) {
-      e.stopPropagation();
-      var name = el.dataset.eventName;
-      var date = el.dataset.eventDate;
-      var parsed = new Date(date);
-      var fmt = parsed.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
-      var ymd = date.replace(/-/g, '');
-
-      document.getElementById('calPopoverTitle').textContent = name.length > 45 ? name.substring(0, 45) + '…' : name;;
-      document.getElementById('calPopoverDate').textContent = fmt;
-
-      var googleUrl = 'https://calendar.google.com/calendar/r/eventedit?text='
-        + encodeURIComponent(name) + '&dates=' + ymd + '/' + ymd;
-      document.getElementById('calGoogleBtn').href = googleUrl;
-      document.getElementById('calAppleBtn').href = '/calendar_events/ics?name='
-        + encodeURIComponent(name) + '&date=' + date;
-
-      var rect = el.getBoundingClientRect();
-      popover.style.top = (rect.bottom + 8) + 'px';
-      popover.style.left = rect.left + 'px';
-      popover.style.display = 'block';
-      return;
-    }
-    if (popover) popover.style.display = 'none';
-=======
   document.addEventListener('click', function(e) {
     var overflow = e.target.closest('.cal-overflow');
     if (overflow) {
@@ -353,6 +248,5 @@
         }, 1800);
       }, 600);
     }, 50);
->>>>>>> Stashed changes
   });
 </script>

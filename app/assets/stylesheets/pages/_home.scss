@@ -1,10 +1,6 @@
 // ── Page background ──
 .dashboard-bg {
-<<<<<<< Updated upstream
-  background: #F5F3FF;
-=======
   background: #F4F3FA;
->>>>>>> Stashed changes
   min-height: 100vh;
   position: relative;
   overflow: hidden;
@@ -19,28 +15,13 @@
   content: '';
   position: absolute;
   inset: 0;
-<<<<<<< Updated upstream
-  background:
-    radial-gradient(ellipse at 10% 15%, rgba(120,100,245,0.04) 0%, transparent 52%),
-    radial-gradient(ellipse at 90% 85%, rgba(255,150,180,0.05) 0%, transparent 52%);
-=======
   background: #F4F3FA;
->>>>>>> Stashed changes
   pointer-events: none;
   z-index: 0;
 }
 
 // ── Hero card ──
 .dashboard-hero {
-<<<<<<< Updated upstream
-  background: #FAF9FF;
-  border-radius: 14px;
-  border: 0.5px solid #EEECFF;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 240px 1fr 220px;
-  margin-bottom: 28px;
-=======
   background: #fff;
   border-radius: 16px;
   border: 1px solid #D8D4EE;
@@ -48,7 +29,6 @@
   display: grid;
   grid-template-columns: 220px 1fr;
   margin-bottom: 18px;
->>>>>>> Stashed changes
   box-shadow: 0 1px 4px rgba(91,80,232,0.06);
   overflow: hidden;
 }
@@ -60,16 +40,10 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-<<<<<<< Updated upstream
-  gap: 4px;
-  padding: 16px 20px;  // was 24px, tightens card height
-  border-right: 0.5px solid #EEECFF;
-=======
   gap: 6px;
   padding: 20px 18px;
   background: #F4F2FF;
   border-right: 0.5px solid #E8E4F8;
->>>>>>> Stashed changes
 }
 
 .hero-greeting__label {
@@ -88,24 +62,17 @@
 }
 
 .hero-name {
-<<<<<<< Updated upstream
-  font-size: 15px;
-  font-weight: 400;
-  color: #1a1d23;
-  margin: 0 0 2px;
-=======
   font-size: 17px;
   font-weight: 500;
   color: #1a1535;
   margin: 0;
->>>>>>> Stashed changes
   letter-spacing: -0.02em;
 }
 
 .hero-stage {
   font-size: 12px;
   color: #7a7f8e;
-  margin: 0;  // removed bottom margin, arrival chip handles its own spacing
+  margin: 0;
   strong { color: #1a1d23; font-weight: 600; }
 }
 
@@ -122,16 +89,6 @@
   white-space: nowrap;
 }
 
-<<<<<<< Updated upstream
-// Centre column — journey + stats
-.hero-journey {
-  padding: 16px 28px;  // was 20px top/bottom
-  border-right: 0.5px solid #EEECFF;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 14px;  // was 16px
-=======
 // Centre column — journey stepper
 .hero-journey {
   padding: 20px 32px;
@@ -139,7 +96,6 @@
   flex-direction: column;
   justify-content: center;
   gap: 16px;
->>>>>>> Stashed changes
 }
 
 .journey-label {
@@ -160,19 +116,11 @@
 
 .journey-track {
   position: absolute;
-<<<<<<< Updated upstream
-  top: 14px;
-  left: 14px;
-  right: 14px;
-  height: 2px;
-  background: #EEECFF;
-=======
   top: 20px;
   left: 22px;
   right: 22px;
   height: 3px;
   background: #EDE8FF;
->>>>>>> Stashed changes
   z-index: 0;
 }
 .journey-track-fill {
@@ -192,13 +140,8 @@
 }
 
 .journey-dot {
-<<<<<<< Updated upstream
-  width: 28px;
-  height: 28px;
-=======
   width: 40px;
   height: 40px;
->>>>>>> Stashed changes
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -236,99 +179,6 @@
   .journey-step-label { color: #C4C2E8; }
 }
 
-<<<<<<< Updated upstream
-// Stats row
-.hero-stats {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-}
-.hero-stat {
-  background: #F5F3FF;
-  border-radius: 8px;
-  padding: 8px 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  &--accent {
-    background: #EEECFF;
-    .hero-stat__label { color: #5B50E8; }
-    .hero-stat__value { color: #3C3489; }
-  }
-}
-.hero-stat__label {
-  font-size: 11px;
-  color: #9ca3af;
-  font-weight: 500;
-}
-.hero-stat__value {
-  font-size: 20px;
-  font-weight: 600;
-  color: #1a1d23;
-  line-height: 1;
-  letter-spacing: -0.02em;
-}
-
-// Right column — today
-.hero-today {
-  padding: 20px 20px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 10px;
-}
-.hero-today__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.hero-today__label {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #9ca3af;
-}
-.hero-today__link {
-  font-size: 11px;
-  color: #5B50E8;
-  font-weight: 500;
-  text-decoration: none;
-}
-.hero-today__events {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-.today-event {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  padding: 8px 10px;
-  background: #F5F3FF;
-  border-radius: 8px;
-}
-.today-event__dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  margin-top: 4px;
-}
-.today-event__name {
-  font-size: 12px;
-  font-weight: 500;
-  color: #1a1d23;
-  margin: 0;
-}
-.today-event__time {
-  font-size: 11px;
-  color: #9ca3af;
-  margin: 2px 0 0;
-}
-
-=======
->>>>>>> Stashed changes
 // ── Tasks ──
 .tasks-section { margin-top: 24px; }
 
@@ -336,7 +186,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
 }
 .tasks-label {
   font-size: 16px;
@@ -383,7 +233,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 10px;
+  padding: 7px 10px;
   border: 1px solid #e5e7eb;
   border-radius: 16px;
   background: white;
@@ -400,11 +250,7 @@
   right: 0;
   background: white;
   border: 1px solid #e5e7eb;
-<<<<<<< Updated upstream
-  border-radius: 10px;
-=======
   border-radius: 16px;
->>>>>>> Stashed changes
   box-shadow: 0 4px 20px rgba(0,0,0,0.10);
   min-width: 210px;
   z-index: 200;
@@ -437,52 +283,25 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   align-items: start;
-<<<<<<< Updated upstream
-  margin-bottom: 36px;
-}
-.kanban-col { display: flex; flex-direction: column; }
-.col-header { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
-=======
   margin-bottom: 24px;
   margin-top: 12px;
 }
 .kanban-col { display: flex; flex-direction: column; gap: 10px; }
 .col-header { display: flex; align-items: center; gap: 6px; margin-bottom: 7px; }
->>>>>>> Stashed changes
 .col-dot {
   width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0;
   &.urgent-dot   { background: #e53e3e; }
   &.active-dot   { background: #e6a817; }
   &.upcoming-dot { background: #7c3aed; }
 }
-<<<<<<< Updated upstream
-.col-title { font-size: 13px; font-weight: 600; color: #1a1d23; flex: 1; }
-.col-count { font-size: 11px; color: #9ca3af; background: #f0f2f7; border-radius: 4px; padding: 1px 6px; }
-.col-menu { font-size: 14px; color: #c0c4ce; cursor: pointer; padding: 0 4px; }
-=======
 .col-title { font-size: 14px; font-weight: 600; color: #1a1535; flex: 1; }
 .col-count { font-size: 11px; color: #9ca3af; background: #f0f2f7; border-radius: 4px; padding: 1px 6px; }
 
 .kanban-hidden { display: none !important; }
->>>>>>> Stashed changes
 
 // ── Task cards ──
 .task-card {
   background: #fff;
-<<<<<<< Updated upstream
-  border: 0.5px solid #e2e5ec;
-  border-radius: 10px;
-  padding: 14px;
-  margin-bottom: 8px;
-  min-height: 160px;
-  display: flex;
-  flex-direction: column;
-  box-shadow: 0 1px 3px rgba(91,80,232,0.05);
-  &.locked { opacity: 0.45; pointer-events: none; }
-  &--done  { opacity: 0.75; border-left: 3px solid #10b981; }
-}
-.card-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-=======
   border: 1px solid #D8D4EE;
   border-radius: 16px;
   padding: 10px;
@@ -529,7 +348,6 @@
 }
 
 .card-top-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
->>>>>>> Stashed changes
 .card-bottom-row { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
 .urgent-badge {
   font-size: 10px; font-weight: 700; letter-spacing: 0.05em;
@@ -539,16 +357,9 @@
 .card-avatar { width: 24px; height: 24px; border-radius: 50%; object-fit: cover; }
 .card-due    { font-size: 11px; font-weight: 500; }
 .urgent-due  { color: #e65100; }
-<<<<<<< Updated upstream
-.card-top    { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px; }
-=======
 .card-top    { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
->>>>>>> Stashed changes
 .card-tags   { display: flex; gap: 4px; flex-wrap: wrap; }
 .tag {
-<<<<<<< Updated upstream
-  font-size: 10px; font-weight: 600; border-radius: 4px; padding: 2px 6px;
-=======
   font-size: 12px;
   font-weight: 600;
   border-radius: 4px;
@@ -565,30 +376,12 @@
     color: inherit;
   }
 
->>>>>>> Stashed changes
   &.tag-medium    { background: #fef3c7; color: #92400e; }
   &.tag-low       { background: #dcfce7; color: #166534; }
   &.tag-visa      { background: #dbeafe; color: #1e40af; }
   &.tag-insurance { background: #d1fae5; color: #065f46; }
   &.tag-travel    { background: #e0f2fe; color: #0369a1; }
 }
-<<<<<<< Updated upstream
-.card-date  { font-size: 10px; color: #9ca3af; white-space: nowrap; }
-.card-title { font-size: 13px; font-weight: 600; color: #1a1d23; margin: 0 0 5px; letter-spacing: -0.01em; }
-.card-desc  { flex: 1; font-size: 11px; color: #7a7f8e; margin: 0 0 10px; line-height: 1.5; }
-.card-footer { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
-.card-progress-label { font-size: 10px; color: #9ca3af; }
-.card-pct   { font-size: 10px; font-weight: 600; color: #1a1d23; }
-.card-track { height: 4px; background: #e9ecef; border-radius: 2px; overflow: hidden; }
-.card-fill  { height: 100%; background: #5B50E8; border-radius: 2px; }
-
-// ── Calendar ──
-.calendar-section { margin-top: 8px; }
-.calendar-card {
-  background: #fff;
-  border: 0.5px solid #e2e5ec;
-  border-radius: 12px;
-=======
 
 [class*="tag-pillar--"] { color: #6B7A99; }
 .tag-pillar--housing_and_registration { background: #FFF3E8; }
@@ -632,7 +425,6 @@
   background: #fff;
   border: 1px solid #D8D4EE;
   border-radius: 16px;
->>>>>>> Stashed changes
   overflow: hidden;
   margin-top: 14px;
   box-shadow: 0 1px 4px rgba(91,80,232,0.05);
@@ -640,12 +432,7 @@
 .cal-toolbar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-<<<<<<< Updated upstream
-  padding: 14px 20px;
-=======
   padding: 9px 14px;
->>>>>>> Stashed changes
   border-bottom: 0.5px solid #e2e5ec;
   gap: 16px;
 }
@@ -655,38 +442,33 @@
   background: transparent; color: #7a7f8e; cursor: pointer; border-radius: 6px;
   &.active { background: #fff; color: #1a1d23; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
 }
-.cal-legend { display: flex; align-items: center; gap: 14px; flex: 1; justify-content: center; }
+.cal-legend { display: flex; align-items: center; gap: 14px; }
 .leg-item   { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #7a7f8e; }
 .leg-dot    { width: 8px; height: 8px; border-radius: 50%; }
-.cal-nav    { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
-<<<<<<< Updated upstream
-.cal-month-title { font-size: 14px; font-weight: 600; color: #1a1d23; }
-.cal-nav-btn {
-  width: 26px; height: 26px; border-radius: 6px; border: 0.5px solid #e2e5ec;
-=======
+.cal-nav    { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: auto; }
 .cal-month-title { font-size: 14px; font-weight: 600; color: #1a1535; min-width: 80px; text-align: center; }
 .cal-nav-btn {
   width: 24px; height: 24px; border-radius: 10px; border: 0.5px solid #e2e5ec;
->>>>>>> Stashed changes
   background: #fff; font-size: 14px; color: #7a7f8e;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; line-height: 1; text-decoration: none;
 }
-.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); border-top: 0.5px solid #e2e5ec; }
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: auto;
+  grid-auto-rows: 96px;
+  border-top: 0.5px solid #e2e5ec;
+}
 .cal-dow {
   padding: 10px 12px 8px; font-size: 11px; font-weight: 600; color: #9ca3af;
   text-align: left; border-bottom: 0.5px solid #e2e5ec; letter-spacing: 0.02em;
 }
 .cal-cell {
-<<<<<<< Updated upstream
-  min-height: 80px; padding: 8px 10px;
-  border-right: 0.5px solid #f0f2f7; border-bottom: 0.5px solid #f0f2f7;
-  display: flex; flex-direction: column; gap: 4px;
-=======
-  min-height: 68px; padding: 7px 9px;
+  padding: 7px 9px;
+  overflow: hidden;
   border-right: 0.5px solid #f0f2f7; border-bottom: 0.5px solid #f0f2f7; min-width: 0;
   display: flex; flex-direction: column; gap: 3px;
->>>>>>> Stashed changes
   &:nth-child(7n) { border-right: none; }
   &.muted .cal-date { color: #c0c4ce; }
   &.weekend { background: #FAFAFE; }
@@ -699,15 +481,6 @@
 }
 .cal-event {
   cursor: pointer;
-<<<<<<< Updated upstream
-  font-size: 10px; font-weight: 600; border-radius: 4px; padding: 3px 6px;
-  white-space: normal; word-wrap: break-word; display: block;
-  max-width: 100%; line-height: 1.2; overflow: hidden; text-overflow: ellipsis;
-  &.housing   { background: #ffedd5; color: #c2410c; }
-  &.financial { background: #dbeafe; color: #1e40af; }
-  &.admin     { background: #fef9c3; color: #854d0e; }
-  &.medical   { background: #fce7f3; color: #9d174d; }
-=======
   font-size: 10px;
   font-weight: 600;
   border-radius: 4px;
@@ -744,7 +517,6 @@
 }
 .task-card--highlight {
   animation: card-highlight 1.8s ease-out forwards;
->>>>>>> Stashed changes
 }
 
 // ── Pillar tag colours ──
@@ -752,7 +524,6 @@
 .tag-pillar--housing_and_registration { background: #FEF3C7; color: #92400E; }
 .tag-pillar--finance_and_banking      { background: #D1FAE5; color: #065F46; }
 .tag-pillar--health_and_insurance     { background: #FFE4E6; color: #9F1239; }
-
 
 // ── Calendar popover ──
 .cal-popover {
@@ -771,20 +542,13 @@
     border-top: 0.5px solid #e2e5ec; padding-top: 10px;
   }
   &__btn {
-<<<<<<< Updated upstream
-  font-size: 11px; font-weight: 600; padding: 6px 10px;
-  border-radius: 6px; text-decoration: none; text-align: center;
-  display: block;
-  &--google { background: #EEECFF; color: #3C3489; }
-  &--apple  { background: #f0f2f7; color: #1a1d23; }
-=======
     font-size: 11px; font-weight: 600; padding: 6px 10px;
     border-radius: 10px; text-decoration: none; text-align: center; display: block;
     &--google { background: #EDE8FF; color: #3C3489; }
     &--apple  { background: #f0f2f7; color: #1a1535; }
->>>>>>> Stashed changes
   }
 }
+
 // ── Misc ──
 .tag--clickable { cursor: pointer; text-decoration: none; }
 .col-see-more { margin-top: 4px; text-align: center; }
@@ -800,8 +564,6 @@
 .no-tasks { color: #9ca3af; font-size: 14px; text-align: center; padding: 40px 0; }
 
 @keyframes spin { to { transform: rotate(360deg); } }
-<<<<<<< Updated upstream
-=======
 
 .col-show-more {
   width: 100%;
@@ -825,4 +587,3 @@
   &[data-expanded="true"]::before { content: '↑'; }
   &:hover { color: #5B50E8; border-color: #5B50E8; background: #F4F2FF; }
 }
->>>>>>> Stashed changes
