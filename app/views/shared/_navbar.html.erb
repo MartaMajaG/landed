@@ -1,59 +1,58 @@
 <% onboarding_page = controller_name == "onboardings" %>
 
-<nav class="navbar navbar-expand-sm navbar-light navbar-lewagon">
-  <div class="container">
-    <%= link_to "Landed", root_path, class: "navbar-brand" %>
-
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto ps-5">
-        <% if user_signed_in? && !onboarding_page %>
-          <li class="nav-item">
-            <%= link_to "Dashboard", dashboard_path, class: "nav-link #{'active' if current_page?(dashboard_path)}" %>
-          </li>
-          <li class="nav-item">
-            <%= link_to "Documents", chats_path, class: "nav-link #{'active' if current_page?(chats_path)}" %>
-          </li>
-          <%# <li class="nav-item">
-            <%#= link_to "Community", "#", class: "nav-link #{'active' if current_page?('#')}" %>
-          </li>
-        <% end %>
-      </ul>
-
+<% if onboarding_page %>
+  <nav class="navbar navbar-expand-sm navbar-light navbar-lewagon">
+    <div class="container">
+      <%= link_to "Landed", root_path, class: "navbar-brand" %>
       <ul class="navbar-nav ms-auto align-items-center gap-1">
-        <% if onboarding_page %>
-          <li class="nav-item">
-            <%= link_to "Help", "#", class: "nav-link" %>
-          </li>
-        <% elsif user_signed_in? %>
-
-          <%# Bell icon %>
-          <li class="nav-item">
-            <button class="navbar-icon-btn" aria-label="Notifications">
-              <i class="bi bi-bell"></i>
-            </button>
-          </li>
-
-          <%# Profile — dropdown trigger %>
-          <li class="nav-item dropdown">
-            <button class="navbar-icon-btn" id="navbarDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Account menu">
-              <i class="bi bi-person-circle"></i>
-            </button>
-            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-              <li><%= link_to "My profile", profile_path, class: "dropdown-item" %></li>
-              <li><%= link_to "Log out", destroy_user_session_path, data: { turbo_method: :delete }, class: "dropdown-item" %></li>
-            </ul>
-          </li>
-
-        <% else %>
-          <li class="nav-item">
-            <%= link_to "Sign in", new_user_session_path, class: "nav-link" %>
-          </li>
-        <% end %>
+        <li class="nav-item">
+          <%= link_to "Help", "#", class: "nav-link" %>
+        </li>
       </ul>
     </div>
-  </div>
-</nav>
+  </nav>
+<% elsif user_signed_in? %>
+  <aside class="landed-sidebar">
+    <div class="sidebar-logo">
+      <%= link_to root_path, class: "sidebar-brand-link" do %>
+        <div class="sidebar-logomark">L</div>
+      <% end %>
+    </div>
+
+    <nav class="sidebar-nav">
+      <%= link_to dashboard_path, class: "sidebar-link #{'active' if current_page?(dashboard_path)}", data: { label: "Dashboard" } do %>
+        <i class="bi bi-house"></i>
+      <% end %>
+      <%= link_to chats_path, class: "sidebar-link #{'active' if current_page?(chats_path)}", data: { label: "Documents" } do %>
+        <i class="bi bi-file-text"></i>
+      <% end %>
+    </nav>
+
+    <div class="sidebar-bottom">
+      <button class="sidebar-link" aria-label="Notifications">
+        <i class="bi bi-bell"></i>
+      </button>
+
+      <div class="dropdown">
+        <button class="sidebar-link" id="sidebarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+          <i class="bi bi-person-circle"></i>
+        </button>
+        <ul class="dropdown-menu sidebar-dropdown" aria-labelledby="sidebarDropdown">
+          <li><%= link_to "My profile", profile_path, class: "dropdown-item" %></li>
+          <li><%= link_to "Log out", destroy_user_session_path, data: { turbo_method: :delete }, class: "dropdown-item" %></li>
+        </ul>
+      </div>
+    </div>
+  </aside>
+<% else %>
+  <nav class="navbar navbar-expand-sm navbar-light navbar-lewagon">
+    <div class="container">
+      <%= link_to "Landed", root_path, class: "navbar-brand" %>
+      <ul class="navbar-nav ms-auto align-items-center gap-1">
+        <li class="nav-item">
+          <%= link_to "Sign in", new_user_session_path, class: "nav-link" %>
+        </li>
+      </ul>
+    </div>
+  </nav>
+<% end %>

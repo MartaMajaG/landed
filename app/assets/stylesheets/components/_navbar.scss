@@ -1,17 +1,9 @@
-<<<<<<< Updated upstream
-.navbar-lewagon {
-  height: 80px;
-  justify-content: space-between;
-  background: white;
-=======
-// ── Body layout ──────────────────────────────────────────────────
 body {
   display: flex;
   min-height: 100vh;
   background: #F4F3FA;
   margin: 0;
   padding: 0;
->>>>>>> Stashed changes
 }
 
 .sidebar-main-content {
@@ -21,48 +13,6 @@ body {
   padding: 12px 0;
 }
 
-<<<<<<< Updated upstream
-.navbar-lewagon .navbar-brand {
-  font-family: "Inter", sans-serif;
-  font-weight: 700;
-  font-size: 20px;
-  letter-spacing: 2px;
-  vertical-align: middle;
-}
-
-.navbar-search {
-  position: relative;
-  align-items: center;
-
-  .navbar-search-icon {
-    position: absolute;
-    left: 14px;
-    color: #64748B;
-    pointer-events: none;
-    z-index: 1;
-  }
-
-  input {
-    padding-left: 2.5rem;
-  }
-}
-
-.navbar-lewagon .navbar-nav .nav-link {
-  color: #64748B;
-  font-weight: 400;
-  font-size: 16px;
-  padding: 0.5rem 1.3rem;
-
-  &:hover,
-  &.active {
-    color: #4F46E5;
-    font-weight: 600;
-    text-decoration: underline;
-    text-decoration-color: #4F46E5;
-    text-decoration-thickness: 4px;
-    text-underline-offset: 8px;
-=======
-// ── Sidebar — floating island, icon-only ─────────────────────────
 .landed-sidebar {
   width: 64px;
   flex-shrink: 0;
@@ -79,7 +29,6 @@ body {
   overflow: visible;
 }
 
-// Logo
 .sidebar-logo {
   padding: 16px 0 14px;
   display: flex;
@@ -110,7 +59,6 @@ body {
   letter-spacing: -0.5px;
 }
 
-// Nav
 .sidebar-nav {
   flex: 1;
   padding: 6px 10px;
@@ -120,7 +68,6 @@ body {
   align-items: center;
 }
 
-// Links — icon only, tooltip on hover
 .sidebar-link {
   width: 44px;
   height: 44px;
@@ -136,19 +83,12 @@ body {
   transition: background 0.15s ease, color 0.15s ease;
   position: relative;
   flex-shrink: 0;
-
-  i {
-    font-size: 18px;
-    line-height: 1;
-  }
-
+  i { font-size: 18px; line-height: 1; }
   span { display: none; }
-
   &:hover {
     background: rgba(255, 255, 255, 0.08);
     color: rgba(255, 255, 255, 0.9);
     text-decoration: none;
-
     &::after {
       content: attr(data-label);
       position: absolute;
@@ -167,14 +107,9 @@ body {
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     }
   }
-
-  &.active {
-    background: #5B50E8;
-    color: #fff;
-  }
+  &.active { background: #5B50E8; color: #fff; }
 }
 
-// Bottom
 .sidebar-bottom {
   padding: 8px 10px 14px;
   border-top: 1px solid rgba(255, 255, 255, 0.07);
@@ -185,7 +120,6 @@ body {
   flex-shrink: 0;
 }
 
-// Dropdown
 .sidebar-dropdown {
   background: #1A1535 !important;
   border: 1px solid rgba(255, 255, 255, 0.12) !important;
@@ -195,27 +129,19 @@ body {
   bottom: 0 !important;
   top: auto !important;
   min-width: 160px !important;
-
   .dropdown-item {
     color: rgba(255, 255, 255, 0.7);
     font-size: 13px;
     border-radius: 8px;
     padding: 8px 12px;
-
-    &:hover {
-      background: rgba(255, 255, 255, 0.08);
-      color: #fff;
-    }
->>>>>>> Stashed changes
+    &:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
   }
 }
 
-// Onboarding fallback
 .navbar-lewagon {
   height: 60px;
   background: #1A1535;
   border-bottom: none;
-
   .navbar-brand {
     font-family: "Inter", sans-serif;
     font-weight: 700;
@@ -223,7 +149,6 @@ body {
     color: #fff !important;
     &:hover { color: #fff !important; }
   }
-
   .nav-link {
     color: rgba(255, 255, 255, 0.7);
     font-size: 14px;

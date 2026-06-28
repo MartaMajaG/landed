@@ -22,5 +22,6 @@ export default class extends Controller {
   enableSubmit() {
     const submitButton = this.element.querySelector("[type=submit]")
     if (submitButton) submitButton.disabled = false
+    this.element.reset()
   }
 }

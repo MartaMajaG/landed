@@ -124,7 +124,7 @@ registration_steps = [
   {
     position:              3,
     title:                 "Prepare civil status certificates + translations (if applicable)",
-    description:           "If you were married or had children abroad, bring original marriage/birth certificates. If not in CIEC multilingual format, a certified translation by a German sworn translator is required — an apostille may also be needed.",
+    description:           "If you were married or had children abroad, bring original marriage/birth certificates. If not in CIEC multilingual format, a certified translation by a German sworn translator is required, and an apostille may also be needed.",
     category:              "housing_and_registration",
     is_optional:           true,   # Optional badge — only needed for some users
     unlock_after_position: nil
@@ -132,7 +132,7 @@ registration_steps = [
   {
     position:              4,
     title:                 "Book Bürgerbüro appointment",
-    description:           "Book your Anmeldung appointment online at the Munich Bürgerbüro (KVR). Slots fill quickly — book as soon as you have your Wohnungsgeberbestätigung.",
+    description:           "Book your Anmeldung appointment online at the Munich Bürgerbüro (KVR). Slots fill quickly, so book as soon as you have your Wohnungsgeberbestätigung.",
     category:              "housing_and_registration",
     is_optional:           false,
     unlock_after_position: 2   # Soft-locked: recommended after Steps 1 & 2 are done
@@ -140,7 +140,7 @@ registration_steps = [
   {
     position:              5,
     title:                 "Attend appointment & collect Meldebescheinigung",
-    description:           "Attend your Bürgerbüro appointment in person — all documents must be presented as originals, not scanned copies. You will receive your Meldebescheinigung on the spot.",
+    description:           "Attend your Bürgerbüro appointment in person. All documents must be presented as originals, not scanned copies. You will receive your Meldebescheinigung on the spot.",
     category:              "housing_and_registration",
     is_optional:           false,
     unlock_after_position: 4   # Soft-locked: only sensible after appointment is booked (Step 4)
@@ -333,7 +333,7 @@ haftpflicht = Task.find_or_initialize_by(name: "Personal Liability Insurance (Pr
 haftpflicht.update!(
   pillar:         pillar_health,
   category:       "health_and_insurance",
-  description:    "Get covered for accidental damage you cause to other people or property — from a broken smartphone to a flooded neighbour's flat.",
+  description:    "Get covered for accidental damage you cause to other people or property, from a broken smartphone to a flooded neighbour's flat.",
   why_it_matters: "Not legally required, but culturally non-negotiable in Germany. Losing a building's key can cost €5,000+ for lock replacement. Without Haftpflicht, you are personally liable for the full amount. Costs as little as €40–60/year for a single person.",
   urgency:        "high"
 )
@@ -376,7 +376,7 @@ hausrat = Task.find_or_initialize_by(name: "Home Contents Insurance (Hausratvers
 hausrat.update!(
   pillar:         pillar_health,
   category:       "health_and_insurance",
-  description:    "Protect your personal belongings — furniture, electronics, clothing — against fire, water damage, storm, and burglary.",
+  description:    "Protect your personal belongings (furniture, electronics, clothing) against fire, water damage, storm, and burglary.",
   why_it_matters: "A simple rule: everything that would fall out if you turned your flat upside down is your Hausrat. Replacing stolen or fire-damaged belongings without insurance can cost tens of thousands of euros.",
   urgency:        "medium"
 )
@@ -462,7 +462,7 @@ supplementary = Task.find_or_initialize_by(name: "Supplementary Insurance", city
 supplementary.update!(
   pillar:         pillar_health,
   category:       "health_and_insurance",
-  description:    "Depending on your lifestyle and situation, review these additional insurance types — some may be legally required for you.",
+  description:    "Depending on your lifestyle and situation, review these additional insurance types. Some may be legally required for you.",
   why_it_matters: "Germany has a complex legal and rental landscape. Some supplementary insurances are mandatory in certain states or situations (dogs in Berlin, cars anywhere in Germany), while others prevent major unexpected costs.",
   urgency:        "low"
 )

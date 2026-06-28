@@ -65,6 +65,11 @@ export default class extends Controller {
         if (nextCheckbox) nextCheckbox.style.display = ""
         const nextToggle = nextStep.querySelector(".step__toggle")
         if (nextToggle) nextToggle.style.display = ""
+        const nextUnlockHint = nextStep.querySelector(".step__unlock-hint")
+        if (nextUnlockHint) nextUnlockHint.style.display = "none"
+
+        // Always scroll to next step, even if already in view
+        this.scrollToStep(nextStep)
       }
 
       const completedCount = this.stepTargets.filter(s => s.classList.contains("step--completed")).length
@@ -133,6 +138,12 @@ export default class extends Controller {
     }
   }
 
+  scrollToStep(stepEl) {
+    const OFFSET = 120 // px from top of viewport — adjust to clear your nav
+    const top = stepEl.getBoundingClientRect().top + window.scrollY - OFFSET
+    window.scrollTo({ top, behavior: "smooth" })
+  }
+
   flashAutosave() {
     const el = this.autosaveTarget
     el.style.opacity = "1"
@@ -142,42 +153,94 @@ export default class extends Controller {
   }
 
   celebrate() {
-    confetti({
-      particleCount: 150,
-      spread: 80,
-      origin: { y: 0.6 },
-      colors: ["#2563EB", "#7A9E1F", "#F59E0B", "#ffffff"]
-    })
-
-    setTimeout(() => {
-      confetti({
-        particleCount: 80,
-        angle: 60,
-        spread: 55,
-        origin: { x: 0 },
-        colors: ["#2563EB", "#7A9E1F"]
-      })
-    }, 300)
-
-    setTimeout(() => {
-      confetti({
-        particleCount: 80,
-        angle: 120,
-        spread: 55,
-        origin: { x: 1 },
-        colors: ["#2563EB", "#7A9E1F"]
-      })
-    }, 500)
+    this.launchParticleShimmer()
 
     setTimeout(() => {
       const overlay = this.completionOverlayTarget
       overlay.classList.add("is-visible")
       const bar = overlay.querySelector(".completion-overlay__bar-fill")
       setTimeout(() => { bar.style.width = "100%" }, 50)
-    }, 800)
+    }, 600)
 
     setTimeout(() => {
       window.location.href = "/"
-    }, 4000)
+    }, 4500)
+  }
+
+  launchParticleShimmer() {
+    const canvas = document.createElement('canvas')
+    canvas.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:999;'
+    document.body.appendChild(canvas)
+    const ctx = canvas.getContext('2d')
+    canvas.width = window.innerWidth
+    canvas.height = window.innerHeight
+
+    const cx = canvas.width / 2
+    const cy = canvas.height / 2
+
+    const colors = ['#5B50E8', '#7A9E1F', '#A89CFF', '#C8F59A', '#ffffff', '#E8E5FB']
+    const particles = []
+
+    for (let i = 0; i < 160; i++) {
+      const angle = (Math.random() * Math.PI * 2)
+      const speed = 1.2 + Math.random() * 3.5
+      particles.push({
+        x: cx + (Math.random() - 0.5) * 100,
+        y: cy + (Math.random() - 0.5) * 100,
+        vx: Math.cos(angle) * speed * 0.5,
+        vy: -(1.5 + Math.random() * 3.5),
+        size: 3 + Math.random() * 5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        alpha: 0,
+        alphaTarget: 0.9 + Math.random() * 0.1,
+        decay: 0.008 + Math.random() * 0.006,
+        twinkle: Math.random() * Math.PI * 2,
+        delay: Math.random() * 20
+      })
+    }
+
+    let tick = 0
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      let alive = false
+      tick++
+
+      particles.forEach(p => {
+        if (tick < p.delay) { alive = true; return }
+
+        if (p.alpha < p.alphaTarget) {
+          p.alpha = Math.min(p.alphaTarget, p.alpha + 0.1)
+        } else {
+          p.alpha -= p.decay
+        }
+
+        if (p.alpha <= 0) return
+        alive = true
+
+        p.x += p.vx
+        p.y += p.vy
+        p.vy *= 0.997
+        p.vx *= 0.997
+        p.twinkle += 0.1
+        const twinkleFactor = 0.65 + 0.35 * Math.sin(p.twinkle)
+
+        ctx.save()
+        ctx.globalAlpha = Math.max(0, p.alpha) * twinkleFactor
+        ctx.fillStyle = p.color
+        ctx.shadowColor = p.color
+        ctx.shadowBlur = 10
+        ctx.beginPath()
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2)
+        ctx.fill()
+        ctx.restore()
+      })
+
+      if (alive) {
+        requestAnimationFrame(animate)
+      } else {
+        canvas.remove()
+      }
+    }
+    animate()
   }
 }

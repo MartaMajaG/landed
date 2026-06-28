@@ -1,7 +1,7 @@
 <%# 1. Append the user's message bubble %>
 <%= turbo_stream.append "chat-messages-#{@chat.id}" do %>
   <div style="display:flex; justify-content:flex-end;">
-    <div style="background:#246DD5; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 4px 16px; max-width:75%;">
+    <div style="background:#5B50E8; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 4px 16px; max-width:75%;">
       <%= @user_message.content %>
     </div>
   </div>
@@ -11,8 +11,8 @@
 <%= turbo_stream.append "chat-messages-#{@chat.id}" do %>
   <div id="ai-loading-<%= @user_message.id %>"
        style="display:flex; justify-content:flex-start; gap:8px; align-items:flex-start;">
-    <div style="width:28px; height:28px; background:#E6F0FB; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:13px;">✦</div>
-    <div style="background:#F3F4F6; padding:12px 14px; border-radius:16px 16px 16px 4px;">
+    <div style="width:28px; height:28px; background:#EEECFF; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:14px; color:#5B50E8;">✦</div>
+    <div style="background:#F8F7FF; padding:12px 14px; border-radius:16px 16px 16px 4px;">
       <div class="chat-spinner-inline"></div>
     </div>
   </div>
@@ -35,4 +35,14 @@
       </div>
     <% end %>
   </div>
+<% end %>
+
+<%# 4. Scroll chat to bottom %>
+<%= turbo_stream.append "chat-messages-#{@chat.id}" do %>
+  <script>
+    (function() {
+      const el = document.getElementById('chat-messages-<%= @chat.id %>');
+      if (el) el.scrollTop = el.scrollHeight;
+    })();
+  </script>
 <% end %>
