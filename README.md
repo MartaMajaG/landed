@@ -168,6 +168,4 @@ db/
 
 ---
 
-## Contributing
 
-This project was bootstrapped with the [Le Wagon Rails template](https://github.com/lewagon/rails-templates).
