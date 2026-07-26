@@ -20,10 +20,10 @@
     </div>
 
     <nav class="sidebar-nav">
-      <%= link_to dashboard_path, class: "sidebar-link #{'active' if current_page?(dashboard_path)}", data: { label: "Dashboard" } do %>
+      <%= link_to dashboard_path, class: "sidebar-link #{'active' if controller_name.in?(['dashboards', 'tasks'])}", data: { label: "Dashboard" } do %>
         <i class="bi bi-house"></i>
       <% end %>
-      <%= link_to chats_path, class: "sidebar-link #{'active' if current_page?(chats_path)}", data: { label: "Documents" } do %>
+      <%= link_to chats_path, class: "sidebar-link #{'active' if controller_name == 'chats'}", data: { label: "Documents" } do %>
         <i class="bi bi-file-text"></i>
       <% end %>
     </nav>
