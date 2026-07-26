@@ -75,19 +75,22 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255, 255, 255, 0.4);
-  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  border: 1px solid transparent;
   background: transparent;
   cursor: pointer;
   text-decoration: none;
-  transition: background 0.15s ease, color 0.15s ease;
+  transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease;
   position: relative;
   flex-shrink: 0;
   i { font-size: 18px; line-height: 1; }
   span { display: none; }
   &:hover {
-    background: rgba(255, 255, 255, 0.08);
-    color: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #fff;
     text-decoration: none;
     &::after {
       content: attr(data-label);
@@ -107,7 +110,13 @@ body {
       box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
     }
   }
-  &.active { background: #5B50E8; color: #fff; }
+  &.active {
+    background: rgba(91, 80, 232, 0.35);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(139, 128, 255, 0.5);
+    color: #fff;
+  }
 }
 
 .sidebar-bottom {
