@@ -97,6 +97,8 @@
   color: $text-gray;
 }
 
+// Pillar tag on the task detail page reuses the same soft-fill pill treatment as the
+// dashboard's tag-pillar--{slug} classes — same colors, same shape, just sized for this context.
 .breadcrumb__pillar-tag {
   font-size: 12px !important;
   font-weight: 700 !important;
@@ -160,6 +162,8 @@
 }
 
 // ── Why This Matters ──────────────────────────────
+// Now uses the same static tinted-glow depth as the dashboard's resting cards, tinted
+// indigo since this box is brand-colored (#E8E5FB), not category-colored.
 
 .task-why {
   display: flex;
@@ -173,6 +177,7 @@
   font-size: 14px;
   line-height: 1.6;
   color: $text-dark;
+  box-shadow: 0 4px 14px -10px rgba(91, 80, 232, 0.30);
 }
 
 .task-why__icon {
@@ -208,6 +213,11 @@
 }
 
 // ── Expert Tips ───────────────────────────────────
+// Header rebuilt to match .quick-guides__header exactly (plain text, no colored band, same
+// size/weight/color) instead of the old uppercase green banner — the two sidebar cards now
+// read as one consistent family instead of two different header treatments.
+// Card itself gets the same static tinted-glow depth as dashboard cards, tinted chartreuse
+// (matching its existing green-leaning border) instead of the generic gray it had before.
 
 .expert-tips {
   background: #fff;
@@ -215,25 +225,33 @@
   border-radius: 16px;
   padding: 1.25rem;
   margin-bottom: 1rem;
+  box-shadow: 0 4px 14px -10px rgba(122, 158, 31, 0.30);
 }
 
 .expert-tips__label {
-  display: block;
-  background: #EFF6E0;
-  border-bottom: 1px solid #D8E8C4;
-  // reduced bottom margin from 1rem → 0.625rem to tighten gap under label
-  margin: -1.25rem -1.25rem 0.625rem;
-  padding: 8px 1.25rem;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  color: #4A6810;
-  border-radius: 16px 16px 0 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: $text-dark;
+  margin: 0 0 0.875rem;
+  letter-spacing: normal;
+  text-transform: none;
+  background: none;
+  border-bottom: none;
+  padding: 0;
+  border-radius: 0;
 }
 
 .expert-tips__item {
-  // reduced from 1rem to tighten spacing between tips
-  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border: 1px solid #E8F0D9;
+  border-radius: 12px;
+  padding: 0.625rem 0.75rem;
+  margin-bottom: 0.5rem;
 
   &:last-child {
     margin-bottom: 0;
@@ -242,26 +260,43 @@
   h4 {
     font-size: 14px;
     font-weight: 600;
-    // fixed: was `white` which made titles invisible on white card background
     color: #1a1d23;
-    margin-bottom: 0.25rem;
+    margin: 0 0 2px;
   }
 
   p {
     font-size: 14px;
     color: #1a1d23;
-    line-height: 1.6;
+    line-height: 1.5;
     margin: 0;
   }
 }
 
+.expert-tips__icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  background: rgba(122, 158, 31, 0.14);
+  color: $chartreuse;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+
+  svg { width: 15px; height: 15px; }
+}
+
 // ── Quick Guides ──────────────────────────────────
+// Same static tinted-glow depth, tinted indigo (brand default, since links aren't
+// category-colored) to match the rest of the page.
 
 .quick-guides {
   background: white;
   border: 1px solid #E5E7EB;
   border-radius: 16px;
   padding: 1rem;
+  box-shadow: 0 4px 14px -10px rgba(91, 80, 232, 0.30);
 }
 
 .quick-guides__header {
@@ -293,6 +328,12 @@
   border-radius: 12px;
   margin-bottom: 6px;
   text-decoration: none;
+  transition: border-color 0.15s ease, background 0.15s ease;
+
+  &:hover {
+    border-color: rgba(91, 80, 232, 0.30);
+    background: #FAF9FF;
+  }
 
   &:last-child {
     margin-bottom: 0;
@@ -349,6 +390,7 @@
   text-align: center;
   max-width: 380px;
   width: 90%;
+  box-shadow: 0 12px 32px -12px rgba(91, 80, 232, 0.35);
 }
 
 .completion-overlay__icon {

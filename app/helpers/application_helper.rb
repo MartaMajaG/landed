@@ -7,20 +7,21 @@ module ApplicationHelper
     "health_and_insurance"     => '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
   }.freeze
 
-  PILLAR_COLORS = {
-    "legal_and_work"           => "#5B50E8",
-    "housing_and_registration" => "#f97316",
-    "finance_and_banking"      => "#246DD5",
-    "health_and_insurance"     => "#ec4899",
-  }.freeze
+  # NOTE: PILLAR_COLORS removed. It hardcoded a second, independent color per pillar
+  # (finance_and_banking => #246DD5, a blue) that was applied via inline style="color: ..."
+  # on the icon span:  this overrode currentColor and caused the icon to render
+  # blue even after .tag-pillar--finance_and_banking's CSS text color was fixed to green.
+  # This was the same root-cause pattern as the earlier calendar/pillar mismatch: a third
+  # place defining pillar color independently of the single source of truth in the SCSS.
+  # Now the icon span carries no inline color at all, so it inherits currentColor from the
+  # parent .tag-pillar--{slug} class — icon and text can never drift out of sync again.
 
   def pillar_chip(task)
     return unless task.pillar
-    slug       = task.pillar.slug
-    icon_svg   = PILLAR_ICONS.fetch(slug, "").html_safe
-    icon_color = PILLAR_COLORS.fetch(slug, "#6B7A99")
+    slug     = task.pillar.slug
+    icon_svg = PILLAR_ICONS.fetch(slug, "").html_safe
     content_tag(:span, class: "tag tag-pillar--#{slug}") do
-      concat content_tag(:span, icon_svg, style: "color: #{icon_color}; display:inline-flex;")
+      concat content_tag(:span, icon_svg, style: "display:inline-flex; color:inherit;")
       concat task.pillar.name
     end
   end

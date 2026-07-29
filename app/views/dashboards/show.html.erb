@@ -23,7 +23,10 @@
         <img src="https://mockmind-api.uifaces.co/content/human/219.jpg" alt="Avatar" class="hero-avatar" />
         <p class="hero-greeting__label">Good morning</p>
         <p class="hero-name"><%= current_user.profile&.first_name.present? ? current_user.profile.first_name : "there" %></p>
-        <p class="hero-stage">Moving to <strong><%= @profile.city&.name || "Berlin" %></strong></p>
+        <span class="destination-chip">
+          <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+          Moving to <%= @profile.city&.name || "Berlin" %>
+        </span>
         <% if @days_to_arrival %>
           <span class="arrival-chip">
             <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
@@ -90,7 +93,7 @@
         </div>
         <div class="tasks-controls">
           <div class="tasks-toggle">
-            <button class="toggle-btn active" data-action="click->task-tabs#switchTab" data-tab="">All Tasks</button>
+            <button class="toggle-btn active" data-action="click->task-tabs#switchTab" data-tab="">Open Tasks</button>
             <button class="toggle-btn" data-action="click->task-tabs#switchTab" data-tab="completed">Completed</button>
           </div>
           <div class="pillar-filter" id="pillarFilter">
@@ -133,11 +136,15 @@
         <h2 class="tasks-label">Calendar</h2>
         <div class="calendar-card">
           <div class="cal-toolbar">
+            <%# Legend mirrors the real pillar categories, plus Scanned Docs for AI-scanner
+                deadlines — kept visually distinct (chartreuse-family) from the four pillar
+                colors so it reads as "surfaced by the scanner," not another relocation category. %>
             <div class="cal-legend">
-              <span class="leg-item"><span class="leg-dot" style="background:#f97316;"></span>Housing</span>
-              <span class="leg-item"><span class="leg-dot" style="background:#246DD5;"></span>Financial</span>
-              <span class="leg-item"><span class="leg-dot" style="background:#eab308;"></span>Admin</span>
-              <span class="leg-item"><span class="leg-dot" style="background:#ec4899;"></span>Health & Insurance</span>
+              <span class="leg-item"><span class="leg-dot" style="background:#f97316;"></span>Housing &amp; Registration</span>
+              <span class="leg-item"><span class="leg-dot" style="background:#246DD5;"></span>Finance &amp; Banking</span>
+              <span class="leg-item"><span class="leg-dot" style="background:#5B21B6;"></span>Legal &amp; Work</span>
+              <span class="leg-item"><span class="leg-dot" style="background:#ec4899;"></span>Health &amp; Insurance</span>
+              <span class="leg-item"><span class="leg-dot" style="background:#7A9E1F;"></span>Scanned Docs</span>
             </div>
             <div class="cal-nav">
               <%= link_to "‹", dashboard_path(month: @date.prev_month), class: "cal-nav-btn", data: { turbo_frame: "calendar" } %>
