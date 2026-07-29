@@ -10,15 +10,28 @@ class DashboardsController < ApplicationController
     @arrival_date = current_user.profile.arrival_date
     @task_deadline = @arrival_date + 3.weeks if @arrival_date
 
+    # NOTE: category comes straight from the task's pillar relation (t.pillar&.slug), not the
+    # old t.calendar_category method. That method was emitting a separate, smaller vocabulary
+    # (housing/financial/admin/health_and_insurance) that didn't match the real pillar slugs
+    # (housing_and_registration/finance_and_banking/legal_and_work/health_and_insurance) used
+    # everywhere else — including .task-card--pillar-* classes and .tag-pillar--* pills. Using
+    # the pillar directly keeps one single source of truth for category across cards, pills,
+    # and calendar chips. Falls back to "uncategorized" for any task without a pillar assigned.
     task_events = @profile.tasks
+                      .includes(:pillar)
                       .where.not(due_date: nil)
-                      .map { |t| { name: t.name, category: t.calendar_category, due_date: t.due_date, source: :task } }
+                      .map { |t| { name: t.name, category: t.pillar&.slug || "uncategorized", due_date: t.due_date, source: :task } }
                       .group_by { |e| e[:due_date] }
 
+    # Deadlines extracted by the AI document scanner (e.g. a notice period, an insurance
+    # renewal date) — these aren't tied to a relocation pillar, so they get their own
+    # "scanned_document" category rather than being folded into a pillar or mislabeled "admin".
+    # Kept visually distinct from the four pillar colors so it reads as "surfaced by the
+    # scanner" rather than another relocation category.
     doc_events = current_user.chats
                         .with_attached_document
                         .where.not(deadline: nil)
-                        .map { |c| { name: c.title, category: "admin", due_date: c.deadline, source: :document } }
+                        .map { |c| { name: c.title, category: "scanned_document", due_date: c.deadline, source: :document } }
                         .group_by { |e| e[:due_date] }
 
     @calendar_tasks = task_events.merge(doc_events) { |_date, a, b| a + b }
