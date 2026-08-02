@@ -10,6 +10,22 @@
   stage_keys    = stages.map { |s| s[:key] }
   current_index = stage_keys.index(@current_stage) || 0
   connector_pct = [0, 33, 66, 100][current_index]
+
+  # ── PLACEHOLDER journey history data ──
+  # Hardcoded for now so we can nail the visual before wiring real data. Each
+  # entry needs a `segment` (0 = pre_departure→arrival, 1 = arrival→settling_in,
+  # 2 = settling_in→established) and a `position` (0.0–1.0, where it sits
+  # within that segment). Once real logic is ready, this should be replaced
+  # with completed tasks positioned by actual completion date within their
+  # derived phase (see Task#phase discussion).
+  journey_history_placeholder = [
+    { segment: 0, position: 0.3, label: "Registration submitted", date: "Jul 2", pillar: "housing_and_registration" },
+    { segment: 0, position: 0.7, label: "Health insurance chosen", date: "Jul 5", pillar: "health_and_insurance" },
+    { segment: 1, position: 0.35, label: "Bank account opened", date: "Jul 18", pillar: "finance_and_banking" },
+    { segment: 1, position: 0.75, label: "Anmeldung completed", date: "Jul 22", pillar: "housing_and_registration" },
+    { segment: 2, position: 0.5, label: "Utilities set up", date: "Aug 15", pillar: "housing_and_registration" }
+  ]
+  segment_bounds = [[0, 33], [33, 66], [66, 100]] # matches connector_pct's 0/33/66/100 stops
 %>
 
 <div class="dashboard-bg">
@@ -52,6 +68,25 @@
           <div class="journey-track">
             <div class="journey-track-fill" style="width:<%= connector_pct %>%;"></div>
           </div>
+
+          <%# ── Journey history dots (placeholder data) ── %>
+          <div class="journey-history">
+            <% journey_history_placeholder.each do |event| %>
+              <%
+                seg_start, seg_end = segment_bounds[event[:segment]]
+                left_pct = seg_start + (seg_end - seg_start) * event[:position]
+              %>
+              <button
+                type="button"
+                class="journey-history-dot"
+                style="left: <%= left_pct %>%;"
+                data-journey-history-label="<%= event[:label] %>"
+                data-journey-history-date="<%= event[:date] %>"
+                aria-label="<%= event[:label] %>, <%= event[:date] %>"
+              ></button>
+            <% end %>
+          </div>
+
           <% stages.each_with_index do |stage, i| %>
             <%
               state = if i < current_index then "done"
@@ -144,12 +179,9 @@
         <h2 class="tasks-label">Calendar</h2>
         <div class="calendar-card">
           <div class="cal-toolbar">
-            <%# Legend mirrors the real pillar categories, plus Scanned Docs for AI-scanner
-                deadlines — kept visually distinct (chartreuse-family) from the four pillar
-                colors so it reads as "surfaced by the scanner," not another relocation category. %>
             <div class="cal-legend">
               <span class="leg-item"><span class="leg-dot" style="background:#f97316;"></span>Housing &amp; Registration</span>
-              <span class="leg-item"><span class="leg-dot" style="background:#246DD5;"></span>Finance &amp; Banking</span>
+              <span class="leg-item"><span class="leg-dot" style="background:#059669;"></span>Finance &amp; Banking</span>
               <span class="leg-item"><span class="leg-dot" style="background:#5B21B6;"></span>Legal &amp; Work</span>
               <span class="leg-item"><span class="leg-dot" style="background:#ec4899;"></span>Health &amp; Insurance</span>
               <span class="leg-item"><span class="leg-dot" style="background:#7A9E1F;"></span>Scanned Docs</span>
@@ -199,6 +231,12 @@
       </div>
     </turbo-frame>
 
+    <%# ── Journey history popover (shared, positioned via JS on click) ── %>
+    <div class="journey-history-popover" id="journeyHistoryPopover">
+      <p class="journey-history-popover__title" id="journeyHistoryPopoverTitle"></p>
+      <p class="journey-history-popover__meta" id="journeyHistoryPopoverMeta"></p>
+    </div>
+
   </div>
 </div>
 
@@ -219,6 +257,26 @@
       filterDropdown.classList.remove('pillar-filter__dropdown--open');
     });
   }
+
+  // ── Journey history dots (placeholder) ──
+  var journeyPopover = document.getElementById('journeyHistoryPopover');
+  var journeyPopoverTitle = document.getElementById('journeyHistoryPopoverTitle');
+  var journeyPopoverMeta = document.getElementById('journeyHistoryPopoverMeta');
+
+  document.querySelectorAll('.journey-history-dot').forEach(function(dot) {
+    dot.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var rect = dot.getBoundingClientRect();
+      journeyPopoverTitle.textContent = dot.getAttribute('data-journey-history-label');
+      journeyPopoverMeta.textContent = 'Completed ' + dot.getAttribute('data-journey-history-date');
+      journeyPopover.style.left = (rect.left + rect.width / 2 - 110) + 'px';
+      journeyPopover.style.top = (rect.top - 70) + 'px';
+      journeyPopover.classList.add('journey-history-popover--open');
+    });
+  });
+  document.addEventListener('click', function() {
+    journeyPopover.classList.remove('journey-history-popover--open');
+  });
 
   document.addEventListener('click', function(e) {
     var overflow = e.target.closest('.cal-overflow');
