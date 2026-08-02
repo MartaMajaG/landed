@@ -1,32 +1,14 @@
 <% content_for :meta_title, "Landed | #{@task.name}" %>
 
 <style>
-  .task-detail-page { background: #F7F7FB; min-height: 100vh; }
+  .task-detail-page { background: #FAFAFC; min-height: 100vh; }
   .task-title { font-size: 20px !important; font-weight: 600 !important; letter-spacing: -0.02em; }
   .task-description { font-size: 14px !important; }
   .task-why { border-radius: 12px !important; font-size: 14px !important; }
   .task-why p { font-size: 14px !important; margin: 0 !important; }
   .task-badge { font-size: 12px !important; border-radius: 20px !important; }
-  .expert-tips { border-radius: 16px !important; }
-  .expert-tips__item h4 { font-size: 14px !important; color: #1a1d23 !important; }
-  .expert-tips__item p { font-size: 14px !important; }
-  .quick-guides { border-radius: 16px !important; }
-  .quick-guide__item { border-radius: 12px !important; }
-  .quick-guide__title { font-size: 14px !important; }
-  .quick-guide__meta { font-size: 12px !important; }
   .task-steps__label { font-size: 14px !important; }
-  .step { border-radius: 12px !important; padding: 0.9rem !important; }
   .step__title { font-size: 14px !important; }
-  .step--locked .step__unlock-hint {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    margin-top: 8px;
-    font-size: 12px;
-    color: #9ca3af;
-    font-weight: 500;
-  }
-  .step--locked .step__unlock-hint svg { flex-shrink: 0; }
   .task-breadcrumb {
   display: flex;
   align-items: center;
@@ -36,7 +18,6 @@
   .task-badge--due {
   display: inline-flex;
   align-items: center;
-  padding-left: 0px;
   gap: 4px;
   }
   .task-breadcrumb {
@@ -48,8 +29,8 @@
 <div class="task-detail-page" data-controller="task-detail">
 
   <%# ── BREADCRUMB ── %>
-  <div style="padding: 10px 0; position: relative; z-index: 1;">
-    <div class="container">
+  <div style="padding: 34px 0 16px; position: relative; z-index: 1;">
+    <div class="container" style="max-width: 1160px; margin: 0 auto;">
       <div class="task-breadcrumb-nav">
         <%= link_to "Dashboard", dashboard_path, class: "breadcrumb__link" %>
         <span class="breadcrumb__divider">›</span>
@@ -58,7 +39,7 @@
     </div>
   </div>
 
-  <div class="container task-container">
+  <div class="container task-container" style="max-width: 1160px; margin: 0 auto;">
     <div class="task-layout">
 
       <%# ── LEFT COLUMN ── %>
@@ -76,12 +57,14 @@
               <span class="task-badge task-badge--urgent">Due in <%= days_left %> day<%= days_left == 1 ? "" : "s" %></span>
             <% else %>
               <span class="task-badge task-badge--due">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                  <line x1="16" y1="2" x2="16" y2="6"/>
-                  <line x1="8" y1="2" x2="8" y2="6"/>
-                  <line x1="3" y1="10" x2="21" y2="10"/>
-                </svg>
+                <span class="lucide-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                </span>
                 <%= @task.due_date.strftime("%b %d") %>
               </span>
             <% end %>
@@ -89,24 +72,26 @@
 
           <% if @task.pillar %>
             <span class="tag tag-pillar--<%= @task.pillar.slug %> breadcrumb__pillar-tag">
-              <% case @task.pillar.slug %>
-              <% when "finance_and_banking" %>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
-                </svg>
-              <% when "health_and_insurance" %>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                </svg>
-              <% when "housing_and_registration" %>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
-                </svg>
-              <% when "legal_and_work" %>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-                </svg>
-              <% end %>
+              <span class="lucide-icon">
+                <% case @task.pillar.slug %>
+                <% when "finance_and_banking" %>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
+                  </svg>
+                <% when "health_and_insurance" %>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                  </svg>
+                <% when "housing_and_registration" %>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+                  </svg>
+                <% when "legal_and_work" %>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
+                  </svg>
+                <% end %>
+              </span>
               <%= @task.pillar.name %>
             </span>
           <% end %>
@@ -134,11 +119,13 @@
 
         <%# ── WHY THIS MATTERS ── %>
         <div class="task-why">
-          <svg class="task-why__icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-            <path d="M9 18h6"/>
-            <path d="M10 22h4"/>
-            <path d="M12 2a7 7 0 0 1 7 7c0 2.5-1.3 4.7-3.3 6H8.3A7.06 7.06 0 0 1 5 9a7 7 0 0 1 7-7z"/>
-          </svg>
+          <span class="lucide-icon task-why__icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3a6 6 0 0 0-6 6c0 2 1 3.5 2.5 4.5V16a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-2.5C17 12.5 18 11 18 9a6 6 0 0 0-6-6z"/>
+              <line x1="9" y1="21" x2="15" y2="21"/>
+              <line x1="9.5" y1="18" x2="14.5" y2="18"/>
+            </svg>
+          </span>
           <p><strong>Good to know:</strong> <%= @task.why_it_matters %></p>
         </div>
 
@@ -169,72 +156,90 @@
                    data-task-detail-target="step"
                    data-completed="<%= completed %>">
 
-                <% if completed %>
-                  <div class="step__number step__number--done">
-                    <%= button_to user_checklist_item_path(item),
-                        method: :patch,
-                        form: { data: { turbo: "false" } },
-                        class: "step__undo-btn",
-                        data: { action: "click->task-detail#undoStep" },
-                        title: "Mark as incomplete" do %>
-                      <span class="step__check">✓</span>
-                    <% end %>
-                  </div>
-                <% else %>
-                  <div class="step__number">
-                    <span><%= index + 1 %></span>
-                  </div>
-                <% end %>
+                <div class="step__marker">
+                  <% if completed %>
+                    <div class="step__number step__number--done">
+                      <%= button_to user_checklist_item_path(item),
+                          method: :patch,
+                          form: { data: { turbo: "false" } },
+                          class: "step__undo-btn",
+                          data: { action: "click->task-detail#undoStep" },
+                          title: "Mark as incomplete" do %>
+                        <span class="step__check">✓</span>
+                      <% end %>
+                    </div>
+                  <% else %>
+                    <div class="step__number">
+                      <span><%= index + 1 %></span>
+                    </div>
+                  <% end %>
+                </div>
 
-                <%# ── STEP CONTENT ── %>
-                <div class="step__content">
-                  <div class="step__header">
+                <div class="step__card">
+                  <%# ── STEP CONTENT ── %>
+                  <div class="step__content">
+                    <div class="step__header">
+                      <h3 class="step__title"><%= item.title %></h3>
+                      <% if is_active %>
+                        <span class="task-badge task-badge--action">Action required</span>
+                      <% end %>
+
+                    </div>
+
+                    <p class="step__description"><%= item.description %></p>
+
+                    <% if is_active && item.action_note.present? %>
+                      <p class="step__action-note"><%= item.action_note %></p>
+                    <% end %>
+
+                    <%# Inline tip — mapped to this step by order (tip 1 with step 1, etc.),
+                        since tips aren't tied to a specific checklist item in the data. %>
+                    <% tip = @task.expert_tips&.[](index) %>
+                    <% if tip.present? %>
+                      <div class="step__tip">
+                        <div class="step__tip-body">
+                          <p><strong><%= tip["title"] %>:</strong> <%= tip["body"] %></p>
+                          <% if tip["resource_url"].present? %>
+                            <a href="<%= tip["resource_url"] %>" target="_blank" class="step__tip-resource">
+                              <span class="step__tip-resource-favicon">
+                                <img src="https://www.google.com/s2/favicons?domain=<%= tip["resource_domain"] %>&sz=64" alt="" />
+                              </span>
+                              <span class="step__tip-resource-text">
+                                <p class="step__tip-resource-title"><%= tip["resource_title"] %></p>
+                                <p class="step__tip-resource-domain"><%= tip["resource_domain"] %></p>
+                              </span>
+                            </a>
+                          <% end %>
+                        </div>
+                      </div>
+                    <% end %>
 
                     <% unless completed %>
                       <%= button_to user_checklist_item_path(item),
                           method: :patch,
                           form: {
-                            class: "step__checkbox-form",
                             data: {
                               action: "submit->task-detail#completeStep",
                               turbo: "false"
                             }
                           },
-                          class: "step__checkbox" do %>
-                        <span class="step__checkbox-inner"></span>
+                          class: "step__toggle",
+                          style: (is_active ? nil : "display:none;"),
+                          data: { "task-detail-target": "toggleBtn" } do %>
+                        Mark complete
                       <% end %>
-                    <% end %>
-
-                    <h3 class="step__title"><%= item.title %></h3>
-                    <% if is_active %>
-                      <span class="task-badge task-badge--action">Action required</span>
                     <% end %>
 
                   </div>
 
-                  <p class="step__description"><%= item.description %></p>
-
-                  <% if is_active && item.action_note.present? %>
-                    <p class="step__action-note"><%= item.action_note %></p>
-                  <% end %>
-
-                  <%# Unlock hint for locked steps %>
-                  <% if is_locked && index > 0 %>
-                    <p class="step__unlock-hint">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                      Unlocks after step <%= index %>
-                    </p>
-                  <% end %>
-
-                  <% if !completed && is_active %>
-                    <%= button_to user_checklist_item_path(item),
-                        method: :patch,
-                        class: "step__toggle",
-                        data: { "task-detail-target": "toggleBtn" } do %>
-                      Mark complete
-                    <% end %>
-                  <% end %>
-
+                  <%# Locked placeholder — always rendered, shown via CSS only when the step
+                      has .step--locked, so JS unlocking (class toggle) needs no changes. %>
+                  <div class="step__locked-placeholder">
+                    <span class="lucide-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </span>
+                    Unlock next step after completion
+                  </div>
                 </div>
               </div>
             <% end %>
@@ -248,153 +253,19 @@
 
       </div>
 
-      <%# ── RIGHT COLUMN ── %>
-      <div class="task-sidebar">
-
-        <%# ── EXPERT TIPS ── %>
-        <div class="expert-tips">
-          <span class="expert-tips__label">Expert tips</span>
-          <% if @task.expert_tips.present? %>
-            <% @task.expert_tips.each do |tip| %>
-              <div class="expert-tips__item">
-                <div class="expert-tips__icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M9 18h6"/>
-                    <path d="M10 22h4"/>
-                    <path d="M12 2a7 7 0 0 1 7 7c0 2.5-1.3 4.7-3.3 6H8.3A7.06 7.06 0 0 1 5 9a7 7 0 0 1 7-7z"/>
-                  </svg>
-                </div>
-                <div>
-                  <h4><%= tip["title"] %></h4>
-                  <p><%= tip["body"] %></p>
-                </div>
-              </div>
-            <% end %>
-          <% else %>
-            <div class="expert-tips__item">
-              <p style="color: #9CA3AF; font-size: 14px;">Expert tips are being generated…</p>
-            </div>
-          <% end %>
-        </div>
-
-        <%# ── QUICK LINKS ── %>
-        <%# Links are keyed by task name slug so each task gets relevant resources,
-            not just pillar-level generic links. Add new tasks here as needed. %>
-        <div class="quick-guides">
-          <div class="quick-guides__header">
-            <h3>Quick links</h3>
-          </div>
-          <div class="quick-guides__list">
-            <%
-              # Match by keyword in task name — more robust than exact slug matching.
-              # Add new entries here as tasks are added to the DB.
-              task_name_lower = @task.name.downcase
-
-              quick_links = if task_name_lower.include?("privathaftpflicht") || task_name_lower.include?("personal liability")
-                [
-                  { title: "Compare Policies on Check24", url: "https://www.check24.de/privathaftpflicht/", domain: "check24.de" },
-                  { title: "Privathaftpflicht Guide for Expats", url: "https://www.make-it-in-germany.com", domain: "make-it-in-germany.com" },
-                  { title: "Verivox Insurance Comparison", url: "https://www.verivox.de/privathaftpflicht/", domain: "verivox.de" }
-                ]
-              elsif task_name_lower.include?("krankenversicherung") || task_name_lower.include?("health insurance")
-                [
-                  { title: "Public vs Private Insurance Guide", url: "https://www.bundesgesundheitsministerium.de", domain: "bundesgesundheitsministerium.de" },
-                  { title: "Find a Health Insurance Provider", url: "https://www.krankenkassen.de", domain: "krankenkassen.de" },
-                  { title: "Make it in Germany — Insurance", url: "https://www.make-it-in-germany.com", domain: "make-it-in-germany.com" }
-                ]
-              elsif task_name_lower.include?("hausrat") || task_name_lower.include?("home contents")
-                [
-                  { title: "Hausratversicherung on Check24", url: "https://www.check24.de/hausratversicherung/", domain: "check24.de" },
-                  { title: "German Tenants Association", url: "https://www.mieterbund.de", domain: "mieterbund.de" },
-                  { title: "Verivox Home Contents Comparison", url: "https://www.verivox.de/hausratversicherung/", domain: "verivox.de" }
-                ]
-              elsif task_name_lower.include?("anmeldung") || task_name_lower.include?("registration")
-                [
-                  { title: "Munich City Registration Office", url: "https://www.muenchen.de/rathaus/home_en/department-of-public-order/registration-of-residence.html", domain: "muenchen.de" },
-                  { title: "Anmeldung Guide for Expats", url: "https://www.make-it-in-germany.com", domain: "make-it-in-germany.com" },
-                  { title: "German Tenants Association", url: "https://www.mieterbund.de", domain: "mieterbund.de" }
-                ]
-              elsif task_name_lower.include?("banking") || task_name_lower.include?("bank account")
-                [
-                  { title: "Open a Bank Account in Germany", url: "https://www.bundesbank.de", domain: "bundesbank.de" },
-                  { title: "N26 — English-Friendly Bank", url: "https://www.n26.com", domain: "n26.com" },
-                  { title: "Make it in Germany — Finance Guide", url: "https://www.make-it-in-germany.com", domain: "make-it-in-germany.com" }
-                ]
-              elsif task_name_lower.include?("work permit") || task_name_lower.include?("visa")
-                [
-                  { title: "Federal Employment Agency", url: "https://www.arbeitsagentur.de", domain: "arbeitsagentur.de" },
-                  { title: "Work Visa Guide", url: "https://www.make-it-in-germany.com", domain: "make-it-in-germany.com" },
-                  { title: "German Labour Law Overview", url: "https://www.bmas.de", domain: "bmas.de" }
-                ]
-              else
-                # Pillar-level fallback
-                case @task.pillar&.slug
-                when "finance_and_banking"
-                  [
-                    { title: "Open a Bank Account in Germany", url: "https://www.bundesbank.de", domain: "bundesbank.de" },
-                    { title: "Official Subsidy Calculator", url: "https://www.arbeitsagentur.de", domain: "arbeitsagentur.de" },
-                    { title: "Make it in Germany — Finance Guide", url: "https://www.make-it-in-germany.com", domain: "make-it-in-germany.com" }
-                  ]
-                when "health_and_insurance"
-                  [
-                    { title: "Public vs Private Insurance Guide", url: "https://www.bundesgesundheitsministerium.de", domain: "bundesgesundheitsministerium.de" },
-                    { title: "Find a Health Insurance Provider", url: "https://www.krankenkassen.de", domain: "krankenkassen.de" },
-                    { title: "Make it in Germany — Insurance", url: "https://www.make-it-in-germany.com", domain: "make-it-in-germany.com" }
-                  ]
-                when "housing_and_registration"
-                  [
-                    { title: "Munich City Registration Office", url: "https://www.muenchen.de", domain: "muenchen.de" },
-                    { title: "Anmeldung Guide for Expats", url: "https://www.make-it-in-germany.com", domain: "make-it-in-germany.com" },
-                    { title: "German Tenants Association", url: "https://www.mieterbund.de", domain: "mieterbund.de" }
-                  ]
-                when "legal_and_work"
-                  [
-                    { title: "Federal Employment Agency", url: "https://www.arbeitsagentur.de", domain: "arbeitsagentur.de" },
-                    { title: "Work Visa Guide", url: "https://www.make-it-in-germany.com", domain: "make-it-in-germany.com" },
-                    { title: "German Labour Law Overview", url: "https://www.bmas.de", domain: "bmas.de" }
-                  ]
-                else
-                  [
-                    { title: "Make it in Germany", url: "https://www.make-it-in-germany.com", domain: "make-it-in-germany.com" },
-                    { title: "Federal Government Germany", url: "https://www.bundesregierung.de", domain: "bundesregierung.de" },
-                    { title: "Germany Expat Guide", url: "https://www.arbeitsagentur.de", domain: "arbeitsagentur.de" }
-                  ]
-                end
-              end
-            %>
-            <% quick_links.each do |link| %>
-              <a href="<%= link[:url] %>" target="_blank" class="quick-guide__item">
-                <span class="quick-guide__favicon">
-                  <img src="https://www.google.com/s2/favicons?domain=<%= link[:domain] %>&sz=32" alt="" />
-                </span>
-                <div class="quick-guide__text">
-                  <p class="quick-guide__title"><%= link[:title] %></p>
-                  <p class="quick-guide__meta"><%= link[:domain] %></p>
-                </div>
-                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; display:block;">
-                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                  <polyline points="15 3 21 3 21 9"/>
-                  <line x1="10" y1="14" x2="21" y2="3"/>
-                </svg>
-              </a>
-            <% end %>
+      <%# ── COMPLETION OVERLAY ── %>
+      <div class="completion-overlay" data-task-detail-target="completionOverlay">
+        <div class="completion-overlay__card">
+          <div class="completion-overlay__icon">✓</div>
+          <h2 class="completion-overlay__title">Task Completed! 🎉</h2>
+          <p class="completion-overlay__message"><%= @task.name %> is done and dusted.</p>
+          <p class="completion-overlay__sub">Heading back to your dashboard..</p>
+          <div class="completion-overlay__bar">
+            <div class="completion-overlay__bar-fill"></div>
           </div>
         </div>
-
-        <%# ── COMPLETION OVERLAY ── %>
-        <div class="completion-overlay" data-task-detail-target="completionOverlay">
-          <div class="completion-overlay__card">
-            <div class="completion-overlay__icon">✓</div>
-            <h2 class="completion-overlay__title">Task Completed! 🎉</h2>
-            <p class="completion-overlay__message"><%= @task.name %> is done and dusted.</p>
-            <p class="completion-overlay__sub">Heading back to your dashboard..</p>
-            <div class="completion-overlay__bar">
-              <div class="completion-overlay__bar-fill"></div>
-            </div>
-          </div>
-        </div>
-
       </div>
+
     </div>
   </div>
 </div>

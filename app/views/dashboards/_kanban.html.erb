@@ -26,7 +26,9 @@
             <div class="card-footer-group">
               <div class="card-bottom-row">
                 <span class="card-due card-done-badge" style="display:inline-flex; align-items:center; gap:4px;">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  <span class="lucide-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </span>
                   Completed
                 </span>
               </div>
@@ -72,7 +74,9 @@
           </div>
           <div class="card-bottom-row">
             <span class="card-due urgent-due" style="display:inline-flex; align-items:center; gap:4px;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <span class="lucide-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </span>
               <%= if task.due_date == Date.today
                     "Today"
                   elsif task.due_date == Date.today + 1.day
@@ -125,7 +129,9 @@
         </div>
         <div class="card-bottom-row" <%= ('style="display:none;"').html_safe unless task.due_date %>>
           <span class="card-due" style="display:inline-flex; align-items:center; gap:4px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span class="lucide-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </span>
             <%= task.due_date&.strftime("%b %d") %>
           </span>
         </div>
@@ -167,7 +173,9 @@
         </div>
         <div class="card-bottom-row" <%= ('style="display:none;"').html_safe unless task.due_date %>>
           <span class="card-due" style="display:inline-flex; align-items:center; gap:4px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span class="lucide-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </span>
             <%= task.due_date&.strftime("%b %d") %>
           </span>
         </div>

@@ -10,7 +10,7 @@
   }
   .doc-icon {
     width: 34px; height: 34px;
-    background: #F6F5FF;
+    background: #F6EDFB;
     border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
     transition: opacity 0.15s;
@@ -21,7 +21,7 @@
     width: 15px; height: 15px;
     opacity: 0;
     transition: opacity 0.15s;
-    accent-color: #5B50E8;
+    accent-color: var(--brand-indigo);
     cursor: pointer;
     z-index: 2;
   }
@@ -29,20 +29,20 @@
   .doc-row:hover .doc-icon { opacity: 0 !important; }
   .doc-row.is-selected .row-checkbox { opacity: 1; }
   .doc-row.is-selected .doc-icon { opacity: 0 !important; }
-  .doc-row.is-selected { background: #E4E0FF !important; border-bottom-color: #DDD8FF !important; }
-  .doc-row.is-selected:hover { background: #DDD8FF !important; }
+  .doc-row.is-selected { background: #F6EDFB !important; border-bottom-color: #EBD6F5 !important; }
+  .doc-row.is-selected:hover { background: #EBD6F5 !important; }
   .selection-active .single-delete { display: none !important; }
 
   #select-all {
     width: 15px; height: 15px;
-    accent-color: #5B50E8; cursor: pointer;
+    accent-color: var(--brand-indigo); cursor: pointer;
     opacity: 0; transition: opacity 0.15s;
     flex-shrink: 0;
   }
   .table-header:hover #select-all,
   #select-all:checked,
   #select-all:indeterminate { opacity: 1; }
-  .selection-active .table-header { background: #F0EEFF !important; border-bottom-color: #E4E0FF !important; }
+  .selection-active .table-header { background: #F1E4FA !important; border-bottom-color: #F6EDFB !important; }
 
   #bulk-bar {
     position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
@@ -59,17 +59,17 @@
   }
 </style>
 
-<div style="min-height:100vh; padding-bottom:48px; position:relative; overflow:hidden; background:#EAE8F5;">
+<div style="min-height:100vh; padding-bottom:48px; position:relative; overflow:hidden; background:var(--page-bg);">
   <div class="container-xl" style="padding-top:40px; position:relative; z-index:1;">
 
     <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:24px;">
       <div>
-        <p style="font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#9B93C9; margin:0 0 6px;">Document Vault</p>
+        <p style="font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#B59BC1; margin:0 0 6px;">Document Vault</p>
         <h1 style="font-size:26px; font-weight:600 !important; font-family:inherit !important; color:#1A1A2E; margin:0 0 4px; letter-spacing:-0.3px;">My Documents</h1>
         <% if @chats.any? %><p style="font-size:13px; color:#9CA3AF; margin:0;"><%= pluralize(@chats.size, "document") %> scanned</p><% end %>
       </div>
       <% if @chats.any? %>
-        <button onclick="document.getElementById('upload-modal').style.display='flex'" style="background:#5B50E8; color:#fff; font-size:13px; font-weight:500; padding:9px 18px; border-radius:8px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+        <button onclick="document.getElementById('upload-modal').style.display='flex'" style="background:var(--brand-indigo); color:#fff; font-size:13px; font-weight:500; padding:9px 18px; border-radius:8px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Scan new document
         </button>
@@ -77,21 +77,21 @@
     </div>
 
     <% if @chats.empty? %>
-      <div style="background:#fff; border-radius:14px; padding:80px 40px; text-align:center; border:1px solid #D8D4EE;">
-        <div style="width:56px; height:56px; background:#EEECFF; border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#5B50E8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      <div style="background:#fff; border-radius:14px; padding:80px 40px; text-align:center; border:1px solid #E7C7F0;">
+        <div style="width:56px; height:56px; background:#F6EDFB; border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand-indigo)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         </div>
         <h2 style="font-size:18px; font-weight:600; color:#1A1A2E; margin-bottom:8px;">No documents yet</h2>
         <p style="font-size:14px; color:#9CA3AF; margin-bottom:28px; max-width:320px; margin-left:auto; margin-right:auto;">Scan your first German document and get a plain-English summary in seconds.</p>
-        <button onclick="document.getElementById('upload-modal').style.display='flex'" style="background:#5B50E8; color:#fff; font-size:13px; font-weight:500; padding:10px 20px; border-radius:8px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+        <button onclick="document.getElementById('upload-modal').style.display='flex'" style="background:var(--brand-indigo); color:#fff; font-size:13px; font-weight:500; padding:10px 20px; border-radius:8px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Scan your first document
         </button>
       </div>
     <% else %>
 
-      <div id="doc-table" style="background:#fff; border-radius:14px; overflow:hidden; border:1px solid #D8D4EE;">
-        <div class="table-header" style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:11px 20px; background:#FAF9FF; border-bottom:1px solid #F0EEFF; align-items:center;">
+      <div id="doc-table" style="background:#fff; border-radius:14px; overflow:hidden; border:1px solid #E7C7F0;">
+        <div class="table-header" style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:11px 20px; background:#FAF9FF; border-bottom:1px solid #F1E4FA; align-items:center;">
           <div style="display:flex; align-items:center; gap:8px;">
             <input type="checkbox" id="select-all" onchange="toggleAll(this)">
             <span style="font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#9CA3AF;">Document</span>
@@ -123,7 +123,7 @@
 
             <div>
               <% if chat.document_type.present? %>
-                <span style="display:inline-block; width:fit-content; font-size:11px; font-weight:600; background:#EEECFF; color:#5B50E8; padding:4px 10px; border-radius:20px;"><%= chat.document_type %></span>
+                <span style="display:inline-block; width:fit-content; font-size:11px; font-weight:600; background:#F6EDFB; color:var(--brand-indigo); padding:4px 10px; border-radius:20px;"><%= chat.document_type %></span>
               <% else %>
                 <span style="font-size:12px; color:#D1D5DB;">—</span>
               <% end %>
@@ -171,17 +171,17 @@
     <%= form_with model: @chat, local: true, multipart: true, data: { controller: "loading", action: "submit->loading#submit" } do |f| %>
       <div data-loading-target="form">
         <div class="mb-4" data-controller="uploadpreview">
-          <div style="border:2px dashed #DDD9FF; border-radius:10px; padding:32px 20px; text-align:center; background:#FAF9FF;">
-            <div style="width:44px; height:44px; background:#EEECFF; border-radius:10px; display:flex; align-items:center; justify-content:center; margin:0 auto 14px;">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#5B50E8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
+          <div style="border:2px dashed #E7C7F0; border-radius:10px; padding:32px 20px; text-align:center; background:#FAF9FF;">
+            <div style="width:44px; height:44px; background:#F6EDFB; border-radius:10px; display:flex; align-items:center; justify-content:center; margin:0 auto 14px;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-indigo)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
             </div>
             <p style="font-size:14px; color:#6B7280; margin-bottom:16px;">Upload a photo (JPEG or PNG)</p>
             <div class="d-flex justify-content-center gap-2">
-              <label style="background:#5B50E8; color:#fff; border-radius:8px; padding:8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" for="chat_document_upload">
+              <label style="background:var(--brand-indigo); color:#fff; border-radius:8px; padding:8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" for="chat_document_upload">
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 Upload
               </label>
-              <label style="background:#fff; color:#5B50E8; border:1.5px solid #5B50E8; border-radius:8px; padding:8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" for="chat_document_camera">
+              <label style="background:#fff; color:var(--brand-indigo); border:1.5px solid var(--brand-indigo); border-radius:8px; padding:8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" for="chat_document_camera">
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
                 Take photo
               </label>
@@ -192,10 +192,10 @@
           <img data-uploadpreview-target="preview" class="img-fluid rounded mt-3 d-none" style="max-height:200px;" />
           <p data-uploadpreview-target="filename" class="mt-3 d-none" style="font-size:13px; color:#6B7280;"></p>
         </div>
-        <%= f.submit "Scan document", style:"width:100%; padding:11px; background:#5B50E8; color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer;" %>
+        <%= f.submit "Scan document", style:"width:100%; padding:11px; background:var(--brand-indigo); color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer;" %>
       </div>
       <div data-loading-target="loader" class="d-none" style="text-align:center; padding:32px 0;">
-        <div style="width:44px; height:44px; border:3px solid #DDD9FF; border-top-color:#5B50E8; border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px;"></div>
+        <div style="width:44px; height:44px; border:3px solid #E7C7F0; border-top-color:var(--brand-indigo); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px;"></div>
         <p style="font-size:15px; font-weight:500; color:#1A1A2E; margin-bottom:4px;">Analysing your document...</p>
         <p style="font-size:13px; color:#9CA3AF;">This takes about 10 seconds</p>
       </div>

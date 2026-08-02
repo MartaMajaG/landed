@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_05_24_171321) do
+ActiveRecord::Schema[8.1].define(version: 2026_08_01_202500) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -51,11 +51,13 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_171321) do
     t.text "description"
     t.string "document_type"
     t.boolean "is_mandatory"
+    t.bigint "provider_id"
     t.string "title"
     t.datetime "updated_at", null: false
     t.string "urgency"
     t.bigint "user_id", null: false
     t.index ["checklist_item_id"], name: "index_chats_on_checklist_item_id"
+    t.index ["provider_id"], name: "index_chats_on_provider_id"
     t.index ["user_id"], name: "index_chats_on_user_id"
   end
 
@@ -124,6 +126,20 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_171321) do
     t.string "visa_status"
     t.index ["city_id"], name: "index_profiles_on_city_id"
     t.index ["user_id"], name: "index_profiles_on_user_id"
+  end
+
+  create_table "providers", force: :cascade do |t|
+    t.integer "contact_status", default: 0, null: false
+    t.string "contact_url"
+    t.datetime "created_at", null: false
+    t.datetime "looked_up_at"
+    t.string "name", null: false
+    t.string "normalized_name", null: false
+    t.string "phone"
+    t.string "source_url"
+    t.datetime "updated_at", null: false
+    t.string "website"
+    t.index ["normalized_name"], name: "index_providers_on_normalized_name", unique: true
   end
 
   create_table "solid_cable_messages", force: :cascade do |t|
@@ -311,6 +327,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_05_24_171321) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "chats", "checklist_items"
+  add_foreign_key "chats", "providers"
   add_foreign_key "chats", "users"
   add_foreign_key "checklist_items", "tasks"
   add_foreign_key "messages", "chats"

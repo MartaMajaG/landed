@@ -1,42 +1,36 @@
 <%# Partial to display the AI analysis results %>
 <%# match contains: { matched_type: Object, confidence_score: Int, target_logic: Hash } %>
 
-<div class="card mb-4 shadow-sm border-0" 
+<div class="analysis-result-card"
      id="analysis_result_<%= match[:matched_type]&.id %>"
      data-controller="smart-actions"
      data-smart-actions-type-value="<%= match[:target_logic]['action_type'] %>"
      data-smart-actions-url-value="<%= match[:target_logic]['target_url'] %>"
      data-smart-actions-task-id-value="<%= match[:target_logic]['completes_task_id'] %>">
-  
-  <div class="card-body p-4">
-    <div class="d-flex justify-content-between align-items-start mb-3">
-      <div>
-        <span class="badge rounded-pill mb-2 <%= match[:matched_type]&.category == 'legal' ? 'bg-primary' : 'bg-secondary' %>">
-          <%= match[:matched_type]&.category&.upcase || "UNCATEGORIZED" %>
-        </span>
-        <h3 class="h5 mb-1"><%= match[:matched_type]&.name || "Unknown Document" %></h3>
-        <p class="text-muted small mb-0">Identification Confidence: <%= (match[:confidence_score] * 20).to_i %>%</p>
-      </div>
-      
-      <i class="fa-solid fa-circle-check text-success h4"></i>
+
+  <div class="d-flex justify-content-between align-items-start mb-3">
+    <div>
+      <span class="category-pill <%= match[:matched_type]&.category == 'legal' ? 'category-pill--legal' : 'category-pill--neutral' %>">
+        <%= match[:matched_type]&.category&.upcase || "UNCATEGORIZED" %>
+      </span>
+      <h3 class="analysis-result-title"><%= match[:matched_type]&.name || "Unknown document" %></h3>
+      <p class="analysis-result-confidence">Identification confidence: <%= (match[:confidence_score] * 20).to_i %>%</p>
     </div>
 
-    <% if match[:target_logic].present? %>
-      <div class="mt-3">
-        <button type="button" 
-                class="btn btn-primary w-100 py-2 d-flex align-items-center justify-content-center"
-                data-action="click->smart-actions#perform">
-          <i class="fa-solid fa-bolt me-2"></i>
-          <%= match[:target_logic]['action_type'].titleize %>
-        </button>
-      </div>
-    <% end %>
+    <span class="lucide-icon analysis-result-check"><%= inline_svg_icon("circle-check") %></span>
+  </div>
 
-    <div class="mt-3 pt-3 border-top">
-      <div class="d-flex align-items-center text-muted small">
-        <i class="fa-solid fa-link me-2"></i>
-        <span>Links to Checklist Task: <strong><%= match[:target_logic]['completes_task_id'] || "None" %></strong></span>
-      </div>
-    </div>
+  <% if match[:target_logic].present? %>
+    <button type="button"
+            class="smart-action-btn"
+            data-action="click->smart-actions#perform">
+      <span class="lucide-icon"><%= inline_svg_icon("bolt") %></span>
+      <%= match[:target_logic]['action_type'].titleize %>
+    </button>
+  <% end %>
+
+  <div class="analysis-result-footer">
+    <span class="lucide-icon"><%= inline_svg_icon("link") %></span>
+    <span>Links to checklist task: <strong><%= match[:target_logic]['completes_task_id'] || "None" %></strong></span>
   </div>
 </div>
