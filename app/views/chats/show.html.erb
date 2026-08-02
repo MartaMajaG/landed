@@ -4,7 +4,7 @@
 
 <%
   raw_title = @chat.title || @chat.document.filename.to_s
-  if raw_title.match(/\A(.+?)\s*\((.+)\)\z/)
+  if raw_title.match(/\A(.+?)\s*[\(\[](.+)[\)\]]\z/)
     english_title = $1.strip
     german_title  = $2.strip
   else
@@ -14,8 +14,8 @@
 %>
 
 <%
-  icon_bulb     = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0-6 6c0 2 1 3.5 2.5 4.5V16a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-2.5C17 12.5 18 11 18 9a6 6 0 0 0-6-6z"/><line x1="9" y1="21" x2="15" y2="21"/><line x1="9.5" y1="18" x2="14.5" y2="18"/></svg>'
-  icon_list     = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>'
+  icon_bulb     = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0-6 6c0 2 1 3.5 2.5 4.5V16a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-2.5C17 12.5 18 11 18 9a6 6 0 0 0-6-6z"/><line x1="9" y1="21" x2="15" y2="21"/><line x1="9.5" y1="18" x2="14.5" y2="18"/></svg>'
+  icon_list     = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>'
   icon_file_doc = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'
   icon_file_red = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E24B4A" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'
   icon_send     = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>'
@@ -24,6 +24,8 @@
   icon_warn     = '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
   icon_check    = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>'
   icon_note     = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>'
+  icon_euro     = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B4B2C4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12"/><path d="M4 14h9"/><path d="M19 6a7.7 7.7 0 0 0-5.2-2A7.9 7.9 0 0 0 6 12a7.9 7.9 0 0 0 7.8 8 7.7 7.7 0 0 0 5.2-2"/></svg>'
+  icon_tag      = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B4B2C4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24L4 3a1 1 0 0 0-1 1l.24 5.59a2 2 0 0 0 .59 1.41l9.58 9.59a2 2 0 0 0 2.83 0l4.35-4.35a2 2 0 0 0 0-2.83z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>'
 %>
 
 <style>
@@ -33,29 +35,21 @@
 
   .white-card {
     background: #fff;
-    border-radius: 16px;
-    border: 1px solid #D8D4EE;
-    box-shadow: 0 1px 3px rgba(91,80,232,0.05);
-  }
-  .glass-card {
-    background: rgba(255,255,255,0.65);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 16px;
-    border: 1px solid #D8D4EE;
-    box-shadow: 0 1px 3px rgba(91,80,232,0.05);
+    border-radius: 20px;
+    border: 1px solid #ECEBF3;
+    box-shadow: 0 1px 2px rgba(16,24,40,0.04), 0 4px 12px rgba(16,24,40,0.05);
   }
   .chat-chip {
     font-size: 12px; color: #374151; background: rgba(255,255,255,0.75);
     border: 1px solid #E5E7EB; border-radius: 20px; padding: 5px 14px;
     cursor: pointer; font-weight: 500; transition: all 0.12s;
   }
-  .chat-chip:hover { background: #fff; border-color: #5B50E8; color: #5B50E8; }
+  .chat-chip:hover { background: #fff; border-color: #9739C8; color: #9739C8; }
 
   .note-panel {
     display: none;
     margin-top: 8px;
-    border: 1px solid #5B50E8;
+    border: 1px solid #9739C8;
     border-radius: 14px;
     padding: 12px;
     background: #fff;
@@ -63,16 +57,16 @@
   .note-panel.open { display: block; }
   .note-textarea {
     width: 100%; font-size: 14px; font-family: inherit;
-    color: #1A1A2E; background: #F8F7FF;
-    border: 1px solid #EEEAFF; border-radius: 12px;
+    color: #1A1A2E; background: #FAF3FC;
+    border: 1px solid #EFD9F4; border-radius: 12px;
     padding: 9px 12px; resize: none; line-height: 1.6; outline: none;
     transition: border-color 0.12s;
   }
-  .note-textarea:focus { border-color: #5B50E8; background: #fff; }
+  .note-textarea:focus { border-color: #9739C8; background: #fff; }
   .note-item {
     display: flex; align-items: flex-start; justify-content: space-between;
     gap: 10px; padding: 10px 12px; margin-top: 8px;
-    background: #F8F7FF; border-radius: 12px; border: 1px solid #EEECFF;
+    background: #FAF3FC; border-radius: 12px; border: 1px solid #F6EDFB;
   }
   .note-item-text { font-size: 14px; color: #1A1A2E; line-height: 1.6; margin: 0; }
   .note-item-meta { font-size: 11px; color: #9CA3AF; margin-top: 3px; }
@@ -82,49 +76,58 @@
   }
   .note-delete-btn:hover { color: #C0392B; }
 
-  /* Tabs */
-  .doc-tabs {
-    display: flex;
-    gap: 4px;
-    background: #F1EFFC;
-    border-radius: 14px;
-    padding: 4px;
+  .section-icon-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    background: #F6EDFB;
+    border-radius: 7px;
+    flex-shrink: 0;
   }
-  .doc-tab-btn {
-    flex: 1;
-    border: none;
-    background: transparent;
-    color: #6B7280;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 10px 12px;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.15s;
+  h5.section-heading {
+    font-size: 14px; font-weight: 600; color: #1A1A2E;
+    margin: 0 0 10px; display: flex; align-items: center; gap: 8px;
   }
-  .doc-tab-btn.active {
-  background: #fff;
-  color: #5B50E8;
-  box-shadow: 0 1px 4px rgba(91,80,232,0.18);
-  border: 1px solid #D8D4EE;
-  }
-  .doc-tab-panel { display: none; }
-  .doc-tab-panel.active { display: flex; flex-direction: column; gap: 10px; }
 
-  .insight-pill {
-    flex: 1;
-    background: #F8F7FF;
-    border: 1px solid #EEECFF;
-    border-radius: 14px;
-    padding: 14px 18px;
+  /* ── Meta rows (Amount owed / Deadline / Type) — plain label+value,
+       no colored pill/stat-block chrome. One shared accent color (indigo)
+       used only where it's meaningful (the number itself, links); red is
+       reserved for the overdue signal specifically, not decoration. ── */
+  .meta-row {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 14px 0; border-top: 1px solid #ECEBF3;
   }
+  .meta-row:first-of-type { border-top: 1px solid #ECEBF3; }
+  .meta-icon { flex-shrink: 0; margin-top: 2px; }
+  .meta-label { font-size: 12px; color: #9CA3AF; margin: 0 0 3px; font-weight: 500; }
+  .meta-value { font-size: 15px; font-weight: 600; color: #1A1A2E; margin: 0; }
+  .meta-value--urgent { color: #A32D2D; }
+  .meta-sub { font-size: 12px; color: #A32D2D; margin: 3px 0 0; display: flex; align-items: center; gap: 4px; }
+
+  .actions-row { display: flex; gap: 10px; }
+  .btn-remind {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+    height: 38px; background: #9739C8; color: #fff; border: none;
+    border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: background 0.12s;
+  }
+  .btn-remind:hover { background: #792EA0; }
+  .btn-note {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+    height: 38px; background: #fff; color: #9739C8; border: 1.5px solid #9739C8;
+    border-radius: 999px; font-size: 13px; font-weight: 600; cursor: pointer;
+    transition: background 0.12s;
+  }
+  .btn-note:hover { background: #F6F5FF; }
 </style>
 
-<div style="min-height:100vh; padding-bottom:24px; background:#F4F3FA;">
-  <div class="container-xl" style="padding-top:0; position:relative; z-index:1;">
+<div style="min-height:100vh; padding-bottom:24px; padding-top:28px; background:#F5F5F9;">
+  <div class="container-xl" style="position:relative; z-index:1; max-width:1160px; margin:0 auto;">
 
     <%# ── BREADCRUMB ── %>
-    <div style="padding: 6px 0; position: relative; z-index: 1;">
+    <div style="padding: 6px 0 0; position: relative; z-index: 1;">
       <div class="task-breadcrumb-nav">
         <%= link_to "Dashboard", dashboard_path, class: "breadcrumb__link" %>
         <span class="breadcrumb__divider">›</span>
@@ -134,366 +137,331 @@
       </div>
     </div>
 
-    <%# ── TWO COLUMNS ── %>
-    <div class="row g-3 align-items-start mx-0" style="--bs-gutter-x:0; gap:0; margin-top:8px;">
+    <%# ── TWO EQUAL COLUMNS ── %>
+    <div class="row g-3 align-items-start mx-0" style="--bs-gutter-x:0; gap:0; margin-top:16px;">
 
-      <%# ── LEFT ── %>
-      <div class="col-12 col-md-7 d-flex flex-column" style="gap:10px; padding-right:24px;">
+      <%# ── LEFT: document card ── %>
+      <div class="col-12 col-md-6 d-flex flex-column" style="padding-right:12px;">
+        <div class="white-card" style="padding:28px;">
 
-        <%# Title card %>
-        <div class="glass-card" style="padding:20px 22px;">
-          <div style="margin-bottom:8px;">
-            <p style="font-size:11px; color:#9CA3AF; margin:0 0 6px; letter-spacing:0.06em; text-transform:uppercase; font-weight:600;">Processed on <%= @chat.created_at.strftime("%b %d, %Y") %></p>
-            <h1 class="doc-title" style="font-size:18px; color:#1A1A2E; margin:0 0 5px; letter-spacing:-0.3px; line-height:1.25;"><%= english_title %></h1>
-            <% if german_title.present? %>
-              <p style="font-size:12px; color:#8B8FA8; margin:0 0 12px;"><%= german_title %></p>
-            <% end %>
-          </div>
-
-          <% if @chat.deadline.present? || @chat.amount.present? %>
-            <% days_left = @chat.deadline.present? ? (@chat.deadline - Date.today).to_i : nil %>
-            <div style="display:flex; flex-direction:column; gap:10px;">
-
-              <div style="display:flex; gap:10px;">
-                <% if @chat.amount.present? %>
-                  <%
-                    if @chat.amount < 0
-                      ac = "#27AE60"; al = "Potential Refund"; as2 = "You may receive this back"
-                    elsif @chat.amount == 0
-                      ac = "#27AE60"; al = "No Payment Required"; as2 = "Nothing owed"
-                    else
-                      ac = "#9CA3AF"; al = "Amount Owed"; as2 = "Payment required"
-                    end
-                  %>
-                  <div class="insight-pill">
-                    <p style="font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:<%= ac %>; margin:0 0 4px;"><%= al %></p>
-                    <% if @chat.amount != 0 %>
-                      <p class="doc-num" style="font-size:18px; color:#1A1A2E; margin:0 0 2px; letter-spacing:-0.3px;">€<%= number_with_precision(@chat.amount.abs, precision: 2) %></p>
-                    <% end %>
-                    <p style="font-size:12px; color:#9CA3AF; margin:0;"><%= as2 %></p>
-                  </div>
-                <% end %>
-
-                <% if @chat.deadline.present? %>
-                  <%
-                    deadline_urgent = @chat.urgency == "high" || days_left < 0
-                    dl_color = deadline_urgent ? "#C0392B" : "#5B50E8"
-                  %>
-                  <div class="insight-pill">
-                    <p style="font-size:11px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:<%= dl_color %>; margin:0 0 4px;"><%= deadline_urgent ? "Critical Deadline" : "Deadline" %></p>
-                    <p class="doc-num" style="font-size:18px; color:#1A1A2E; margin:0 0 2px; letter-spacing:-0.3px;"><%= @chat.deadline.strftime("%b %d, %Y") %></p>
-                    <p style="font-size:12px; margin:0; display:flex; align-items:center; gap:4px; color:<%= days_left < 0 ? '#C0392B' : '#9CA3AF' %>;">
-                      <% if days_left < 0 %>
-                        <span class="lucide-icon"><%= icon_warn.html_safe %></span>
-                        Passed <%= days_left.abs %> <%= 'day'.pluralize(days_left.abs) %> ago
-                      <% elsif days_left == 0 %>
-                        Due today
-                      <% else %>
-                        <%= days_left %> days remaining
-                      <% end %>
-                    </p>
-                  </div>
-                <% end %>
-              </div>
-
-              <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                <% if @chat.is_mandatory? || @chat.is_mandatory.nil? %>
-                  <span style="background:#FCEBEB; color:#791F1F; font-size:10px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase; padding:3px 9px; border-radius:20px; white-space:nowrap;">Mandatory</span>
-                <% else %>
-                  <span style="background:#F1EFE8; color:#5F5E5A; font-size:10px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; padding:3px 9px; border-radius:20px; white-space:nowrap;">Optional</span>
-                <% end %>
-                <% if @chat.document_type.present? %>
-                  <span style="background:#F1EFE8; color:#5F5E5A; font-size:10px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; padding:3px 9px; border-radius:20px; white-space:nowrap;"><%= @chat.document_type %></span>
-                <% end %>
-              </div>
-
-            </div>
+          <p style="font-size:11px; color:#B4B2C4; margin:0 0 8px; letter-spacing:0.06em; text-transform:uppercase; font-weight:700;">Processed on <%= @chat.created_at.strftime("%b %d, %Y") %></p>
+          <h1 class="doc-title" style="font-size:24px; color:#1A1A2E; margin:0 0 4px; letter-spacing:-0.3px; line-height:1.25;"><%= english_title %></h1>
+          <% if german_title.present? %>
+            <p style="font-size:13.5px; color:#8B8FA8; margin:0 0 22px; font-style:italic;"><%= german_title %></p>
           <% end %>
-        </div>
 
-        <%# Source panel %>
-        <% if @chat.document.attached? %>
-          <div class="glass-card" id="doc-panel-<%= @chat.id %>" style="padding:12px 14px; display:flex; flex-direction:column; overflow:hidden;">
-            <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid #F0EEF9; flex-shrink:0;">
-              <div style="display:flex; align-items:center; gap:6px;">
-                <span class="lucide-icon"><%= icon_file_doc.html_safe %></span>
-                <span style="font-size:14px; font-weight:600; color:#1A1A2E;">Source</span>
-                <% if @chat.document_type.present? %>
-                  <span style="font-size:11px; color:#9CA3AF;">| <%= @chat.document_type %></span>
-                <% end %>
-              </div>
-              <div style="display:flex; gap:12px; color:#9CA3AF;">
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="cursor:pointer;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="cursor:pointer;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-                <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="cursor:pointer;"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-              </div>
-            </div>
-            <% if @chat.document.content_type.start_with?("image/") %>
-              <div style="background:#F1F0F7; border-radius:12px; overflow:hidden; height:360px; display:flex; align-items:flex-start; justify-content:center; padding:20px; position:relative;">
-                <%= image_tag url_for(@chat.document), style:"max-width:80%; height:auto; object-fit:contain; border-radius:6px; box-shadow:0 4px 20px rgba(91,80,232,0.12); display:block;" %>
-                <div style="position:absolute; bottom:0; left:0; right:0; height:90px; background:linear-gradient(to bottom, rgba(241,240,247,0) 0%, rgba(241,240,247,0.85) 100%); pointer-events:none; border-radius:0 0 16px 16px;"></div>
-                <div style="position:absolute; bottom:14px; left:50%; transform:translateX(-50%); pointer-events:auto;">
-                  <%= link_to url_for(@chat.document), target:"_blank",
-                        style:"display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:600; color:#5B50E8; background:#fff; border:1px solid #D8D4EE; border-radius:20px; padding:5px 14px; text-decoration:none; white-space:nowrap; box-shadow:0 1px 4px rgba(91,80,232,0.10);" do %>
-                    View full document <%= icon_expand.html_safe %>
-                  <% end %>
+          <%# ── ACTIONS (Remind me / Add note) — moved to the top, right under
+               the title, since they're primary actions for this document ── %>
+          <% if @chat.deadline.present? %>
+            <%
+              days_left_actions = (@chat.deadline - Date.today).to_i
+              default_reminder_date = days_left_actions < 0 ? Date.today + 1 : @chat.deadline
+              cal_title_r   = CGI.escape("Deadline: #{@chat.title}")
+              cal_details_r = CGI.escape(@chat.title.to_s)
+            %>
+            <div class="actions-row" style="margin-bottom:22px;">
+              <div style="position:relative; flex:1;">
+                <button type="button" class="btn-remind" style="width:100%;"
+                  onclick="const m=document.getElementById('rm-<%= @chat.id %>');m.style.display=m.style.display==='none'?'block':'none';event.stopPropagation();">
+                  <span class="lucide-icon"><%= icon_cal_plus.html_safe %></span>
+                  Remind me
+                </button>
+                <div id="rm-<%= @chat.id %>" style="display:none; position:absolute; top:calc(100% + 4px); left:0; right:0; background:#fff; border:1px solid #E5E7EB; border-radius:14px; box-shadow:0 12px 28px -12px rgba(151,57,200,0.30); min-width:220px; overflow:hidden; z-index:100;">
+                  <div style="padding:12px 14px; border-bottom:1px solid #F3F4F6;">
+                    <label style="font-size:12px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.04em; display:block; margin-bottom:6px;">Reminder date</label>
+                    <input type="date" id="reminder-date-<%= @chat.id %>" value="<%= default_reminder_date.strftime("%Y-%m-%d") %>" style="width:100%; font-size:13px; border:1px solid #E5E7EB; border-radius:8px; padding:6px 8px; color:#1A1A2E;" onclick="event.stopPropagation()">
+                  </div>
+                  <a href="#" id="google-cal-link-<%= @chat.id %>" target="_blank" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'" style="display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:14px; color:#1A1A2E; text-decoration:none; border-bottom:1px solid #F3F4F6;"><span class="lucide-icon"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>Google Calendar</a>
+                  <a href="#" id="outlook-link-<%= @chat.id %>" target="_blank" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'" style="display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:14px; color:#1A1A2E; text-decoration:none; border-bottom:1px solid #F3F4F6;"><span class="lucide-icon"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>Outlook</a>
+                  <a href="#" id="apple-link-<%= @chat.id %>" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'" style="display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:14px; color:#1A1A2E; text-decoration:none;"><span class="lucide-icon"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>Apple Calendar</a>
                 </div>
+                <script>
+                  document.addEventListener('click',function(){const m=document.getElementById('rm-<%= @chat.id %>');if(m)m.style.display='none';});
+                  function updateReminderLinks<%= @chat.id %>() {
+                    const dateInput = document.getElementById('reminder-date-<%= @chat.id %>');
+                    const dateVal = dateInput.value;
+                    const dateCompact = dateVal.replace(/-/g, '');
+                    const title = "<%= cal_title_r %>";
+                    const details = "<%= cal_details_r %>";
+                    document.getElementById('google-cal-link-<%= @chat.id %>').href =
+                      `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dateCompact}/${dateCompact}&details=${details}`;
+                    document.getElementById('outlook-link-<%= @chat.id %>').href =
+                      `https://outlook.live.com/calendar/0/deeplink/compose?subject=${title}&startdt=${dateVal}&enddt=${dateVal}`;
+                    document.getElementById('apple-link-<%= @chat.id %>').href =
+                      `data:text/calendar;charset=utf8,${encodeURIComponent("BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:<%= @chat.title %>\nDTSTART;VALUE=DATE:" + dateCompact + "\nDTEND;VALUE=DATE:" + dateCompact + "\nEND:VEVENT\nEND:VCALENDAR")}`;
+                  }
+                  document.getElementById('reminder-date-<%= @chat.id %>').addEventListener('change', updateReminderLinks<%= @chat.id %>);
+                  updateReminderLinks<%= @chat.id %>();
+                </script>
               </div>
-            <% else %>
-              <div style="border-radius:12px; padding:32px; text-align:center; background:#F8F7FF; border:1px solid #F0EEF9;">
-                <span class="lucide-icon"><%= icon_file_red.html_safe %></span>
-                <p style="color:#6B7280; margin-top:8px; font-size:14px;"><%= @chat.document.filename %></p>
-              </div>
-            <% end %>
-          </div>
-        <% end %>
-      </div>
-
-      <%# ── RIGHT ── %>
-      <div class="col-12 col-md-5 d-flex flex-column" style="gap:10px; padding-left:6px;">
-
-        <%# Actions row %>
-        <% if @chat.deadline.present? %>
-  <%
-    days_left = (@chat.deadline - Date.today).to_i
-    default_reminder_date = days_left < 0 ? Date.today + 1 : @chat.deadline
-    cal_title_r   = CGI.escape("Deadline: #{@chat.title}")
-    cal_details_r = CGI.escape(@chat.title.to_s)
-  %>
-  <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-    <div style="position:relative;">
-      <button
-        onclick="const m=document.getElementById('rm-<%= @chat.id %>');m.style.display=m.style.display==='none'?'block':'none';event.stopPropagation();"
-        style="width:100%; box-sizing:border-box; height:36px; display:flex; align-items:center; justify-content:center; gap:6px; font-size:13px; font-weight:500; color:#fff; border:1px solid transparent; border-radius:12px; background:#5B50E8; cursor:pointer; white-space:nowrap; transition:background 0.12s;"
-        onmouseover="this.style.background='#4840C8'" onmouseout="this.style.background='#5B50E8'">
-        <%= icon_cal_plus.html_safe %>
-        Remind me
-      </button>
-      <div id="rm-<%= @chat.id %>" style="display:none; position:absolute; top:calc(100% + 4px); left:0; background:#fff; border:1px solid #E5E7EB; border-radius:14px; box-shadow:0 4px 16px rgba(0,0,0,0.08); min-width:220px; overflow:hidden; z-index:100;">
-
-        <div style="padding:12px 14px; border-bottom:1px solid #F3F4F6;">
-          <label style="font-size:11px; font-weight:600; color:#6B7280; text-transform:uppercase; letter-spacing:0.04em; display:block; margin-bottom:6px;">Reminder date</label>
-          <input type="date" id="reminder-date-<%= @chat.id %>" value="<%= default_reminder_date.strftime("%Y-%m-%d") %>" style="width:100%; font-size:13px; border:1px solid #E5E7EB; border-radius:8px; padding:6px 8px; color:#1A1A2E;" onclick="event.stopPropagation()">
-        </div>
-
-        <a href="#" id="google-cal-link-<%= @chat.id %>" target="_blank" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'" style="display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:14px; color:#1A1A2E; text-decoration:none; border-bottom:1px solid #F3F4F6;"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Google Calendar</a>
-        <a href="#" id="outlook-link-<%= @chat.id %>" target="_blank" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'" style="display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:14px; color:#1A1A2E; text-decoration:none; border-bottom:1px solid #F3F4F6;"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Outlook</a>
-        <a href="#" id="apple-link-<%= @chat.id %>" onmouseover="this.style.background='#F9FAFB'" onmouseout="this.style.background='transparent'" style="display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:14px; color:#1A1A2E; text-decoration:none;"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>Apple Calendar</a>
-
-      </div>
-      <script>
-        document.addEventListener('click',function(){const m=document.getElementById('rm-<%= @chat.id %>');if(m)m.style.display='none';});
-
-        function updateReminderLinks<%= @chat.id %>() {
-          const dateInput = document.getElementById('reminder-date-<%= @chat.id %>');
-          const dateVal = dateInput.value;
-          const dateCompact = dateVal.replace(/-/g, '');
-          const title = "<%= cal_title_r %>";
-          const details = "<%= cal_details_r %>";
-
-          document.getElementById('google-cal-link-<%= @chat.id %>').href =
-            `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${dateCompact}/${dateCompact}&details=${details}`;
-
-          document.getElementById('outlook-link-<%= @chat.id %>').href =
-            `https://outlook.live.com/calendar/0/deeplink/compose?subject=${title}&startdt=${dateVal}&enddt=${dateVal}`;
-
-          document.getElementById('apple-link-<%= @chat.id %>').href =
-            `data:text/calendar;charset=utf8,${encodeURIComponent("BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:<%= @chat.title %>\nDTSTART;VALUE=DATE:" + dateCompact + "\nDTEND;VALUE=DATE:" + dateCompact + "\nEND:VEVENT\nEND:VCALENDAR")}`;
-        }
-
-        document.getElementById('reminder-date-<%= @chat.id %>').addEventListener('change', updateReminderLinks<%= @chat.id %>);
-        updateReminderLinks<%= @chat.id %>();
-      </script>
-    </div>
-    <button
-      id="note-toggle-<%= @chat.id %>"
-      style="width:100%; box-sizing:border-box; height:36px; display:flex; align-items:center; justify-content:center; gap:6px; font-size:13px; font-weight:500; color:#5B50E8; border:1.5px solid #5B50E8; border-radius:12px; background:transparent; cursor:pointer; white-space:nowrap; transition:all 0.12s;"
-      onmouseover="this.style.background='#F6F5FF'" onmouseout="this.style.background='transparent'"
-      onclick="
-        const panel = document.getElementById('note-panel-<%= @chat.id %>');
-        const btn = document.getElementById('note-toggle-<%= @chat.id %>');
-        const isOpen = panel.classList.contains('open');
-        panel.classList.toggle('open', !isOpen);
-        btn.classList.toggle('active', !isOpen);
-      ">
-      <%= icon_note.html_safe %>
-      Add note
-    </button>
-  </div>
-
-          <%# Note panel %>
-          <div id="note-panel-<%= @chat.id %>" class="note-panel">
-            <textarea id="note-input-<%= @chat.id %>" class="note-textarea" rows="3" placeholder="e.g. Called Bürgeramt, bringing this on Tuesday with passport copy..."></textarea>
-            <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
-              <button style="font-size:12px; font-weight:500; color:#6B7280; padding:5px 12px; border:1px solid #E5E7EB; border-radius:10px; background:transparent; cursor:pointer;" onclick="closeNotePanel('<%= @chat.id %>')">Cancel</button>
-              <button style="font-size:12px; font-weight:500; color:#fff; padding:5px 12px; border:none; border-radius:10px; background:#5B50E8; cursor:pointer; display:flex; align-items:center; gap:5px;" onclick="saveNote('<%= @chat.id %>')">
-                <span class="lucide-icon"><%= icon_check.html_safe %></span> Save note
+              <button
+                type="button"
+                id="note-toggle-<%= @chat.id %>"
+                class="btn-note"
+                onclick="
+                  const panel = document.getElementById('note-panel-<%= @chat.id %>');
+                  const btn = document.getElementById('note-toggle-<%= @chat.id %>');
+                  const isOpen = panel.classList.contains('open');
+                  panel.classList.toggle('open', !isOpen);
+                  btn.classList.toggle('active', !isOpen);
+                ">
+                <span class="lucide-icon"><%= icon_note.html_safe %></span>
+                Add note
               </button>
             </div>
-          </div>
-          <div id="note-list-<%= @chat.id %>"></div>
-        <% end %>
 
-        <%# ── TABS ── %>
-        <div class="doc-tabs">
-          <button type="button" class="doc-tab-btn active" id="tab-btn-facts-<%= @chat.id %>" onclick="switchDocTab('<%= @chat.id %>','facts')">Key Facts</button>
-          <button type="button" class="doc-tab-btn" id="tab-btn-assistant-<%= @chat.id %>" onclick="switchDocTab('<%= @chat.id %>','assistant')">Ask Assistant</button>
-        </div>
+            <%# Note panel %>
+            <div id="note-panel-<%= @chat.id %>" class="note-panel">
+              <textarea id="note-input-<%= @chat.id %>" class="note-textarea" rows="3" placeholder="e.g. Called Bürgeramt, bringing this on Tuesday with passport copy..."></textarea>
+              <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
+                <button style="font-size:12px; font-weight:500; color:#6B7280; padding:5px 12px; border:1px solid #E5E7EB; border-radius:10px; background:transparent; cursor:pointer;" onclick="closeNotePanel('<%= @chat.id %>')">Cancel</button>
+                <button style="font-size:12px; font-weight:500; color:#fff; padding:5px 12px; border:none; border-radius:10px; background:#9739C8; cursor:pointer; display:flex; align-items:center; gap:5px;" onclick="saveNote('<%= @chat.id %>')">
+                  <span class="lucide-icon"><%= icon_check.html_safe %></span> Save note
+                </button>
+              </div>
+            </div>
+            <div id="note-list-<%= @chat.id %>" style="margin-bottom:8px;"></div>
+          <% end %>
 
-        <%# ── KEY FACTS TAB ── %>
-        <div class="doc-tab-panel active" id="tab-panel-facts-<%= @chat.id %>">
-
-          <% if @chat.advice.present? %>
-            <% adv = @chat.parsed_advice %>
-            <% vague = ["unknown","varies","n/a","none","tbd","variable","see document"] %>
-            <% redundant_labels = ["fee", "amount", "deadline", "cost", "payment", "due date", "price", "gebühr"] %>
-            <% concrete_stats = adv["stats"]&.reject { |s|
-                 vague.include?(s["value"].to_s.downcase.strip) ||
-                 redundant_labels.any? { |r| s["label"].to_s.downcase.include?(r) }
-               } %>
-
-            <%# What this means %>
-            <div class="white-card" style="padding:16px 18px; border-left:3px solid #5B50E8; border-radius:0 12px 12px 0;">
-              <h5 style="font-size:14px; font-weight:600; color:#1A1A2E; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-                <div style="width:26px; height:26px; background:#EEECFF; border-radius:10px; display:flex; align-items:center; justify-content:center; color:#5B50E8; flex-shrink:0;">
-                  <span class="lucide-icon"><%= icon_bulb.html_safe %></span>
-                </div>
-                What this means
-              </h5>
-              <% if adv["explanation"].present? %>
-                <p style="font-size:14px; color:#4B5563; line-height:1.7; margin:0;"><%= adv["explanation"].split('.').first(2).join('.') + '.' %></p>
-              <% elsif adv["summary"].present? %>
-                <p style="font-size:14px; color:#4B5563; line-height:1.7; margin:0;"><%= adv["summary"] %></p>
-              <% end %>
-              <% if concrete_stats.present? %>
-                <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:14px;">
-                  <% concrete_stats.each do |stat| %>
-                    <% raw_value = stat["value"].to_s %>
-                    <% norm = raw_value.match?(/\A[\d.,]+\s*€\z/) ? "€#{raw_value.gsub(/\s*€/,'').strip}" : raw_value %>
-                    <div style="background:#F6F5FF; border-radius:14px; padding:10px 14px; min-width:100px;">
-                      <p style="font-size:10px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#6B7280; margin:0 0 3px;"><%= stat["label"] %></p>
-                      <p class="doc-num" style="font-size:16px; color:#1A1A2E; margin:0 0 1px; line-height:1.2;"><%= norm %></p>
-                      <p style="font-size:11px; color:#9CA3AF; margin:0;"><%= stat["sub"] %></p>
-                    </div>
-                  <% end %>
+          <%# ── SMALL PREVIEW THUMBNAIL — quiet, not the visual focus ── %>
+          <% if @chat.document.attached? %>
+            <div style="background:#F7F6FB; border:1px solid #ECEBF3; border-radius:14px; padding:14px; margin-bottom:8px; display:flex; align-items:center; justify-content:center; min-height:150px;">
+              <% if @chat.document.content_type.start_with?("image/") %>
+                <%= image_tag url_for(@chat.document), style:"max-width:42%; max-height:150px; height:auto; object-fit:contain; border-radius:6px; box-shadow:0 4px 16px rgba(151,57,200,0.10); display:block;" %>
+              <% else %>
+                <div style="text-align:center;">
+                  <span class="lucide-icon"><%= icon_file_red.html_safe %></span>
+                  <p style="color:#6B7280; margin-top:8px; font-size:13px;"><%= @chat.document.filename %></p>
                 </div>
               <% end %>
             </div>
-
-            <%# Key facts %>
-            <% if adv["key_facts"].present? %>
-              <div class="white-card" style="padding:16px 18px;">
-                <h5 style="font-size:14px; font-weight:600; color:#1A1A2E; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-                  <div style="width:26px; height:26px; background:#EEECFF; border-radius:10px; display:flex; align-items:center; justify-content:center; color:#5B50E8; flex-shrink:0;">
-                    <span class="lucide-icon"><%= icon_list.html_safe %></span>
-                  </div>
-                  Key facts
-                </h5>
-                <div style="display:flex; flex-direction:column; gap:10px;">
-                  <% adv["key_facts"].each do |fact| %>
-                    <div style="display:flex; align-items:flex-start; gap:10px;">
-                      <span style="min-width:20px; height:20px; background:#EEECFF; color:#5B50E8; border-radius:50%; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;"><%= fact["n"] %></span>
-                      <p style="font-size:14px; color:#4B5563; line-height:1.6; margin:0;"><%= fact["text"] %></p>
-                    </div>
-                  <% end %>
-                </div>
-              </div>
+            <%= link_to url_for(@chat.document), target:"_blank",
+                  style:"display:block; text-align:center; font-size:12.5px; font-weight:600; color:#9739C8; text-decoration:none; margin:0 0 22px;" do %>
+              View full document <%= icon_expand.html_safe %>
             <% end %>
           <% end %>
 
-          <%# Next steps %>
-          <% if @chat.description.present? %>
-            <div class="white-card" style="padding:16px 18px;">
-              <h5 style="font-size:14px; font-weight:600; color:#1A1A2E; margin-bottom:10px; display:flex; align-items:center; gap:8px;">
-                <div style="width:26px; height:26px; background:#EEECFF; border-radius:10px; display:flex; align-items:center; justify-content:center; color:#5B50E8; flex-shrink:0;">
-                  <span class="lucide-icon"><%= icon_list.html_safe %></span>
-                </div>
-                Next steps
-              </h5>
-              <ul style="font-size:14px; color:#4B5563; line-height:1.8; padding-left:18px; margin-bottom:0;">
-                <% @chat.description.split("\n").reject(&:blank?).each do |step| %>
-                  <li style="margin-bottom:6px;"><%= step.gsub(/^[-•\d.]\s*/,"").strip %></li>
+          <%# ── PLAIN META ROWS — no colored pills/stat-blocks ── %>
+          <% if @chat.amount.present? %>
+            <%
+              if @chat.amount < 0
+                al = "Potential refund"; as2 = "You may receive this back"
+              elsif @chat.amount == 0
+                al = "No payment required"; as2 = "Nothing owed"
+              else
+                al = "Amount owed"; as2 = "Payment required"
+              end
+            %>
+            <div class="meta-row">
+              <span class="meta-icon lucide-icon"><%= icon_euro.html_safe %></span>
+              <div>
+                <p class="meta-label"><%= al %></p>
+                <% if @chat.amount != 0 %>
+                  <p class="meta-value">€<%= number_with_precision(@chat.amount.abs, precision: 2) %></p>
                 <% end %>
-              </ul>
+                <p style="font-size:12px; color:#9CA3AF; margin:2px 0 0;"><%= as2 %></p>
+              </div>
             </div>
           <% end %>
 
-        </div>
-
-        <%# ── ASK ASSISTANT TAB ── %>
-        <div class="doc-tab-panel" id="tab-panel-assistant-<%= @chat.id %>">
-          <div class="white-card" id="chat-card-<%= @chat.id %>" style="overflow:hidden;">
-            <div id="chat-messages-<%= @chat.id %>" style="padding:14px; display:flex; flex-direction:column; gap:12px; max-height:360px; overflow-y:auto; min-height:0;">
-              <span style="display:none;" aria-hidden="true"></span>
-              <% @chat.messages.order(:created_at).each do |message| %>
-                <% if message.role == "user" %>
-                  <div style="display:flex; justify-content:flex-end;">
-                    <div style="background:#5B50E8; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 4px 16px; max-width:75%;"><%= message.content %></div>
-                  </div>
+          <% if @chat.deadline.present? %>
+            <%
+              days_left = (@chat.deadline - Date.today).to_i
+              deadline_urgent = @chat.urgency == "high" || days_left < 0
+            %>
+            <div class="meta-row">
+              <span class="meta-icon lucide-icon"><%= icon_cal_plus.html_safe %></span>
+              <div>
+                <p class="meta-label"><%= deadline_urgent ? "Critical deadline" : "Deadline" %></p>
+                <p class="meta-value <%= 'meta-value--urgent' if deadline_urgent %>"><%= @chat.deadline.strftime("%b %d, %Y") %></p>
+                <% if days_left < 0 %>
+                  <p class="meta-sub"><span class="lucide-icon"><%= icon_warn.html_safe %></span> Passed <%= days_left.abs %> <%= 'day'.pluralize(days_left.abs) %> ago</p>
+                <% elsif days_left == 0 %>
+                  <p class="meta-sub" style="color:#9CA3AF;">Due today</p>
                 <% else %>
-                  <div style="display:flex; gap:8px; align-items:flex-start;">
-                    <div style="width:28px; height:28px; background:#EEECFF; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:14px; color:#5B50E8;">✦</div>
-                    <div style="background:#F8F7FF; color:#1A1A2E; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 16px 4px; max-width:75%;"><%= message.content %></div>
-                  </div>
+                  <p style="font-size:12px; color:#9CA3AF; margin:3px 0 0;"><%= days_left %> days remaining</p>
                 <% end %>
-              <% end %>
+              </div>
             </div>
+          <% end %>
 
-            <div style="padding:10px 12px;">
-              <%= form_with url: chat_messages_path(@chat), method: :post, data: { controller:"chat-form", action:"submit->chat-form#disableSubmit" } do |f| %>
-                <div style="display:flex; align-items:center; gap:10px; background:#F8F7FF; border:1.5px solid #EEEAFF; border-radius:16px; padding:10px 14px; transition:all 0.15s;"
-                     onfocusin="this.style.borderColor='#5B50E8'; this.style.background='#fff';"
-                     onfocusout="this.style.borderColor='#EEEAFF'; this.style.background='#F8F7FF';">
-                  <%= f.text_field :message, name: "message[content]", id: "chat-input-#{@chat.id}", placeholder: "Ask anything about this document...", autocomplete: "off", required: true, style: "flex:1; min-width:0; font-size:14px; border:none; outline:none; background:transparent; color:#1A1A2E; padding:0;" %>
-                  <button type="submit" style="flex-shrink:0; width:32px; height:32px; background:#5B50E8; color:#fff; border:none; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center;">
-                    <%= icon_send.html_safe %>
-                  </button>
-                </div>
-              <% end %>
-            </div>
-
-            <div style="padding:0 12px 12px; display:flex; gap:8px; flex-wrap:wrap;">
-              <button type="button" class="chat-chip" onclick="document.getElementById('chat-input-<%= @chat.id %>').value='Do I need an appointment?'; document.getElementById('chat-input-<%= @chat.id %>').focus();">Do I need an appointment?</button>
-              <button type="button" class="chat-chip" onclick="document.getElementById('chat-input-<%= @chat.id %>').value='What documents do I need to bring?'; document.getElementById('chat-input-<%= @chat.id %>').focus();">What do I need to bring?</button>
-              <% if @chat.amount.present? && @chat.amount > 0 %>
-                <button type="button" class="chat-chip" onclick="document.getElementById('chat-input-<%= @chat.id %>').value='Can I pay this fee online?'; document.getElementById('chat-input-<%= @chat.id %>').focus();">Can I pay this online?</button>
-              <% else %>
-                <button type="button" class="chat-chip" onclick="document.getElementById('chat-input-<%= @chat.id %>').value='Can someone submit this on my behalf?'; document.getElementById('chat-input-<%= @chat.id %>').focus();">Can someone submit this for me?</button>
-              <% end %>
+          <div class="meta-row">
+            <span class="meta-icon lucide-icon"><%= icon_tag.html_safe %></span>
+            <div>
+              <p class="meta-label">Type</p>
+              <p class="meta-value">
+                <%= (@chat.is_mandatory? || @chat.is_mandatory.nil?) ? "Mandatory" : "Optional" %><% if @chat.document_type.present? %> · <%= @chat.document_type.to_s.split("/").first.to_s.strip %><% end %>
+              </p>
             </div>
           </div>
-        </div>
 
+        </div>
       </div>
+
+      <%# ── RIGHT: What this means / Key facts / chat ── %>
+      <div class="col-12 col-md-6 d-flex flex-column" style="padding-left:12px;">
+        <div class="white-card" id="chat-card-<%= @chat.id %>" style="overflow:hidden;">
+
+          <%# ── Fixed header banner — always visible, doesn't scroll with the
+               messages below it. Gives the right column a clear identity
+               instead of just starting mid-content with "What this means". ── %>
+          <div style="display:flex; align-items:center; gap:10px; padding:18px 24px; background:#F8F0FA; border-bottom:1px solid #ECEBF3; border-radius:20px 20px 0 0;">
+            <span style="width:30px; height:30px; border-radius:9px; background:#EBD6F5; display:flex; align-items:center; justify-content:center; color:#6E2B93; flex-shrink:0;">
+              <span class="lucide-icon" style="font-size:15px;">✦</span>
+            </span>
+            <div>
+              <p style="font-size:14px; font-weight:700; color:#1A1A2E; margin:0;">AI Assistant</p>
+              <p style="font-size:11.5px; color:#9CA3AF; margin:0;">Document intelligence & chat</p>
+            </div>
+          </div>
+
+          <div style="position:relative;">
+            <div id="chat-messages-<%= @chat.id %>" style="padding:24px; display:flex; flex-direction:column; gap:18px; max-height:600px; overflow-y:auto; min-height:0;">
+
+            <% if @chat.advice.present? %>
+              <% adv = @chat.parsed_advice %>
+              <% vague = ["unknown","varies","n/a","none","tbd","variable","see document"] %>
+              <% redundant_labels = ["fee", "amount", "deadline", "cost", "payment", "due date", "price", "gebühr"] %>
+              <% concrete_stats = adv["stats"]&.reject { |s|
+                   vague.include?(s["value"].to_s.downcase.strip) ||
+                   redundant_labels.any? { |r| s["label"].to_s.downcase.include?(r) }
+                 } %>
+
+              <div>
+                <h5 class="section-heading" style="margin-bottom:12px;">
+                  <span class="section-icon-chip"><span class="lucide-icon" style="color:#9739C8;"><%= icon_bulb.html_safe %></span></span> What this means
+                </h5>
+                <%
+                  def highlight_values(text, style: :highlight)
+                    escaped = ERB::Util.html_escape(text)
+
+                    # Bold-parsing runs BEFORE euro-highlighting now — previously it ran
+                    # after, so if the source text had irregular spacing around the
+                    # markers (e.g. "**  €734 **" instead of "**€734**"), the euro span
+                    # already inserted could throw off the ** match and leave a stray
+                    # "**" visible. Doing bold first avoids that entirely.
+                    escaped = escaped.gsub(/\*\*\s*(.+?)\s*\*\*/, '<strong style="color:#9739C8;font-weight:600;">\1</strong>')
+
+                    escaped = escaped.gsub(/€\s?\d{1,3}(?:[.,]\d{3})*(?:[.,]\d{2})?/) do |m|
+                      if style == :underline
+                        %(<span style="color:#7D3AA3;font-weight:500;text-decoration:underline;text-decoration-color:#DDBBEE;text-decoration-thickness:1px;text-underline-offset:3px;">#{m}</span>)
+                      else
+                        %(<span style="background:#F6EDFB;color:#7D3AA3;padding:1px 6px;border-radius:6px;font-weight:600;">#{m}</span>)
+                      end
+                    end
+
+                    # Defensive cleanup: if the source text has an unpaired ** (odd
+                    # number of markers), strip whatever's left rather than showing raw
+                    # asterisks to the user. This is a safety net, not a real fix — if
+                    # this fires often, the actual advice-generation prompt should be
+                    # adjusted to stop emitting malformed markdown in the first place.
+                    escaped = escaped.gsub(/\*\*/, '')
+
+                    escaped.html_safe
+                  end
+                %>
+                <% if adv["explanation"].present? %>
+                  <p style="font-size:14px; color:#4B5563; line-height:1.85; margin:0;"><%= highlight_values(adv["explanation"].split('.').first(2).join('.') + '.') %></p>
+                <% elsif adv["summary"].present? %>
+                  <p style="font-size:14px; color:#4B5563; line-height:1.85; margin:0;"><%= highlight_values(adv["summary"]) %></p>
+                <% end %>
+
+                <% if concrete_stats.present? %>
+                  <div style="display:flex; flex-wrap:wrap; gap:24px; margin-top:18px;">
+                    <% concrete_stats.each do |stat| %>
+                      <% raw_value = stat["value"].to_s %>
+                      <% norm = raw_value.match?(/\A[\d.,]+\s*€\z/) ? "€#{raw_value.gsub(/\s*€/,'').strip}" : raw_value %>
+                      <div>
+                        <p style="font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#9CA3AF; margin:0 0 4px;"><%= stat["label"] %></p>
+                        <p class="doc-num" style="font-size:14px; color:#1A1A2E; margin:0 0 1px; line-height:1.2; font-weight:600 !important;"><%= norm %></p>
+                        <p style="font-size:12px; color:#9CA3AF; margin:0;"><%= stat["sub"] %></p>
+                      </div>
+                    <% end %>
+                  </div>
+                <% end %>
+
+                <% if adv["key_facts"].present? %>
+                  <div style="margin-top:22px; padding-top:18px; border-top:1px solid #ECEBF3;">
+                    <h5 class="section-heading" style="margin-bottom:14px;">
+                      <span class="section-icon-chip"><span class="lucide-icon" style="color:#9739C8;"><%= icon_list.html_safe %></span></span> Key facts
+                    </h5>
+                    <div style="display:flex; flex-direction:column; gap:20px;">
+                      <% adv["key_facts"].each do |fact| %>
+                        <div style="display:flex; align-items:flex-start; gap:10px;">
+                          <span style="min-width:22px; height:22px; background:#F6EDFB; color:#9739C8; border-radius:50%; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;"><%= fact["n"] %></span>
+                          <p style="font-size:14px; color:#4B5563; line-height:1.75; margin:0;"><%= highlight_values(fact["text"], style: :underline) %></p>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+
+                <% if @chat.description.present? %>
+                  <div style="margin-top:22px; padding-top:18px; border-top:1px solid #ECEBF3;">
+                    <h5 style="font-size:14px; font-weight:600; color:#1A1A2E; margin:0 0 12px;">Next steps</h5>
+                    <ul style="font-size:14px; color:#4B5563; line-height:1.8; padding-left:16px; margin:0;">
+                      <% @chat.description.split("\n").reject(&:blank?).each do |step| %>
+                        <li style="margin-bottom:6px;"><%= step.gsub(/^[-•\d.]\s*/,"").strip %></li>
+                      <% end %>
+                    </ul>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+
+            <div style="font-size:12px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:#6B7280; margin:4px 2px 0; padding-top:6px; border-top:1px solid #ECEBF3;">Conversation</div>
+
+            <% @chat.messages.order(:created_at).each do |message| %>
+              <% if message.role == "user" %>
+                <div style="display:flex; justify-content:flex-end;">
+                  <div style="background:#9739C8; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:18px 4px 18px 18px; max-width:75%;"><%= message.content %></div>
+                </div>
+              <% else %>
+                <div style="display:flex; gap:8px; align-items:flex-start;">
+                  <div style="width:28px; height:28px; background:#F6EDFB; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:14px; color:#9739C8;">✦</div>
+                  <div style="background:#fff; border:1px solid #E2C2EF; color:#1A1A2E; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:4px 18px 18px 18px; max-width:75%;"><%= message.content %></div>
+                </div>
+              <% end %>
+            <% end %>
+          </div>
+
+          <%# Fade overlay — sits on top of the scroll area (not inside it, so it
+              doesn't scroll away), signaling "more content below" instead of a
+              hard clipped edge. Purely visual, pointer-events:none so it never
+              blocks scrolling or clicking through to messages underneath. %>
+          <div style="position:absolute; bottom:0; left:0; right:0; height:36px; background:linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.95) 100%); pointer-events:none;"></div>
+          </div>
+
+          <div style="padding:10px 12px;">
+            <%= form_with url: chat_messages_path(@chat), method: :post, data: { controller:"chat-form", action:"submit->chat-form#disableSubmit" } do |f| %>
+              <div style="display:flex; align-items:center; gap:10px; background:#FAF3FC; border:1.5px solid #EFD9F4; border-radius:16px; padding:10px 14px; transition:all 0.15s;"
+                   onfocusin="this.style.borderColor='#9739C8'; this.style.background='#fff';"
+                   onfocusout="this.style.borderColor='#EFD9F4'; this.style.background='#FAF3FC';">
+                <%= f.text_field :message, name: "message[content]", id: "chat-input-#{@chat.id}", placeholder: "Ask anything about this document...", autocomplete: "off", required: true, style: "flex:1; min-width:0; font-size:14px; border:none; outline:none; background:transparent; color:#1A1A2E; padding:0;" %>
+                <button type="submit" style="flex-shrink:0; width:32px; height:32px; background:#9739C8; color:#fff; border:none; border-radius:12px; cursor:pointer; display:flex; align-items:center; justify-content:center;">
+                  <span class="lucide-icon"><%= icon_send.html_safe %></span>
+                </button>
+              </div>
+            <% end %>
+          </div>
+
+          <div style="padding:0 12px 12px; display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="chat-chip" onclick="document.getElementById('chat-input-<%= @chat.id %>').value='Do I need an appointment?'; document.getElementById('chat-input-<%= @chat.id %>').focus();">Do I need an appointment?</button>
+            <button type="button" class="chat-chip" onclick="document.getElementById('chat-input-<%= @chat.id %>').value='What documents do I need to bring?'; document.getElementById('chat-input-<%= @chat.id %>').focus();">What do I need to bring?</button>
+            <% if @chat.amount.present? && @chat.amount > 0 %>
+              <button type="button" class="chat-chip" onclick="document.getElementById('chat-input-<%= @chat.id %>').value='Can I pay this fee online?'; document.getElementById('chat-input-<%= @chat.id %>').focus();">Can I pay this online?</button>
+            <% else %>
+              <button type="button" class="chat-chip" onclick="document.getElementById('chat-input-<%= @chat.id %>').value='Can someone submit this on my behalf?'; document.getElementById('chat-input-<%= @chat.id %>').focus();">Can someone submit this for me?</button>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </div>
 
 <script>
-  (function() {
-    const el = document.getElementById('chat-messages-<%= @chat.id %>');
-    if (el) el.scrollTop = el.scrollHeight;
-  })();
-
-  function switchDocTab(chatId, tab) {
-    const facts = document.getElementById('tab-panel-facts-' + chatId);
-    const assistant = document.getElementById('tab-panel-assistant-' + chatId);
-    const btnFacts = document.getElementById('tab-btn-facts-' + chatId);
-    const btnAssistant = document.getElementById('tab-btn-assistant-' + chatId);
-
-    if (tab === 'facts') {
-      facts.classList.add('active');
-      assistant.classList.remove('active');
-      btnFacts.classList.add('active');
-      btnAssistant.classList.remove('active');
-    } else {
-      assistant.classList.add('active');
-      facts.classList.remove('active');
-      btnAssistant.classList.add('active');
-      btnFacts.classList.remove('active');
-    }
-  }
-
   function closeNotePanel(chatId) {
     document.getElementById('note-panel-' + chatId).classList.remove('open');
     document.getElementById('note-toggle-' + chatId).classList.remove('active');
@@ -514,14 +482,14 @@
     item.id = noteId;
     item.innerHTML = `
       <div style="display:flex; gap:8px; align-items:flex-start; flex:1;">
-        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0; margin-top:3px;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span class="lucide-icon" style="flex-shrink:0; margin-top:3px;"><svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
         <div>
           <p class="note-item-text">${text}</p>
           <p class="note-item-meta">Today at ${now}</p>
         </div>
       </div>
       <button class="note-delete-btn" onclick="document.getElementById('${noteId}').remove();" aria-label="Delete note">
-        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        <span class="lucide-icon"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></span>
       </button>
     `;
     list.appendChild(item);

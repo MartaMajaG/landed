@@ -5,15 +5,6 @@ export default class extends Controller {
 
   connect() {
     console.log("Task detail controller connected")
-    const sidebar = document.querySelector('.task-sidebar')
-    const stepsEl = document.querySelector('.task-why')
-    if (sidebar && stepsEl) {
-      requestAnimationFrame(() => {
-        const sidebarRect = sidebar.getBoundingClientRect()
-        sidebar.style.left = sidebarRect.left + 'px'
-        sidebar.style.width = sidebarRect.width + 'px'
-      })
-    }
   }
 
   async completeStep(event) {
@@ -48,9 +39,6 @@ export default class extends Controller {
         </form>
       `
 
-      const checkboxForm = stepEl.querySelector(".step__checkbox-form")
-      if (checkboxForm) checkboxForm.style.display = "none"
-
       const toggleBtn = stepEl.querySelector(".step__toggle")
       if (toggleBtn) toggleBtn.style.display = "none"
 
@@ -61,12 +49,8 @@ export default class extends Controller {
       if (nextStep) {
         nextStep.classList.remove("step--locked")
         nextStep.classList.add("step--active")
-        const nextCheckbox = nextStep.querySelector(".step__checkbox-form")
-        if (nextCheckbox) nextCheckbox.style.display = ""
         const nextToggle = nextStep.querySelector(".step__toggle")
         if (nextToggle) nextToggle.style.display = ""
-        const nextUnlockHint = nextStep.querySelector(".step__unlock-hint")
-        if (nextUnlockHint) nextUnlockHint.style.display = "none"
 
         // Always scroll to next step, even if already in view
         this.scrollToStep(nextStep)
@@ -76,9 +60,13 @@ export default class extends Controller {
       const totalCount = this.stepTargets.length
 
       if (completedCount === totalCount) {
-        this.stepCountTarget.textContent = `All steps complete!`
+        if (this.hasStepCountTarget) {
+          this.stepCountTarget.innerHTML = `<span class="task-steps__all-done">All done ✓</span>`
+        }
       } else {
-        this.stepCountTarget.textContent = `Step ${completedCount + 1} of ${totalCount}`
+        if (this.hasStepCountTarget) {
+          this.stepCountTarget.innerHTML = `<span class="task-steps__fraction">${completedCount}&thinsp;/&thinsp;${totalCount}</span>`
+        }
       }
 
       this.flashAutosave()
@@ -112,9 +100,6 @@ export default class extends Controller {
       numberEl.classList.remove("step__number--done")
       numberEl.innerHTML = `<span>${this.stepTargets.indexOf(stepEl) + 1}</span>`
 
-      const checkboxForm = stepEl.querySelector(".step__checkbox-form")
-      if (checkboxForm) checkboxForm.style.display = ""
-
       const toggleBtn = stepEl.querySelector(".step__toggle")
       if (toggleBtn) toggleBtn.style.display = ""
 
@@ -124,15 +109,15 @@ export default class extends Controller {
       if (nextStep) {
         nextStep.classList.remove("step--active")
         nextStep.classList.add("step--locked")
-        const nextCheckbox = nextStep.querySelector(".step__checkbox-form")
-        if (nextCheckbox) nextCheckbox.style.display = "none"
         const nextToggle = nextStep.querySelector(".step__toggle")
         if (nextToggle) nextToggle.style.display = "none"
       }
 
       const completedCount = this.stepTargets.filter(s => s.classList.contains("step--completed")).length
       const totalCount = this.stepTargets.length
-      this.stepCountTarget.textContent = `Step ${completedCount + 1} of ${totalCount}`
+      if (this.hasStepCountTarget) {
+        this.stepCountTarget.innerHTML = `<span class="task-steps__fraction">${completedCount}&thinsp;/&thinsp;${totalCount}</span>`
+      }
 
       this.flashAutosave()
     }
@@ -178,7 +163,7 @@ export default class extends Controller {
     const cx = canvas.width / 2
     const cy = canvas.height / 2
 
-    const colors = ['#5B50E8', '#7A9E1F', '#A89CFF', '#C8F59A', '#ffffff', '#E8E5FB']
+    const colors = ['#9739C8', '#7A9E1F', '#C48FDE', '#C8F59A', '#ffffff', '#EBD6F5']
     const particles = []
 
     for (let i = 0; i < 160; i++) {

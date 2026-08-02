@@ -1,7 +1,15 @@
 // ── Task Detail Page ──────────────────────────────
 
+// Global icon wrapper — every inline SVG icon on this page is wrapped in
+// <span class="lucide-icon">, matching the convention already used on the document chat page.
+.lucide-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 .task-detail-page {
-  background: #F4F3FA;
+  background: #FAFAFC;
   min-height: 100vh;
   padding: 0 0 32px 0;
   position: relative;
@@ -11,7 +19,7 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: #F4F3FA;
+    background: #FAFAFC;
     pointer-events: none;
     z-index: 0;
   }
@@ -35,7 +43,7 @@
 .breadcrumb__link {
   color: #4B5563;
   text-decoration: none;
-  &:hover { color: #5B50E8; }
+  &:hover { color: #9739C8; }
 }
 
 .breadcrumb__current {
@@ -47,26 +55,16 @@
   max-width: 500px;
 }
 
-// Two column layout
-.task-layout {
-  display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 2rem;
-}
-
-// Left column
+// Single column layout — the two-column grid existed only to hold the Expert Tips
+// sidebar; now that tips are inline with their matching checklist step, there's nothing
+// left for a second column to do. Centered rather than left-hugging the container, and
+// a bit wider than the old 760px cap since there's no sidebar competing for space.
+// Single column layout — width is now capped on the outer .container (see the ERB),
+// matching document view's approach exactly: max-width lives on the outermost wrapper,
+// so Bootstrap's own container padding is correctly subtracted from the 1160px rather
+// than sitting outside it.
 .task-main {
-  min-width: 0; // prevents grid blowout
-}
-
-// Right column — sticky sidebar
-.task-sidebar {
-  position: sticky;
-  top: 2rem;
-  align-self: start;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  min-width: 0;
 }
 
 // ── Breadcrumb ────────────────────────────────────
@@ -138,7 +136,7 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  margin-bottom: 0.75rem;
+  margin-bottom: 1.25rem;
 }
 
 .task-title {
@@ -163,27 +161,33 @@
 
 // ── Why This Matters ──────────────────────────────
 // Now uses the same static tinted-glow depth as the dashboard's resting cards, tinted
-// indigo since this box is brand-colored (#E8E5FB), not category-colored.
+// indigo since this box is brand-colored (#F6EDFB), not category-colored.
 
 .task-why {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  background: #E8E5FB;
-  border: 1px solid #D0CCEE;
+  gap: 0.875rem;
+  background: #F6EDFB;
+  border: 1px solid #F1E4FA;
   border-radius: 12px;
-  padding: 0.5rem 0.875rem;
+  padding: 0.875rem 1.125rem;
   margin-bottom: 1.5rem;
   font-size: 14px;
   line-height: 1.6;
   color: $text-dark;
-  box-shadow: 0 4px 14px -10px rgba(91, 80, 232, 0.30);
+  box-shadow: none;
 }
 
 .task-why__icon {
-  color: $blue-action;
+  color: $indigo-landed;
   flex-shrink: 0;
-  margin-top: 1px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .task-why p {
@@ -212,159 +216,92 @@
   color: #D97706;
 }
 
-// ── Expert Tips ───────────────────────────────────
-// Header rebuilt to match .quick-guides__header exactly (plain text, no colored band, same
-// size/weight/color) instead of the old uppercase green banner — the two sidebar cards now
-// read as one consistent family instead of two different header treatments.
-// Card itself gets the same static tinted-glow depth as dashboard cards, tinted chartreuse
-// (matching its existing green-leaning border) instead of the generic gray it had before.
-
-.expert-tips {
-  background: #fff;
-  border: 1px solid #D8E8C4;
-  border-radius: 16px;
-  padding: 1.25rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 4px 14px -10px rgba(122, 158, 31, 0.30);
-}
-
-.expert-tips__label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 14px;
+.task-badge--due {
+  background: #F5F4FB;
+  color: $text-gray;
+  border: 1px solid #F1E4FA;
   font-weight: 600;
-  color: $text-dark;
-  margin: 0 0 0.875rem;
-  letter-spacing: normal;
-  text-transform: none;
-  background: none;
-  border-bottom: none;
-  padding: 0;
-  border-radius: 0;
 }
 
-.expert-tips__item {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  border: 1px solid #E8F0D9;
-  border-radius: 12px;
-  padding: 0.625rem 0.75rem;
-  margin-bottom: 0.5rem;
+// ── Step Tip (inline expert tip) ──────────────────
+// Replaces the old standalone "Expert tips" sidebar. Each tip now renders inside its
+// matching checklist step (mapped by order — tip 1 with step 1, etc.) instead of in a
+// separate always-visible panel. No card chrome of its own — it's a lightly tinted block
+// that reads as part of the step's content, not a competing box.
 
-  &:last-child {
-    margin-bottom: 0;
-  }
+.step__tip {
+  margin-top: 0.875rem;
+  padding: 0.875rem 1rem;
+  background: #F6F5FA;
+  border-radius: 10px;
+}
 
-  h4 {
-    font-size: 14px;
-    font-weight: 600;
-    color: #1a1d23;
-    margin: 0 0 2px;
-  }
+.step__tip-body {
+  min-width: 0;
 
   p {
-    font-size: 14px;
-    color: #1a1d23;
-    line-height: 1.5;
-    margin: 0;
-  }
-}
-
-.expert-tips__icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 8px;
-  background: rgba(122, 158, 31, 0.14);
-  color: $chartreuse;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  margin-top: 1px;
-
-  svg { width: 15px; height: 15px; }
-}
-
-// ── Quick Guides ──────────────────────────────────
-// Same static tinted-glow depth, tinted indigo (brand default, since links aren't
-// category-colored) to match the rest of the page.
-
-.quick-guides {
-  background: white;
-  border: 1px solid #E5E7EB;
-  border-radius: 16px;
-  padding: 1rem;
-  box-shadow: 0 4px 14px -10px rgba(91, 80, 232, 0.30);
-}
-
-.quick-guides__header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.875rem;
-
-  h3 {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 13.5px;
     color: $text-dark;
-    margin: 0;
-  }
+    line-height: 1.55;
+    margin: 0 0 8px;
 
-  a {
-    color: $text-gray;
-    text-decoration: none;
-    font-size: 14px;
+    strong { font-weight: 700; }
   }
 }
 
-.quick-guide__item {
+// Resource link now shows as a small preview card — a larger favicon tile standing in
+// for a link-preview image, with title/domain stacked beside it — rather than a tiny
+// inline icon. Reads more like "here's the source" than a plain text link.
+.step__tip-resource {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px 10px;
-  border: 1px solid #E8E4F4;
-  border-radius: 12px;
-  margin-bottom: 6px;
+  gap: 10px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid rgba(151, 57, 200, 0.14);
+  border-radius: 8px;
   text-decoration: none;
-  transition: border-color 0.15s ease, background 0.15s ease;
+  min-width: 0;
 
   &:hover {
-    border-color: rgba(91, 80, 232, 0.30);
-    background: #FAF9FF;
-  }
-
-  &:last-child {
-    margin-bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
   }
 }
 
-.quick-guide__favicon {
-  width: 32px;
-  height: 32px;
+.step__tip-resource-favicon {
+  width: 38px;
+  height: 38px;
   border-radius: 8px;
-  background: #F5F3FF;
-  border: 1px solid #E8E4F4;
+  background: rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
-  flex-shrink: 0;
-  img { width: 18px; height: 18px; object-fit: contain; }
+  overflow: hidden;
+  img { width: 55%; height: 55%; object-fit: contain; }
 }
 
-.quick-guide__title {
-  font-size: 14px;
-  font-weight: 500;
-  color: $text-dark;
-  margin: 0 0 2px;
+.step__tip-resource-text {
+  min-width: 0;
 }
 
-.quick-guide__meta {
-  font-size: 12px;
-  color: $text-gray;
+.step__tip-resource-title {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #1a1d23;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   margin: 0;
+}
+
+.step__tip-resource-domain {
+  font-size: 11px;
+  color: $text-gray;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 1px 0 0;
 }
 
 // ── Completion Overlay ────────────────────────────
@@ -390,7 +327,7 @@
   text-align: center;
   max-width: 380px;
   width: 90%;
-  box-shadow: 0 12px 32px -12px rgba(91, 80, 232, 0.35);
+  box-shadow: 0 12px 32px -12px rgba(151, 57, 200, 0.30);
 }
 
 .completion-overlay__icon {
@@ -441,7 +378,186 @@
   transition: width 3s linear;
 }
 
-// ── Step Title Row ────────────────────────────────
+// ── Checklist Steps ────────────────────────────────
+// Restructured to add a timeline: the number circle now lives in a .step__marker column
+// outside the card, connected to the next step's circle by a dashed vertical line. The
+// outer .step stays the JS target (state classes, data-completed) and is now a plain
+// layout row with no visual chrome of its own — border/background/padding moved to
+// .step__card so JS's stepEl.querySelector(".step__number") etc. still work unchanged
+// since the marker is still a descendant of .step, just a sibling of .step__card rather
+// than living inside it.
+
+.step {
+  position: relative;
+  display: flex;
+  gap: 16px;
+  align-items: stretch;
+  margin-bottom: 16px;
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.step__marker {
+  position: relative;
+  width: 28px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 28px;
+    bottom: -16px;
+    width: 0;
+    border-left: 1.5px dashed #E7C7F0;
+  }
+}
+
+.step:last-child .step__marker::after {
+  display: none;
+}
+
+.step__card {
+  flex: 1;
+  min-width: 0;
+  background: #fff;
+  border: 1px solid #F1E4FA;
+  border-radius: 16px;
+  padding: 1.25rem 1.375rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.step--active .step__card {
+  border-color: rgba(151, 57, 200, 0.28);
+  box-shadow: 0 4px 14px -10px rgba(151, 57, 200, 0.30);
+}
+
+.step--completed .step__card {
+  border-color: rgba(16, 185, 129, 0.22);
+}
+
+.step--locked .step__card {
+  background: #FAFAFC;
+  border: 1.5px dashed #EBE3EE;
+  padding: 1.75rem 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .step__content {
+    display: none;
+  }
+}
+
+.step__locked-placeholder {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  color: #9CA3AF;
+  font-size: 13px;
+  font-weight: 500;
+
+  svg { width: 18px; height: 18px; }
+}
+
+.step--locked .step__locked-placeholder {
+  display: flex;
+}
+
+.step__number {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #F0F0F8;
+  color: #9090A8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  flex-shrink: 0;
+
+  span { line-height: 1; }
+
+  svg { width: 12px; height: 12px; }
+}
+
+.step--active .step__number,
+.step__number--done {
+  background: $indigo-landed;
+  color: #fff;
+}
+
+.step__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.step__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.step__title {
+  font-size: 14px;
+  font-weight: 600;
+  color: $text-dark;
+  margin: 0;
+}
+
+.step__description {
+  font-size: 14px;
+  color: $text-gray;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.step__checkbox {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+  border: 1.5px solid #E7C7F0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.15s ease;
+
+  &:hover { border-color: $indigo-landed; }
+}
+
+.step__checkbox-inner {
+  width: 100%;
+  height: 100%;
+  border-radius: 4px;
+}
+
+.step__toggle {
+  display: inline-block;
+  margin-top: 0.75rem;
+  font-size: 14px;
+  font-weight: 600;
+  color: $indigo-landed;
+  background: #F6EDFB;
+  border: 1px solid rgba(151, 57, 200, 0.16);
+  border-radius: 10px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+
+  &:hover { background: #EBD6F5; }
+}
 
 .step__title-row {
   display: flex;
@@ -507,8 +623,8 @@
 .step__soft-lock {
   margin-top: 0.75rem;
   padding: 0.625rem 0.875rem;
-  background: #F4F3FA;
-  border: 1px solid #C7D2FE;
+  background: #FAF3FC;
+  border: 1px solid #E7C7F0;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -537,7 +653,7 @@
   text-underline-offset: 2px;
 
   &:hover {
-    color: darken(#4F46E5, 10%);
+    color: #792EA0;
   }
 }
 
@@ -589,7 +705,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #D4D2ED;
+  background: #EBD6F5;
   flex-shrink: 0;
   transition: background 0.2s ease;
 
@@ -628,6 +744,18 @@
     flex-shrink: 0;
     color: inherit;
   }
+}
+
+// ── Steps section spacing ─────────────────────────
+// Previously undefined — the CHECKLIST label sat flush against the "Good to know" box
+// above it and the first step card below it, with no breathing room at all.
+
+.task-steps {
+  margin-top: 0.5rem;
+}
+
+.task-steps__header {
+  margin-bottom: 1rem;
 }
 
 // ── Steps section label ───────────────────────────

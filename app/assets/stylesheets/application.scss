@@ -10,15 +10,14 @@
 // Your CSS partials
 @import "components/index";
 @import "pages/index";
-@import "documents";
 @import "pages/home";
 
 html {
   scroll-behavior: auto;
 }
 body {
-  background: #F4F3FA;
+  background: $page-bg;
 }
 main.sidebar-main-content {
-  background: #F4F3FA;
+  background: #FAFAFC;
 }

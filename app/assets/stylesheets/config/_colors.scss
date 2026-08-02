@@ -1,5 +1,5 @@
 // Landed Core Palette
-$indigo-landed: #4F46E5;
+$indigo-landed: #9739C8;
 $blue-action:   #1A4FD6;
 $chartreuse:    #7A9E1F;
 $success-text:  #344211;
@@ -7,7 +7,7 @@ $urgent-red:    #EF4444;
 $gray-bg:       #F9FAFB;
 $text-dark:     #111827;
 $text-gray:     #4B5563;
-$page-bg:    #F4F3FA;
+$page-bg:    #FAFAFC;
 $amber:      #F59E0B;
 $dark-card:  #1a1f2e;
 $headers-font: "Inter", sans-serif;
@@ -17,4 +17,5 @@ $headers-font: "Inter", sans-serif;
   --blue-action:  #{$blue-action};
   --urgent-red:   #{$urgent-red};
   --text-dark:    #{$text-dark};
+  --page-bg:      #{$page-bg};
 }

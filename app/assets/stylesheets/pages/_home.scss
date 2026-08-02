@@ -1,6 +1,15 @@
 // ── Page background ──
+
+// Global icon wrapper — every inline SVG icon on the dashboard is wrapped in
+// <span class="lucide-icon">, matching the convention used on the document chat page.
+.lucide-icon {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
 .dashboard-bg {
-  background: #F4F3FA;
+  background: $page-bg;
   min-height: 100vh;
   position: relative;
   overflow: hidden;
@@ -15,7 +24,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: #F4F3FA;
+  background: $page-bg;
   pointer-events: none;
   z-index: 0;
 }
@@ -24,12 +33,12 @@
 .dashboard-hero {
   background: #fff;
   border-radius: 16px;
-  border: 1px solid #D8D4EE;
+  border: 1px solid #E7C7F0;
   padding: 0;
   display: grid;
   grid-template-columns: 220px 1fr;
   margin-bottom: 18px;
-  box-shadow: 0 4px 14px -10px rgba(91, 80, 232, 0.35);
+  box-shadow: 0 4px 14px -10px rgba(151, 57, 200, 0.35);
   overflow: hidden;
 }
 
@@ -42,8 +51,8 @@
   text-align: center;
   gap: 6px;
   padding: 20px 18px;
-  background: #F4F2FF;
-  border-right: 0.5px solid #E8E4F8;
+  background: #F6EDFB;
+  border-right: 0.5px solid #F1E4FA;
 }
 
 .hero-greeting__label {
@@ -80,8 +89,8 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: #EEECFF;
-  color: #3C3489;
+  background: #F6EDFB;
+  color: #7D3AA3;
   font-size: 12px;
   font-weight: 700;
   padding: 4px 11px;
@@ -93,7 +102,7 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  background: #F4F2FF;
+  background: #F6EDFB;
   color: #7a7f8e;
   font-size: 11px;
   font-weight: 600;
@@ -116,7 +125,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #5B50E8;
+  color: $indigo-landed;
   margin: 0;
 }
 
@@ -133,12 +142,12 @@
   left: 18px;
   right: 18px;
   height: 2px;
-  background: #EDE8FF;
+  background: #F1E4FA;
   z-index: 0;
 }
 .journey-track-fill {
   height: 100%;
-  background: #5B50E8;
+  background: $indigo-landed;
   border-radius: 1px;
   transition: width 0.4s ease;
 }
@@ -171,28 +180,28 @@
 
 .journey-step--active {
   .journey-dot {
-    background: #5B50E8;
+    background: $indigo-landed;
     color: #fff;
-    box-shadow: 0 0 0 4px rgba(91, 80, 232, 0.14);
+    box-shadow: 0 0 0 4px rgba(151, 57, 200, 0.14);
   }
-  .journey-step-label { font-weight: 600; color: #5B50E8; }
+  .journey-step-label { font-weight: 600; color: $indigo-landed; }
 }
 
 .journey-step--done {
   .journey-dot {
-    background: #5B50E8;
+    background: $indigo-landed;
     color: #fff;
   }
-  .journey-step-label { font-weight: 500; color: #5B50E8; }
+  .journey-step-label { font-weight: 500; color: $indigo-landed; }
 }
 
 .journey-step--future {
   .journey-dot {
     background: #fff;
-    border: 1px solid #EDE8FF;
-    color: #C4C2E8;
+    border: 1px solid #F1E4FA;
+    color: #D7C8E2;
   }
-  .journey-step-label { color: #C4C2E8; }
+  .journey-step-label { color: #D7C8E2; }
 }
 
 // ── Tasks ──
@@ -239,7 +248,7 @@
   background: transparent;
   color: #7a7f8e;
   cursor: pointer;
-  &.active { background: #5B50E8; color: #fff; }
+  &.active { background: $indigo-landed; color: #fff; }
 }
 .tasks-controls { display: flex; align-items: center; gap: 0.75rem; }
 
@@ -288,7 +297,7 @@
   text-decoration: none;
   cursor: pointer;
   &:hover { background: #f3f4f6; }
-  &.active { background: #eeecff; color: #5B50E8; font-weight: 600; }
+  &.active { background: #F6EDFB; color: $indigo-landed; font-weight: 600; }
 }
 .pillar-filter__dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 .pillar-filter__count { margin-left: auto; font-size: 11px; color: #9ca3af; font-weight: 400; }
@@ -328,7 +337,7 @@
 .task-card {
   position: relative;
   background: #fff;
-  border: 1px solid #E4E1F4;
+  border: 1px solid #F1E4FA;
   border-radius: 16px;
   padding: 16px;
   margin-bottom: 0;
@@ -338,7 +347,7 @@
   flex-direction: column;
   // Depth comes from a tight, tinted glow (negative spread) instead of a flat gray shadow.
   // --glow is set per pillar below; urgent-card overrides it with a red glow regardless of pillar.
-  box-shadow: 0 4px 14px -10px var(--glow, rgba(91,80,232,0.35));
+  box-shadow: 0 4px 14px -10px var(--glow, rgba(151,57,200,0.35));
   transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 
   // Pillar-colored accent line — inset from the card edges, hidden until hover.
@@ -347,7 +356,7 @@
     content: '';
     position: absolute;
     top: 0; left: 10px; right: 10px; height: 2px;
-    background: var(--accent, #5B50E8);
+    background: var(--accent, #{$indigo-landed});
     border-radius: 2px;
     transform: scaleX(0);
     transform-origin: left;
@@ -355,7 +364,7 @@
   }
 
   &:hover {
-    box-shadow: 0 16px 28px -12px var(--glow, rgba(91,80,232,0.45));
+    box-shadow: 0 16px 28px -12px var(--glow, rgba(151,57,200,0.45));
     transform: translateY(-2px);
     &::before { transform: scaleX(1); }
   }
@@ -458,17 +467,17 @@
   background: #7A9E1F;
 }
 .urgent-card .card-fill { background: #E53E3E; }
-.locked      .card-fill { background: #C4C2E8; }
+.locked      .card-fill { background: #D7C8E2; }
 
 // ── Calendar ──
 .calendar-section { margin-top: 22px; }
 .calendar-card {
   background: #fff;
-  border: 1px solid #D8D4EE;
+  border: 1px solid #E7C7F0;
   border-radius: 16px;
   overflow: hidden;
   margin-top: 14px;
-  box-shadow: 0 4px 14px -10px rgba(91, 80, 232, 0.35);
+  box-shadow: 0 4px 14px -10px rgba(151, 57, 200, 0.35);
 }
 .cal-toolbar {
   display: flex;
@@ -516,7 +525,7 @@
 }
 .cal-date { font-size: 12px; font-weight: 500; color: #1a1d23; margin-bottom: 2px; }
 .today-num {
-  font-size: 12px; font-weight: 700; background: #5B50E8; color: #fff;
+  font-size: 12px; font-weight: 700; background: $indigo-landed; color: #fff;
   width: 22px; height: 22px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center; margin-bottom: 2px;
 }
@@ -550,7 +559,7 @@
 .cal-overflow {
   font-size: 10px;
   font-weight: 600;
-  color: #5B50E8;
+  color: $indigo-landed;
   padding: 1px 2px;
   cursor: pointer;
   line-height: 1.4;
@@ -558,9 +567,9 @@
 }
 
 @keyframes card-highlight {
-  0%   { box-shadow: 0 0 0 3px var(--highlight-color, #5B50E8), 0 6px 20px rgba(0,0,0,0.1); }
+  0%   { box-shadow: 0 0 0 3px var(--highlight-color, #{$indigo-landed}), 0 6px 20px rgba(0,0,0,0.1); }
   60%  { box-shadow: 0 0 0 2px rgba(0,0,0,0.05), 0 4px 8px rgba(0,0,0,0.05); }
-  100% { box-shadow: 0 1px 3px rgba(91,80,232,0.05); }
+  100% { box-shadow: 0 1px 3px rgba(151,57,200,0.05); }
 }
 .task-card--highlight {
   animation: card-highlight 1.8s ease-out forwards;
@@ -594,7 +603,7 @@
   &__btn {
     font-size: 11px; font-weight: 600; padding: 6px 10px;
     border-radius: 10px; text-decoration: none; text-align: center; display: block;
-    &--google { background: #EDE8FF; color: #3C3489; }
+    &--google { background: #F1E4FA; color: #7D3AA3; }
     &--apple  { background: #f0f2f7; color: #1a1535; }
   }
 }
@@ -628,7 +637,7 @@
   font-weight: 600;
   color: #9ca3af;
   background: transparent;
-  border: 1.5px dashed #D8D4EE;
+  border: 1.5px dashed #E7C7F0;
   border-radius: 16px;
   cursor: pointer;
   text-align: center;
@@ -641,5 +650,5 @@
 
   &::before { content: '↓'; font-size: 11px; }
   &[data-expanded="true"]::before { content: '↑'; }
-  &:hover { color: #5B50E8; border-color: #5B50E8; background: #F4F2FF; }
+  &:hover { color: $indigo-landed; border-color: $indigo-landed; background: #F6EDFB; }
 }
