@@ -38,7 +38,7 @@
   display: grid;
   grid-template-columns: 220px 1fr;
   margin-bottom: 18px;
-  box-shadow: 0 4px 14px -10px rgba(151, 57, 200, 0.35);
+  box-shadow: 0 4px 14px -10px rgba(151, 57, 200, 0.15);
   overflow: hidden;
 }
 
@@ -125,7 +125,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: $indigo-landed;
+  color: #7D3AA3;
   margin: 0;
 }
 
@@ -134,11 +134,14 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+  // Extra top padding so the history dots (which sit above the track) have
+  // room without crowding the main milestone row.
+  padding-top: 14px;
 }
 
 .journey-track {
   position: absolute;
-  top: 16px;
+  top: 30px;
   left: 18px;
   right: 18px;
   height: 2px;
@@ -147,14 +150,63 @@
 }
 .journey-track-fill {
   height: 100%;
-  background: $indigo-landed;
+  background: #C48FDE;
   border-radius: 1px;
   transition: width 0.4s ease;
 }
 
+// ── Journey history dots ──
+// Small markers sitting ON the track between milestones, each representing a
+// completed task/event. Placeholder data for now (see dashboard.html.erb) —
+// once wired to real data these will be positioned by actual completion date
+// within each phase segment rather than evenly spaced.
+.journey-history {
+  position: absolute;
+  top: 30px;
+  left: 18px;
+  right: 18px;
+  height: 2px;
+  z-index: 1;
+  pointer-events: none;
+}
+.journey-history-dot {
+  position: absolute;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: $indigo-landed;
+  border: 1.5px solid #fff;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.12s ease;
+
+  &:hover {
+    transform: translate(-50%, -50%) scale(1.35);
+  }
+}
+
+.journey-history-popover {
+  position: fixed;
+  background: white;
+  border: 0.5px solid #e2e5ec;
+  border-radius: 16px;
+  padding: 10px 14px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+  z-index: 300;
+  width: 220px;
+  display: none;
+
+  &--open { display: block; }
+
+  &__title { font-size: 12.5px; font-weight: 600; color: #1a1d23; margin: 0 0 2px; line-height: 1.4; }
+  &__meta  { font-size: 11px; color: #9ca3af; margin: 0; }
+}
+
 .journey-step {
   position: relative;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -182,17 +234,23 @@
   .journey-dot {
     background: $indigo-landed;
     color: #fff;
-    box-shadow: 0 0 0 4px rgba(151, 57, 200, 0.14);
+    animation: journey-pulse 2.4s ease-in-out infinite;
   }
   .journey-step-label { font-weight: 600; color: $indigo-landed; }
 }
 
+@keyframes journey-pulse {
+  0%   { box-shadow: 0 0 0 4px rgba(151, 57, 200, 0.14); transform: scale(1); }
+  50%  { box-shadow: 0 0 0 9px rgba(151, 57, 200, 0.07); transform: scale(1.05); }
+  100% { box-shadow: 0 0 0 4px rgba(151, 57, 200, 0.14); transform: scale(1); }
+}
+
 .journey-step--done {
   .journey-dot {
-    background: $indigo-landed;
+    background: #C48FDE;
     color: #fff;
   }
-  .journey-step-label { font-weight: 500; color: $indigo-landed; }
+  .journey-step-label { font-weight: 500; color: #7D3AA3; }
 }
 
 .journey-step--future {
@@ -205,7 +263,7 @@
 }
 
 // ── Tasks ──
-.tasks-section { margin-top: 24px; }
+.tasks-section { margin-top: 40px; }
 
 .tasks-header {
   display: flex;
@@ -235,20 +293,24 @@
 .tasks-pillar-pill__arrow { font-size: 11px; opacity: 0.7; }
 .tasks-toggle {
   display: flex;
-  background: #fff;
-  border: 0.5px solid #e2e5ec;
-  border-radius: 16px;
-  overflow: hidden;
+  background: #F3F2F7;
+  border: none;
+  border-radius: 999px;
+  padding: 3px;
+  gap: 2px;
 }
 .toggle-btn {
-  padding: 6px 16px;
-  font-size: 12px;
-  font-weight: 500;
+  padding: 7px 18px;
+  font-size: 12.5px;
+  font-weight: 600;
   border: none;
+  border-radius: 999px;
   background: transparent;
   color: #7a7f8e;
   cursor: pointer;
-  &.active { background: $indigo-landed; color: #fff; }
+  transition: background 0.15s ease, color 0.15s ease;
+  &.active { background: #F6EDFB; color: $indigo-landed; }
+  &:not(.active):hover { background: rgba(255,255,255,0.6); color: #4b5563; }
 }
 .tasks-controls { display: flex; align-items: center; gap: 0.75rem; }
 
@@ -257,16 +319,28 @@
 .pillar-filter__btn {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 7px 10px;
-  border: 1px solid #e5e7eb;
-  border-radius: 16px;
-  background: white;
-  font-size: 12px;
-  font-weight: 500;
+  height: 38px;
+  min-width: 38px;
+  padding: 0 12px;
+  border: 0.5px solid #e2e5ec;
+  border-radius: 999px;
+  background: #fff;
+  font-size: 12.5px;
+  font-weight: 600;
   color: #6b7280;
   cursor: pointer;
   white-space: nowrap;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+
+  &:hover { background: #F6EDFB; border-color: #E7C7F0; color: $indigo-landed; }
+
+  &--active {
+    background: #F6EDFB;
+    border-color: #E7C7F0;
+    color: $indigo-landed;
+  }
 }
 .pillar-filter__label { max-width: 120px; overflow: hidden; text-overflow: ellipsis; }
 .pillar-filter__dropdown {
@@ -308,8 +382,8 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
   align-items: start;
-  margin-bottom: 24px;
-  margin-top: 12px;
+  margin-bottom: 28px;
+  margin-top: 16px;
 }
 .kanban-col { display: flex; flex-direction: column; gap: 10px; }
 .col-header {
@@ -390,7 +464,7 @@
 }
 
 // Pillar → accent + glow color. Single source of truth for category coloring across the card.
-.task-card--pillar-finance_and_banking      { --accent: #246DD5; --glow: rgba(36,109,213,0.28); }
+.task-card--pillar-finance_and_banking      { --accent: #059669; --glow: rgba(5,150,105,0.28); }
 .task-card--pillar-health_and_insurance     { --accent: #ec4899; --glow: rgba(236,72,153,0.28); }
 .task-card--pillar-housing_and_registration { --accent: #f97316; --glow: rgba(249,115,22,0.28); }
 .task-card--pillar-legal_and_work           { --accent: #5B21B6; --glow: rgba(91,33,182,0.28); }
@@ -545,12 +619,8 @@
   border-left: 2px solid transparent;
   transition: opacity 0.1s ease;
   &:hover { opacity: 0.8; }
-  // Categories match the real pillar slugs and reuse the exact same hex values as
-  // .task-card--pillar-* above. scanned_document is deliberately a distinct color (not one of
-  // the four pillar accents) so scanner-extracted deadlines read as "surfaced by the AI
-  // scanner" rather than another relocation category — see dashboards_controller.rb.
   &.housing_and_registration { background: #ffedd5; color: #c2410c; border-left-color: #f97316; }
-  &.finance_and_banking      { background: #dbeafe; color: #1e40af; border-left-color: #246DD5; }
+  &.finance_and_banking      { background: #D1FAE5; color: #065F46; border-left-color: #059669; }
   &.legal_and_work           { background: #ede9fe; color: #5b21b6; border-left-color: #5B21B6; }
   &.health_and_insurance     { background: #fce7f3; color: #9d174d; border-left-color: #ec4899; }
   &.scanned_document         { background: #ECFCCB; color: #3F6212; border-left-color: #7A9E1F; }
@@ -576,9 +646,6 @@
 }
 
 // ── Pillar tag colours ──
-// This is the single active block for tag-pillar backgrounds. An earlier duplicate block with
-// generic #6B7A99 text and paler backgrounds has been removed — it was dead weight, always
-// overridden by this one anyway (same selectors, later in the cascade).
 .tag-pillar--legal_and_work           { background: #EDE9FE; color: #5B21B6; }
 .tag-pillar--housing_and_registration { background: #FEF3C7; color: #92400E; }
 .tag-pillar--finance_and_banking      { background: #D1FAE5; color: #065F46; }
