@@ -7,6 +7,18 @@ module ApplicationHelper
     "health_and_insurance"     => '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>',
   }.freeze
 
+  # Pillar accent colors — single source of truth for the hex values used as
+  # inline backgrounds wherever CSS classes alone can't reach (e.g. the
+  # pillar-filter dropdown dots). Matches the --accent custom properties set
+  # on .task-card--pillar-* in dashboard.scss — keep these in sync if a
+  # pillar's color ever changes.
+  PILLAR_ACCENT_COLORS = {
+    "legal_and_work"           => "#5B21B6",
+    "housing_and_registration" => "#f97316",
+    "finance_and_banking"      => "#059669",
+    "health_and_insurance"     => "#ec4899",
+  }.freeze
+
   # NOTE: PILLAR_COLORS was removed. It hardcoded a second, independent color per pillar
   # (finance_and_banking => #246DD5, a blue) that was applied via inline style="color: ..."
   # on the icon span — this silently overrode currentColor and caused the icon to render
@@ -20,10 +32,25 @@ module ApplicationHelper
     return unless task.pillar
     slug     = task.pillar.slug
     icon_svg = PILLAR_ICONS.fetch(slug, "").html_safe
-    content_tag(:span, class: "tag tag-pillar--#{slug}") do
-      concat content_tag(:span, icon_svg, class: "lucide-icon", style: "color:inherit;")
-      concat task.pillar.name
+    content_tag(:span, class: "pillar-chip tag-pillar--#{slug}") do
+      concat content_tag(:span, icon_svg, class: "pillar-chip__icon")
+      concat content_tag(:span, task.pillar.name, class: "pillar-chip__label")
     end
+  end
+
+  def pillar_accent_color(slug)
+    PILLAR_ACCENT_COLORS.fetch(slug, "#9ca3af")
+  end
+
+  # Returns the first sentence of `text`, truncated to `max_length` characters
+  # on a word boundary if that sentence itself runs long. Used for task card
+  # descriptions so every card gets a similarly-sized snippet instead of a
+  # CSS line-clamp that can cut off mid-word or mid-sentence.
+  def first_sentence(text, max_length: 90)
+    return "" if text.blank?
+    match = text.to_s.match(/[^.!?]+[.!?]+/)
+    sentence = match ? match[0].strip : text.strip
+    truncate(sentence, length: max_length, separator: " ")
   end
 
   # ... other helper methods ...

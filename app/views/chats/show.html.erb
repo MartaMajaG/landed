@@ -26,6 +26,21 @@
   icon_note     = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>'
   icon_euro     = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B4B2C4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h12"/><path d="M4 14h9"/><path d="M19 6a7.7 7.7 0 0 0-5.2-2A7.9 7.9 0 0 0 6 12a7.9 7.9 0 0 0 7.8 8 7.7 7.7 0 0 0 5.2-2"/></svg>'
   icon_tag      = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#B4B2C4" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41 11 3.83A2 2 0 0 0 9.59 3.24L4 3a1 1 0 0 0-1 1l.24 5.59a2 2 0 0 0 .59 1.41l9.58 9.59a2 2 0 0 0 2.83 0l4.35-4.35a2 2 0 0 0 0-2.83z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg>'
+  icon_help     = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>'
+  icon_hash     = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>'
+  # Generic fallback for stat cards whose label doesn't match any of the
+  # keyword patterns below. Kept deliberately plain (info-circle) so it never
+  # looks wrong regardless of what an unseen label turns out to be.
+  icon_stat      = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9739C8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>'
+  icon_bank      = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9739C8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>'
+  icon_clipboard = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#9739C8" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>'
+  # Was a bare Unicode "✦" character before — inconsistent with every other
+  # icon on the page (and the rest of the app), which are all outline SVGs at
+  # stroke-width:1.75. This is Lucide's actual "sparkles" glyph, same
+  # convention as the icons above, so the AI assistant's icon renders
+  # consistently with everything around it instead of looking like a
+  # different icon set / font glyph.
+  icon_sparkle  = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg>'
 %>
 
 <style>
@@ -303,11 +318,12 @@
         <div class="white-card" id="chat-card-<%= @chat.id %>" style="overflow:hidden;">
 
           <%# ── Fixed header banner — always visible, doesn't scroll with the
-               messages below it. Gives the right column a clear identity
-               instead of just starting mid-content with "What this means". ── %>
-          <div style="display:flex; align-items:center; gap:10px; padding:18px 24px; background:#F8F0FA; border-bottom:1px solid #ECEBF3; border-radius:20px 20px 0 0;">
+               messages below it. Fades into white via a gradient instead of a
+               flat tint + hard border, so it dissolves into the message area
+               below it rather than reading as two stacked blocks. ── %>
+          <div style="display:flex; align-items:center; gap:10px; padding:18px 24px 26px; background:linear-gradient(180deg, #F8F0FA 0%, #FFFFFF 100%); border-radius:20px 20px 0 0;">
             <span style="width:30px; height:30px; border-radius:9px; background:#EBD6F5; display:flex; align-items:center; justify-content:center; color:#6E2B93; flex-shrink:0;">
-              <span class="lucide-icon" style="font-size:15px;">✦</span>
+              <span class="lucide-icon"><%= icon_sparkle.html_safe %></span>
             </span>
             <div>
               <p style="font-size:14px; font-weight:700; color:#1A1A2E; margin:0;">AI Assistant</p>
@@ -316,7 +332,7 @@
           </div>
 
           <div style="position:relative;">
-            <div id="chat-messages-<%= @chat.id %>" style="padding:24px; display:flex; flex-direction:column; gap:18px; max-height:600px; overflow-y:auto; min-height:0;">
+            <div id="chat-messages-<%= @chat.id %>" style="padding:0 24px 24px; display:flex; flex-direction:column; gap:18px; max-height:600px; overflow-y:auto; min-height:0;">
 
             <% if @chat.advice.present? %>
               <% adv = @chat.parsed_advice %>
@@ -329,7 +345,7 @@
 
               <div>
                 <h5 class="section-heading" style="margin-bottom:12px;">
-                  <span class="section-icon-chip"><span class="lucide-icon" style="color:#9739C8;"><%= icon_bulb.html_safe %></span></span> What this means
+                  <span class="section-icon-chip"><span class="lucide-icon" style="color:#9739C8;"><%= icon_help.html_safe %></span></span> What this means
                 </h5>
                 <%
                   def highlight_values(text, style: :highlight)
@@ -367,12 +383,28 @@
                 <% end %>
 
                 <% if concrete_stats.present? %>
-                  <div style="display:flex; flex-wrap:wrap; gap:24px; margin-top:18px;">
+                  <div style="border-top:1px solid #ECEBF3; margin-top:18px; padding-top:18px; display:flex; flex-wrap:wrap; gap:14px;">
                     <% concrete_stats.each do |stat| %>
                       <% raw_value = stat["value"].to_s %>
                       <% norm = raw_value.match?(/\A[\d.,]+\s*€\z/) ? "€#{raw_value.gsub(/\s*€/,'').strip}" : raw_value %>
-                      <div>
-                        <p style="font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#9CA3AF; margin:0 0 4px;"><%= stat["label"] %></p>
+                      <%
+                        lbl = stat["label"].to_s.downcase
+                        stat_icon = if lbl.match?(/authorit|issu|office|referat|department/)
+                          icon_bank
+                        elsif lbl.match?(/data|includ|document|content/)
+                          icon_clipboard
+                        elsif lbl.match?(/date|deadline|due/)
+                          icon_cal_plus
+                        elsif lbl.match?(/fee|cost|amount|price|payment/)
+                          icon_euro
+                        else
+                          icon_stat
+                        end
+                      %>
+                      <div style="flex:1; min-width:180px; border:1px solid #ECEBF3; border-radius:14px; padding:14px 16px; background:#FAFAFC;">
+                        <p style="display:flex; align-items:center; gap:6px; font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase; color:#9CA3AF; margin:0 0 8px;">
+                          <span class="lucide-icon"><%= stat_icon.html_safe %></span><%= stat["label"] %>
+                        </p>
                         <p class="doc-num" style="font-size:14px; color:#1A1A2E; margin:0 0 1px; line-height:1.2; font-weight:600 !important;"><%= norm %></p>
                         <p style="font-size:12px; color:#9CA3AF; margin:0;"><%= stat["sub"] %></p>
                       </div>
@@ -382,13 +414,13 @@
 
                 <% if adv["key_facts"].present? %>
                   <div style="margin-top:22px; padding-top:18px; border-top:1px solid #ECEBF3;">
-                    <h5 class="section-heading" style="margin-bottom:14px;">
-                      <span class="section-icon-chip"><span class="lucide-icon" style="color:#9739C8;"><%= icon_list.html_safe %></span></span> Key facts
+                    <h5 class="section-heading" style="margin-bottom:20px;">
+                      <span class="section-icon-chip"><span class="lucide-icon" style="color:#9739C8;"><%= icon_hash.html_safe %></span></span> Key facts
                     </h5>
                     <div style="display:flex; flex-direction:column; gap:20px;">
                       <% adv["key_facts"].each do |fact| %>
                         <div style="display:flex; align-items:flex-start; gap:10px;">
-                          <span style="min-width:22px; height:22px; background:#F6EDFB; color:#9739C8; border-radius:50%; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;"><%= fact["n"] %></span>
+                          <span style="min-width:22px; height:22px; background:#fff; border:1.5px solid #E2C2EF; color:#9739C8; border-radius:50%; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px;"><%= fact["n"] %></span>
                           <p style="font-size:14px; color:#4B5563; line-height:1.75; margin:0;"><%= highlight_values(fact["text"], style: :underline) %></p>
                         </div>
                       <% end %>
@@ -409,7 +441,9 @@
               </div>
             <% end %>
 
-            <div style="font-size:12px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:#6B7280; margin:4px 2px 0; padding-top:6px; border-top:1px solid #ECEBF3;">Conversation</div>
+            <% if @chat.messages.exists? %>
+              <div style="font-size:12px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:#6B7280; margin:4px 2px 0; padding-top:6px; border-top:1px solid #ECEBF3;">Conversation</div>
+            <% end %>
 
             <% @chat.messages.order(:created_at).each do |message| %>
               <% if message.role == "user" %>
@@ -418,7 +452,7 @@
                 </div>
               <% else %>
                 <div style="display:flex; gap:8px; align-items:flex-start;">
-                  <div style="width:28px; height:28px; background:#F6EDFB; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:14px; color:#9739C8;">✦</div>
+                  <div style="width:28px; height:28px; background:#F6EDFB; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; color:#9739C8;"><span class="lucide-icon"><%= icon_sparkle.html_safe %></span></div>
                   <div style="background:#fff; border:1px solid #E2C2EF; color:#1A1A2E; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:4px 18px 18px 18px; max-width:75%;"><%= message.content %></div>
                 </div>
               <% end %>

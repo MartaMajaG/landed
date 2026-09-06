@@ -11,6 +11,13 @@
   current_index = stage_keys.index(@current_stage) || 0
   connector_pct = [0, 33, 66, 100][current_index]
 
+  stage_headlines = {
+    "pre_departure" => "Getting ready for the big move.",
+    "arrival"       => "Welcome to your new city.",
+    "settling_in"   => "A little closer to home.",
+    "established"   => "Home, sweet home."
+  }
+
   # ── PLACEHOLDER journey history data ──
   # Hardcoded for now so we can nail the visual before wiring real data. Each
   # entry needs a `segment` (0 = pre_departure→arrival, 1 = arrival→settling_in,
@@ -36,7 +43,10 @@
 
       <%# Left: greeting %>
       <div class="hero-greeting">
-        <img src="https://mockmind-api.uifaces.co/content/human/219.jpg" alt="Avatar" class="hero-avatar" />
+        <div class="hero-avatar-wrap">
+          <img src="https://mockmind-api.uifaces.co/content/human/219.jpg" alt="Avatar" class="hero-avatar" />
+          <span class="hero-avatar-status"></span>
+        </div>
         <p class="hero-greeting__label">Good morning</p>
         <p class="hero-name"><%= current_user.profile&.first_name.present? ? current_user.profile.first_name : "there" %></p>
         <span class="destination-chip">
@@ -64,6 +74,7 @@
       <%# Centre: journey stepper %>
       <div class="hero-journey">
         <p class="journey-label">Relocation journey</p>
+        <p class="journey-headline"><%= stage_headlines[@current_stage] %></p>
         <div class="journey-stepper">
           <div class="journey-track">
             <div class="journey-track-fill" style="width:<%= connector_pct %>%;"></div>
@@ -145,13 +156,13 @@
               <% if @active_pillar %><span class="pillar-filter__label"><%= @active_pillar.name %></span><% end %>
             </button>
             <div class="pillar-filter__dropdown" id="pillarFilterDropdown">
-              <a href="<%= dashboard_path %>" class="pillar-filter__option <%= 'active' unless @active_pillar %>">
+              <a href="<%= dashboard_path %>" class="pillar-filter__option pillar-filter__option--all <%= 'active' unless @active_pillar %>">
                 <span class="pillar-filter__dot" style="background:#9ca3af;"></span>All Categories
               </a>
               <% @pillars.each do |pillar| %>
                 <% progress = @pillar_progress[pillar.id] %>
                 <a href="<%= dashboard_path(pillar: pillar.slug) %>" class="pillar-filter__option <%= 'active' if @active_pillar&.id == pillar.id %>">
-                  <span class="pillar-filter__dot tag-pillar--<%= pillar.slug %>"></span>
+                  <span class="pillar-filter__dot" style="background: <%= pillar_accent_color(pillar.slug) %>;"></span>
                   <%= pillar.name %>
                   <span class="pillar-filter__count"><%= progress[:done] %>/<%= progress[:total] %></span>
                 </a>

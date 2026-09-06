@@ -22,7 +22,7 @@
               </div>
             </div>
             <h4 class="card-title"><%= task.name %></h4>
-            <p class="card-desc"><%= task.description %></p>
+            <p class="card-desc"><%= first_sentence(task.description) %></p>
             <div class="card-footer-group">
               <div class="card-bottom-row">
                 <span class="card-due card-done-badge" style="display:inline-flex; align-items:center; gap:4px;">
@@ -61,7 +61,7 @@
           </div>
         </div>
         <h4 class="card-title"><%= task.name %></h4>
-        <p class="card-desc"><%= task.description %></p>
+        <p class="card-desc"><%= first_sentence(task.description) %></p>
         <% total = task.checklist_items.size %>
         <% done = task.checklist_items.count { |ci| completed_ids.include?(ci.id) } %>
         <div class="card-footer-group">
@@ -116,7 +116,7 @@
         </div>
       </div>
       <h4 class="card-title"><%= task.name %></h4>
-      <p class="card-desc"><%= task.description %></p>
+      <p class="card-desc"><%= first_sentence(task.description) %></p>
       <% total = task.checklist_items.size %>
       <% done = task.checklist_items.count { |ci| completed_ids.include?(ci.id) } %>
       <div class="card-footer-group">
@@ -160,7 +160,7 @@
         </div>
       </div>
       <h4 class="card-title"><%= task.name %></h4>
-      <p class="card-desc"><%= task.description %></p>
+      <p class="card-desc"><%= first_sentence(task.description) %></p>
       <% total = task.checklist_items.size %>
       <% done = task.checklist_items.count { |ci| completed_ids.include?(ci.id) } %>
       <div class="card-footer-group">
