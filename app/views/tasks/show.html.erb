@@ -24,6 +24,19 @@
   padding-left: 0;
   margin-left: 0;
   }
+
+  /* ── Flatten the tip's resource link from its own bordered box down to a
+       plain divided row, so a step tops out at two visual nesting levels
+       (step card → tip box) instead of three (step card → tip box →
+       resource box). ── */
+  .step__tip-resource {
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    padding: 10px 0 0 !important;
+    margin-top: 10px !important;
+    border-top: 1px solid #ECEBF3 !important;
+  }
 </style>
 
 <div class="task-detail-page" data-controller="task-detail">
@@ -96,10 +109,8 @@
             </span>
           <% end %>
 
-          <span class="breadcrumb__divider">·</span>
-
           <% if @pillar_tasks_count <= 8 %>
-            <span class="task-progress-stepper" aria-hidden="true">
+            <span class="task-progress-stepper" aria-hidden="true" style="margin-left: 10px;">
               <% @pillar_tasks_count.times do |i| %>
                 <span class="task-progress-dot <%= i < @task_position - 1 ? 'task-progress-dot--done' : (i == @task_position - 1 ? 'task-progress-dot--active' : '') %>"></span>
               <% end %>
@@ -234,11 +245,15 @@
 
                   <%# Locked placeholder — always rendered, shown via CSS only when the step
                       has .step--locked, so JS unlocking (class toggle) needs no changes. %>
-                  <div class="step__locked-placeholder">
-                    <span class="lucide-icon">
-                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                    </span>
-                    Unlock next step after completion
+                  <div class="step__locked-placeholder" style="<%= is_locked ? 'display:flex !important; flex-direction:column !important; align-items:center !important; text-align:center !important; gap:8px !important;' : 'display:none !important;' %>">
+                    <p style="font-size:14px; font-weight:600; color:#6B7280; margin:0;"><%= item.title %></p>
+                    <p style="font-size:13px; color:#B4B2C4; margin:0; line-height:1.5;"><%= item.description.to_s.split(".").first.to_s.strip %><%= "." if item.description.to_s.include?(".") %></p>
+                    <div style="display:flex; align-items:center; justify-content:center; gap:8px; color:#B4B2C4; font-size:13px;">
+                      <span class="lucide-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                      </span>
+                      Unlock next step after completion
+                    </div>
                   </div>
                 </div>
               </div>
