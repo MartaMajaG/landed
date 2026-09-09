@@ -10,7 +10,7 @@ body {
   flex: 1;
   min-width: 0;
   overflow-x: hidden;
-  padding: 12px 0;
+  padding: 0 0 12px;
 }
 
 .landed-sidebar {
@@ -68,6 +68,10 @@ body {
   align-items: center;
 }
 
+// ── Icon selection states — the only glass surfaces in the sidebar ──
+// Hover and active both use a translucent frosted fill + blur so the
+// selection itself reads as "lifted glass" against the solid navy panel,
+// without the panel or logo picking up any glass treatment.
 .sidebar-link {
   width: 44px;
   height: 44px;
