@@ -168,16 +168,21 @@
 }
 
 // ─── Ask AI bar ───────────────────────────────────────────────────
+// Glass treatment: translucent frosted fill + blur instead of a flat white
+// bar, matching the dashboard's toggle/filter glass pattern. The lavender
+// border stays so the bar still reads clearly as an input on any background.
 
 .ai-ask-bar {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  border: none;
+  border: 1px solid rgba(231, 199, 240, 0.7);
   border-radius: 999px;
   padding: 0.375rem 0.375rem 0.375rem 0.875rem;
-  background: #fff;
-  box-shadow: 0 4px 14px -10px rgba(151, 57, 200, 0.35);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 14px -10px rgba(151, 57, 200, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 
   input {
     flex: 1;
@@ -194,22 +199,26 @@
     width: 30px;
     height: 30px;
     border-radius: 50%;
-    background: $indigo-landed;
+    background: rgba(151, 57, 200, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
     color: #fff;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    border: none;
 
     i { font-size: 0.9rem; }
   }
 }
 
 .ai-suggestion-chip {
-  border: none;
+  border: 1px solid rgba(231, 199, 240, 0.6);
   border-radius: 999px;
-  background: #F6EDFB;
+  background: rgba(246, 237, 251, 0.55);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   color: #7D3AA3;
   font-size: 0.75rem;
   font-weight: 500;
@@ -218,7 +227,7 @@
   transition: background 0.15s ease;
 
   &:hover {
-    background: #E7C7F0;
+    background: rgba(231, 199, 240, 0.7);
   }
 }
 
@@ -270,15 +279,19 @@
   font-size: 1.25rem;
 }
 
+// Glass CTA — translucent indigo fill + blur instead of a flat solid pill,
+// consistent with the ask bar's send button.
 .smart-action-btn {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  background: $indigo-landed;
+  background: rgba(151, 57, 200, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.35);
   color: #fff;
-  border: none;
   border-radius: 999px;
   padding: 0.6rem 1rem;
   font-size: 0.85rem;
@@ -288,7 +301,7 @@
   transition: background 0.15s ease;
 
   &:hover {
-    background: #792EA0;
+    background: rgba(121, 46, 160, 0.75);
   }
 
   .lucide-icon { font-size: 0.9rem; }
