@@ -57,6 +57,41 @@
     background: rgba(44,44,42,0.5); z-index: 1000;
     align-items: center; justify-content: center;
   }
+
+  /* ── Standardized buttons — same formula as the document detail page's
+       Remind me / Add note and the task page's Mark complete: 10px corners
+       instead of a full pill, solid brand-indigo for primary actions, soft
+       #F6EDFB tint for secondary actions. Replaces this page's previous
+       999px pill buttons so all three pages read as one button system. ── */
+  .btn-doc-primary {
+    background: var(--brand-indigo);
+    color: #fff;
+    border: 1px solid var(--brand-indigo);
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s ease;
+  }
+  .btn-doc-primary:hover { background: #792EA0; border-color: #792EA0; }
+
+  .btn-doc-secondary {
+    background: #F6EDFB;
+    color: var(--brand-indigo);
+    border: 1px solid rgba(151,57,200,0.18);
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s ease;
+  }
+  .btn-doc-secondary:hover { background: #EFDFF7; }
 </style>
 
 <div style="min-height:100vh; padding-bottom:48px; background:#FBFAFF;">
@@ -69,7 +104,7 @@
         <% if @chats.any? %><p style="font-size:13px; color:#888780; margin:0;"><%= pluralize(@chats.size, "document") %> scanned</p><% end %>
       </div>
       <% if @chats.any? %>
-        <button onclick="document.getElementById('upload-modal').style.display='flex'" style="background:var(--brand-indigo); color:#fff; font-size:13px; font-weight:500; padding:9px 18px; border-radius:999px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+        <button onclick="document.getElementById('upload-modal').style.display='flex'" class="btn-doc-primary" style="padding:9px 18px;">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Scan new document
         </button>
@@ -83,7 +118,7 @@
         </div>
         <h2 style="font-size:18px; font-weight:500; color:#2C2C2A; margin-bottom:8px;">No documents yet</h2>
         <p style="font-size:14px; color:#888780; margin-bottom:28px; max-width:320px; margin-left:auto; margin-right:auto;">Scan your first German document and get a plain-English summary in seconds.</p>
-        <button onclick="document.getElementById('upload-modal').style.display='flex'" style="background:var(--brand-indigo); color:#fff; font-size:13px; font-weight:500; padding:10px 20px; border-radius:999px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+        <button onclick="document.getElementById('upload-modal').style.display='flex'" class="btn-doc-primary" style="padding:10px 20px;">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Scan your first document
         </button>
@@ -177,11 +212,11 @@
             </div>
             <p style="font-size:14px; color:#5F5E5A; margin-bottom:16px;">Upload a photo (JPEG or PNG)</p>
             <div class="d-flex justify-content-center gap-2">
-              <label style="background:var(--brand-indigo); color:#fff; border-radius:999px; padding:8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" for="chat_document_upload">
+              <label class="btn-doc-primary" style="padding:8px 18px;" for="chat_document_upload">
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 Upload
               </label>
-              <label style="background:#fff; color:var(--brand-indigo); border:1.5px solid var(--brand-indigo); border-radius:999px; padding:8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" for="chat_document_camera">
+              <label class="btn-doc-secondary" style="padding:8px 18px;" for="chat_document_camera">
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
                 Take photo
               </label>
@@ -192,7 +227,7 @@
           <img data-uploadpreview-target="preview" class="img-fluid rounded mt-3 d-none" style="max-height:200px; border-radius:12px;" />
           <p data-uploadpreview-target="filename" class="mt-3 d-none" style="font-size:13px; color:#5F5E5A;"></p>
         </div>
-        <%= f.submit "Scan document", style:"width:100%; padding:11px; background:var(--brand-indigo); color:#fff; border:none; border-radius:999px; font-size:15px; font-weight:500; cursor:pointer;" %>
+        <%= f.submit "Scan document", class: "btn-doc-primary", style:"width:100%; justify-content:center; padding:11px; font-size:15px;" %>
       </div>
       <div data-loading-target="loader" class="d-none" style="text-align:center; padding:32px 0;">
         <div style="width:44px; height:44px; border:3px solid #F6EDFB; border-top-color:var(--brand-indigo); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px;"></div>
