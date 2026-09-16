@@ -163,7 +163,7 @@ export default class extends Controller {
     const cx = canvas.width / 2
     const cy = canvas.height / 2
 
-    const colors = ['#9739C8', '#7A9E1F', '#C48FDE', '#C8F59A', '#ffffff', '#EBD6F5']
+    const colors = ['#6B56E2', '#7A9E1F', '#9585E8', '#C8F59A', '#ffffff', '#D9D2F9']
     const particles = []
 
     for (let i = 0; i < 160; i++) {

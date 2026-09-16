@@ -33,12 +33,12 @@
 .dashboard-hero {
   background: #fff;
   border-radius: 16px;
-  border: 1px solid #E7C7F0;
+  border: 1px solid #D0C2F5;
   padding: 0;
   display: grid;
   grid-template-columns: 220px 1fr;
   margin-bottom: 16px;
-  box-shadow: 0 4px 14px -10px rgba(151, 57, 200, 0.15);
+  box-shadow: 0 4px 14px -10px rgba(107, 86, 226, 0.15);
   overflow: hidden;
 }
 
@@ -54,7 +54,11 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  gap: 10px;
+  // Tightened from 10px: label + name now read as one grouped unit (like
+  // "Good morning," sitting right above "Mila"); the extra room before the
+  // tagline comes from .hero-stage's own margin-top below, not from this
+  // shared gap.
+  gap: 6px;
   padding: 32px 20px;
   overflow: hidden;
 
@@ -90,24 +94,34 @@
   }
 }
 
+// Sentence-style lead-in ("Good morning,") sitting right above the bold
+// name — no longer an uppercase tracked eyebrow label.
 .hero-greeting__label {
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.75);
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.85);
   margin: 0;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  line-height: 1.2; // tightened — default line-height was adding extra gap below the text
+  letter-spacing: normal;
+  text-transform: none;
 }
 
 .hero-avatar-wrap {
   position: relative;
   width: 56px;
   height: 56px;
+  overflow: hidden;
+  border-radius: 50%;
+  // No margin here — spacing above/below comes from .hero-greeting's own
+  // gap, kept consistent with the rest of the stack.
 }
 .hero-avatar {
   width: 56px;
   height: 56px;
   border-radius: 50%;
   object-fit: cover;
+  object-position: center 25%; // pull focus up toward the face
+  transform: scale(1.4); // zoom in — adjust 1.2–1.6 to taste
   border: 2px solid rgba(255, 255, 255, 0.8);
 }
 .hero-name {
@@ -116,13 +130,14 @@
   font-weight: 700;
   color: #fff;
   margin: 0;
+  line-height: 1.15; // tightened for the same reason
   letter-spacing: -0.01em;
 }
 
 .hero-stage {
   font-size: 11px;
   color: rgba(255, 255, 255, 0.85);
-  margin: 0;
+  margin: 6px 0 0; // extra separation from the name, since the base gap is now tighter
   strong { color: #fff; font-weight: 600; }
 }
 
@@ -164,7 +179,7 @@
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #7D3AA3;
+  color: #3E2DB0;
   margin: 0;
 }
 
@@ -193,12 +208,12 @@
   left: 16px;
   right: 16px;
   height: 2px;
-  background: #F1E4FA;
+  background: #E4E1FD;
   z-index: 0;
 }
 .journey-track-fill {
   height: 100%;
-  background: #C48FDE;
+  background: #9585E8;
   border-radius: 1px;
   transition: width 0.4s ease;
 }
@@ -288,26 +303,26 @@
 }
 
 @keyframes journey-pulse {
-  0%   { box-shadow: 0 0 0 4px rgba(151, 57, 200, 0.14); transform: scale(1); }
-  50%  { box-shadow: 0 0 0 9px rgba(151, 57, 200, 0.07); transform: scale(1.05); }
-  100% { box-shadow: 0 0 0 4px rgba(151, 57, 200, 0.14); transform: scale(1); }
+  0%   { box-shadow: 0 0 0 4px rgba(107, 86, 226, 0.14); transform: scale(1); }
+  50%  { box-shadow: 0 0 0 9px rgba(107, 86, 226, 0.07); transform: scale(1.05); }
+  100% { box-shadow: 0 0 0 4px rgba(107, 86, 226, 0.14); transform: scale(1); }
 }
 
 .journey-step--done {
   .journey-dot {
-    background: #C48FDE;
+    background: #9585E8;
     color: #fff;
   }
-  .journey-step-label { font-weight: 500; color: #7D3AA3; }
+  .journey-step-label { font-weight: 500; color: #3E2DB0; }
 }
 
 .journey-step--future {
   .journey-dot {
     background: #fff;
-    border: 1px solid #F1E4FA;
-    color: #D7C8E2;
+    border: 1px solid #E4E1FD;
+    color: #C7C5E5;
   }
-  .journey-step-label { color: #D7C8E2; }
+  .journey-step-label { color: #C7C5E5; }
 }
 
 // ── Tasks ──
@@ -352,7 +367,7 @@
   border-radius: 999px;
   padding: 3px;
   gap: 2px;
-  box-shadow: 0 4px 16px rgba(151, 57, 200, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 16px rgba(107, 86, 226, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
 .toggle-btn {
   padding: 6px 16px;
@@ -370,7 +385,7 @@
     // reads as part of the glass surface instead of sitting flat on top of it.
     background: rgba(255, 255, 255, 0.85);
     color: $indigo-landed;
-    box-shadow: 0 2px 8px rgba(151, 57, 200, 0.12);
+    box-shadow: 0 2px 8px rgba(107, 86, 226, 0.12);
   }
   &:not(.active):hover { background: rgba(255, 255, 255, 0.35); color: #4b5563; }
 }
@@ -394,7 +409,7 @@
   background: rgba(255, 255, 255, 0.45);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  box-shadow: 0 4px 16px rgba(151, 57, 200, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 16px rgba(107, 86, 226, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
   font-size: 11.5px;
   font-weight: 600;
   color: #6b7280;
@@ -402,11 +417,11 @@
   white-space: nowrap;
   transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
 
-  &:hover { background: rgba(246, 237, 251, 0.65); border-color: #E7C7F0; color: $indigo-landed; }
+  &:hover { background: rgba(246, 237, 251, 0.65); border-color: #D0C2F5; color: $indigo-landed; }
 
   &--active {
     background: rgba(246, 237, 251, 0.75);
-    border-color: #E7C7F0;
+    border-color: #D0C2F5;
     color: $indigo-landed;
   }
 }
@@ -439,7 +454,7 @@
   text-decoration: none;
   cursor: pointer;
   &:hover { background: #f3f4f6; }
-  &.active { background: #F6EDFB; color: $indigo-landed; font-weight: 600; }
+  &.active { background: #EEEBFD; color: $indigo-landed; font-weight: 600; }
 
   // "All categories" acts as a reset, not a selectable filter — give it a
   // quieter divider treatment instead of the same active-pill styling used
@@ -502,7 +517,7 @@
 .task-card {
   position: relative;
   background: #fff;
-  border: 1px solid #F1E4FA;
+  border: 1px solid #E4E1FD;
   border-radius: 16px;
   padding: 14px;
   margin-bottom: 0;
@@ -511,7 +526,7 @@
   flex-direction: column;
   // Depth comes from a tight, tinted glow (negative spread) instead of a flat gray shadow.
   // --glow is set per pillar below; urgent-card overrides it with a red glow regardless of pillar.
-  box-shadow: 0 4px 14px -10px var(--glow, rgba(151,57,200,0.35));
+  box-shadow: 0 4px 14px -10px var(--glow, rgba(107,86,226,0.35));
   transition: box-shadow 0.2s ease, transform 0.2s ease, border-color 0.2s ease;
 
   // Pillar-colored accent line — inset from the card edges, hidden until hover.
@@ -528,7 +543,7 @@
   }
 
   &:hover {
-    box-shadow: 0 16px 28px -12px var(--glow, rgba(151,57,200,0.45));
+    box-shadow: 0 16px 28px -12px var(--glow, rgba(107,86,226,0.45));
     transform: translateY(-2px);
     &::before { transform: scaleX(1); }
   }
@@ -624,7 +639,7 @@
   background: #7A9E1F;
 }
 .urgent-card .card-fill { background: #E53E3E; }
-.locked      .card-fill { background: #D7C8E2; }
+.locked      .card-fill { background: #C7C5E5; }
 
 // ── Calendar ──
 .calendar-section { margin-top: 20px; }
@@ -721,7 +736,7 @@
 @keyframes card-highlight {
   0%   { box-shadow: 0 0 0 3px var(--highlight-color, #{$indigo-landed}), 0 6px 20px rgba(0,0,0,0.1); }
   60%  { box-shadow: 0 0 0 2px rgba(0,0,0,0.05), 0 4px 8px rgba(0,0,0,0.05); }
-  100% { box-shadow: 0 1px 3px rgba(151,57,200,0.05); }
+  100% { box-shadow: 0 1px 3px rgba(107,86,226,0.05); }
 }
 .task-card--highlight {
   animation: card-highlight 1.8s ease-out forwards;
@@ -784,7 +799,7 @@
   &__btn {
     font-size: 10px; font-weight: 600; padding: 6px 9px;
     border-radius: 10px; text-decoration: none; text-align: center; display: block;
-    &--google { background: #F1E4FA; color: #7D3AA3; }
+    &--google { background: #E4E1FD; color: #3E2DB0; }
     &--apple  { background: #f0f2f7; color: #1a1535; }
   }
 }
@@ -818,7 +833,7 @@
   font-weight: 600;
   color: #9ca3af;
   background: transparent;
-  border: 1.5px dashed #E7C7F0;
+  border: 1.5px dashed #D0C2F5;
   border-radius: 16px;
   cursor: pointer;
   text-align: center;
@@ -831,5 +846,5 @@
 
   &::before { content: '↓'; font-size: 10px; }
   &[data-expanded="true"]::before { content: '↑'; }
-  &:hover { color: $indigo-landed; border-color: $indigo-landed; background: #F6EDFB; }
+  &:hover { color: $indigo-landed; border-color: $indigo-landed; background: #EEEBFD; }
 }

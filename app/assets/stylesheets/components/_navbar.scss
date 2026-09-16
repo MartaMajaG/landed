@@ -115,10 +115,10 @@ body {
     }
   }
   &.active {
-    background: rgba(151, 57, 200, 0.35);
+    background: rgba(107, 86, 226, 0.35);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(202, 147, 236, 0.5);
+    border: 1px solid rgba(148, 136, 247, 0.5);
     color: #fff;
   }
 }

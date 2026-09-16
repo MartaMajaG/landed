@@ -10,7 +10,7 @@
   }
   .doc-icon {
     width: 34px; height: 34px;
-    background: #F6EDFB;
+    background: #EEEBFD;
     border-radius: 8px;
     display: flex; align-items: center; justify-content: center;
     transition: opacity 0.15s;
@@ -29,8 +29,8 @@
   .doc-row:hover .doc-icon { opacity: 0 !important; }
   .doc-row.is-selected .row-checkbox { opacity: 1; }
   .doc-row.is-selected .doc-icon { opacity: 0 !important; }
-  .doc-row.is-selected { background: #F6EDFB !important; border-bottom-color: #EBD6F5 !important; }
-  .doc-row.is-selected:hover { background: #EBD6F5 !important; }
+  .doc-row.is-selected { background: #EEEBFD !important; border-bottom-color: #D9D2F9 !important; }
+  .doc-row.is-selected:hover { background: #D9D2F9 !important; }
   .selection-active .single-delete { display: none !important; }
 
   #select-all {
@@ -42,7 +42,7 @@
   .table-header:hover #select-all,
   #select-all:checked,
   #select-all:indeterminate { opacity: 1; }
-  .selection-active .table-header { background: #F1E4FA !important; border-bottom-color: #F6EDFB !important; }
+  .selection-active .table-header { background: #E4E1FD !important; border-bottom-color: #EEEBFD !important; }
 
   #bulk-bar {
     position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
@@ -64,7 +64,7 @@
 
     <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:24px;">
       <div>
-        <p style="font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#B59BC1; margin:0 0 6px;">Document Vault</p>
+        <p style="font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#9F96C6; margin:0 0 6px;">Document Vault</p>
         <h1 style="font-size:26px; font-weight:600 !important; font-family:inherit !important; color:#1A1A2E; margin:0 0 4px; letter-spacing:-0.3px;">My Documents</h1>
         <% if @chats.any? %><p style="font-size:13px; color:#9CA3AF; margin:0;"><%= pluralize(@chats.size, "document") %> scanned</p><% end %>
       </div>
@@ -77,8 +77,8 @@
     </div>
 
     <% if @chats.empty? %>
-      <div style="background:#fff; border-radius:14px; padding:80px 40px; text-align:center; border:1px solid #E7C7F0;">
-        <div style="width:56px; height:56px; background:#F6EDFB; border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
+      <div style="background:#fff; border-radius:14px; padding:80px 40px; text-align:center; border:1px solid #D0C2F5;">
+        <div style="width:56px; height:56px; background:#EEEBFD; border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand-indigo)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         </div>
         <h2 style="font-size:18px; font-weight:600; color:#1A1A2E; margin-bottom:8px;">No documents yet</h2>
@@ -90,8 +90,8 @@
       </div>
     <% else %>
 
-      <div id="doc-table" style="background:#fff; border-radius:14px; overflow:hidden; border:1px solid #E7C7F0;">
-        <div class="table-header" style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:11px 20px; background:#FAF9FF; border-bottom:1px solid #F1E4FA; align-items:center;">
+      <div id="doc-table" style="background:#fff; border-radius:14px; overflow:hidden; border:1px solid #D0C2F5;">
+        <div class="table-header" style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:11px 20px; background:#FAF9FF; border-bottom:1px solid #E4E1FD; align-items:center;">
           <div style="display:flex; align-items:center; gap:8px;">
             <input type="checkbox" id="select-all" onchange="toggleAll(this)">
             <span style="font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#9CA3AF;">Document</span>
@@ -123,7 +123,7 @@
 
             <div>
               <% if chat.document_type.present? %>
-                <span style="display:inline-block; width:fit-content; font-size:11px; font-weight:600; background:#F6EDFB; color:var(--brand-indigo); padding:4px 10px; border-radius:20px;"><%= chat.document_type %></span>
+                <span style="display:inline-block; width:fit-content; font-size:11px; font-weight:600; background:#EEEBFD; color:var(--brand-indigo); padding:4px 10px; border-radius:20px;"><%= chat.document_type %></span>
               <% else %>
                 <span style="font-size:12px; color:#D1D5DB;">—</span>
               <% end %>
@@ -171,8 +171,8 @@
     <%= form_with model: @chat, local: true, multipart: true, data: { controller: "loading", action: "submit->loading#submit" } do |f| %>
       <div data-loading-target="form">
         <div class="mb-4" data-controller="uploadpreview">
-          <div style="border:2px dashed #E7C7F0; border-radius:10px; padding:32px 20px; text-align:center; background:#FAF9FF;">
-            <div style="width:44px; height:44px; background:#F6EDFB; border-radius:10px; display:flex; align-items:center; justify-content:center; margin:0 auto 14px;">
+          <div style="border:2px dashed #D0C2F5; border-radius:10px; padding:32px 20px; text-align:center; background:#FAF9FF;">
+            <div style="width:44px; height:44px; background:#EEEBFD; border-radius:10px; display:flex; align-items:center; justify-content:center; margin:0 auto 14px;">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-indigo)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
             </div>
             <p style="font-size:14px; color:#6B7280; margin-bottom:16px;">Upload a photo (JPEG or PNG)</p>
@@ -195,7 +195,7 @@
         <%= f.submit "Scan document", style:"width:100%; padding:11px; background:var(--brand-indigo); color:#fff; border:none; border-radius:8px; font-size:15px; font-weight:600; cursor:pointer;" %>
       </div>
       <div data-loading-target="loader" class="d-none" style="text-align:center; padding:32px 0;">
-        <div style="width:44px; height:44px; border:3px solid #E7C7F0; border-top-color:var(--brand-indigo); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px;"></div>
+        <div style="width:44px; height:44px; border:3px solid #D0C2F5; border-top-color:var(--brand-indigo); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px;"></div>
         <p style="font-size:15px; font-weight:500; color:#1A1A2E; margin-bottom:4px;">Analysing your document...</p>
         <p style="font-size:13px; color:#9CA3AF;">This takes about 10 seconds</p>
       </div>

@@ -43,7 +43,7 @@
 .breadcrumb__link {
   color: #4B5563;
   text-decoration: none;
-  &:hover { color: #9739C8; }
+  &:hover { color: #6B56E2; }
 }
 
 .breadcrumb__current {
@@ -161,14 +161,14 @@
 
 // ── Why This Matters ──────────────────────────────
 // Now uses the same static tinted-glow depth as the dashboard's resting cards, tinted
-// indigo since this box is brand-colored (#F6EDFB), not category-colored.
+// indigo since this box is brand-colored (#EEEBFD), not category-colored.
 
 .task-why {
   display: flex;
   align-items: center;
   gap: 0.875rem;
-  background: #F6EDFB;
-  border: 1px solid #F1E4FA;
+  background: #EEEBFD;
+  border: 1px solid #E4E1FD;
   border-radius: 12px;
   padding: 0.875rem 1.125rem;
   margin-bottom: 1.5rem;
@@ -219,7 +219,7 @@
 .task-badge--due {
   background: #F5F4FB;
   color: $text-gray;
-  border: 1px solid #F1E4FA;
+  border: 1px solid #E4E1FD;
   font-weight: 600;
 }
 
@@ -258,7 +258,7 @@
   gap: 10px;
   padding: 8px;
   background: rgba(255, 255, 255, 0.55);
-  border: 1px solid rgba(151, 57, 200, 0.14);
+  border: 1px solid rgba(107, 86, 226, 0.14);
   border-radius: 8px;
   text-decoration: none;
   min-width: 0;
@@ -327,7 +327,7 @@
   text-align: center;
   max-width: 380px;
   width: 90%;
-  box-shadow: 0 12px 32px -12px rgba(151, 57, 200, 0.30);
+  box-shadow: 0 12px 32px -12px rgba(107, 86, 226, 0.30);
 }
 
 .completion-overlay__icon {
@@ -411,7 +411,7 @@
     top: 28px;
     bottom: -16px;
     width: 0;
-    border-left: 1.5px dashed #E7C7F0;
+    border-left: 1.5px dashed #D0C2F5;
   }
 }
 
@@ -423,15 +423,15 @@
   flex: 1;
   min-width: 0;
   background: #fff;
-  border: 1px solid #F1E4FA;
+  border: 1px solid #E4E1FD;
   border-radius: 16px;
   padding: 1.25rem 1.375rem;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .step--active .step__card {
-  border-color: rgba(151, 57, 200, 0.28);
-  box-shadow: 0 4px 14px -10px rgba(151, 57, 200, 0.30);
+  border-color: rgba(107, 86, 226, 0.28);
+  box-shadow: 0 4px 14px -10px rgba(107, 86, 226, 0.30);
 }
 
 .step--completed .step__card {
@@ -524,7 +524,7 @@
   width: 18px;
   height: 18px;
   border-radius: 5px;
-  border: 1.5px solid #E7C7F0;
+  border: 1.5px solid #D0C2F5;
   background: none;
   padding: 0;
   cursor: pointer;
@@ -549,14 +549,14 @@
   font-size: 14px;
   font-weight: 600;
   color: $indigo-landed;
-  background: #F6EDFB;
-  border: 1px solid rgba(151, 57, 200, 0.16);
+  background: #EEEBFD;
+  border: 1px solid rgba(107, 86, 226, 0.16);
   border-radius: 10px;
   padding: 8px 16px;
   cursor: pointer;
   transition: background 0.15s ease;
 
-  &:hover { background: #EBD6F5; }
+  &:hover { background: #D9D2F9; }
 }
 
 .step__title-row {
@@ -623,8 +623,8 @@
 .step__soft-lock {
   margin-top: 0.75rem;
   padding: 0.625rem 0.875rem;
-  background: #FAF3FC;
-  border: 1px solid #E7C7F0;
+  background: #F5F2FD;
+  border: 1px solid #D0C2F5;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -653,7 +653,7 @@
   text-underline-offset: 2px;
 
   &:hover {
-    color: #792EA0;
+    color: #3520AE;
   }
 }
 
@@ -705,7 +705,7 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: #EBD6F5;
+  background: #D9D2F9;
   flex-shrink: 0;
   transition: background 0.2s ease;
 
