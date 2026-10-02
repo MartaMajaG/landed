@@ -864,3 +864,13 @@
   color: #4B5563 !important;
   &:hover, &:focus-visible { color: #6B56E2 !important; border-color: #C8BCF5 !important; background: #F8F6FE !important; }
 }
+
+// ── Completion in chartreuse, like the rest of the design system ──
+.task-detail-page {
+  .step__number--done {
+    background: #7A9E1F !important;
+    border-color: #7A9E1F !important;
+    color: #fff !important;
+  }
+  .step--completed .step__card { border-color: rgba(122, 158, 31, 0.28) !important; }
+}
