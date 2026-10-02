@@ -243,7 +243,10 @@
                       <% if is_active %>
                         <span class="task-badge task-badge--action">Action required</span>
                       <% end %>
-
+                      <% if completed %>
+                        <%# Light undo: clicks the existing undo button on the step's check mark %>
+                        <button type="button" class="step__undo-link" onclick="this.closest('.step').querySelector('.step__undo-btn').click()">Undo</button>
+                      <% end %>
                     </div>
 
                     <p class="step__description"><%= item.description %></p>

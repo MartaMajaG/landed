@@ -42,9 +42,23 @@ export default class extends Controller {
       const toggleBtn = stepEl.querySelector(".step__toggle")
       if (toggleBtn) toggleBtn.style.display = "none"
 
-      // The finished step is no longer "Action required"
-      stepEl.querySelector(".task-badge--action")?.remove()
-      stepEl.querySelector(".step__action-note")?.remove()
+      // The finished step is no longer "Action required", and gets the light Undo link
+      const badge = stepEl.querySelector(".task-badge--action")
+      if (badge) badge.remove()
+      const note = stepEl.querySelector(".step__action-note")
+      if (note) note.remove()
+      const header = stepEl.querySelector(".step__header")
+      if (header && !header.querySelector(".step__undo-link")) {
+        const undoLink = document.createElement("button")
+        undoLink.type = "button"
+        undoLink.className = "step__undo-link"
+        undoLink.textContent = "Undo"
+        undoLink.addEventListener("click", () => {
+          const undoBtn = stepEl.querySelector(".step__undo-btn")
+          if (undoBtn) undoBtn.click()
+        })
+        header.appendChild(undoLink)
+      }
 
       const allSteps = this.stepTargets
       const currentIndex = allSteps.indexOf(stepEl)
@@ -102,6 +116,10 @@ export default class extends Controller {
       const stepEl = form.closest(".step")
       stepEl.classList.remove("step--completed")
       stepEl.classList.add("step--active")
+
+      // Remove the light Undo link from the step that is open again
+      const undoLink = stepEl.querySelector(".step__undo-link")
+      if (undoLink) undoLink.remove()
 
       const numberEl = stepEl.querySelector(".step__number")
       numberEl.classList.remove("step__number--done")

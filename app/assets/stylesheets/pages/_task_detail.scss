@@ -820,3 +820,29 @@
   .step--completed .step__title { color: #4B5563 !important; }
   .step--completed .step__description { color: #6B7280 !important; }
 }
+
+// ── Centered page + light undo ──
+.task-detail-page {
+  // Breadcrumb and content share one centered column
+  .container { max-width: 920px !important; }
+  .task-main { max-width: none; }
+
+  .step__header { display: flex; align-items: center; gap: 8px; }
+  .step__undo-link {
+    margin-left: auto;
+    flex-shrink: 0;
+    min-height: 32px;
+    padding: 0 10px;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    font-size: 14px;
+    font-weight: 500;
+    color: #6B7280;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.15s ease, color 0.15s ease, background 0.15s ease;
+    &:hover, &:focus-visible { opacity: 1; color: #6B56E2; background: #F3F0FE; }
+  }
+  .step--completed .step__card:hover .step__undo-link { opacity: 1; }
+}
