@@ -76,13 +76,28 @@
       stat_cells << { label: "Amount owed", value: "€#{number_with_precision(@chat.amount, precision: 2)}", sub: amount_stat&.dig("sub").presence || "Payment required" }
     end
   end
+  # Short numeric facts (€32,597, 2019, 30 days) go in the big stat strip.
+  # Text facts (an authority, a list of data) go in the Details list on the left.
+  detail_rows = []
   extra_stats.each do |s|
     raw = s["value"].to_s
     value = raw.match?(/\A[\d.,]+\s*€\z/) ? "€#{raw.gsub(/\s*€/, '').strip}" : raw
-    stat_cells << { label: s["label"], value: value, sub: s["sub"] }
+    if value.match?(/\d/) && value.length <= 14
+      stat_cells << { label: s["label"], value: value, sub: s["sub"] }
+    else
+      detail_rows << { label: s["label"], value: value, sub: s["sub"] }
+    end
   end
 
-  questions = document_questions(@chat, skip: (show_pay ? ["How do I pay this?"] : []))
+  # Main action depends on the kind of document: applications get submitted, bills get paid.
+  doc_text = "#{@chat.document_type} #{@chat.title}".downcase
+  if doc_text.match?(/applica|antrag|form\b|registration|anmeldung/)
+    primary_label, primary_question = "How to apply", "How do I submit this application?"
+  elsif show_pay
+    primary_label, primary_question = "How to pay", "How do I pay this?"
+  end
+
+  questions = document_questions(@chat, skip: [primary_question].compact)
 %>
 
 <%
@@ -131,6 +146,7 @@
   /* Deadline banner */
   .doc-banner { display: flex; align-items: center; gap: 14px; border-radius: 14px; padding: 14px 18px; border: 1px solid; }
   .doc-banner__icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .doc-banner__svg svg { width: 18px; height: 18px; }
   .doc-banner__title { margin: 0; font-size: 15px; font-weight: 600; }
   .doc-banner__text { margin: 2px 0 0; font-size: 14px; }
   .doc-banner--overdue { background: #FEF3F2; border-color: #FBD5D1; }
@@ -160,7 +176,7 @@
   .doc-link { font-size: 14px; font-weight: 600; color: #6B56E2; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
   .doc-link:hover { color: #4433B8; }
 
-  .doc-left { padding: 24px; display: flex; flex-direction: column; gap: 20px; min-height: calc(100vh - 48px); box-sizing: border-box; }
+  .doc-left { padding: 24px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box; }
   .doc-peek {
     display: block; position: relative; height: 260px; overflow: hidden;
     background: #fff; border: 1px solid #ECEBF3; border-radius: 14px;
@@ -173,7 +189,14 @@
   .doc-peek:hover img { transform: translateY(-6px); }
   .doc-file { background: #F7F6FB; border: 1px solid #ECEBF3; border-radius: 14px; min-height: 160px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #4B5563; font-size: 14px; }
 
-  .doc-notes { border-top: 1px solid #ECEBF3; padding-top: 12px; }
+  .doc-details { border-top: 1px solid #ECEBF3; padding-top: 16px; }
+  .doc-details dl { margin: 10px 0 0; }
+  .doc-details__row { padding: 12px 0; border-bottom: 1px solid #F1F0F6; }
+  .doc-details__row:last-child { border-bottom: none; padding-bottom: 0; }
+  .doc-details dt { font-size: 12px; font-weight: 500; color: #6B7280; margin: 0 0 2px; }
+  .doc-details dd { margin: 0; font-size: 14px; font-weight: 600; color: #1A1A2E; line-height: 1.5; }
+  .doc-details dd span { font-weight: 400; color: #6B7280; }
+  .doc-notes { border-top: 1px solid #ECEBF3; padding-top: 6px; }
   .doc-notes__head { display: flex; justify-content: space-between; align-items: center; }
   .doc-label { margin: 0; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #6B7280; }
   .doc-notes__add { min-height: 44px; padding: 0 4px; border: none; background: transparent; color: #6B56E2; font-size: 14px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
@@ -269,7 +292,7 @@
                 cal_details_r = CGI.escape(@chat.title.to_s)
               %>
               <div style="position:relative;">
-                <button type="button" class="doc-btn <%= show_pay ? 'doc-btn--secondary' : 'doc-btn--primary' %>"
+                <button type="button" class="doc-btn <%= primary_label ? 'doc-btn--secondary' : 'doc-btn--primary' %>"
                   onclick="const m=document.getElementById('rm-<%= @chat.id %>');m.style.display=m.style.display==='none'?'block':'none';event.stopPropagation();">
                   <span class="lucide-icon"><%= icon_cal_plus.html_safe %></span>
                   Remind me
@@ -303,10 +326,10 @@
               </div>
             <% end %>
 
-            <% if show_pay %>
-              <button type="button" class="doc-btn doc-btn--primary" onclick="askAssistant<%= @chat.id %>('How do I pay this?')">
-                <span class="lucide-icon"><%= icon_card.html_safe %></span>
-                How to pay
+            <% if primary_label %>
+              <button type="button" class="doc-btn doc-btn--primary" onclick="askAssistant<%= @chat.id %>('<%= j primary_question %>')">
+                <span class="lucide-icon"><%= (primary_label == "How to pay" ? icon_card : icon_send).html_safe %></span>
+                <%= primary_label %>
               </button>
             <% end %>
           </div>
@@ -314,7 +337,7 @@
 
         <% if @chat.deadline.present? %>
           <div class="doc-banner doc-banner--<%= banner_tone %>">
-            <div class="doc-banner__icon"><span class="lucide-icon"><%= (banner_tone == "calm" ? icon_cal_plus : icon_warn).html_safe %></span></div>
+            <div class="doc-banner__icon"><span class="lucide-icon doc-banner__svg"><%= (banner_tone == "calm" ? icon_cal_plus : icon_warn).html_safe %></span></div>
             <div>
               <p class="doc-banner__title"><%= banner_title %></p>
               <p class="doc-banner__text"><%= banner_text %></p>
@@ -357,6 +380,20 @@
               <span><%= @chat.document.filename %></span>
             </div>
           <% end %>
+        <% end %>
+
+        <% if detail_rows.any? %>
+          <div class="doc-details">
+            <h3 class="doc-label">Details</h3>
+            <dl>
+              <% detail_rows.each do |row| %>
+                <div class="doc-details__row">
+                  <dt><%= row[:label].to_s.downcase.upcase_first %></dt>
+                  <dd><%= row[:value] %><% if row[:sub].present? %><span> · <%= row[:sub] %></span><% end %></dd>
+                </div>
+              <% end %>
+            </dl>
+          </div>
         <% end %>
 
         <div class="doc-notes">
@@ -514,9 +551,4 @@
     closeNotePanel(chatId);
   }
 
-  // Keep the newest chat message in view
-  (function () {
-    const el = document.getElementById('chat-messages-<%= @chat.id %>');
-    if (el && <%= @chat.messages.exists? %>) el.scrollTop = el.scrollHeight;
-  })();
 </script>
