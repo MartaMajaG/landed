@@ -1,0 +1,79 @@
+// ── Alerts page ──
+.alerts-page { padding: 32px 0 48px; }
+.alerts-wrap { max-width: 880px; margin: 0 auto; padding: 0 12px; display: flex; flex-direction: column; gap: 20px; }
+
+.alerts-head { padding: 0 4px; }
+.alerts-title { margin: 0; font-family: $headers-font; font-size: 28px; font-weight: 700; letter-spacing: -0.4px; color: #1A1A2E; }
+.alerts-sub { margin: 4px 0 0; font-size: 14px; color: #4B5563; }
+
+.alerts-card {
+  background: #fff; border: 1px solid #ECEBF3; border-radius: 20px;
+  box-shadow: 0 4px 14px -10px rgba(91, 80, 232, 0.35);
+  padding: 22px 24px;
+}
+
+.alerts-group__head { margin-bottom: 12px; }
+.alerts-group__title {
+  margin: 0; display: flex; align-items: center; gap: 8px;
+  font-family: $headers-font; font-size: 17px; font-weight: 700; color: #1A1A2E;
+}
+.alerts-count {
+  font-family: Inter, sans-serif; font-size: 12px; font-weight: 600;
+  min-width: 22px; height: 22px; padding: 0 7px; border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #F1F1F5; color: #374151;
+}
+.alerts-group__sub { margin: 2px 0 0; font-size: 14px; color: #6B7280; }
+
+.alerts-list { list-style: none; margin: 0; padding: 0; }
+.alerts-list li + li { border-top: 1px solid #F1F0F6; }
+
+.alert-row {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 10px; margin: 0 -10px; border-radius: 12px;
+  text-decoration: none; color: inherit; transition: background 0.12s ease;
+  &:hover { background: #F8F6FE; text-decoration: none; color: inherit; }
+  &:hover .alert-row__chev { color: #6B56E2; transform: translateX(2px); }
+}
+.alert-row__icon {
+  width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: #F1F1F5; color: #4B5563;
+}
+// Same category colours as the dashboard
+.alert-row__icon--housing_and_registration { background: #FFEDD5; color: #C2410C; }
+.alert-row__icon--finance_and_banking      { background: #D1FAE5; color: #065F46; }
+.alert-row__icon--legal_and_work           { background: #EDE9FE; color: #5B21B6; }
+.alert-row__icon--health_and_insurance     { background: #FCE7F3; color: #9D174D; }
+.alert-row__icon--scanned_document         { background: #ECFCCB; color: #3F6212; }
+
+.alert-row__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.alert-row__title { font-size: 15px; font-weight: 600; color: #1A1A2E; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.alert-row__meta { font-size: 14px; color: #6B7280; }
+
+.alert-chip { flex-shrink: 0; font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 999px; white-space: nowrap; }
+.alert-chip--overdue { background: #FEF3F2; color: #B42318; }
+.alert-chip--soon    { background: #FFFAEB; color: #B54708; }
+.alert-chip--later   { background: #F1F1F5; color: #374151; }
+
+.alert-row__chev { color: #9CA3AF; display: flex; transition: transform 0.15s ease, color 0.15s ease; }
+
+.alerts-empty { text-align: center; padding: 40px 24px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.alerts-empty .alerts-group__title { justify-content: center; margin-top: 8px; }
+.alerts-empty__icon {
+  width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center;
+  background: #ECFCCB; color: #3F6212;
+}
+.alerts-btn {
+  margin-top: 14px; height: 44px; padding: 0 16px; border-radius: 10px;
+  display: inline-flex; align-items: center; font-size: 14px; font-weight: 600; text-decoration: none;
+  border: 1px solid #DCD5FA; background: #F6F4FE; color: #4433B8;
+  &:hover { background: #ECE8FD; color: #4433B8; text-decoration: none; }
+}
+
+@media (max-width: 640px) {
+  .alert-row { flex-wrap: wrap; }
+  .alert-row__body { flex-basis: calc(100% - 52px); }
+  .alert-chip { margin-left: 52px; }
+  .alert-row__chev { display: none; }
+}

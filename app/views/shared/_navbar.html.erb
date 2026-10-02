@@ -38,12 +38,14 @@
     </nav>
 
     <div class="sidebar-bottom">
-      <button class="sidebar-link" aria-label="Notifications">
+      <% alert_count = AlertsFeed.new(current_user).attention_count %>
+      <%= link_to alerts_path, class: "sidebar-link #{'active' if controller_name == 'alerts'}", data: { label: "Alerts" }, aria: { label: alert_count > 0 ? "Alerts, #{alert_count} need attention" : "Alerts" } do %>
         <svg class="nav-icon nav-icon--bell" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path class="nav-icon__bell" d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/>
           <path class="nav-icon__clapper" d="M10.268 21a2 2 0 0 0 3.464 0"/>
         </svg>
-      </button>
+        <% if alert_count > 0 %><i class="sidebar-dot" aria-hidden="true"></i><% end %>
+      <% end %>
 
       <div class="dropdown">
         <button class="sidebar-link" id="sidebarDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Account">
