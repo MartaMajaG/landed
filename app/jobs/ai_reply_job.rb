@@ -28,12 +28,6 @@ class AiReplyJob < ApplicationJob
   private
 
   def render_ai_bubble(content)
-    escaped = ERB::Util.html_escape(content)
-    '<div style="display:flex; justify-content:flex-start; gap:8px; align-items:flex-start; margin-bottom:8px;">' \
-      '<div style="width:28px; height:28px; background:#EEEBFD; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; font-size:14px; color:var(--brand-indigo);">&#10022;</div>' \
-      '<div style="background:#F5F2FD; color:#1A1A2E; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:16px 16px 16px 4px; max-width:75%;">' +
-      escaped +
-      '</div>' \
-    '</div>'
+    ApplicationController.render(partial: "messages/ai_bubble", locals: { content: content })
   end
 end

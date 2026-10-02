@@ -1,5 +1,13 @@
 module ApplicationHelper
 
+  # Turns an AI chat reply into safe HTML: keeps line breaks and lists,
+  # and renders **bold** as real bold instead of showing the asterisks.
+  def format_ai_reply(text)
+    escaped = ERB::Util.html_escape(text.to_s).to_str
+    escaped = escaped.gsub(/\*\*(.+?)\*\*/m, '<strong>\\1</strong>').gsub("**", "")
+    simple_format(escaped)
+  end
+
   PILLAR_ICONS = {
     "legal_and_work"           => '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>',
     "housing_and_registration" => '<svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
@@ -53,5 +61,33 @@ module ApplicationHelper
     truncate(sentence, length: max_length, separator: " ")
   end
 
-  # ... other helper methods ...
+  # Suggested chat questions for a scanned document, based on what kind of
+  # document it is. Overdue documents lead with what to do now.
+  # skip: questions already covered by a button on the page.
+  DOCUMENT_QUESTIONS = [
+    [/fine|bu(ss|ß)geld|penalty|mahnung|reminder/, ["How do I pay this?", "Can I contest this?", "What happens if I don't pay?"]],
+    [/tax|finanzamt|steuer/, ["How do I pay this?", "What if I can't pay in full?", "Can I object to this?"]],
+    [/residence|visa|aufenthalt|ausl(ä|ae)nder|permit/, ["Do I need an appointment?", "What do I need to bring?", "What happens if I miss it?"]],
+    [/registration|anmeldung|b(ü|ue)rgeramt|meld/, ["Do I need an appointment?", "What do I need to bring?", "Is there anything else I need to do after?"]],
+    [/insurance|krankenkasse|versicherung/, ["What does this cover?", "Do I need to send anything back?", "How do I change or cancel it?"]],
+    [/rent|lease|miet|contract|vertrag/, ["What's my notice period?", "What am I committing to?", "Are there any extra costs?"]],
+    [/bill|utility|rundfunk|broadcast|strom|gas|water|wasser|fee|geb(ü|ue)hr/, ["How do I pay this?", "Can I set up a direct debit?", "What if I think it's wrong?"]]
+  ].freeze
+
+  def document_questions(chat, skip: [])
+    text = "#{chat.document_type} #{chat.title}".downcase
+    questions = DOCUMENT_QUESTIONS.find { |pattern, _| text.match?(pattern) }&.last
+    questions ||= [
+      "What do I need to do next?",
+      "Is there a deadline?",
+      chat.amount.to_f > 0 ? "How do I pay this?" : "Who can I contact about this?"
+    ]
+    questions -= skip
+
+    if chat.deadline.present? && chat.deadline < Date.today
+      (["What happens now that it's overdue?"] + questions).first(3)
+    else
+      questions.first(3)
+    end
+  end
 end
