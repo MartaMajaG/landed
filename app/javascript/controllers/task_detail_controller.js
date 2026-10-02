@@ -47,17 +47,17 @@ export default class extends Controller {
       if (badge) badge.remove()
       const note = stepEl.querySelector(".step__action-note")
       if (note) note.remove()
-      const header = stepEl.querySelector(".step__header")
-      if (header && !header.querySelector(".step__undo-link")) {
+      const content = stepEl.querySelector(".step__content")
+      if (content && !content.querySelector(".step__undo-link")) {
         const undoLink = document.createElement("button")
         undoLink.type = "button"
         undoLink.className = "step__undo-link"
-        undoLink.textContent = "Undo"
+        undoLink.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 0 11H11"/></svg> Mark as not done'
         undoLink.addEventListener("click", () => {
           const undoBtn = stepEl.querySelector(".step__undo-btn")
           if (undoBtn) undoBtn.click()
         })
-        header.appendChild(undoLink)
+        content.appendChild(undoLink)
       }
 
       const allSteps = this.stepTargets
