@@ -1,336 +1,287 @@
 <% content_for :meta_title, "Landed | #{@task.name}" %>
 
-<style>
-  .task-detail-page { background: #FAFAFC; min-height: 100vh; }
-  .task-title { font-size: 20px !important; font-weight: 600 !important; letter-spacing: -0.02em; }
-  .task-description { font-size: 14px !important; }
-  .task-why { border-radius: 12px !important; font-size: 14px !important; }
-  .task-why p { font-size: 14px !important; margin: 0 !important; }
-  .task-badge { font-size: 12px !important; border-radius: 20px !important; }
-  .task-steps__label { font-size: 14px !important; }
-  .step__title { font-size: 14px !important; }
-  .task-breadcrumb {
-  display: flex;
-  align-items: center;
-  margin-bottom: 14px;
+<%
+  # ── Step state, read from the data instead of assumed order ──
+  # Required steps count towards progress; optional ones never block anything.
+  # A required step waits while its prerequisites (unlock_after_position) aren't done.
+  done     = ->(item) { @user_checklist_items[item.id]&.completed }
+  waiting  = ->(item) { !done.(item) && item.soft_locked_for?(@user_checklist_items, @manually_unlocked_ids, @checklist_items) }
+
+  required = @checklist_items.reject(&:is_optional)
+  optional = @checklist_items.select(&:is_optional)
+  number   = required.each_with_index.to_h { |item, i| [item.id, i + 1] }
+
+  now_steps   = required.reject { |i| waiting.(i) }
+  later_steps = required.select { |i| waiting.(i) }
+  focus_step  = now_steps.find { |i| !done.(i) }
+  open_now    = now_steps.reject { |i| done.(i) }
+
+  required_done = required.count { |i| done.(i) }
+  all_done      = required.any? && required_done == required.size
+  pct           = required.any? ? (required_done * 100.0 / required.size).round : 0
+
+  waiting_for = ->(item) {
+    nums = required.select { |i| i.position <= item.unlock_after_position && !done.(i) }.map { |i| number[i.id] }
+    return "Unlocks when the steps above are done" if nums.empty?
+    return "Unlocks when step #{nums.first} is done" if nums.size == 1
+    consecutive = nums.each_cons(2).all? { |a, b| b == a + 1 }
+    consecutive ? "Unlocks when steps #{nums.first} to #{nums.last} are done" : "Unlocks when steps #{nums.to_sentence(last_word_connector: ' and ')} are done"
   }
 
-  .task-badge--due {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  }
-  .task-breadcrumb {
-  padding-left: 0;
-  margin-left: 0;
-  }
+  first_sentence_of = ->(text) { text.to_s.split(/(?<=[.!?])\s+/).first.to_s }
+  rest_of           = ->(text) { text.to_s.split(/(?<=[.!?])\s+/).drop(1).join(" ") }
 
-  /* ── Flatten the tip's resource link from its own bordered box down to a
-       plain divided row, so a step tops out at two visual nesting levels
-       (step card → tip box) instead of three (step card → tip box →
-       resource box). ── */
-  /* ── Flatten the tip's resource link from its own bordered box down to a
-       plain divided row, so a step tops out at two visual nesting levels
-       (step card → tip box) instead of three (step card → tip box →
-       resource box). ── */
-  .step__tip-resource {
-    background: transparent !important;
-    border: none !important;
-    border-radius: 0 !important;
-    padding: 10px 0 0 !important;
-    margin-top: 10px !important;
-    border-top: 1px solid #ECEBF3 !important;
-  }
+  # Tips that name a step show on that step; the rest give "Before you start" its links
+  tips         = Array(@task.expert_tips).select { |t| t.is_a?(Hash) }
+  step_titles  = @checklist_items.map(&:title)
+  tips_for     = ->(item) { tips.select { |t| t["step"] == item.title } }
+  general_tips = tips.reject { |t| step_titles.include?(t["step"]) }
 
-  /* ── Muted icon above the locked step's title, so each preview reads
-       distinctly instead of all locked cards looking identical. Selected
-       deterministically from the step title's keywords (same pattern as the
-       document page's stat_icon), not left to the LLM — a prompt-generated
-       icon choice would drift and be unmaintainable across steps. ── */
-  .step__locked-placeholder-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 9px;
-    background: #F1F0F6;
-    color: #9CA3AF;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 0 2px;
-  }
-</style>
-
-<div class="task-detail-page" data-controller="task-detail">
-
-  <%
-    # ── Lucide-style icons for locked-step previews, same stroke-1.75
-    # convention as the rest of the app. Add a keyword and icon here rather
-    # than asking the model to choose one per generation.
-    icon_lock_bank   = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>'
-    icon_lock_bolt   = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>'
-    icon_lock_wifi   = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.55a11 11 0 0 1 14.08 0"/><path d="M1.42 9a16 16 0 0 1 21.16 0"/><path d="M8.53 16.11a6 6 0 0 1 6.95 0"/><line x1="12" y1="20" x2="12.01" y2="20"/></svg>'
-    icon_lock_home   = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>'
-    icon_lock_heart  = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>'
-    icon_lock_brief  = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>'
-    icon_lock_phone  = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>'
-    icon_lock_generic = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'
-
-    locked_step_icon = ->(title) {
-      t = title.to_s.downcase
-      case t
-      when /bank|account|iban|payroll/ then icon_lock_bank
-      when /electric|energy|power|strom/ then icon_lock_bolt
-      when /internet|broadband|wifi|wlan/ then icon_lock_wifi
-      when /register|address|meld|housing|apartment|rent/ then icon_lock_home
-      when /insurance|health|doctor|kranken/ then icon_lock_heart
-      when /visa|work permit|legal|contract|residence/ then icon_lock_brief
-      when /phone|mobile|sim|handy/ then icon_lock_phone
-      else icon_lock_generic
+  if @task.due_date
+    d = (@task.due_date - Date.today).to_i
+    due_label, due_tone =
+      if all_done then ["Done", "done"]
+      elsif d < -30 then ["Overdue since #{@task.due_date.strftime('%B %Y')}", "overdue"]
+      elsif d < 0 then ["#{-d} #{'day'.pluralize(-d)} overdue", "overdue"]
+      elsif d == 0 then ["Due today", "soon"]
+      elsif d <= 7 then ["Due #{@task.due_date.strftime('%b %-d')} · in #{d} #{'day'.pluralize(d)}", "soon"]
+      else ["Due #{@task.due_date.strftime('%b %-d')}", "later"]
       end
-    }
-  %>
+  end
 
-  <%# ── BREADCRUMB ── %>
-  <div style="padding: 34px 0 16px; position: relative; z-index: 1;">
-    <div class="container" style="max-width: 1160px; margin: 0 auto;">
-      <div class="task-breadcrumb-nav">
-        <%= link_to "Dashboard", dashboard_path, class: "breadcrumb__link" %>
-        <span class="breadcrumb__divider">›</span>
-        <span class="breadcrumb__current"><%= @task.name %></span>
+  svg = ->(paths, size = 16, stroke = 1.75) { %(<svg width="#{size}" height="#{size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="#{stroke}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">#{paths}</svg>).html_safe }
+  i_check = svg.(%(<path d="M20 6 9 17l-5-5"/>), 16, 2)
+  i_lock  = svg.(%(<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>), 14, 2)
+  i_info  = svg.(%(<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>), 18)
+  i_chev  = svg.(%(<path d="m6 9 6 6 6-6"/>), 18)
+  i_out   = svg.(%(<path d="M7 17 17 7"/><path d="M7 7h10v10"/>), 16)
+  i_cal   = svg.(%(<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>), 16)
+  i_done  = svg.(%(<path d="M20 6 9 17l-5-5"/>), 22, 2.25)
+
+  link_card = ->(tip) {
+    url = tip["resource_url"].presence || (tip["resource_domain"].present? ? "https://#{tip['resource_domain']}" : nil)
+    next "".html_safe if url.blank?
+    domain = tip["resource_domain"].presence || URI.parse(url).host.to_s.sub(/\Awww\./, "")
+    title  = tip["resource_title"].presence || tip["title"].presence || domain
+    %(<a href="#{ERB::Util.h(url)}" target="_blank" rel="noopener" class="tp-link" aria-label="#{ERB::Util.h(title)} (opens #{ERB::Util.h(domain)} in a new tab)">
+      <span class="tp-link__icon"><img src="https://www.google.com/s2/favicons?domain=#{ERB::Util.h(domain)}&amp;sz=64" alt="" width="18" height="18"></span>
+      <span class="tp-link__text"><span class="tp-link__title">#{ERB::Util.h(title)}</span><span class="tp-link__domain">#{ERB::Util.h(domain)}</span></span>
+      <span class="tp-link__out">#{i_out}</span>
+    </a>).html_safe
+  }
+  general_links = general_tips.select { |t| t["resource_url"].present? || t["resource_domain"].present? }
+                              .uniq { |t| t["resource_url"].presence || t["resource_domain"] }
+%>
+
+<div class="tp-page">
+  <div class="tp-wrap">
+
+    <nav class="tp-crumbs" aria-label="Breadcrumb">
+      <%= link_to "Dashboard", dashboard_path %>
+      <span aria-hidden="true">›</span>
+      <% if @task.pillar %>
+        <%= link_to @task.pillar.name, pillar_path(@task.pillar) %>
+        <span aria-hidden="true">›</span>
+      <% end %>
+      <span class="tp-crumbs__current"><%= @task.name %></span>
+    </nav>
+
+    <%# ── HEADER ── %>
+    <section class="tp-card tp-head">
+      <div class="tp-head__top">
+        <div class="tp-head__text">
+          <div class="tp-tags">
+            <% if @task.pillar %><span class="tp-pill tp-pill--<%= @task.pillar.slug %>"><%= @task.pillar.name %></span><% end %>
+            <% if due_label %><span class="tp-due tp-due--<%= due_tone %>"><%= due_label %></span><% end %>
+          </div>
+          <h1 class="tp-title"><%= @task.name %></h1>
+          <% if @task.description.present? %><p class="tp-desc"><%= @task.description %></p><% end %>
+        </div>
+
+        <% if @task.due_date && !all_done %>
+          <%
+            reminder_date = @task.due_date < Date.today ? Date.today + 1 : @task.due_date - 1
+            reminder_date = Date.today if reminder_date < Date.today
+            cal_title = CGI.escape("Landed: #{@task.name}")
+          %>
+          <div class="tp-remind">
+            <button type="button" class="tp-btn tp-btn--secondary" aria-haspopup="true" aria-expanded="false" aria-controls="tp-remind-menu"
+              onclick="const m=document.getElementById('tp-remind-menu'); const open=m.hidden; m.hidden=!open; this.setAttribute('aria-expanded', open); event.stopPropagation();">
+              <%= i_cal %> Remind me
+            </button>
+            <div id="tp-remind-menu" class="tp-remind__menu" hidden onclick="event.stopPropagation()">
+              <div class="tp-remind__date">
+                <label for="tp-remind-date">Reminder date</label>
+                <input type="date" id="tp-remind-date" value="<%= reminder_date.strftime('%Y-%m-%d') %>">
+              </div>
+              <a href="#" id="tp-remind-google" target="_blank" rel="noopener"><%= i_cal %> Google Calendar</a>
+              <a href="#" id="tp-remind-outlook" target="_blank" rel="noopener"><%= i_cal %> Outlook</a>
+              <a href="#" id="tp-remind-apple"><%= i_cal %> Apple Calendar</a>
+            </div>
+            <script>
+              (function () {
+                const menu = document.getElementById('tp-remind-menu');
+                document.addEventListener('click', () => { if (menu) menu.hidden = true; });
+                const input = document.getElementById('tp-remind-date');
+                const title = "<%= cal_title %>";
+                const update = () => {
+                  const v = input.value, c = v.replace(/-/g, '');
+                  document.getElementById('tp-remind-google').href = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${title}&dates=${c}/${c}`;
+                  document.getElementById('tp-remind-outlook').href = `https://outlook.live.com/calendar/0/deeplink/compose?subject=${title}&startdt=${v}&enddt=${v}`;
+                  document.getElementById('tp-remind-apple').href = `data:text/calendar;charset=utf8,${encodeURIComponent("BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:<%= j @task.name %>\nDTSTART;VALUE=DATE:" + c + "\nDTEND;VALUE=DATE:" + c + "\nEND:VEVENT\nEND:VCALENDAR")}`;
+                };
+                input.addEventListener('change', update);
+                update();
+              })();
+            </script>
+          </div>
+        <% end %>
       </div>
-    </div>
-  </div>
 
-  <div class="container task-container" style="max-width: 1160px; margin: 0 auto;">
-    <div class="task-layout">
+      <% if all_done %>
+        <div class="tp-complete">
+          <span class="tp-complete__icon"><%= i_done %></span>
+          <div>
+            <p class="tp-complete__title">All required steps are done</p>
+            <p class="tp-complete__text"><%= optional.any? ? "Check the optional steps below in case any apply to you." : "This task is complete." %></p>
+          </div>
+          <%= link_to "Back to dashboard", dashboard_path, class: "tp-btn tp-btn--secondary tp-complete__btn" %>
+        </div>
+      <% elsif required.any? %>
+        <div class="tp-progress">
+          <div class="tp-progress__row">
+            <p class="tp-progress__label"><%= required_done %> of <%= required.size %> steps done</p>
+            <% if optional.any? %><p class="tp-progress__note"><%= optional.size %> optional <%= 'step'.pluralize(optional.size) %> if they apply to you</p><% end %>
+          </div>
+          <div class="tp-progress__bar" role="progressbar" aria-valuenow="<%= pct %>" aria-valuemin="0" aria-valuemax="100" aria-label="Task progress"><span style="width: <%= [pct, 4].max %>%"></span></div>
+        </div>
+      <% end %>
 
-      <%# ── LEFT COLUMN ── %>
-      <div class="task-main">
-
-        <%# ── BADGE ROW ── %>
-        <div class="task-breadcrumb">
-          <% if @task.due_date %>
-            <% days_left = (@task.due_date - Date.today).to_i %>
-            <% if days_left < 0 %>
-              <span class="task-badge task-badge--urgent">Overdue</span>
-            <% elsif days_left == 0 %>
-              <span class="task-badge task-badge--urgent">Due today</span>
-            <% elsif days_left <= 7 %>
-              <span class="task-badge task-badge--urgent">Due in <%= days_left %> day<%= days_left == 1 ? "" : "s" %></span>
-            <% else %>
-              <span class="task-badge task-badge--due">
-                <span class="lucide-icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
-                    <line x1="16" y1="2" x2="16" y2="6"/>
-                    <line x1="8" y1="2" x2="8" y2="6"/>
-                    <line x1="3" y1="10" x2="21" y2="10"/>
-                  </svg>
-                </span>
-                <%= @task.due_date.strftime("%b %d") %>
-              </span>
+      <% if @task.why_it_matters.present? || general_links.any? %>
+        <div class="tp-before">
+          <span class="tp-before__icon"><%= i_info %></span>
+          <div class="tp-before__body">
+            <p class="tp-before__title">Before you start</p>
+            <% if @task.why_it_matters.present? %><p class="tp-before__text"><%= @task.why_it_matters %></p><% end %>
+            <% general_links.each do |tip| %>
+              <%= link_card.(tip) %>
             <% end %>
-          <% end %>
-
-          <% if @task.pillar %>
-            <span class="tag tag-pillar--<%= @task.pillar.slug %> breadcrumb__pillar-tag">
-              <span class="lucide-icon">
-                <% case @task.pillar.slug %>
-                <% when "finance_and_banking" %>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/>
-                  </svg>
-                <% when "health_and_insurance" %>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                  </svg>
-                <% when "housing_and_registration" %>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
-                  </svg>
-                <% when "legal_and_work" %>
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>
-                  </svg>
-                <% end %>
-              </span>
-              <%= @task.pillar.name %>
-            </span>
-          <% end %>
-
-          <% if @pillar_tasks_count <= 8 %>
-            <span class="task-progress-stepper" aria-hidden="true" style="margin-left: 10px;">
-              <% @pillar_tasks_count.times do |i| %>
-                <span class="task-progress-dot <%= i < @task_position - 1 ? 'task-progress-dot--done' : (i == @task_position - 1 ? 'task-progress-dot--active' : '') %>"></span>
-              <% end %>
-            </span>
-          <% end %>
-          <span class="breadcrumb__position">Task <%= @task_position %> of <%= @pillar_tasks_count %></span>
-        </div>
-
-        <%# ── HEADER ── %>
-        <div class="task-header">
-          <div class="task-header__text">
-            <h1 class="task-title"><%= @task.name %></h1>
-            <p class="task-description"><%= @task.description %></p>
           </div>
-          <span class="autosave" data-task-detail-target="autosave" style="opacity: 0;">✓ Saved</span>
         </div>
+      <% end %>
+    </section>
 
-        <%# ── WHY THIS MATTERS ── %>
-        <div class="task-why">
-          <span class="lucide-icon task-why__icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M12 3a6 6 0 0 0-6 6c0 2 1 3.5 2.5 4.5V16a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-2.5C17 12.5 18 11 18 9a6 6 0 0 0-6-6z"/>
-              <line x1="9" y1="21" x2="15" y2="21"/>
-              <line x1="9.5" y1="18" x2="14.5" y2="18"/>
-            </svg>
-          </span>
-          <p><strong>Good to know:</strong> <%= @task.why_it_matters %></p>
+    <%# ── START NOW ── %>
+    <% if now_steps.any? %>
+      <section class="tp-card" aria-labelledby="tp-now">
+        <div class="tp-section-head">
+          <h2 id="tp-now" class="tp-section-title">Start now</h2>
+          <% if open_now.size > 1 %><span class="tp-section-note">These can happen at the same time</span><% end %>
         </div>
+        <% if focus_step && open_now.size > 1 %>
+          <p class="tp-section-intro">Start with step <%= number[focus_step.id] %>. The others can happen alongside it.</p>
+        <% end %>
 
-        <%# ── STEPS SECTION ── %>
-        <div class="task-steps">
-
-          <% completed_steps = @checklist_items.select { |i| @user_checklist_items[i.id]&.completed }.count %>
-          <div class="task-steps__header">
-            <span class="task-steps__label">Checklist</span>
-            <span class="task-steps__count" data-task-detail-target="stepCount">
-              <% if completed_steps == @checklist_items.count %>
-                <span class="task-steps__all-done">All done ✓</span>
-              <% else %>
-                <span class="task-steps__fraction"><%= completed_steps %>&thinsp;/&thinsp;<%= @checklist_items.count %></span>
-              <% end %>
-            </span>
-          </div>
-
-          <%# ── STEPS LIST ── %>
-          <div class="task-steps__list" data-task-detail-target="stepsList">
-            <% @checklist_items.each_with_index do |item, index| %>
-              <% progress  = @user_checklist_items[item.id] %>
-              <% completed = progress&.completed %>
-              <% is_active = !completed && @checklist_items.select { |i| @user_checklist_items[i.id]&.completed }.count == index %>
-              <% is_locked = !completed && !is_active %>
-
-              <div class="step <%= completed ? 'step--completed' : '' %> <%= is_active ? 'step--active' : '' %> <%= is_locked ? 'step--locked' : '' %>"
-                   data-task-detail-target="step"
-                   data-completed="<%= completed %>">
-
-                <div class="step__marker">
-                  <% if completed %>
-                    <div class="step__number step__number--done">
-                      <%= button_to user_checklist_item_path(item),
-                          method: :patch,
-                          form: { data: { turbo: "false" } },
-                          class: "step__undo-btn",
-                          data: { action: "click->task-detail#undoStep" },
-                          title: "Mark as incomplete" do %>
-                        <span class="step__check">✓</span>
-                      <% end %>
+        <div class="tp-steps">
+          <% now_steps.each do |item| %>
+            <% if item == focus_step %>
+              <div class="tp-focus">
+                <div class="tp-focus__head">
+                  <span class="tp-num tp-num--focus"><%= number[item.id] %></span>
+                  <div class="tp-focus__text">
+                    <div class="tp-focus__title-row">
+                      <h3 class="tp-focus__title"><%= item.title %></h3>
+                      <span class="tp-tag">Do this first</span>
                     </div>
-                  <% else %>
-                    <div class="step__number">
-                      <span><%= index + 1 %></span>
-                    </div>
-                  <% end %>
-                </div>
-
-                <div class="step__card">
-                  <%# ── STEP CONTENT ── %>
-                  <div class="step__content">
-                    <div class="step__header">
-                      <h3 class="step__title"><%= item.title %></h3>
-                      <% if is_active %>
-                        <span class="task-badge task-badge--action">Action required</span>
-                      <% end %>
-
-                    </div>
-
-                    <p class="step__description"><%= item.description %></p>
-
-                    <% if is_active && item.action_note.present? %>
-                      <p class="step__action-note"><%= item.action_note %></p>
-                    <% end %>
-
-                    <%# Inline tip — mapped to this step by order (tip 1 with step 1, etc.),
-                        since tips aren't tied to a specific checklist item in the data. %>
-                    <% tip = @task.expert_tips&.[](index) %>
-                    <% if tip.present? %>
-                      <div class="step__tip">
-                        <div class="step__tip-body">
-                          <p><strong><%= tip["title"] %>:</strong> <%= tip["body"] %></p>
-                          <% if tip["resource_url"].present? %>
-                            <a href="<%= tip["resource_url"] %>" target="_blank" class="step__tip-resource">
-                              <span class="step__tip-resource-favicon">
-                                <img src="https://www.google.com/s2/favicons?domain=<%= tip["resource_domain"] %>&sz=64" alt="" />
-                              </span>
-                              <span class="step__tip-resource-text">
-                                <p class="step__tip-resource-title"><%= tip["resource_title"] %></p>
-                                <p class="step__tip-resource-domain"><%= tip["resource_domain"] %></p>
-                              </span>
-                            </a>
-                          <% end %>
-                        </div>
-                      </div>
-                    <% end %>
-
-                    <% unless completed %>
-                      <%= button_to user_checklist_item_path(item),
-                          method: :patch,
-                          form: {
-                            data: {
-                              action: "submit->task-detail#completeStep",
-                              turbo: "false"
-                            }
-                          },
-                          class: "step__toggle",
-                          style: (is_active ? nil : "display:none;"),
-                          data: { "task-detail-target": "toggleBtn" } do %>
-                        Mark complete
-                      <% end %>
-                    <% end %>
-
+                    <% if item.description.present? %><p class="tp-step__desc"><%= item.description %></p><% end %>
+                    <% if item.action_note.present? %><p class="tp-step__desc"><%= item.action_note %></p><% end %>
                   </div>
-
-                  <%# Locked placeholder — always rendered, shown via CSS only when the step
-                      has .step--locked, so JS unlocking (class toggle) needs no changes. %>
-                  <div class="step__locked-placeholder" style="<%= is_locked ? 'display:flex !important; flex-direction:column !important; align-items:center !important; text-align:center !important; gap:8px !important;' : 'display:none !important;' %>">
-                    <span class="step__locked-placeholder-icon lucide-icon"><%= locked_step_icon.call(item.title).html_safe %></span>
-                    <p style="font-size:14px; font-weight:600; color:#6B7280; margin:0;"><%= item.title %></p>
-                    <p style="font-size:13px; color:#B4B2C4; margin:0; line-height:1.5;"><%= item.description.to_s.split(".").first.to_s.strip %><%= "." if item.description.to_s.include?(".") %></p>
-                    <div style="display:flex; align-items:center; justify-content:center; gap:8px; color:#B4B2C4; font-size:13px;">
-                      <span class="lucide-icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-                      </span>
-                      Unlock next step after completion
-                    </div>
+                </div>
+                <div class="tp-focus__actions">
+                  <% tips_for.(item).each do |tip| %><%= link_card.(tip) %><% end %>
+                  <div>
+                    <%= button_to user_checklist_item_path(item), method: :patch, form: { data: { turbo: false } }, class: "tp-btn tp-btn--primary" do %>
+                      <%= i_check %> Mark as done
+                    <% end %>
                   </div>
                 </div>
               </div>
+
+            <% elsif done.(item) %>
+              <div class="tp-row tp-row--done">
+                <span class="tp-num tp-num--done" aria-label="Done"><%= i_check %></span>
+                <span class="tp-row__text"><span class="tp-row__title"><%= item.title %></span></span>
+                <span class="tp-done-chip">Done</span>
+                <%= button_to "Undo", user_checklist_item_path(item), method: :patch, form: { data: { turbo: false } }, class: "tp-text-btn tp-text-btn--muted", aria: { label: "Mark #{item.title} as not done" } %>
+              </div>
+
+            <% else %>
+              <details class="tp-row">
+                <summary>
+                  <span class="tp-num"><%= number[item.id] %></span>
+                  <span class="tp-row__text">
+                    <span class="tp-row__title"><%= item.title %></span>
+                    <span class="tp-row__desc"><%= item.description %></span>
+                  </span>
+                  <span class="tp-row__chev"><%= i_chev %></span>
+                </summary>
+                <div class="tp-row__more">
+                  <% if item.action_note.present? %><p class="tp-step__desc"><%= item.action_note %></p><% end %>
+                  <% tips_for.(item).each do |tip| %><%= link_card.(tip) %><% end %>
+                  <%= button_to user_checklist_item_path(item), method: :patch, form: { data: { turbo: false } }, class: "tp-btn tp-btn--secondary" do %>
+                    <%= i_check %> Mark as done
+                  <% end %>
+                </div>
+              </details>
             <% end %>
-          </div>
-
+          <% end %>
         </div>
+      </section>
+    <% end %>
 
-        <div class="task-skip">
-          <a href="#" class="task-skip__link"></a>
+    <%# ── STEPS THAT WAIT FOR OTHERS ── %>
+    <% if later_steps.any? %>
+      <section class="tp-card" aria-labelledby="tp-later">
+        <h2 id="tp-later" class="tp-section-title tp-section-title--solo">After that</h2>
+        <div class="tp-steps">
+          <% later_steps.each do |item| %>
+            <div class="tp-row tp-row--waiting">
+              <span class="tp-num tp-num--waiting"><%= i_lock %></span>
+              <span class="tp-row__text">
+                <span class="tp-row__title"><%= number[item.id] %> · <%= item.title %></span>
+                <span class="tp-row__desc"><%= rest_of.(item.description).presence || first_sentence_of.(item.description) %> <%= waiting_for.(item) %>.</span>
+              </span>
+            </div>
+          <% end %>
         </div>
+      </section>
+    <% end %>
 
-      </div>
-
-      <%# ── COMPLETION OVERLAY ── %>
-      <div class="completion-overlay" data-task-detail-target="completionOverlay">
-        <div class="completion-overlay__card">
-          <div class="completion-overlay__icon">✓</div>
-          <h2 class="completion-overlay__title">Task Completed! 🎉</h2>
-          <p class="completion-overlay__message"><%= @task.name %> is done and dusted.</p>
-          <p class="completion-overlay__sub">Heading back to your dashboard..</p>
-          <div class="completion-overlay__bar">
-            <div class="completion-overlay__bar-fill"></div>
-          </div>
+    <%# ── OPTIONAL ── %>
+    <% if optional.any? %>
+      <section class="tp-card" aria-labelledby="tp-optional">
+        <div class="tp-section-head">
+          <h2 id="tp-optional" class="tp-section-title"><%= required.any? ? "Only if it applies to you" : "Pick what applies to you" %></h2>
+          <span class="tp-section-note"><%= required.any? ? "Not counted in your progress" : "None of these are required" %></span>
         </div>
-      </div>
+        <ul class="tp-optional">
+          <% optional.each do |item| %>
+            <li class="tp-optional__item">
+              <% if done.(item) %>
+                <span class="tp-num tp-num--done" aria-label="Done"><%= i_check %></span>
+              <% else %>
+                <span class="tp-num tp-num--optional" aria-hidden="true"></span>
+              <% end %>
+              <span class="tp-row__text">
+                <span class="tp-row__title"><%= item.title %></span>
+                <span class="tp-row__desc"><%= first_sentence_of.(item.description) %></span>
+              </span>
+              <%= button_to (done.(item) ? "Undo" : "Mark as done"), user_checklist_item_path(item), method: :patch, form: { data: { turbo: false } }, class: "tp-text-btn#{' tp-text-btn--muted' if done.(item)}" %>
+            </li>
+          <% end %>
+        </ul>
+      </section>
+    <% end %>
 
-    </div>
   </div>
 </div>

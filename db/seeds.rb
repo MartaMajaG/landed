@@ -94,19 +94,43 @@ health.update!(
 
 puts "Tasks seeded: #{Task.count} total."
 
+# Creates or updates a task's steps by title, in place.
+# Existing steps keep their id, so users' progress and documents linked to a
+# step survive a re-seed. Only steps whose title was removed from the list
+# are deleted (with the documents linked to them, since a document needs a step).
+def sync_steps!(task, steps)
+  titles = steps.map { |s| s[:title] }
+  stale  = ChecklistItem.where(task: task).where.not(title: titles)
+  if stale.exists?
+    puts "  Removing #{stale.count} old step(s) from #{task.name}"
+    Chat.where(checklist_item_id: stale.select(:id)).destroy_all
+    stale.destroy_all
+  end
+  steps.each do |attrs|
+    item = ChecklistItem.find_or_initialize_by(task: task, title: attrs[:title])
+    item.update!(attrs.except(:title))
+  end
+end
+
 # ─────────────────────────────────────────────────────────────────────────────
 # SUBTASKS  (ChecklistItems per Main Task)
 # ─────────────────────────────────────────────────────────────────────────────
 
 # Pillar 2, Task 1 — Registration (Anmeldung): 6 structured subtasks
-# Destroy old items + their dependent chats first (FK constraint on chats table)
-old_item_ids = ChecklistItem.where(task: registration).pluck(:id)
-Chat.where(checklist_item_id: old_item_ids).destroy_all
-ChecklistItem.where(task: registration).destroy_all
 
 registration_steps = [
+  # Booking comes first: slots fill quickly and you don't need your documents to book.
+  # Steps 1–3 can all happen at the same time; attending waits for all three.
   {
     position:              1,
+    title:                 "Book Bürgerbüro appointment",
+    description:           "Book your Anmeldung appointment online at the Munich Bürgerbüro (KVR). Slots fill quickly, so book as early as you can. You don't need your documents ready to book.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              2,
     title:                 "Get landlord confirmation (Wohnungsgeberbestätigung)",
     description:           "Ask your landlord to fill and sign the official Wohnungsgeberbestätigung form. A standard rental contract is no longer legally sufficient for the Anmeldung.",
     category:              "housing_and_registration",
@@ -114,7 +138,7 @@ registration_steps = [
     unlock_after_position: nil
   },
   {
-    position:              2,
+    position:              3,
     title:                 "Gather identity documents",
     description:           "Prepare your valid passport or national ID. Non-EU citizens must also bring the original visa or electronic residence permit (eAT).",
     category:              "housing_and_registration",
@@ -122,50 +146,35 @@ registration_steps = [
     unlock_after_position: nil
   },
   {
-    position:              3,
-    title:                 "Prepare civil status certificates + translations (if applicable)",
-    description:           "If you were married or had children abroad, bring original marriage/birth certificates. If not in CIEC multilingual format, a certified translation by a German sworn translator is required, and an apostille may also be needed.",
-    category:              "housing_and_registration",
-    is_optional:           true,   # Optional badge — only needed for some users
-    unlock_after_position: nil
-  },
-  {
     position:              4,
-    title:                 "Book Bürgerbüro appointment",
-    description:           "Book your Anmeldung appointment online at the Munich Bürgerbüro (KVR). Slots fill quickly, so book as soon as you have your Wohnungsgeberbestätigung.",
-    category:              "housing_and_registration",
-    is_optional:           false,
-    unlock_after_position: 2   # Soft-locked: recommended after Steps 1 & 2 are done
-  },
-  {
-    position:              5,
     title:                 "Attend appointment & collect Meldebescheinigung",
     description:           "Attend your Bürgerbüro appointment in person. All documents must be presented as originals, not scanned copies. You will receive your Meldebescheinigung on the spot.",
     category:              "housing_and_registration",
     is_optional:           false,
-    unlock_after_position: 4   # Soft-locked: only sensible after appointment is booked (Step 4)
+    unlock_after_position: 3   # Unlocks once the required steps 1–3 are done
+  },
+  {
+    position:              5,
+    title:                 "Prepare civil status certificates + translations (if applicable)",
+    description:           "If you were married or had children abroad, bring original marriage/birth certificates. If not in CIEC multilingual format, a certified translation by a German sworn translator is required, and an apostille may also be needed.",
+    category:              "housing_and_registration",
+    is_optional:           true,   # Only needed for some users
+    unlock_after_position: nil
   },
   {
     position:              6,
     title:                 "Prepare Vollmacht (Power of Attorney) if sending someone else",
     description:           "If you cannot attend the appointment in person, prepare and sign a Vollmacht (Power of Attorney) for the person attending on your behalf. Must be an original signature.",
     category:              "housing_and_registration",
-    is_optional:           true,  # Optional badge — only needed if user cannot attend
+    is_optional:           true,   # Only needed if the user cannot attend
     unlock_after_position: nil
   }
 ]
 
-registration_steps.each do |attrs|
-  ChecklistItem.find_or_create_by!(task: registration, title: attrs[:title]) do |item|
-    item.assign_attributes(attrs.except(:title))
-  end
-end
+sync_steps!(registration, registration_steps)
 
 
 # Banking subtasks
-old_banking_ids = ChecklistItem.where(task: banking).pluck(:id)
-Chat.where(checklist_item_id: old_banking_ids).destroy_all
-ChecklistItem.where(task: banking).destroy_all
 
 banking_steps = [
   {
@@ -186,11 +195,7 @@ banking_steps = [
   }
 ]
 
-banking_steps.each do |attrs|
-  ChecklistItem.find_or_create_by!(task: banking, title: attrs[:title]) do |item|
-    item.assign_attributes(attrs.except(:title))
-  end
-end
+sync_steps!(banking, banking_steps)
 # ─────────────────────────────────────────────────────────────────────────────
 # Pillar 2, Task 2 — Set Up Household Utilities
 # ─────────────────────────────────────────────────────────────────────────────
@@ -230,16 +235,12 @@ household_steps = [
   }
 ]
 
-household_steps.each do |attrs|
-  ChecklistItem.find_or_create_by!(task: household, title: attrs[:title]) do |item|
-    item.assign_attributes(attrs.except(:title))
-  end
-end
+sync_steps!(household, household_steps)
 
 # =============================================================================
 # PILLAR 4 — HEALTH & INSURANCE
 # 5 Main Tasks, each representing a distinct insurance category.
-# No soft-lock (unlock_after_position: nil everywhere).
+# unlock_after_position: N = waits until all required steps up to position N are done.
 # is_optional: true = Optional badge shown in UI.
 # =============================================================================
 
@@ -254,10 +255,6 @@ health.update!(
   urgency:        "high"
 )
 
-# Destroy old stubs (and their linked chats) before rebuilding
-old_health_ids = ChecklistItem.where(task: health).pluck(:id)
-Chat.where(checklist_item_id: old_health_ids).destroy_all
-ChecklistItem.where(task: health).destroy_all
 
 health_steps = [
   {
@@ -290,7 +287,7 @@ health_steps = [
     description:           "For GKV, compare funds such as TK (Techniker Krankenkasse), AOK Bayern, Barmer, or DAK. All charge the same base rate (14.6% of gross salary) but differ in additional services and English-language support. For PKV, obtain quotes from at least 3 providers — premiums vary by age and health status.",
     category:              "health_and_insurance",
     is_optional:           false,
-    unlock_after_position: nil
+    unlock_after_position: 2   # After checking GKV vs PKV eligibility
   },
   {
     position:              5,
@@ -298,7 +295,7 @@ health_steps = [
     description:           "Complete the insurer's registration form and submit your documents. For GKV, most funds offer an online application. You will receive a membership confirmation letter, which you must forward to your employer's HR department.",
     category:              "health_and_insurance",
     is_optional:           false,
-    unlock_after_position: nil
+    unlock_after_position: 4   # After documents and provider choice (steps 2–4)
   },
   {
     position:              6,
@@ -306,7 +303,7 @@ health_steps = [
     description:           "Most GKV funds (TK, AOK, Barmer) allow you to upload a passport photo via their app. The eGK will be sent to your registered address within 2–4 weeks and is required to access doctors and pharmacies.",
     category:              "health_and_insurance",
     is_optional:           false,
-    unlock_after_position: nil
+    unlock_after_position: 5   # Only possible once you are enrolled
   },
   {
     position:              7,
@@ -314,7 +311,7 @@ health_steps = [
     description:           "Your GKV enrolment automatically triggers the issuance of your permanent Sozialversicherungsnummer (social security number). Once received (by post), forward it to HR — it is required for legal payroll processing.",
     category:              "health_and_insurance",
     is_optional:           false,
-    unlock_after_position: nil
+    unlock_after_position: 5   # Issued after enrolment
   },
   {
     position:              8,
@@ -326,7 +323,7 @@ health_steps = [
   }
 ]
 
-health_steps.each { |attrs| ChecklistItem.create!(task: health, **attrs) }
+sync_steps!(health, health_steps)
 
 # ── Task 2: Personal Liability Insurance (Privathaftpflicht) ─────────────────
 haftpflicht = Task.find_or_initialize_by(name: "Personal Liability Insurance (Privathaftpflicht)", city: munich)
@@ -338,9 +335,6 @@ haftpflicht.update!(
   urgency:        "high"
 )
 
-old_ids = ChecklistItem.where(task: haftpflicht).pluck(:id)
-Chat.where(checklist_item_id: old_ids).destroy_all
-ChecklistItem.where(task: haftpflicht).destroy_all
 
 haftpflicht_steps = [
   {
@@ -365,11 +359,11 @@ haftpflicht_steps = [
     description:           "Complete the application online — you will need your name, address, and date of birth. Download and store your Versicherungsschein (policy document) in a safe place. Coverage typically begins the same day.",
     category:              "health_and_insurance",
     is_optional:           false,
-    unlock_after_position: nil
+    unlock_after_position: 2   # After choosing a policy
   }
 ]
 
-haftpflicht_steps.each { |attrs| ChecklistItem.create!(task: haftpflicht, **attrs) }
+sync_steps!(haftpflicht, haftpflicht_steps)
 
 # ── Task 3: Home Contents Insurance (Hausratversicherung) ────────────────────
 hausrat = Task.find_or_initialize_by(name: "Home Contents Insurance (Hausratversicherung)", city: munich)
@@ -381,9 +375,6 @@ hausrat.update!(
   urgency:        "medium"
 )
 
-old_ids = ChecklistItem.where(task: hausrat).pluck(:id)
-Chat.where(checklist_item_id: old_ids).destroy_all
-ChecklistItem.where(task: hausrat).destroy_all
 
 hausrat_steps = [
   {
@@ -408,11 +399,11 @@ hausrat_steps = [
     description:           "Complete the application with your address and floor area. Store the Versicherungsschein digitally and note the claims hotline number — it will be needed immediately in case of a burglary or water damage.",
     category:              "health_and_insurance",
     is_optional:           false,
-    unlock_after_position: nil
+    unlock_after_position: 2   # After choosing a policy
   }
 ]
 
-hausrat_steps.each { |attrs| ChecklistItem.create!(task: hausrat, **attrs) }
+sync_steps!(hausrat, hausrat_steps)
 
 # ── Task 4: Disability Insurance (Berufsunfähigkeitsversicherung) ─────────────
 bu = Task.find_or_initialize_by(name: "Disability Insurance (Berufsunfähigkeitsversicherung)", city: munich)
@@ -424,9 +415,6 @@ bu.update!(
   urgency:        "medium"
 )
 
-old_ids = ChecklistItem.where(task: bu).pluck(:id)
-Chat.where(checklist_item_id: old_ids).destroy_all
-ChecklistItem.where(task: bu).destroy_all
 
 bu_steps = [
   {
@@ -451,11 +439,11 @@ bu_steps = [
     description:           "Compare at least 3 quotes. Ensure the payout amount covers your monthly living costs. Typical monthly benefit: 60–80% of your net income. The younger and healthier you are when you sign, the lower the premium — do not delay.",
     category:              "health_and_insurance",
     is_optional:           false,
-    unlock_after_position: nil
+    unlock_after_position: 2   # After getting independent advice
   }
 ]
 
-bu_steps.each { |attrs| ChecklistItem.create!(task: bu, **attrs) }
+sync_steps!(bu, bu_steps)
 
 # ── Task 5: Supplementary Insurance ─────────────────────────────────────────
 supplementary = Task.find_or_initialize_by(name: "Supplementary Insurance", city: munich)
@@ -467,9 +455,6 @@ supplementary.update!(
   urgency:        "low"
 )
 
-old_ids = ChecklistItem.where(task: supplementary).pluck(:id)
-Chat.where(checklist_item_id: old_ids).destroy_all
-ChecklistItem.where(task: supplementary).destroy_all
 
 supplementary_steps = [
   {
@@ -506,7 +491,7 @@ supplementary_steps = [
   }
 ]
 
-supplementary_steps.each { |attrs| ChecklistItem.create!(task: supplementary, **attrs) }
+sync_steps!(supplementary, supplementary_steps)
 
 puts "Subtasks seeded: #{ChecklistItem.count} total."
 

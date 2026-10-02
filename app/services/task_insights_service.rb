@@ -39,6 +39,9 @@ class TaskInsightsService
         key and "resource_title" entirely rather than inventing a domain or URL.
       - "resource_title": OPTIONAL. Only include if "resource_domain" is included — a short
         name (max 6 words) describing what that domain offers for this tip.
+      - "step": OPTIONAL. If the user prompt lists the task's steps and this tip is about one
+        specific step, set this to that step's title, copied exactly. Leave it out for tips
+        about the task as a whole. Never attach a tip to a step it isn't about.
     Never invent a domain, URL, or resource that isn't explicitly in the allowed list you
     were given. A tip with no resource is completely acceptable and expected sometimes.
     The tips must be genuinely useful and specific — avoid generic statements.
@@ -88,6 +91,12 @@ class TaskInsightsService
     context << "Description: #{@task.description}" if @task.description.present?
     context << "Category: #{@task.category}"       if @task.category.present?
 
+    steps = @task.checklist_items.order(:position).pluck(:title)
+    if steps.any?
+      context << "Steps of this task (use these exact titles for a tip's \"step\"):"
+      steps.each { |title| context << "- #{title}" }
+    end
+
     allowed = APPROVED_DOMAINS[@task.category.to_s]
     if allowed.present?
       context << "Allowed resource domains for this category (in preference order — " \
@@ -108,6 +117,7 @@ class TaskInsightsService
     parsed
       .select { |tip| tip.is_a?(Hash) && tip["title"].present? && tip["body"].present? }
       .map { |tip| attach_verified_resource(tip) }
+      .map { |tip| keep_step_only_if_real(tip) }
   rescue JSON::ParserError => e
     Rails.logger.error("[TaskInsightsService] JSON parse failed for '#{@task.name}': #{e.message}")
     []
@@ -131,6 +141,14 @@ class TaskInsightsService
 
     tip["resource_domain"] = domain
     tip["resource_url"]    = "https://#{domain}"
+    tip
+  end
+
+  # A tip may only point at a step that actually exists on this task,
+  # otherwise it shows up in "Before you start" instead.
+  def keep_step_only_if_real(tip)
+    titles = @task.checklist_items.pluck(:title)
+    tip.delete("step") unless titles.include?(tip["step"])
     tip
   end
 
