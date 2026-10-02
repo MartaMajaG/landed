@@ -123,6 +123,62 @@ body {
   }
 }
 
+// ── Animated nav icons (Lucide, stroke 1.75) ──
+// Home: the house hops and the door swings open.
+// Documents: the page lifts and its lines are rewritten one by one.
+.nav-icon { display: block; overflow: visible; }
+
+.nav-icon__door {
+  transform-box: fill-box;
+  transform-origin: left center;
+}
+.sidebar-link:hover .nav-icon--home,
+.sidebar-link:focus-visible .nav-icon--home {
+  animation: nav-home-hop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.sidebar-link:hover .nav-icon__door,
+.sidebar-link:focus-visible .nav-icon__door {
+  animation: nav-door-open 0.6s ease-in-out;
+}
+
+.nav-icon__line {
+  stroke-dasharray: 10;
+  stroke-dashoffset: 0;
+}
+.sidebar-link:hover .nav-icon--docs,
+.sidebar-link:focus-visible .nav-icon--docs {
+  animation: nav-doc-lift 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.sidebar-link:hover .nav-icon__line,
+.sidebar-link:focus-visible .nav-icon__line {
+  animation: nav-doc-write 0.45s ease-out both;
+}
+.sidebar-link:hover .nav-icon__line--1 { animation-delay: 0.08s; }
+.sidebar-link:hover .nav-icon__line--2 { animation-delay: 0.18s; }
+
+@keyframes nav-home-hop {
+  0%   { transform: translateY(0); }
+  40%  { transform: translateY(-3px); }
+  100% { transform: translateY(0); }
+}
+@keyframes nav-door-open {
+  0%, 100% { transform: scaleX(1); }
+  50%      { transform: scaleX(0.35); }
+}
+@keyframes nav-doc-lift {
+  0%   { transform: translateY(0) rotate(0); }
+  40%  { transform: translateY(-2px) rotate(-6deg); }
+  100% { transform: translateY(0) rotate(0); }
+}
+@keyframes nav-doc-write {
+  from { stroke-dashoffset: 10; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nav-icon, .nav-icon * { animation: none !important; }
+}
+
 .sidebar-bottom {
   padding: 8px 10px 14px;
   border-top: 1px solid rgba(255, 255, 255, 0.07);

@@ -20,11 +20,20 @@
     </div>
 
     <nav class="sidebar-nav">
-      <%= link_to dashboard_path, class: "sidebar-link #{'active' if controller_name.in?(['dashboards', 'tasks'])}", data: { label: "Dashboard" } do %>
-        <i class="bi bi-house"></i>
+      <%= link_to dashboard_path, class: "sidebar-link #{'active' if controller_name.in?(['dashboards', 'tasks'])}", data: { label: "Dashboard" }, aria: { label: "Dashboard" } do %>
+        <svg class="nav-icon nav-icon--home" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path class="nav-icon__house" d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <path class="nav-icon__door" d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
+        </svg>
       <% end %>
-      <%= link_to chats_path, class: "sidebar-link #{'active' if controller_name == 'chats'}", data: { label: "Documents" } do %>
-        <i class="bi bi-file-text"></i>
+      <%= link_to chats_path, class: "sidebar-link #{'active' if controller_name == 'chats'}", data: { label: "Documents" }, aria: { label: "Documents" } do %>
+        <svg class="nav-icon nav-icon--docs" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path class="nav-icon__page" d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7z"/>
+          <path class="nav-icon__fold" d="M14 2v4a2 2 0 0 0 2 2h4"/>
+          <path class="nav-icon__line nav-icon__line--1" d="M8 13h8"/>
+          <path class="nav-icon__line nav-icon__line--2" d="M8 17h8"/>
+          <path class="nav-icon__line nav-icon__line--3" d="M8 9h2"/>
+        </svg>
       <% end %>
     </nav>
 
