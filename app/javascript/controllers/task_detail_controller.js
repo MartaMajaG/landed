@@ -42,6 +42,10 @@ export default class extends Controller {
       const toggleBtn = stepEl.querySelector(".step__toggle")
       if (toggleBtn) toggleBtn.style.display = "none"
 
+      // The finished step is no longer "Action required"
+      stepEl.querySelector(".task-badge--action")?.remove()
+      stepEl.querySelector(".step__action-note")?.remove()
+
       const allSteps = this.stepTargets
       const currentIndex = allSteps.indexOf(stepEl)
       const nextStep = allSteps[currentIndex + 1]
@@ -51,6 +55,9 @@ export default class extends Controller {
         nextStep.classList.add("step--active")
         const nextToggle = nextStep.querySelector(".step__toggle")
         if (nextToggle) nextToggle.style.display = ""
+        // Hide the locked placeholder of the step that just unlocked
+        const nextPlaceholder = nextStep.querySelector(".step__locked-placeholder")
+        if (nextPlaceholder) nextPlaceholder.style.setProperty("display", "none", "important")
 
         // Always scroll to next step, even if already in view
         this.scrollToStep(nextStep)
@@ -111,6 +118,9 @@ export default class extends Controller {
         nextStep.classList.add("step--locked")
         const nextToggle = nextStep.querySelector(".step__toggle")
         if (nextToggle) nextToggle.style.display = "none"
+        // Show the locked placeholder again on the step that is locked again
+        const nextPlaceholder = nextStep.querySelector(".step__locked-placeholder")
+        if (nextPlaceholder) nextPlaceholder.style.setProperty("display", "flex", "important")
       }
 
       const completedCount = this.stepTargets.filter(s => s.classList.contains("step--completed")).length

@@ -780,3 +780,43 @@
   padding: 0.625rem 0.875rem;
   line-height: 1.55;
 }
+
+// ── Task page polish (styling only: no content, links or buttons removed) ──
+.task-detail-page {
+  // Comfortable line length instead of text running across the whole screen
+  .task-main { max-width: 880px; }
+
+  // Clearer page title
+  .task-title { font-size: 26px !important; font-weight: 700 !important; letter-spacing: -0.4px !important; margin-bottom: 6px; }
+
+  // Link inside a tip: title and site sit together and read as one clickable card
+  .step__tip-resource {
+    background: #fff !important;
+    border: 1px solid #ECEBF3 !important;
+    border-radius: 12px !important;
+    padding: 10px 14px 10px 10px !important;
+    margin-top: 12px !important;
+    max-width: 420px;
+    transition: border-color 0.15s ease;
+    &:hover { border-color: #C8BCF5 !important; }
+  }
+  .step__tip-resource-favicon { width: 36px; height: 36px; background: #F4F4F7; border: 1px solid #ECEBF3; }
+  .step__tip-resource-text { display: flex; flex-direction: column; gap: 2px; }
+  .step__tip-resource-title { font-size: 14px !important; font-weight: 600 !important; line-height: 1.3 !important; margin: 0 !important; }
+  .step__tip-resource-domain { font-size: 12px !important; line-height: 1.3 !important; margin: 0 !important; color: #6B7280 !important; }
+  .step__tip-resource:hover .step__tip-resource-title { color: #6B56E2 !important; }
+
+  // The one action on the page is a real primary button
+  .step__toggle {
+    background: #6B56E2 !important;
+    color: #fff !important;
+    border-color: #6B56E2 !important;
+    padding: 10px 18px !important;
+    &:hover { background: #5B47D6 !important; }
+  }
+
+  // Finished steps step back so the active one stands out
+  .step--completed .step__card { background: #FCFCFE; box-shadow: none; }
+  .step--completed .step__title { color: #4B5563 !important; }
+  .step--completed .step__description { color: #6B7280 !important; }
+}

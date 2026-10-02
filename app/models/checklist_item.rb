@@ -13,13 +13,12 @@ class ChecklistItem < ApplicationRecord
   # A step is soft-locked when:
   #   1. It has an unlock_after_position set
   #   2. The user has NOT manually unlocked it
-  #   3. At least one required prerequisite step (position <= unlock_after_position) is not yet completed.
-  #      Optional steps never block anything: most users skip them.
+  #   3. At least one prerequisite step (position <= unlock_after_position) is not yet completed
   def soft_locked_for?(user_checklist_items_by_id, manually_unlocked_ids, all_task_items)
     return false if unlock_after_position.nil?
     return false if manually_unlocked_ids.include?(id)
 
-    prerequisites = all_task_items.select { |i| !i.is_optional && i.position <= unlock_after_position }
+    prerequisites = all_task_items.select { |i| i.position <= unlock_after_position }
     prerequisites.any? { |prereq| !user_checklist_items_by_id[prereq.id]&.completed }
   end
 end
