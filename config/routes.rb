@@ -31,7 +31,6 @@ Rails.application.routes.draw do
   resource :onboarding, only: [:show, :update]
   resource :profile, only: [:edit, :update, :show]
   resource :dashboard, only: :show
-  resources :alerts, only: :index
 
   # 3-tier hierarchy: Pillar → Main Task (Task) → Subtask (ChecklistItem)
   resources :pillars, only: [:show]
