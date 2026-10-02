@@ -39,12 +39,19 @@
 
     <div class="sidebar-bottom">
       <button class="sidebar-link" aria-label="Notifications">
-        <i class="bi bi-bell"></i>
+        <svg class="nav-icon nav-icon--bell" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path class="nav-icon__bell" d="M3.262 15.326A1 1 0 0 0 4 17h16a1 1 0 0 0 .74-1.673C19.41 13.956 18 12.499 18 8A6 6 0 0 0 6 8c0 4.499-1.411 5.956-2.738 7.326"/>
+          <path class="nav-icon__clapper" d="M10.268 21a2 2 0 0 0 3.464 0"/>
+        </svg>
       </button>
 
       <div class="dropdown">
-        <button class="sidebar-link" id="sidebarDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-          <i class="bi bi-person-circle"></i>
+        <button class="sidebar-link" id="sidebarDropdown" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Account">
+          <svg class="nav-icon nav-icon--user" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="10"/>
+            <circle class="nav-icon__head" cx="12" cy="10" r="3"/>
+            <path class="nav-icon__shoulders" d="M7 20.662V19a2 2 0 0 1 2-2h6a2 2 0 0 1 2 2v1.662"/>
+          </svg>
         </button>
         <ul class="dropdown-menu sidebar-dropdown" aria-labelledby="sidebarDropdown">
           <li><%= link_to "My profile", profile_path, class: "dropdown-item" %></li>

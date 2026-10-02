@@ -56,3 +56,96 @@
   justify-content: center;
   text-decoration: none;
 }
+
+// ── Profile page (show) ──
+.prof-page { padding: 32px 0 48px; }
+.prof-wrap { max-width: 880px; margin: 0 auto; padding: 0 12px; display: flex; flex-direction: column; gap: 20px; }
+
+.prof-card {
+  background: #fff;
+  border: 1px solid #ECEBF3;
+  border-radius: 20px;
+  box-shadow: 0 4px 14px -10px rgba(91, 80, 232, 0.35);
+  padding: 28px 32px;
+}
+
+.prof-hero { display: flex; flex-direction: column; gap: 28px; }
+.prof-hero__top { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+.prof-identity { display: flex; align-items: center; gap: 18px; }
+.prof-avatar {
+  width: 72px; height: 72px; border-radius: 50%; object-fit: cover;
+  border: 3px solid #fff; box-shadow: 0 0 0 1px #E6E0FB, 0 6px 16px -8px rgba(91, 80, 232, 0.5);
+}
+.prof-name {
+  margin: 0; font-family: $headers-font; font-size: 28px; font-weight: 700;
+  letter-spacing: -0.4px; line-height: 1.2; color: #1A1A2E;
+}
+.prof-meta { margin: 4px 0 0; font-size: 14px; color: #4B5563; }
+
+.prof-btn {
+  height: 44px; padding: 0 16px; border-radius: 10px;
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 14px; font-weight: 600; text-decoration: none;
+  border: 1px solid #DCD5FA; background: #F6F4FE; color: #4433B8;
+  transition: background 0.15s ease;
+  &:hover { background: #ECE8FD; color: #4433B8; text-decoration: none; }
+}
+.prof-btn--quiet {
+  border-color: #E5E7EB; background: #fff; color: #374151;
+  &:hover { background: #F9FAFB; color: #1A1A2E; }
+}
+
+.prof-label {
+  margin: 0 0 14px; font-size: 12px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase; color: #6B7280;
+}
+
+// Journey stepper, same four stages as the dashboard
+.prof-steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.prof-step { position: relative; display: flex; flex-direction: column; gap: 8px; font-size: 14px; color: #6B7280; }
+.prof-step::before {
+  content: ""; position: absolute; top: 11px; left: 24px; right: 0; height: 2px; background: #ECEBF3;
+}
+.prof-step:last-child::before { display: none; }
+.prof-step--done::before { background: #6B56E2; }
+.prof-step__dot {
+  position: relative; z-index: 1; width: 24px; height: 24px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: #fff; border: 2px solid #DCD5FA; color: #fff;
+  svg { width: 14px; height: 14px; }
+}
+.prof-step--done .prof-step__dot { background: #6B56E2; border-color: #6B56E2; }
+.prof-step--current .prof-step__dot { border-color: #6B56E2; box-shadow: 0 0 0 4px #EEEBFD; }
+.prof-step--current .prof-step__dot::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #6B56E2; }
+.prof-step--current .prof-step__name { color: #1A1A2E; font-weight: 600; }
+.prof-step--done .prof-step__name { color: #374151; }
+
+.prof-section-head { margin-bottom: 20px; }
+.prof-title { margin: 0; font-family: $headers-font; font-size: 17px; font-weight: 700; color: #1A1A2E; }
+.prof-sub { margin: 4px 0 0; font-size: 14px; color: #4B5563; }
+.prof-sub strong { color: #1A1A2E; font-weight: 600; }
+
+.prof-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+.prof-detail {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 16px 18px; border: 1px solid #ECEBF3; border-radius: 14px; background: #FCFCFE;
+}
+.prof-detail__icon {
+  width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: #EEEBFD; color: #6B56E2;
+}
+.prof-detail__label { margin: 0 0 2px; font-size: 12px; font-weight: 500; color: #6B7280; }
+.prof-detail__value { margin: 0; font-size: 15px; font-weight: 600; color: #1A1A2E; }
+.prof-detail__value--empty { font-weight: 500; color: #6B7280; }
+.prof-detail__sub { margin: 2px 0 0; font-size: 14px; color: #4B5563; }
+.prof-link { font-size: 14px; font-weight: 600; color: #6B56E2; text-decoration: none; &:hover { color: #4433B8; } }
+
+.prof-account { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+
+@media (max-width: 720px) {
+  .prof-card { padding: 22px 20px; }
+  .prof-grid { grid-template-columns: minmax(0, 1fr); }
+  .prof-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 16px; }
+  .prof-step:nth-child(2)::before { display: none; }
+}
