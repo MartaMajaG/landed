@@ -31,7 +31,7 @@ class DashboardsController < ApplicationController
     doc_events = current_user.chats
                         .with_attached_document
                         .where.not(deadline: nil)
-                        .map { |c| { name: c.title, category: "scanned_document", due_date: c.deadline, source: :document } }
+                        .map { |c| { name: c.title.to_s.sub(/\s*\[.*\]\s*\z/, "").strip, category: "scanned_document", due_date: c.deadline, source: :document } }
                         .group_by { |e| e[:due_date] }
 
     @calendar_tasks = task_events.merge(doc_events) { |_date, a, b| a + b }

@@ -17,6 +17,7 @@
 .dashboard-wrapper {
   padding-top: 16px;
   padding-bottom: 32px;
+  padding-right: 20px;
   position: relative;
   z-index: 1;
 }
@@ -706,11 +707,7 @@
   font-weight: 600;
   border-radius: 6px;
   padding: 4px 8px 4px 9px;
-  white-space: normal;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  display: block;
   max-width: 100%;
   line-height: 1.4;
   border-left: 2px solid transparent;
@@ -722,6 +719,13 @@
   &.health_and_insurance     { background: #fce7f3; color: #9d174d; border-left-color: #ec4899; }
   &.scanned_document         { background: #ECFCCB; color: #3F6212; border-left-color: #7A9E1F; }
   &.uncategorized            { background: #F0F0F8; color: #6B7280; border-left-color: #9CA3AF; }
+}
+.cal-event__text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: normal;
 }
 .cal-overflow {
   font-size: 11px;

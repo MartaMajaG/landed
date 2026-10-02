@@ -228,7 +228,7 @@
                          style="<%= 'display:none;' if idx >= 2 %>"
                          data-task-name="<%= event[:name] %>"
                          title="<%= event[:name].gsub(/\s*\(.*\)\z/, '').strip %>">
-                      <%= event[:name].gsub(/\s*\(.*\)\z/, '').strip %>
+                      <span class="cal-event__text"><%= event[:name].gsub(/\s*\(.*\)\z/, '').strip %></span>
                     </div>
                   <% end %>
                   <% if day_events.size > 2 %>
