@@ -12,8 +12,7 @@
 <div class="lp" data-controller="landing">
   <header class="lp-nav">
     <%= link_to root_path, class: "lp-brand" do %>
-      <span class="lp-brand__mark">L</span>
-      <span>Landed</span>
+      <%= render "shared/logo", size: 24 %>
     <% end %>
     <nav class="lp-nav__links">
       <a href="#how" class="lp-nav__link">How it works</a>
@@ -247,7 +246,7 @@
   </section>
 
   <footer class="lp-footer">
-    <span class="lp-brand lp-brand--small"><span class="lp-brand__mark">L</span>Landed</span>
+    <span class="lp-brand lp-brand--small"><%= render "shared/logo", size: 18 %></span>
     <span>Made in Berlin for people moving to Germany.</span>
   </footer>
 </div>
