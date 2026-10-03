@@ -49,6 +49,16 @@ class DashboardsController < ApplicationController
     incomplete       = all_tasks.reject { |t| t.completed_by?(current_user) }
     @completed_tasks = all_tasks.select { |t| t.completed_by?(current_user) }
 
+    # Open task counts per category for the filter menu, always across ALL
+    # categories so each option shows what you'd get if you picked it.
+    all_open = if @active_pillar
+      @profile.tasks.includes(:checklist_items).reject { |t| t.completed_by?(current_user) }
+    else
+      incomplete
+    end
+    @open_by_pillar = all_open.group_by(&:pillar_id).transform_values(&:size)
+    @open_total     = all_open.size
+
     # Kanban columns from incomplete tasks only
     @urgent_tasks   = incomplete.select { |t| t.urgency == "high" }
     @active_tasks   = incomplete.select { |t| t.urgency == "medium" }

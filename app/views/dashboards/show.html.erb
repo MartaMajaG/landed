@@ -136,12 +136,6 @@
       <div class="tasks-header">
         <div class="tasks-title-group">
           <h2 class="tasks-label">Tasks</h2>
-          <% if @active_pillar %>
-            <a href="<%= pillar_path(@active_pillar) %>" class="tasks-pillar-pill tag-pillar--<%= @active_pillar.slug %>">
-              <%= @active_pillar.name %>
-              <span class="tasks-pillar-pill__arrow">→</span>
-            </a>
-          <% end %>
         </div>
         <div class="tasks-controls">
           <div class="tasks-toggle">
@@ -149,22 +143,56 @@
             <button class="toggle-btn" data-action="click->task-tabs#switchTab" data-tab="completed">Completed</button>
           </div>
           <div class="pillar-filter" id="pillarFilter">
-            <button class="pillar-filter__btn <%= 'pillar-filter__btn--active' if @active_pillar %>" id="pillarFilterBtn" title="Filter by category">
-              <span class="lucide-icon">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
-              </span>
-              <% if @active_pillar %><span class="pillar-filter__label"><%= @active_pillar.name %></span><% end %>
+            <button type="button" class="pillar-filter__btn <%= 'pillar-filter__btn--active' if @active_pillar %>" id="pillarFilterBtn"
+                    aria-haspopup="true" aria-expanded="false" aria-controls="pillarFilterDropdown"
+                    aria-label="<%= @active_pillar ? "Filter by category: #{@active_pillar.name}" : 'Filter by category' %>"
+                    title="<%= @active_pillar ? @active_pillar.name : 'Filter by category' %>">
+              <span class="lucide-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></span>
+              <% if @active_pillar %>
+                <span class="pillar-filter__badge" style="background: <%= pillar_accent_color(@active_pillar.slug) %>;" aria-hidden="true"></span>
+              <% end %>
             </button>
-            <div class="pillar-filter__dropdown" id="pillarFilterDropdown">
-              <a href="<%= dashboard_path %>" class="pillar-filter__option pillar-filter__option--all <%= 'active' unless @active_pillar %>">
-                <span class="pillar-filter__dot" style="background:#9ca3af;"></span>All Categories
+
+            <div class="pillar-filter__dropdown" id="pillarFilterDropdown" role="menu" aria-label="Filter tasks by category">
+              <p class="pillar-filter__heading">Filter by category</p>
+
+              <a href="<%= dashboard_path %>" role="menuitemradio" aria-checked="<%= @active_pillar.nil? %>"
+                 class="pillar-filter__option <%= 'is-selected' unless @active_pillar %>">
+                <span class="pillar-filter__dot pillar-filter__dot--all"></span>
+                <span class="pillar-filter__body"><span class="pillar-filter__name">All categories</span></span>
+                <span class="pillar-filter__meta"><%= @open_total %> open</span>
+                <span class="pillar-filter__check" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
               </a>
+
+              <div class="pillar-filter__divider"></div>
+
               <% @pillars.each do |pillar| %>
-                <% progress = @pillar_progress[pillar.id] %>
-                <a href="<%= dashboard_path(pillar: pillar.slug) %>" class="pillar-filter__option <%= 'active' if @active_pillar&.id == pillar.id %>">
+                <%
+                  progress  = @pillar_progress[pillar.id]
+                  open      = @open_by_pillar[pillar.id].to_i
+                  next if progress[:total].zero? && open.zero?
+                  pct       = progress[:total] > 0 ? (progress[:done] * 100.0 / progress[:total]).round : 0
+                  selected  = @active_pillar&.id == pillar.id
+                %>
+                <a href="<%= dashboard_path(pillar: pillar.slug) %>" role="menuitemradio" aria-checked="<%= selected %>"
+                   class="pillar-filter__option <%= 'is-selected' if selected %>">
                   <span class="pillar-filter__dot" style="background: <%= pillar_accent_color(pillar.slug) %>;"></span>
-                  <%= pillar.name %>
-                  <span class="pillar-filter__count"><%= progress[:done] %>/<%= progress[:total] %></span>
+                  <span class="pillar-filter__body">
+                    <span class="pillar-filter__name"><%= pillar.name %></span>
+                    <span class="pillar-filter__bar" title="<%= pct %>% of steps done">
+                      <span style="width: <%= pct %>%; background: <%= pillar_accent_color(pillar.slug) %>;"></span>
+                    </span>
+                  </span>
+                  <span class="pillar-filter__meta"><%= open.zero? ? "All done" : "#{open} open" %></span>
+                  <span class="pillar-filter__check" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>
+                </a>
+              <% end %>
+
+              <% if @active_pillar %>
+                <div class="pillar-filter__divider"></div>
+                <a href="<%= pillar_path(@active_pillar) %>" class="pillar-filter__footer">
+                  Open <%= @active_pillar.name %> overview
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
                 </a>
               <% end %>
             </div>
@@ -259,13 +287,21 @@
   var filterBtn = document.getElementById('pillarFilterBtn');
   var filterDropdown = document.getElementById('pillarFilterDropdown');
   if (filterBtn && filterDropdown) {
+    var setFilterOpen = function(open) {
+      filterDropdown.classList.toggle('pillar-filter__dropdown--open', open);
+      filterBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    };
     filterBtn.addEventListener('click', function(e) {
       e.stopPropagation();
-      filterDropdown.classList.toggle('pillar-filter__dropdown--open',
-        !filterDropdown.classList.contains('pillar-filter__dropdown--open'));
+      setFilterOpen(!filterDropdown.classList.contains('pillar-filter__dropdown--open'));
     });
-    document.addEventListener('click', function() {
-      filterDropdown.classList.remove('pillar-filter__dropdown--open');
+    filterDropdown.addEventListener('click', function(e) { e.stopPropagation(); });
+    document.addEventListener('click', function() { setFilterOpen(false); });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && filterDropdown.classList.contains('pillar-filter__dropdown--open')) {
+        setFilterOpen(false);
+        filterBtn.focus();
+      }
     });
   }
 
