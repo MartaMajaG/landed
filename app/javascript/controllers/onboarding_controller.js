@@ -50,7 +50,6 @@ export default class extends Controller {
 
   disconnect() {
     document.removeEventListener("keydown", this.onKey)
-    clearTimeout(this.advanceTimer)
     this.genTimers?.forEach(clearTimeout)
   }
 
@@ -68,7 +67,6 @@ export default class extends Controller {
 
   previous(event) {
     event?.preventDefault()
-    clearTimeout(this.advanceTimer)
     this.currentStepValue = Math.max(this.currentStepValue - 1, 1)
     this.showCurrentStep()
   }
@@ -98,14 +96,10 @@ export default class extends Controller {
     this.progressBarTarget.style.width = `${Math.round(fraction * 100)}%`
   }
 
-  // A radio choice updates the summary and moves on after a beat
+  // A radio choice only selects and updates the summary; the user moves on with Continue
   choose(event) {
     this.clearStepError(this.currentStep)
     this.syncSummary(event.target.dataset.summaryKey)
-    clearTimeout(this.advanceTimer)
-    if (this.currentStepValue < this.totalStepsValue) {
-      this.advanceTimer = setTimeout(() => this.next(), this.reduced ? 0 : 450)
-    }
   }
 
   handleKey(event) {
@@ -285,7 +279,6 @@ export default class extends Controller {
 
   build(event) {
     event?.preventDefault()
-    clearTimeout(this.advanceTimer)
     if (!this.currentStepIsValid()) return this.showStepError(this.currentStep)
 
     const tasks = this.tasksFor(this.selectedCityId())
