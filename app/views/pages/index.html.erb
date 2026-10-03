@@ -1,18 +1,199 @@
-<% content_for :meta_title, "Landed | Welcome" %>
+<% content_for :meta_title, "Landed | Your move to Germany, sorted" %>
 
-<div class="landing-page">
-  <section class="pt-4 pt-lg-5">
-    <div class="container landing-content">
-      <div class="row">
-        <div class="col-12 col-lg-7">
-          <h1 class="landing-title mb-4">The relocation companion that moves with you.</h1>
-          <p class="landing-subtitle mb-4">Sit back, relax. Let Landed do all the work.</p>
+<% pillars = [
+  ["housing_and_registration", "Housing & registration"],
+  ["finance_and_banking",      "Finance & banking"],
+  ["legal_and_work",           "Legal & work"],
+  ["health_and_insurance",     "Health & insurance"]
+] %>
 
-          <div class="d-flex flex-column flex-sm-row gap-3">
-            <%= link_to "Get Started", new_user_registration_path, class: "onboarding-button landing-button" %>
+<div class="lp" data-controller="landing">
+  <header class="lp-nav">
+    <%= link_to root_path, class: "lp-brand" do %>
+      <span class="lp-brand__mark">L</span>
+      <span>Landed</span>
+    <% end %>
+    <nav class="lp-nav__links">
+      <a href="#how" class="lp-nav__link">How it works</a>
+      <%= link_to "Sign in", new_user_session_path, class: "lp-nav__link" %>
+      <%= link_to "Get started", new_user_registration_path, class: "lp-btn lp-btn--sm" %>
+    </nav>
+  </header>
+
+  <%# ── HERO ── %>
+  <section class="lp-hero">
+    <div class="lp-hero__copy">
+      <h1 class="lp-hero__title">
+        <span class="lp-rise" style="--d: 0ms">The relocation companion</span>
+        <span class="lp-rise" style="--d: 90ms">that moves with you.</span>
+      </h1>
+      <p class="lp-hero__lede lp-rise" style="--d: 200ms">
+        Tell Landed where you're moving and when you arrive. It turns German bureaucracy into a dated checklist, and explains the official letters you can't read yet.
+      </p>
+      <div class="lp-hero__actions lp-rise" style="--d: 300ms">
+        <%= link_to new_user_registration_path, class: "lp-btn" do %>
+          Get started <%= lucide_icon("arrow_right", size: 16) %>
+        <% end %>
+        <a href="#how" class="lp-btn lp-btn--ghost">See how it works</a>
+      </div>
+      <ul class="lp-hero__pillars lp-rise" style="--d: 400ms" aria-label="What Landed covers">
+        <% pillars.each do |slug, name| %>
+          <li class="lp-pillar lp-pillar--<%= slug %>">
+            <span class="lp-pillar__icon"><%= ApplicationHelper::PILLAR_ICONS[slug].html_safe %></span><%= name %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+
+    <%# Living product preview: the plan ticks itself off, a letter gets scanned %>
+    <div class="lp-demo" aria-hidden="true">
+      <div class="lp-demo__board">
+        <div class="lp-demo__head">
+          <div>
+            <p class="lp-demo__title">Your move to Munich</p>
+            <p class="lp-demo__sub">Arriving 1 Nov</p>
           </div>
+          <span class="lp-demo__count"><b class="lp-demo__done">1</b>/12 done</span>
         </div>
-          <%= image_tag "landing_image.png", class: "landing-image mt-5", alt: "People arriving in Germany by plane" %>
+        <div class="lp-demo__bar"><span></span></div>
+
+        <ul class="lp-demo__tasks">
+          <li class="lp-task lp-task--done" style="--accent: #f97316">
+            <span class="lp-task__box"><%= lucide_icon("check", size: 12) %></span>
+            <span class="lp-task__body">
+              <span class="lp-task__name">Get the landlord confirmation</span>
+              <span class="lp-task__meta">Wohnungsgeberbestätigung</span>
+            </span>
+            <span class="lp-task__due">Done</span>
+          </li>
+          <li class="lp-task lp-task--ticks" style="--accent: #f97316">
+            <span class="lp-task__box"><%= lucide_icon("check", size: 12) %></span>
+            <span class="lp-task__body">
+              <span class="lp-task__name">Register your address</span>
+              <span class="lp-task__meta">Anmeldung</span>
+            </span>
+            <span class="lp-task__due">By 15 Nov</span>
+          </li>
+          <li class="lp-task" style="--accent: #ec4899">
+            <span class="lp-task__box"><%= lucide_icon("check", size: 12) %></span>
+            <span class="lp-task__body">
+              <span class="lp-task__name">Choose your health insurance</span>
+              <span class="lp-task__meta">Krankenversicherung</span>
+            </span>
+            <span class="lp-task__due">By 15 Nov</span>
+          </li>
+          <li class="lp-task lp-task--locked" style="--accent: #059669">
+            <span class="lp-task__box"><%= lucide_icon("lock", size: 12) %></span>
+            <span class="lp-task__body">
+              <span class="lp-task__name">Open a German bank account</span>
+              <span class="lp-task__meta">Unlocks after Anmeldung</span>
+            </span>
+            <span class="lp-task__due">By 1 Dec</span>
+          </li>
+        </ul>
+      </div>
+
+      <div class="lp-demo__doc">
+        <div class="lp-demo__paper">
+          <span></span><span></span><span></span><span></span><span></span><span></span>
+          <i class="lp-demo__scan"></i>
+        </div>
+        <div class="lp-demo__facts">
+          <p class="lp-demo__doctitle"><%= lucide_icon("file", size: 14) %> Rental contract</p>
+          <p class="lp-fact" style="--d: 0s">Notice period <b>3 months</b></p>
+          <p class="lp-fact" style="--d: .35s">Deposit due <b>15 Nov</b></p>
+          <p class="lp-fact" style="--d: .7s">Rent <b>€1,240 / month</b></p>
+        </div>
+      </div>
+
+      <div class="lp-demo__toast">
+        <span class="lp-demo__toast-icon"><%= lucide_icon("check", size: 14) %></span>
+        Anmeldung done. Banking unlocked.
+      </div>
     </div>
   </section>
+
+  <%# ── ILLUSTRATION ── %>
+  <section class="lp-scene" data-landing-target="reveal">
+    <%= image_tag "landing_image.png", class: "lp-scene__img", alt: "People arriving at a German airport with luggage" %>
+  </section>
+
+  <%# ── HOW IT WORKS ── %>
+  <section class="lp-how" id="how" data-landing-target="reveal">
+    <div class="lp-section-head">
+      <h2>From arrival to settled in three steps</h2>
+      <p>Most of the work in a move to Germany is knowing what comes first. Landed works that out for you.</p>
+    </div>
+
+    <ol class="lp-steps">
+      <li class="lp-step">
+        <span class="lp-step__num">1</span>
+        <span class="lp-step__icon"><%= lucide_icon("pin", size: 20) %></span>
+        <h3>Tell us about your move</h3>
+        <p>Four quick questions: your city, arrival date, visa and whether you have a flat yet.</p>
+      </li>
+      <li class="lp-step">
+        <span class="lp-step__num">2</span>
+        <span class="lp-step__icon"><%= lucide_icon("list", size: 20) %></span>
+        <h3>Follow your checklist</h3>
+        <p>Every task is dated from your arrival and opens in the right order, so you never book the bank before the Anmeldung.</p>
+      </li>
+      <li class="lp-step">
+        <span class="lp-step__num">3</span>
+        <span class="lp-step__icon"><%= lucide_icon("scan", size: 20) %></span>
+        <h3>Scan what lands in your mailbox</h3>
+        <p>Upload a German letter and get the key facts, the deadline and what to do next, in English.</p>
+      </li>
+    </ol>
+  </section>
+
+  <%# ── DOCUMENT SCANNER ── %>
+  <section class="lp-scanner" data-landing-target="reveal">
+    <div class="lp-scanner__copy">
+      <h2>Understand a German letter in about a minute</h2>
+      <p>Rental contracts, tax notices, insurance letters. Landed reads them, pulls out what matters and answers your follow-up questions in the same thread.</p>
+      <div class="lp-stat">
+        <b>80%</b>
+        <span>faster than testers' usual way of decoding a German document, like a translation app or a bilingual friend</span>
+      </div>
+    </div>
+
+    <div class="lp-chat" aria-hidden="true">
+      <div class="lp-chat__head">
+        <span class="lp-chat__thumb"><%= lucide_icon("file", size: 16) %></span>
+        <div>
+          <p>Kündigungsbestätigung</p>
+          <span>Scanned just now</span>
+        </div>
+      </div>
+      <div class="lp-chat__msg lp-chat__msg--ai" style="--d: .2s">
+        <p class="lp-chat__label"><%= lucide_icon("bulb", size: 14) %> Key facts</p>
+        <ul>
+          <li>Your old flat's lease ends on <b>31 Jan</b></li>
+          <li>Hand over the keys by <b>12:00 that day</b></li>
+          <li>Deposit returned within <b>6 months</b></li>
+        </ul>
+      </div>
+      <div class="lp-chat__msg lp-chat__msg--me" style="--d: 1s">Do I need to repaint the walls?</div>
+      <div class="lp-chat__msg lp-chat__msg--ai" style="--d: 1.8s">
+        Only if the contract says so. Clause 14 asks for neutral colours, so repaint any walls you changed.
+      </div>
+    </div>
+  </section>
+
+  <%# ── CTA ── %>
+  <section class="lp-cta" data-landing-target="reveal">
+    <div>
+      <h2>Sort your move before you land</h2>
+      <p>Answer four questions and your checklist is ready.</p>
+    </div>
+    <%= link_to new_user_registration_path, class: "lp-btn lp-btn--light" do %>
+      Get started <%= lucide_icon("arrow_right", size: 16) %>
+    <% end %>
+  </section>
+
+  <footer class="lp-footer">
+    <span class="lp-brand lp-brand--small"><span class="lp-brand__mark">L</span>Landed</span>
+    <span>Made in Berlin for people moving to Germany.</span>
+  </footer>
 </div>

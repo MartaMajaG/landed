@@ -21,7 +21,8 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body class="bg-light">
+  <% has_sidebar = user_signed_in? && controller_name != "onboardings" %>
+  <body class="bg-light <%= 'no-sidebar' unless has_sidebar %>">
     <%= render "shared/flashes" %>
     <%= render "shared/navbar" %>
     <main class="sidebar-main-content">

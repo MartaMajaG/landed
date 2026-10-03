@@ -1,205 +1,205 @@
-<% content_for :meta_title, "Landed | Onboarding" %>
+<% content_for :meta_title, "Landed | Set up your move" %>
 
-<% city_details = {
-  "Berlin" => { icon: "bi-buildings", description: "Capital city, startup energy, fast-moving admin." },
-  "Munich" => { icon: "bi-bank", description: "Bavarian base, strong employers, calm pace." },
-  "Hamburg" => { icon: "bi-water", description: "Harbor city, international, practical access." }
-} %>
+<div class="ob"
+     data-controller="onboarding"
+     data-onboarding-tasks-value="<%= @plan_tasks.to_json %>"
+     data-onboarding-icons-value="<%= ApplicationHelper::PILLAR_ICONS.to_json %>"
+     data-onboarding-current-step-value="1"
+     data-onboarding-total-steps-value="4">
 
-<div class="onboarding-page">
-  <div class="onboarding-shell">
-    <%= form_with model: @profile,
-              url: onboarding_path,
-              method: :patch,
-              class: "onboarding-form",
-              data: {
-                controller: "onboarding",
-                onboarding_current_step_value: 1,
-                onboarding_total_steps_value: 4
-              } do |f| %>
-      <div class="onboarding-progress">
-        <div class="onboarding-progress__labels">
-          <span data-onboarding-target="stepLabel">STEP 1 OF 4</span>
-          <span data-onboarding-target="percentLabel">25% COMPLETE</span>
-        </div>
-        <div class="onboarding-progress__track">
-          <div class="onboarding-progress__bar" style="width: 25%;" data-onboarding-target="progressBar"></div>
-        </div>
-      </div>
+  <header class="ob-header">
+    <%= link_to root_path, class: "lp-brand" do %>
+      <span class="lp-brand__mark">L</span>
+      <span>Landed</span>
+    <% end %>
+    <span class="ob-header__step" data-onboarding-target="stepLabel">Question 1 of 4</span>
+    <%= link_to "Log out", destroy_user_session_path, data: { turbo_method: :delete }, class: "ob-header__link" %>
+  </header>
+  <div class="ob-progress" aria-hidden="true"><span data-onboarding-target="progressBar"></span></div>
 
-      <% if @profile.errors.any? %>
-        <div class="onboarding-alert" role="alert">
-          <%= @profile.errors.full_messages.to_sentence %>
-        </div>
-      <% end %>
+  <%= form_with model: @profile, url: onboarding_path, method: :patch, class: "ob-form",
+                data: { onboarding_target: "form" } do |f| %>
 
-      <section class="onboarding-step" data-onboarding-target="step">
-        <div class="onboarding-heading">
-          <h1>Where are you moving to?</h1>
-          <p>Let's find the perfect location for your new chapter.</p>
-        </div>
+    <div class="ob-stage" data-onboarding-target="stage">
+      <div class="ob-main">
+        <% if @profile.errors.any? %>
+          <div class="ob-alert" role="alert"><%= @profile.errors.full_messages.to_sentence %></div>
+        <% end %>
 
-        <div class="onboarding-panel onboarding-panel--narrow">
-          <div class="onboarding-field">
-            <%= label_tag :country, "Country", class: "onboarding-label" %>
-            <div class="onboarding-select-wrap">
-              <%= select_tag :country,
-                             options_for_select([["Germany", "Germany"]], "Germany"),
-                             required: true,
-                             class: "onboarding-select" %>
-            </div>
+        <%# ── 1. City ── %>
+        <section class="ob-step" data-onboarding-target="step" aria-labelledby="ob-q1">
+          <h1 id="ob-q1">Where in Germany are you moving?</h1>
+          <p class="ob-lede">Each city runs its own offices and booking systems, so your checklist depends on it.</p>
+
+          <div class="ob-options ob-options--3" role="radiogroup" aria-labelledby="ob-q1">
+            <% @city_names.each do |city_name| %>
+              <% city = @cities_by_name[city_name] %>
+              <% details = @city_details.fetch(city_name) %>
+              <% input_id = "profile_city_id_#{city_name.parameterize}" %>
+              <div class="ob-option">
+                <%= f.radio_button :city_id, city&.id, id: input_id, required: true, disabled: city.nil?,
+                      class: "ob-option__input",
+                      data: { action: "change->onboarding#choose", summary_key: "city", summary_label: city_name } %>
+                <label class="ob-option__card" for="<%= input_id %>">
+                  <span class="ob-option__icon"><%= lucide_icon(details[:icon], size: 20) %></span>
+                  <span class="ob-option__title"><%= city_name %></span>
+                  <span class="ob-option__desc"><%= details[:description] %></span>
+                  <span class="ob-option__tick"><%= lucide_icon("check", size: 12) %></span>
+                </label>
+              </div>
+            <% end %>
           </div>
 
-          <fieldset class="onboarding-fieldset">
-            <legend>City</legend>
+          <div class="ob-actions">
+            <button type="button" class="ob-btn" data-action="onboarding#next">Continue <%= lucide_icon("arrow_right", size: 16) %></button>
+            <span class="ob-hint">or press <kbd>Enter</kbd></span>
+          </div>
+        </section>
 
-            <div class="onboarding-choice-list">
-              <% @city_names.each do |city_name| %>
-                <% city = @cities_by_name[city_name] %>
-                <% details = city_details.fetch(city_name) %>
-                <% input_id = "profile_city_id_#{city_name.parameterize}" %>
+        <%# ── 2. Arrival date ── %>
+        <section class="ob-step" data-onboarding-target="step" aria-labelledby="ob-q2" hidden>
+          <h1 id="ob-q2">When do you arrive?</h1>
+          <p class="ob-lede">Most German deadlines count from the day you move in. We'll date your checklist from here.</p>
 
-                <div class="onboarding-choice-wrap">
-                  <%= f.radio_button :city_id,
-                                     city&.id,
-                                     id: input_id,
-                                     required: true,
-                                     disabled: city.nil?,
-                                     class: "onboarding-option-input" %>
-
-                  <label class="onboarding-choice onboarding-choice--row" for="<%= input_id %>">
-                    <span class="onboarding-choice__icon">
-                      <i class="bi <%= details[:icon] %>" aria-hidden="true"></i>
-                    </span>
-                    <span class="onboarding-choice__body">
-                      <span class="onboarding-choice__title"><%= city_name %></span>
-                      <span class="onboarding-choice__description"><%= details[:description] %></span>
-                    </span>
-                  </label>
-                </div>
-              <% end %>
-            </div>
-          </fieldset>
-        </div>
-
-        <div class="onboarding-actions">
-          <button type="button" class="onboarding-button" data-action="onboarding#next">Continue</button>
-        </div>
-      </section>
-
-        <section class="onboarding-step" data-onboarding-target="step" hidden>
-        <div class="onboarding-heading">
-          <h1>When are you moving?</h1>
-          <p>Select your estimated moving date so we can time your checklist around German deadlines.</p>
-        </div>
-
-        <div class="onboarding-calendar-card">
           <%= f.hidden_field :arrival_date, data: { onboarding_target: "dateInput" } %>
 
-          <div class="onboarding-calendar-header">
-            <button type="button" class="onboarding-calendar-nav" aria-label="Previous month" data-action="onboarding#previousMonth">
-              <i class="bi bi-chevron-left" aria-hidden="true"></i>
-            </button>
-
-            <h2 data-onboarding-target="monthLabel"></h2>
-
-            <button type="button" class="onboarding-calendar-nav" aria-label="Next month" data-action="onboarding#nextMonth">
-              <i class="bi bi-chevron-right" aria-hidden="true"></i>
-            </button>
+          <div class="ob-quick" role="group" aria-label="Quick picks">
+            <button type="button" class="ob-chip" data-days="0"  data-action="onboarding#quickDate">I'm already here</button>
+            <button type="button" class="ob-chip" data-days="14" data-action="onboarding#quickDate">In 2 weeks</button>
+            <button type="button" class="ob-chip" data-days="30" data-action="onboarding#quickDate">In a month</button>
+            <button type="button" class="ob-chip" data-days="90" data-action="onboarding#quickDate">In 3 months</button>
           </div>
 
-          <div class="onboarding-calendar-weekdays">
-            <% %w[Sun Mon Tue Wed Thu Fri Sat].each do |day| %>
-              <span><%= day %></span>
-            <% end %>
+          <div class="ob-cal">
+            <div class="ob-cal__head">
+              <button type="button" class="ob-cal__nav" aria-label="Previous month" data-action="onboarding#previousMonth"><%= lucide_icon("chevron_left", size: 18) %></button>
+              <h2 data-onboarding-target="monthLabel"></h2>
+              <button type="button" class="ob-cal__nav" aria-label="Next month" data-action="onboarding#nextMonth"><%= lucide_icon("chevron_right", size: 18) %></button>
+            </div>
+            <div class="ob-cal__weekdays">
+              <% %w[Mon Tue Wed Thu Fri Sat Sun].each do |day| %><span><%= day %></span><% end %>
+            </div>
+            <div class="ob-cal__grid" data-onboarding-target="calendarGrid"></div>
           </div>
 
-          <div class="onboarding-calendar-grid" data-onboarding-target="calendarGrid"></div>
-        </div>
+          <div class="ob-actions">
+            <button type="button" class="ob-btn" data-action="onboarding#next">Continue <%= lucide_icon("arrow_right", size: 16) %></button>
+            <button type="button" class="ob-btn ob-btn--ghost" data-action="onboarding#previous"><%= lucide_icon("arrow_left", size: 16) %> Back</button>
+            <button type="button" class="ob-skip" data-action="onboarding#skipDate">I don't know yet</button>
+          </div>
+        </section>
 
-        <div class="onboarding-actions">
-          <button type="button" class="onboarding-button onboarding-button--secondary" data-action="onboarding#previous">Back</button>
-          <button type="button" class="onboarding-button" data-action="onboarding#next">Continue</button>
-        </div>
+        <%# ── 3. Visa ── %>
+        <section class="ob-step" data-onboarding-target="step" aria-labelledby="ob-q3" hidden>
+          <h1 id="ob-q3">What brings you to Germany?</h1>
+          <p class="ob-lede">Your reason for moving decides which permits and registrations you need.</p>
 
-        <button type="button" class="onboarding-skip-link" data-action="onboarding#skipDate">Skip for now</button>
-      </section>
-
-      <section class="onboarding-step" data-onboarding-target="step" hidden>
-        <div class="onboarding-heading">
-          <h1>What is your visa status?</h1>
-          <p>Tell us where you are in your visa journey so your checklist starts in the right place.</p>
-        </div>
-
-        <fieldset class="onboarding-fieldset onboarding-fieldset--grid">
-          <legend>Visa status</legend>
-
-          <div class="onboarding-card-grid">
+          <div class="ob-options ob-options--2" role="radiogroup" aria-labelledby="ob-q3">
             <% @visa_options.each do |option| %>
               <% input_id = "profile_visa_status_#{option[:value]}" %>
-
-              <div class="onboarding-choice-wrap">
-                <%= f.radio_button :visa_status,
-                                  option[:value],
-                                  id: input_id,
-                                  required: true,
-                                  class: "onboarding-option-input" %>
-
-                <label class="onboarding-choice onboarding-choice--card" for="<%= input_id %>">
-                  <span class="onboarding-choice__icon">
-                    <i class="bi <%= option[:icon] %>" aria-hidden="true"></i>
+              <div class="ob-option">
+                <%= f.radio_button :visa_status, option[:value], id: input_id, required: true,
+                      class: "ob-option__input",
+                      data: { action: "change->onboarding#choose", summary_key: "visa", summary_label: option[:title] } %>
+                <label class="ob-option__card ob-option__card--row" for="<%= input_id %>">
+                  <span class="ob-option__icon"><%= lucide_icon(option[:icon], size: 20) %></span>
+                  <span>
+                    <span class="ob-option__title"><%= option[:title] %></span>
+                    <span class="ob-option__desc"><%= option[:description] %></span>
                   </span>
-                  <span class="onboarding-choice__title"><%= option[:title] %></span>
-                  <span class="onboarding-choice__description"><%= option[:description] %></span>
+                  <span class="ob-option__tick"><%= lucide_icon("check", size: 12) %></span>
                 </label>
               </div>
             <% end %>
           </div>
-        </fieldset>
 
-        <div class="onboarding-actions">
-          <button type="button" class="onboarding-button onboarding-button--secondary" data-action="onboarding#previous">Back</button>
-          <button type="button" class="onboarding-button" data-action="onboarding#next">Continue</button>
-        </div>
-      </section>
+          <div class="ob-actions">
+            <button type="button" class="ob-btn" data-action="onboarding#next">Continue <%= lucide_icon("arrow_right", size: 16) %></button>
+            <button type="button" class="ob-btn ob-btn--ghost" data-action="onboarding#previous"><%= lucide_icon("arrow_left", size: 16) %> Back</button>
+          </div>
+        </section>
 
-      <section class="onboarding-step" data-onboarding-target="step" hidden>
-        <div class="onboarding-heading">
-          <h1>Do you have a home yet?</h1>
-          <p>Tell us where you are in your housing journey so we can tailor your first German admin tasks.</p>
-        </div>
+        <%# ── 4. Housing ── %>
+        <section class="ob-step" data-onboarding-target="step" aria-labelledby="ob-q4" hidden>
+          <h1 id="ob-q4">Do you have a place to live yet?</h1>
+          <p class="ob-lede">You can only register your address once you have one, so this changes what comes first.</p>
 
-        <fieldset class="onboarding-fieldset onboarding-fieldset--grid">
-          <legend>Housing status</legend>
-
-          <div class="onboarding-card-grid onboarding-card-grid--two">
+          <div class="ob-options ob-options--2" role="radiogroup" aria-labelledby="ob-q4">
             <% @home_options.each do |option| %>
               <% input_id = "profile_has_home_#{option[:value]}" %>
-
-              <div class="onboarding-choice-wrap">
-                <%= f.radio_button :has_home,
-                                  option[:value],
-                                  id: input_id,
-                                  required: true,
-                                  class: "onboarding-option-input" %>
-
-                <label class="onboarding-choice onboarding-choice--card onboarding-choice--large" for="<%= input_id %>">
-                  <span class="onboarding-choice__icon">
-                    <i class="bi <%= option[:icon] %>" aria-hidden="true"></i>
-                  </span>
-                  <span class="onboarding-choice__title"><%= option[:title] %></span>
-                  <span class="onboarding-choice__description"><%= option[:description] %></span>
+              <div class="ob-option">
+                <%= f.radio_button :has_home, option[:value], id: input_id, required: true,
+                      class: "ob-option__input",
+                      data: { action: "change->onboarding#choose", summary_key: "home", summary_label: option[:value] == "true" ? "Has a place" : "Still looking" } %>
+                <label class="ob-option__card" for="<%= input_id %>">
+                  <span class="ob-option__icon"><%= lucide_icon(option[:icon], size: 20) %></span>
+                  <span class="ob-option__title"><%= option[:title] %></span>
+                  <span class="ob-option__desc"><%= option[:description] %></span>
+                  <span class="ob-option__tick"><%= lucide_icon("check", size: 12) %></span>
                 </label>
               </div>
             <% end %>
           </div>
-        </fieldset>
 
-        <div class="onboarding-actions">
-          <button type="button" class="onboarding-button onboarding-button--secondary" data-action="onboarding#previous">Back</button>
-          <%= f.submit "Complete Onboarding", class: "onboarding-button" %>
+          <div class="ob-actions">
+            <button type="button" class="ob-btn" data-action="onboarding#build">Build my plan <%= lucide_icon("sparkles", size: 16) %></button>
+            <button type="button" class="ob-btn ob-btn--ghost" data-action="onboarding#previous"><%= lucide_icon("arrow_left", size: 16) %> Back</button>
+          </div>
+        </section>
+      </div>
+
+      <%# ── Live summary ── %>
+      <aside class="ob-summary" aria-label="Your move so far">
+        <div class="ob-summary__head">
+          <h2>Your move</h2>
+          <p>Updates as you answer</p>
         </div>
-      </section>
-    <% end %>
-  </div>
+        <ul class="ob-summary__rows">
+          <% [["city", "Destination", "pin"], ["date", "Arrival", "calendar"], ["visa", "Reason for moving", "passport"], ["home", "Housing", "home"]].each do |key, label, icon| %>
+            <li class="ob-fact" data-onboarding-target="fact" data-key="<%= key %>">
+              <span class="ob-fact__icon">
+                <span class="ob-fact__idle"><%= lucide_icon(icon, size: 16) %></span>
+                <span class="ob-fact__done"><%= lucide_icon("check", size: 16) %></span>
+              </span>
+              <span>
+                <span class="ob-fact__label"><%= label %></span>
+                <span class="ob-fact__value">Not set yet</span>
+              </span>
+            </li>
+          <% end %>
+        </ul>
+        <div class="ob-summary__foot">
+          <b data-onboarding-target="taskCount">–</b>
+          <span>tasks in your checklist</span>
+        </div>
+      </aside>
+    </div>
+
+    <%# ── Building the plan ── %>
+    <section class="ob-gen" data-onboarding-target="generating" hidden>
+      <h1>Building your plan</h1>
+      <ul>
+        <li data-onboarding-target="genLine"><span class="ob-gen__dot"><%= lucide_icon("check", size: 12) %></span>Reading your answers</li>
+        <li data-onboarding-target="genLine"><span class="ob-gen__dot"><%= lucide_icon("check", size: 12) %></span><span data-onboarding-target="genCity">Matching offices in your city</span></li>
+        <li data-onboarding-target="genLine"><span class="ob-gen__dot"><%= lucide_icon("check", size: 12) %></span>Ordering tasks so each one unlocks the next</li>
+        <li data-onboarding-target="genLine"><span class="ob-gen__dot"><%= lucide_icon("check", size: 12) %></span>Setting deadlines from your arrival date</li>
+      </ul>
+    </section>
+
+    <%# ── Plan preview ── %>
+    <section class="ob-plan" data-onboarding-target="plan" hidden>
+      <div class="ob-plan__head">
+        <div>
+          <h1 data-onboarding-target="planTitle">Your plan is ready</h1>
+          <p data-onboarding-target="planLede"></p>
+        </div>
+        <div class="ob-plan__stats" data-onboarding-target="planStats"></div>
+      </div>
+      <div class="ob-plan__phases" data-onboarding-target="planBody"></div>
+      <div class="ob-plan__cta" data-onboarding-target="planCta">
+        <p data-onboarding-target="planNext"></p>
+        <button type="submit" class="ob-btn">Open my dashboard <%= lucide_icon("arrow_right", size: 16) %></button>
+      </div>
+    </section>
+  <% end %>
 </div>

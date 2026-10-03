@@ -1,0 +1,538 @@
+// ── Onboarding flow (ob-*) ──
+// The older .onboarding-* classes stay in _onboarding.scss because the profile
+// edit page still uses them.
+
+$ob-navy:  #1A1535;
+$ob-line:  #ECEBF3;
+$ob-lilac: #D0C2F5;
+$ob-tint:  #F3F0FD;
+$ob-muted: #8B8AA0;
+$ob-glow:  0 4px 14px -10px rgba(107, 86, 226, 0.35);
+$ob-glow-strong: 0 14px 32px -18px rgba(107, 86, 226, 0.55), 0 1px 2px rgba(26, 21, 53, 0.04);
+$ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
+
+.ob {
+  width: 100%;
+  min-height: 100vh;
+  background: $page-bg;
+  color: $text-dark;
+  font-family: $font-ui;
+  padding-bottom: 64px;
+}
+
+// ── Header + progress ──
+.ob-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 32px;
+}
+.ob-header__step { font-size: 14px; font-weight: 500; color: $text-gray; }
+.ob-header__link {
+  font-size: 14px;
+  color: $ob-muted;
+  text-decoration: none;
+  padding: 6px 10px;
+  border-radius: 8px;
+  &:hover { color: $text-dark; background: rgba(107, 86, 226, 0.06); }
+}
+.ob-progress {
+  max-width: 1136px;
+  height: 4px;
+  margin: 0 auto;
+  border-radius: 4px;
+  background: $ob-line;
+  overflow: hidden;
+  span {
+    display: block;
+    width: 0;
+    height: 100%;
+    border-radius: 4px;
+    background: $chartreuse;
+    transition: width 0.6s $ob-ease;
+  }
+}
+
+// ── Stage: question + summary ──
+.ob-stage {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 32px 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 56px;
+  align-items: start;
+}
+.ob-stage[hidden], .ob-gen[hidden], .ob-plan[hidden], .ob-step[hidden] { display: none !important; }
+.ob-main { max-width: 680px; }
+
+.ob-step h1 {
+  font-family: $font-display;
+  font-weight: 800;
+  font-size: clamp(1.9rem, 3.2vw, 2.6rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 12px;
+}
+.ob-lede { color: $text-gray; font-size: 16px; line-height: 1.55; margin: 0 0 32px; max-width: 54ch; }
+.ob-step--in { animation: ob-step-in 0.5s $ob-ease both; }
+@keyframes ob-step-in {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.ob-alert {
+  margin-bottom: 24px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba($urgent-red, 0.08);
+  border: 1px solid rgba($urgent-red, 0.25);
+  color: #B91C1C;
+  font-size: 14px;
+  font-weight: 500;
+}
+.ob-error { color: #B91C1C; font-size: 14px; font-weight: 500; margin: 16px 0 0; }
+
+// ── Option cards ──
+.ob-options { display: grid; gap: 12px; }
+.ob-options--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.ob-options--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.ob-option { position: relative; }
+.ob-option__input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.ob-option__card {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 18px;
+  background: #fff;
+  border: 1.5px solid $ob-line;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: border-color 0.15s, box-shadow 0.2s, transform 0.15s;
+  &:hover { border-color: $ob-lilac; box-shadow: $ob-glow; }
+  &:active { transform: scale(0.99); }
+}
+.ob-option__card--row {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 14px;
+  .ob-option__icon { margin-bottom: 0; }
+}
+.ob-option__icon {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  border-radius: 11px;
+  background: $ob-tint;
+  color: $indigo-landed;
+  display: grid;
+  place-items: center;
+  margin-bottom: 10px;
+  transition: background 0.2s, color 0.2s;
+}
+.ob-option__title { display: block; font-weight: 600; font-size: 16px; color: $text-dark; line-height: 1.3; }
+.ob-option__desc { display: block; font-size: 14px; color: $text-gray; line-height: 1.45; margin-top: 2px; }
+.ob-option__tick {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: $indigo-landed;
+  color: #fff;
+  display: grid;
+  place-items: center;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.2s, transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.ob-option__input:checked + .ob-option__card {
+  border-color: $indigo-landed;
+  box-shadow: $ob-glow-strong;
+  .ob-option__icon { background: $indigo-landed; color: #fff; }
+  .ob-option__tick { opacity: 1; transform: none; }
+}
+.ob-option__input:focus-visible + .ob-option__card { outline: 2px solid $indigo-landed; outline-offset: 3px; }
+.ob-option__input:disabled + .ob-option__card { opacity: 0.45; cursor: not-allowed; }
+
+// ── Date step ──
+.ob-quick { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+.ob-chip {
+  border: 1.5px solid $ob-line;
+  background: #fff;
+  color: $text-dark;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 9px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s, color 0.15s;
+  &:hover { border-color: $ob-lilac; }
+  &:focus-visible { outline: 2px solid $indigo-landed; outline-offset: 2px; }
+  &.is-selected { background: $indigo-landed; border-color: $indigo-landed; color: #fff; }
+}
+.ob-cal {
+  max-width: 440px;
+  background: #fff;
+  border: 1px solid $ob-line;
+  border-radius: 18px;
+  padding: 16px 18px 18px;
+  box-shadow: $ob-glow;
+}
+.ob-cal__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  h2 { font-family: $font-display; font-size: 16px; font-weight: 700; margin: 0; }
+}
+.ob-cal__nav {
+  width: 34px;
+  height: 34px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: $text-gray;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  &:hover { background: $ob-tint; color: $indigo-landed; }
+}
+.ob-cal__weekdays, .ob-cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.ob-cal__weekdays span { text-align: center; font-size: 12px; color: $ob-muted; font-weight: 500; padding: 4px 0; }
+.ob-cal__day {
+  aspect-ratio: 1;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: $text-dark;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  &:hover { background: $ob-tint; }
+  &:focus-visible { outline: 2px solid $indigo-landed; outline-offset: 1px; }
+  &.is-today { box-shadow: inset 0 0 0 1.5px $ob-lilac; font-weight: 600; }
+  &.is-selected { background: $indigo-landed; color: #fff; font-weight: 600; animation: ob-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+}
+@keyframes ob-pop { from { transform: scale(0.8); } to { transform: none; } }
+
+// ── Actions ──
+.ob-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.ob-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 12px;
+  padding: 13px 22px;
+  background: $indigo-landed;
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  box-shadow: 0 10px 22px -12px rgba(107, 86, 226, 0.9);
+  transition: background 0.15s, transform 0.15s;
+  &:hover { background: #5A45D1; transform: translateY(-1px); }
+  &:focus-visible { outline: 2px solid $indigo-landed; outline-offset: 3px; }
+}
+.ob-btn--ghost {
+  background: transparent;
+  color: $text-gray;
+  box-shadow: none;
+  padding-left: 10px;
+  padding-right: 10px;
+  &:hover { background: transparent; color: $text-dark; transform: none; }
+}
+.ob-skip {
+  margin-left: auto;
+  border: 0;
+  background: none;
+  color: $ob-muted;
+  font-size: 14px;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  &:hover { color: $text-dark; }
+}
+.ob-hint {
+  font-size: 13px;
+  color: $ob-muted;
+  kbd {
+    font-family: $font-ui;
+    font-size: 12px;
+    color: $text-gray;
+    background: #fff;
+    border: 1px solid $ob-line;
+    border-bottom-width: 2px;
+    border-radius: 6px;
+    padding: 1px 6px;
+  }
+}
+
+// ── Live summary ──
+.ob-summary {
+  position: sticky;
+  top: 24px;
+  background: #fff;
+  border: 1px solid $ob-line;
+  border-radius: 20px;
+  box-shadow: $ob-glow-strong;
+  overflow: hidden;
+}
+.ob-summary__head {
+  padding: 20px 22px 14px;
+  border-bottom: 1px solid #F3F2F8;
+  h2 { font-family: $font-display; font-weight: 700; font-size: 18px; margin: 0; }
+  p { margin: 2px 0 0; font-size: 13px; color: $ob-muted; }
+}
+.ob-summary__rows { list-style: none; margin: 0; padding: 8px 0; }
+.ob-fact {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 11px 22px;
+}
+.ob-fact__icon {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 10px;
+  background: #F6F5FA;
+  color: $ob-muted;
+  display: grid;
+  place-items: center;
+  transition: background 0.3s, color 0.3s;
+  > span { grid-area: 1 / 1; transition: opacity 0.2s, transform 0.3s; }
+}
+.ob-fact__done { opacity: 0; transform: scale(0.5); }
+.ob-fact__label { display: block; font-size: 12px; color: $ob-muted; line-height: 1.2; }
+.ob-fact__value { display: block; font-size: 15px; font-weight: 600; color: #B4B2C5; line-height: 1.35; }
+.ob-fact.is-set {
+  .ob-fact__icon { background: rgba(122, 158, 31, 0.12); color: $chartreuse; }
+  .ob-fact__idle { opacity: 0; }
+  .ob-fact__done { opacity: 1; transform: none; }
+  .ob-fact__value { color: $text-dark; }
+}
+.ob-fact.is-pop .ob-fact__value { animation: ob-fact-pop 0.45s $ob-ease; }
+@keyframes ob-fact-pop {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+.ob-summary__foot {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 22px 18px;
+  background: #FAF9FD;
+  border-top: 1px solid #F3F2F8;
+  font-size: 14px;
+  color: $text-gray;
+  b {
+    min-width: 28px;
+    text-align: center;
+    font-family: $font-display;
+    font-weight: 800;
+    font-size: 22px;
+    color: $indigo-landed;
+  }
+}
+
+// ── Generating ──
+.ob-gen {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 12vh 32px 0;
+  h1 {
+    font-family: $font-display;
+    font-weight: 800;
+    font-size: 2.2rem;
+    letter-spacing: -0.02em;
+    margin: 0 0 28px;
+  }
+  ul { list-style: none; margin: 0; padding: 0; }
+  li {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 0;
+    font-size: 16px;
+    color: #B4B2C5;
+    transition: color 0.3s;
+  }
+  li.is-active, li.is-done { color: $text-dark; }
+}
+.ob-gen__dot {
+  width: 26px;
+  height: 26px;
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid $ob-line;
+  display: grid;
+  place-items: center;
+  color: transparent;
+  transition: background 0.3s, border-color 0.3s, color 0.3s;
+  .is-active & { border-color: $indigo-landed; border-top-color: transparent; animation: ob-spin 0.8s linear infinite; }
+  .is-done & { background: $chartreuse; border-color: $chartreuse; color: #fff; animation: ob-pop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1); }
+}
+@keyframes ob-spin { to { transform: rotate(360deg); } }
+
+// ── Plan preview ──
+.ob-plan {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 32px 0;
+}
+.ob-plan__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 32px;
+  animation: ob-step-in 0.5s $ob-ease both;
+  h1 {
+    font-family: $font-display;
+    font-weight: 800;
+    font-size: clamp(1.9rem, 3.4vw, 2.75rem);
+    letter-spacing: -0.02em;
+    line-height: 1.08;
+    margin: 0 0 8px;
+  }
+  p { margin: 0; color: $text-gray; font-size: 16px; max-width: 58ch; }
+}
+.ob-plan__stats { display: flex; gap: 10px; flex-wrap: wrap; }
+.ob-stat {
+  min-width: 112px;
+  padding: 12px 16px;
+  background: #fff;
+  border: 1px solid $ob-line;
+  border-radius: 14px;
+  box-shadow: $ob-glow;
+  b { display: block; font-family: $font-display; font-weight: 800; font-size: 24px; line-height: 1.1; }
+  span { font-size: 13px; color: $text-gray; }
+}
+.ob-stat--lime b { color: $chartreuse; }
+
+.ob-plan__phases {
+  display: grid;
+  grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+.ob-phase h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: $font-display;
+  font-weight: 700;
+  font-size: 16px;
+  margin: 0 0 2px;
+}
+.ob-phase__count {
+  font-family: $font-ui;
+  font-size: 12px;
+  font-weight: 600;
+  color: $indigo-landed;
+  background: $ob-tint;
+  border-radius: 999px;
+  padding: 1px 8px;
+}
+.ob-phase__range { font-size: 13px; color: $ob-muted; margin: 0 0 14px; }
+.ob-phase__cards { display: flex; flex-direction: column; gap: 12px; }
+
+// Matches the dashboard task cards: pillar colour as a top accent bar
+.ob-task {
+  --accent: #9ca3af;
+  position: relative;
+  background: #fff;
+  border: 1px solid $ob-line;
+  border-radius: 16px;
+  padding: 18px 16px 14px;
+  overflow: hidden;
+  box-shadow: $ob-glow;
+  opacity: 0;
+  transform: translateY(12px);
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 4px;
+    background: var(--accent);
+  }
+  &.is-in { animation: ob-card-in 0.5s $ob-ease forwards; }
+}
+@keyframes ob-card-in { to { opacity: 1; transform: none; } }
+.ob-task--finance_and_banking      { --accent: #059669; }
+.ob-task--health_and_insurance     { --accent: #ec4899; }
+.ob-task--housing_and_registration { --accent: #f97316; }
+.ob-task--legal_and_work           { --accent: #5B21B6; }
+.ob-task__name { font-weight: 600; font-size: 15px; line-height: 1.35; margin: 0 0 6px; }
+.ob-task__why { font-size: 14px; color: $text-gray; line-height: 1.45; margin: 0 0 12px; }
+.ob-task__row { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.ob-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  svg { width: 12px; height: 12px; display: block; }
+}
+.ob-task__due {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 500;
+  color: $text-gray;
+}
+
+.ob-plan__cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 36px;
+  padding: 20px 24px;
+  background: #fff;
+  border: 1px solid $ob-line;
+  border-radius: 18px;
+  box-shadow: $ob-glow;
+  opacity: 0;
+  &.is-in { animation: ob-card-in 0.5s $ob-ease forwards; }
+  p { margin: 0; font-size: 15px; color: $text-gray; }
+  b { color: $text-dark; }
+}
+
+// ── Responsive ──
+@media (max-width: 991px) {
+  .ob-stage { grid-template-columns: 1fr; gap: 32px; }
+  .ob-summary { position: static; }
+  .ob-plan__phases { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .ob-header, .ob-stage, .ob-plan, .ob-gen { padding-left: 16px; padding-right: 16px; }
+  .ob-progress { margin: 0 16px; }
+  .ob-options--3, .ob-options--2 { grid-template-columns: 1fr; }
+  .ob-header__step { display: none; }
+  .ob-skip { margin-left: 0; }
+  .ob-hint { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ob-step--in, .ob-plan__head, .ob-fact.is-pop .ob-fact__value, .ob-cal__day.is-selected { animation: none; }
+  .ob-task, .ob-plan__cta { opacity: 1; transform: none; animation: none !important; }
+  .ob-gen__dot { animation: none !important; }
+  .ob-progress span, .ob-option__tick, .ob-fact__icon > span { transition: none; }
+}
