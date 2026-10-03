@@ -5,18 +5,22 @@ const ICON = {
   clock: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>'
 }
 
-// Same rule as Task.assign_due_dates, so the preview matches the dashboard.
-const PHASES = [
-  { urgency: "high",   title: "Do these first",   offset: (arrival, today) => new Date(Math.max(addDays(arrival, -7), today)) },
-  { urgency: "medium", title: "First two weeks",  offset: (arrival) => addDays(arrival, 14) },
-  { urgency: "low",    title: "First month",      offset: (arrival) => addDays(arrival, 30) }
+// The dashboard's own columns, same urgency split and same due-date rule as
+// Task.assign_due_dates, so the preview and the dashboard show the same board.
+const COLUMNS = [
+  { urgency: "high",   title: "Urgent",   key: "urgent",   offset: (arrival, today) => new Date(Math.max(addDays(arrival, -7), today)) },
+  { urgency: "medium", title: "Active",   key: "active",   offset: (arrival) => addDays(arrival, 14) },
+  { urgency: "low",    title: "Upcoming", key: "upcoming", offset: (arrival) => addDays(arrival, 30) }
 ]
+const PREVIEW_PER_COLUMN = 3
 
 function addDays(date, n) { const d = new Date(date); d.setDate(d.getDate() + n); return d }
 function startOfToday() { const d = new Date(); d.setHours(0, 0, 0, 0); return d }
 function toISO(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}` }
 function fromISO(s) { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d) }
 function fmt(d) { return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }) }
+// Dashboard card date format (strftime "%b %d"), e.g. "Nov 08"
+function fmtCard(d) { return `${d.toLocaleDateString("en-US", { month: "short" })} ${String(d.getDate()).padStart(2, "0")}` }
 function esc(s) { const el = document.createElement("span"); el.textContent = s ?? ""; return el.innerHTML }
 
 export default class extends Controller {
@@ -25,7 +29,7 @@ export default class extends Controller {
     "dateInput", "monthLabel", "calendarGrid",
     "fact", "taskCount",
     "generating", "genLine", "genCity",
-    "plan", "planTitle", "planLede", "planStats", "planBody", "planNext", "planCta"
+    "plan", "planTitle", "planLede", "planBody", "planNext", "planCta"
   ]
 
   static values = {
@@ -311,55 +315,60 @@ export default class extends Controller {
     const today = startOfToday()
     const arrival = this.dateInputTarget.value ? fromISO(this.dateInputTarget.value) : null
 
-    const phases = PHASES.map((phase) => {
-      const due = arrival ? phase.offset(arrival, today) : null
-      return { ...phase, due, items: tasks.filter((t) => t.urgency === phase.urgency) }
-    }).filter((p) => p.items.length)
+    const columns = COLUMNS.map((col) => ({
+      ...col,
+      due: arrival ? col.offset(arrival, today) : null,
+      items: tasks.filter((t) => t.urgency === col.urgency)
+    })).filter((c) => c.items.length)
 
-    const first = phases[0]
-    this.planTitleTarget.textContent = `Your plan for ${city} is ready`
-    this.planLedeTarget.textContent = arrival
-      ? `${tasks.length} tasks across housing, money, legal and health, dated from your arrival on ${fmt(arrival)}.`
-      : `${tasks.length} tasks across housing, money, legal and health. Add your arrival date in your profile to get deadlines.`
+    const first = columns[0]
+    const urgent = columns.find((c) => c.key === "urgent")
+    this.planTitleTarget.textContent = `Your board for ${city} is ready`
+    this.planLedeTarget.textContent = urgent
+      ? `${tasks.length} tasks, sorted by urgency. Start with the ${urgent.items.length} urgent ones. The rest move up as their deadlines get closer.`
+      : `${tasks.length} tasks, sorted by urgency. The rest move up as their deadlines get closer.`
 
-    this.planStatsTarget.innerHTML = `
-      <div class="ob-stat"><b>${tasks.length}</b><span>tasks</span></div>
-      <div class="ob-stat ob-stat--lime"><b>${first.items.length}</b><span>to do first</span></div>
-      ${first.due ? `<div class="ob-stat"><b>${fmt(first.due)}</b><span>first deadline</span></div>` : ""}`
-
-    this.planBodyTarget.style.setProperty("--cols", phases.length)
-    this.planBodyTarget.innerHTML = phases.map((phase) => `
-      <div class="ob-phase">
-        <h3>${phase.title} <span class="ob-phase__count">${phase.items.length}</span></h3>
-        <p class="ob-phase__range">${phase.due ? `By ${fmt(phase.due)}` : "No date yet"}</p>
-        <div class="ob-phase__cards">
-          ${phase.items.map((t) => `
-            <article class="ob-task ob-task--${esc(t.pillar_slug)}">
-              <p class="ob-task__name">${esc(t.name)}</p>
-              ${t.why ? `<p class="ob-task__why">${esc(t.why)}</p>` : ""}
-              <div class="ob-task__row">
-                ${t.pillar_slug ? `<span class="ob-pill tag-pillar--${esc(t.pillar_slug)}"><span class="ob-pill__icon">${this.iconsValue[t.pillar_slug] || ""}</span>${esc(t.pillar_name)}</span>` : "<span></span>"}
-                ${phase.due ? `<span class="ob-task__due">${ICON.clock}${fmt(phase.due)}</span>` : ""}
-              </div>
-            </article>`).join("")}
+    // Compact versions of the dashboard's kanban cards: category, title, due date
+    const card = (t, col, isFirst) => `
+      <div class="task-card ${col.key === "urgent" ? "urgent-card" : ""} ${col.key === "upcoming" ? "locked" : ""} task-card--pillar-${esc(t.pillar_slug)} ob-card">
+        <div class="card-top">
+          <div class="card-tags">${t.pillar_slug ? `<span class="pillar-chip tag-pillar--${esc(t.pillar_slug)}"><span class="pillar-chip__icon">${this.iconsValue[t.pillar_slug] || ""}</span><span class="pillar-chip__label">${esc(t.pillar_name)}</span></span>` : ""}</div>
+          ${isFirst ? `<span class="ob-start">Start here</span>` : ""}
         </div>
-      </div>`).join("")
+        <h4 class="card-title">${esc(t.name)}</h4>
+        ${col.due ? `<div class="card-bottom-row"><span class="card-due ${col.key === "urgent" ? "urgent-due" : ""}" style="display:inline-flex; align-items:center; gap:4px;"><span class="lucide-icon">${ICON.clock}</span>${fmtCard(col.due)}</span></div>` : ""}
+      </div>`
+
+    this.planBodyTarget.innerHTML = columns.map((col) => {
+      const shown = col.items.slice(0, PREVIEW_PER_COLUMN)
+      const more = col.items.length - shown.length
+      return `
+        <div class="kanban-col">
+          <div class="col-header ${col.key}-header">
+            <span class="col-dot ${col.key}-dot"></span>
+            <span class="col-title">${col.title}</span>
+            <span class="col-count">${col.items.length}</span>
+          </div>
+          ${shown.map((t, i) => card(t, col, col === first && i === 0)).join("")}
+          ${more > 0 ? `<p class="ob-more">+${more} more on your board</p>` : ""}
+        </div>`
+    }).join("")
 
     this.planNextTarget.innerHTML = `Start with <b>${esc(first.items[0].name)}</b>. It unlocks most of what comes after.`
 
     this.generatingTarget.hidden = true
     this.planTarget.hidden = false
-    this.stepLabelTarget.textContent = "Your plan"
+    this.stepLabelTarget.textContent = "Your board"
     this.setProgress(1)
 
-    // One orchestrated reveal: phase by phase, card by card
-    const cards = [...this.planBodyTarget.querySelectorAll(".ob-task")]
+    // One orchestrated reveal: column by column, card by card
+    const cards = [...this.planBodyTarget.querySelectorAll(".ob-card, .ob-more")]
     if (this.reduced) {
       cards.forEach((c) => c.classList.add("is-in"))
       this.planCtaTarget.classList.add("is-in")
       return
     }
-    cards.forEach((card, i) => setTimeout(() => card.classList.add("is-in"), 200 + i * 90))
+    cards.forEach((c, i) => setTimeout(() => c.classList.add("is-in"), 200 + i * 90))
     setTimeout(() => this.planCtaTarget.classList.add("is-in"), 300 + cards.length * 90)
   }
 }
