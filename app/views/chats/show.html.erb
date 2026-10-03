@@ -529,7 +529,7 @@
           <% if questions.any? %>
             <div class="chat-chips">
               <% questions.each do |question| %>
-                <button type="button" class="chat-chip" data-question="<%= question %>" onclick="var input = document.getElementById('chat-input-<%= @chat.id %>'); input.value = this.dataset.question; input.focus();"><%= question %></button>
+                <button type="button" class="chat-chip" data-question="<%= question %>" onclick="askAssistant<%= @chat.id %>(this.dataset.question)"><%= question %></button>
               <% end %>
             </div>
           <% end %>
