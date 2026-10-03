@@ -185,8 +185,8 @@ export default class extends Controller {
     this.calendarYear = date.getFullYear()
     this.renderCalendar()
     this.markChip(event.currentTarget)
-    clearTimeout(this.advanceTimer)
-    this.advanceTimer = setTimeout(() => this.next(), this.reduced ? 0 : 500)
+    // No auto-advance here: the user checks the date on the calendar, then presses Continue
+    this.currentStep.querySelector(".ob-actions .ob-btn")?.focus({ preventScroll: true })
   }
 
   markChip(chip) {
