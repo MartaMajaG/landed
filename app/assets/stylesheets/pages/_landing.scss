@@ -66,25 +66,25 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
 .lp-brand {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  text-decoration: none;
+  &:hover { text-decoration: none; }
+}
+// Landed logo: plane mark + wordmark, both in the logo purple from favicon.svg
+.landed-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  color: #4F46E5;
+}
+.landed-logo__mark { display: block; flex: none; }
+.landed-logo__word {
   font-family: $font-display;
   font-weight: 800;
-  font-size: 20px;
-  color: $lp-navy;
-  text-decoration: none;
-  &:hover { color: $lp-navy; }
+  font-size: 21px;
+  letter-spacing: -0.02em;
+  line-height: 1;
 }
-.lp-brand__mark {
-  width: 32px;
-  height: 32px;
-  border-radius: 10px;
-  background: $lp-navy;
-  color: #fff;
-  display: grid;
-  place-items: center;
-  font-size: 15px;
-}
-.lp-brand--small { font-size: 15px; .lp-brand__mark { width: 24px; height: 24px; font-size: 12px; border-radius: 7px; } }
+.lp-brand--small .landed-logo__word { font-size: 15px; }
 .lp-nav__links { display: flex; align-items: center; gap: 6px; }
 .lp-nav__link {
   color: $text-gray;

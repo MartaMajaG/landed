@@ -1,0 +1,6 @@
+<%# Landed logo: the landing-plane mark from favicon.svg plus the wordmark. locals: size (mark height in px) %>
+<% size = local_assigns.fetch(:size, 24) %>
+<span class="landed-logo">
+  <svg class="landed-logo__mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 500.45" height="<%= size %>" width="<%= (size * 576 / 500.45).round %>" aria-hidden="true"><path fill="currentColor" d="M386.6,211.55L265.9,22.15c-4.8-7.6-12.6-12.8-21.4-14.3L201.4.25c-10.8-1.9-20.2,7.3-18.6,18.1l24,161.6-105-18.5-33.8-61.8c-3.5-6.5-9.8-11-16.9-12.2l-17.1-3c-9.8-1.7-18.8,5.9-18.8,15.8l.6,106.3c.2,30.9,22.4,57.3,52.9,62.7l13.5,2.4h0l417.6,73.6c30.5,5.4,59.5-15,64.9-45.4,5.4-30.4-15-59.5-45.4-64.9l-132.7-23.4ZM32,436.45c-17.7,0-32,14.3-32,32s14.3,32,32,32h512c17.7,0,32-14.3,32-32s-14.3-32-32-32H32Z"/></svg>
+  <span class="landed-logo__word">Landed</span>
+</span>
