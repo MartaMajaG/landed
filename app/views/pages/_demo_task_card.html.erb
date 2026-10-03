@@ -1,0 +1,29 @@
+<%# Static copy of a dashboard kanban card (see dashboards/_kanban.html.erb) for the landing preview.
+    locals: slug, pillar, name, desc, done, total, due, urgent %>
+<% pct = total > 0 ? ((done.to_f / total) * 100).round : 0 %>
+<div class="task-card <%= 'urgent-card' if urgent %> task-card--pillar-<%= slug %>" data-total="<%= total %>">
+  <div class="card-top">
+    <div class="card-tags">
+      <%= pillar_chip_for(slug, pillar) %>
+    </div>
+  </div>
+  <h4 class="card-title"><%= name %></h4>
+  <p class="card-desc"><%= first_sentence(desc) %></p>
+  <div class="card-footer-group">
+    <div class="card-footer">
+      <span class="card-progress-label"><%= done == 0 ? "Not started" : "#{done}/#{total} steps" %></span>
+      <span class="card-pct"><%= done > 0 ? "#{pct}%" : "" %></span>
+    </div>
+    <div class="card-track">
+      <div class="card-fill" style="width: <%= pct %>%;"></div>
+    </div>
+    <div class="card-bottom-row">
+      <span class="card-due <%= 'urgent-due' if urgent %>" style="display:inline-flex; align-items:center; gap:4px;">
+        <span class="lucide-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </span>
+        <%= due %>
+      </span>
+    </div>
+  </div>
+</div>
