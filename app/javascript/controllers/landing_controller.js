@@ -1,9 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Landing page motion: sections fade in once as they scroll into view,
-// and the hero demo's "done" counter ticks up when the Anmeldung row checks itself off.
+// Landing page motion: sections fade in once as they scroll into view, the illustration
+// drifts with scroll, and the hero preview (real dashboard cards) plays a short sequence:
+// two Anmeldung steps get ticked off, then the Banking card shows its hover state.
 export default class extends Controller {
-  static targets = ["reveal", "scene", "sceneMedia"]
+  static targets = ["reveal", "scene", "sceneMedia", "demo"]
 
   connect() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -31,8 +32,36 @@ export default class extends Controller {
       this.parallax()
     }
 
-    const done = this.element.querySelector(".lp-demo__done")
-    if (done) this.tickTimer = setTimeout(() => { done.textContent = "2" }, reduced ? 0 : 2400)
+    if (this.hasDemoTarget) this.playDemo(reduced)
+  }
+
+  playDemo(reduced) {
+    this.timers = []
+    const card = this.demoTarget.querySelector(".lp-demo__progress .task-card")
+    const hover = this.demoTarget.querySelector(".lp-demo__hover .task-card")
+    const at = (ms, fn) => this.timers.push(setTimeout(fn, reduced ? 0 : ms))
+
+    if (card) {
+      const total = Number(card.dataset.total)
+      const setStep = (done) => {
+        const pct = Math.round((done / total) * 100)
+        const label = card.querySelector(".card-progress-label")
+        const pctEl = card.querySelector(".card-pct")
+        label.textContent = `${done}/${total} steps`
+        pctEl.textContent = `${pct}%`
+        card.querySelector(".card-fill").style.width = `${pct}%`
+        if (!reduced) {
+          ;[label, pctEl].forEach((el) => { el.classList.remove("is-bump"); void el.offsetWidth; el.classList.add("is-bump") })
+        }
+      }
+      if (reduced) setStep(2)
+      else { at(2200, () => setStep(1)); at(3300, () => setStep(2)) }
+    }
+
+    if (hover && !reduced) {
+      at(4300, () => hover.classList.add("is-hover"))
+      at(5900, () => hover.classList.remove("is-hover"))
+    }
   }
 
   // The illustration zooms out and drifts slightly as it scrolls through the viewport
@@ -50,6 +79,6 @@ export default class extends Controller {
     window.removeEventListener("resize", this.onScroll)
     if (this.frame) cancelAnimationFrame(this.frame)
     this.observer?.disconnect()
-    clearTimeout(this.tickTimer)
+    this.timers?.forEach(clearTimeout)
   }
 }

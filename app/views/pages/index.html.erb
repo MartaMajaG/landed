@@ -7,6 +7,8 @@
   ["health_and_insurance",     "Health & insurance"]
 ] %>
 
+<%= render "chats/document_styles" %>
+
 <div class="lp" data-controller="landing">
   <header class="lp-nav">
     <%= link_to root_path, class: "lp-brand" do %>
@@ -38,90 +40,91 @@
       </div>
       <ul class="lp-hero__pillars lp-rise" style="--d: 400ms" aria-label="What Landed covers">
         <% pillars.each do |slug, name| %>
-          <li class="lp-pillar lp-pillar--<%= slug %>">
-            <span class="lp-pillar__icon"><%= ApplicationHelper::PILLAR_ICONS[slug].html_safe %></span><%= name %>
-          </li>
+          <li class="lp-pillar"><%= pillar_chip_for(slug, name) %></li>
         <% end %>
       </ul>
     </div>
 
-    <%# Living product preview: the plan ticks itself off, a letter gets scanned %>
-    <div class="lp-demo" aria-hidden="true">
-      <div class="lp-demo__board">
-        <div class="lp-demo__head">
-          <div>
-            <p class="lp-demo__title">Your move to Munich</p>
-            <p class="lp-demo__sub">Arriving 1 Nov</p>
+    <%# Product preview built from the real dashboard and document components:
+        kanban columns + task cards (dashboards/_kanban) and the document header card (chats/show) %>
+    <div class="lp-demo" aria-hidden="true" data-landing-target="demo">
+      <div class="lp-demo__window">
+        <div class="tasks-header">
+          <div class="tasks-title-group"><h2 class="tasks-label">Tasks</h2></div>
+          <div class="tasks-toggle">
+            <button class="toggle-btn active" tabindex="-1">Open Tasks</button>
+            <button class="toggle-btn" tabindex="-1">Completed</button>
           </div>
-          <span class="lp-demo__count"><b class="lp-demo__done">1</b>/12 done</span>
         </div>
-        <div class="lp-demo__bar"><span></span></div>
 
-        <ul class="lp-demo__tasks">
-          <li class="lp-task lp-task--done" style="--accent: #f97316">
-            <span class="lp-task__box"><%= lucide_icon("check", size: 12) %></span>
-            <span class="lp-task__body">
-              <span class="lp-task__name">Get the landlord confirmation</span>
-              <span class="lp-task__meta">Wohnungsgeberbestätigung</span>
-            </span>
-            <span class="lp-task__due">Done</span>
-          </li>
-          <li class="lp-task lp-task--ticks" style="--accent: #f97316">
-            <span class="lp-task__box"><%= lucide_icon("check", size: 12) %></span>
-            <span class="lp-task__body">
-              <span class="lp-task__name">Register your address</span>
-              <span class="lp-task__meta">Anmeldung</span>
-            </span>
-            <span class="lp-task__due">By 15 Nov</span>
-          </li>
-          <li class="lp-task" style="--accent: #ec4899">
-            <span class="lp-task__box"><%= lucide_icon("check", size: 12) %></span>
-            <span class="lp-task__body">
-              <span class="lp-task__name">Choose your health insurance</span>
-              <span class="lp-task__meta">Krankenversicherung</span>
-            </span>
-            <span class="lp-task__due">By 15 Nov</span>
-          </li>
-          <li class="lp-task lp-task--locked" style="--accent: #059669">
-            <span class="lp-task__box"><%= lucide_icon("lock", size: 12) %></span>
-            <span class="lp-task__body">
-              <span class="lp-task__name">Open a German bank account</span>
-              <span class="lp-task__meta">Unlocks after Anmeldung</span>
-            </span>
-            <span class="lp-task__due">By 1 Dec</span>
-          </li>
-        </ul>
-      </div>
+        <div class="kanban">
+          <div class="kanban-col">
+            <div class="col-header urgent-header">
+              <span class="col-dot urgent-dot"></span>
+              <span class="col-title">Urgent</span>
+              <span class="col-count">2</span>
+            </div>
+            <div class="lp-demo__progress">
+              <%= render "pages/demo_task_card", slug: "housing_and_registration", pillar: "Housing & Registration",
+                    name: "Registration (Anmeldung)", desc: "Register your address with the local authorities to obtain your Meldebescheinigung.",
+                    done: 0, total: 6, due: "Tomorrow", urgent: true %>
+            </div>
+            <%= render "pages/demo_task_card", slug: "health_and_insurance", pillar: "Health & Insurance",
+                  name: "Health Insurance (Krankenversicherung)", desc: "Choose between public (GKV) and private (PKV) health insurance and complete your enrolment before starting work.",
+                  done: 1, total: 5, due: "Nov 08", urgent: true %>
+          </div>
 
-      <div class="lp-demo__doc">
-        <div class="lp-demo__paper">
-          <span></span><span></span><span></span><span></span><span></span><span></span>
-          <i class="lp-demo__scan"></i>
-        </div>
-        <div class="lp-demo__facts">
-          <p class="lp-demo__doctitle"><%= lucide_icon("file", size: 14) %> Rental contract</p>
-          <p class="lp-fact" style="--d: 0s">Notice period <b>3 months</b></p>
-          <p class="lp-fact" style="--d: .35s">Deposit due <b>15 Nov</b></p>
-          <p class="lp-fact" style="--d: .7s">Rent <b>€1,240 / month</b></p>
+          <div class="kanban-col">
+            <div class="col-header active-header">
+              <span class="col-dot active-dot"></span>
+              <span class="col-title">Active</span>
+              <span class="col-count">2</span>
+            </div>
+            <div class="lp-demo__hover">
+              <%= render "pages/demo_task_card", slug: "finance_and_banking", pillar: "Finance & Banking",
+                    name: "Banking", desc: "Open a German bank account to receive your salary and pay bills locally.",
+                    done: 0, total: 4, due: "Nov 21", urgent: false %>
+            </div>
+            <%= render "pages/demo_task_card", slug: "housing_and_registration", pillar: "Housing & Registration",
+                  name: "Set Up Household Utilities", desc: "Register for the broadcasting fee, set up your electricity contract, and arrange your internet connection.",
+                  done: 2, total: 5, due: "Nov 21", urgent: false %>
+          </div>
         </div>
       </div>
 
-      <div class="lp-demo__toast">
-        <span class="lp-demo__toast-icon"><%= lucide_icon("check", size: 14) %></span>
-        Anmeldung done. Banking unlocked.
+      <%# Document header card from the scanner page, with the "due soon" banner %>
+      <div class="doc-card lp-demo__doc">
+        <div class="doc-head">
+          <div>
+            <div class="doc-tags">
+              <span class="doc-tag doc-tag--brand">Mandatory</span>
+              <span class="doc-tag">Rental contract</span>
+            </div>
+            <h1 class="doc-title">Rental agreement</h1>
+            <p class="doc-subtitle">Mietvertrag</p>
+          </div>
+          <div class="doc-banner doc-banner--soon">
+            <div class="doc-banner__icon"><span class="lucide-icon doc-banner__svg"><svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span></div>
+            <div>
+              <p class="doc-banner__title">Deposit due in 5 days</p>
+              <p class="doc-banner__text">Transfer €3,720 to your landlord by Nov 15.</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
   <%# ── ILLUSTRATION ── %>
-  <%# Positions are % of the frame, anchored on travellers' heads in the illustration %>
+  <%# Positions are % of the frame, anchored on travellers' heads in the illustration.
+      Each tag is the dashboard's journey-history popover + dot. %>
   <% scene_tags = [
-    { x: 25.8, y: 36, text: "Anmeldung booked",        color: "#f97316" },
-    { x: 67.6, y: 30, text: "Bank account opened",     color: "#059669" },
-    { x: 40.6, y: 56, text: "Health insurance sorted", color: "#ec4899" },
-    { x: 10.6, y: 16, text: "Lease signed",            color: "#f97316" },
-    { x: 83.4, y: 74, text: "Permit appointment set",  color: "#5B21B6" },
-    { x: 31.6, y: 83, text: "Tax ID arrived",          color: "#059669" }
+    { x: 25.8, y: 36, title: "Anmeldung completed",     date: "Nov 4" },
+    { x: 67.6, y: 30, title: "Bank account opened",     date: "Nov 12" },
+    { x: 40.6, y: 56, title: "Health insurance chosen", date: "Oct 30" },
+    { x: 10.6, y: 16, title: "Registration submitted",  date: "Oct 21" },
+    { x: 83.4, y: 74, title: "Utilities set up",        date: "Nov 18" },
+    { x: 31.6, y: 83, title: "Liability insurance chosen", date: "Nov 26" }
   ] %>
   <section class="lp-scene" data-landing-target="reveal">
     <div class="lp-scene__frame" data-landing-target="scene">
@@ -129,11 +132,12 @@
         <%= image_tag "landing_image.png", class: "lp-scene__img", alt: "People arriving at a German airport with luggage" %>
         <div class="lp-scene__tags" aria-hidden="true">
           <% scene_tags.each_with_index do |tag, i| %>
-            <span class="lp-tag" style="--x: <%= tag[:x] %>%; --y: <%= tag[:y] %>%; --i: <%= i %>; --c: <%= tag[:color] %>">
-              <span class="lp-tag__pill">
-                <span class="lp-tag__check"><%= lucide_icon("check", size: 10) %></span><%= tag[:text] %>
+            <span class="lp-tag" style="--x: <%= tag[:x] %>%; --y: <%= tag[:y] %>%; --i: <%= i %>">
+              <span class="journey-history-popover journey-history-popover--open lp-tag__pill">
+                <span class="journey-history-popover__title"><%= tag[:title] %></span>
+                <span class="journey-history-popover__meta">Completed <%= tag[:date] %></span>
               </span>
-              <span class="lp-tag__ping"></span>
+              <span class="journey-history-dot lp-tag__ping"></span>
             </span>
           <% end %>
         </div>
@@ -181,27 +185,54 @@
       </div>
     </div>
 
-    <div class="lp-chat" aria-hidden="true">
-      <div class="lp-chat__head">
-        <span class="lp-chat__thumb"><%= lucide_icon("file", size: 16) %></span>
+    <%# The AI Assistant panel from the document page (chats/show), with an example rental contract %>
+    <section class="doc-card doc-assistant lp-assistant" aria-hidden="true">
+      <header class="doc-assistant__head">
+        <div class="doc-assistant__icon"><span class="lucide-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg></span></div>
         <div>
-          <p>Kündigungsbestätigung</p>
-          <span>Scanned just now</span>
+          <h2 class="doc-section-title">AI Assistant</h2>
+          <p style="margin:2px 0 0; font-size:14px; color:#6B7280;">Ask anything about this document</p>
+        </div>
+      </header>
+
+      <div class="doc-assistant__body">
+        <div class="lp-seq" style="--d: .15s">
+          <h3 class="doc-h3">What this means</h3>
+          <p class="doc-summary">This is your rental agreement for the flat in Schwabing. Rent is <strong class="doc-value">€1,240 per month</strong>, and the contract runs with no end date.</p>
+        </div>
+
+        <div class="lp-seq" style="--d: .5s">
+          <h3 class="doc-h3">What to watch out for</h3>
+          <ol class="doc-facts">
+            <li class="doc-fact"><span class="doc-fact__n">1</span><p>The deposit of <strong class="doc-value">€3,720</strong> is due by <strong class="doc-value">Nov 15</strong>.</p></li>
+            <li class="doc-fact"><span class="doc-fact__n">2</span><p>Either side can end the lease with <strong class="doc-value">3 months' notice</strong>.</p></li>
+          </ol>
+        </div>
+
+        <p class="doc-label lp-seq" style="--d: 1s; padding-top:14px; border-top:1px solid #ECEBF3;">Conversation</p>
+
+        <div class="lp-seq" style="--d: 1.3s; display:flex; justify-content:flex-end;">
+          <div style="background:#6B56E2; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:18px 4px 18px 18px; max-width:75%;">Can I pay the deposit in parts?</div>
+        </div>
+
+        <div class="lp-seq" style="--d: 2s">
+          <%= render "messages/ai_bubble", content: "Yes. German law lets you pay a rental deposit in **three monthly instalments**, with the first one due when the lease starts." %>
         </div>
       </div>
-      <div class="lp-chat__msg lp-chat__msg--ai" style="--d: .2s">
-        <p class="lp-chat__label"><%= lucide_icon("bulb", size: 14) %> Key facts</p>
-        <ul>
-          <li>Your old flat's lease ends on <b>31 Jan</b></li>
-          <li>Hand over the keys by <b>12:00 that day</b></li>
-          <li>Deposit returned within <b>6 months</b></li>
-        </ul>
+
+      <div class="doc-assistant__foot">
+        <div class="chat-chips">
+          <button type="button" class="chat-chip" tabindex="-1">When is the deposit due?</button>
+          <button type="button" class="chat-chip" tabindex="-1">How do I give notice?</button>
+        </div>
+        <div class="chat-input">
+          <input type="text" placeholder="Ask anything about this document…" tabindex="-1" readonly>
+          <button type="button" class="chat-send" tabindex="-1">
+            <span class="lucide-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg></span>
+          </button>
+        </div>
       </div>
-      <div class="lp-chat__msg lp-chat__msg--me" style="--d: 1s">Do I need to repaint the walls?</div>
-      <div class="lp-chat__msg lp-chat__msg--ai" style="--d: 1.8s">
-        Only if the contract says so. Clause 14 asks for neutral colours, so repaint any walls you changed.
-      </div>
-    </div>
+    </section>
   </section>
 
   <%# ── CTA ── %>

@@ -38,11 +38,15 @@ module ApplicationHelper
 
   def pillar_chip(task)
     return unless task.pillar
-    slug     = task.pillar.slug
+    pillar_chip_for(task.pillar.slug, task.pillar.name)
+  end
+
+  # Same chip without a Task record (used by the landing page's product preview)
+  def pillar_chip_for(slug, name)
     icon_svg = PILLAR_ICONS.fetch(slug, "").html_safe
     content_tag(:span, class: "pillar-chip tag-pillar--#{slug}") do
       concat content_tag(:span, icon_svg, class: "pillar-chip__icon")
-      concat content_tag(:span, task.pillar.name, class: "pillar-chip__label")
+      concat content_tag(:span, name, class: "pillar-chip__label")
     end
   end
 
