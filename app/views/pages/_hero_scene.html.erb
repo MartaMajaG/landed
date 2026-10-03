@@ -1,0 +1,298 @@
+<%# Hero illustration: original isometric scene drawn in SVG (sharp at any size).
+    A plane flies in, a route links pins in the pillar colours, travellers walk the route,
+    and two floating cards reuse the app's journey popover and document card.
+    Animation is driven by the .lp-iso rules in pages/_landing.scss. %>
+<svg class="lp-iso play" viewBox="96 14 640 556" role="img" aria-label="An isometric map of Germany on a platform. A plane flies in, a dotted route links pins in Hamburg, Berlin, Frankfurt and Munich, and travellers with suitcases walk across the map.">
+        <defs>
+          <filter id="iso-soft" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="6"/></filter>
+          <filter id="iso-soft-sm" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.5"/></filter>
+          <filter id="iso-glow" x="-20%" y="-200%" width="140%" height="500%"><feGaussianBlur stdDeviation="2.5"/></filter>
+          <!-- top-down plane, pointing along +x -->
+          <g id="iso-plane-shape">
+            <path d="M8,-8 L-16,-66 L-30,-66 L-22,-8Z"/>
+            <path d="M8,8 L-16,66 L-30,66 L-22,8Z"/>
+            <path d="M-50,-6 L-62,-28 L-70,-28 L-64,-5Z"/>
+            <path d="M-50,6 L-62,28 L-70,28 L-64,5Z"/>
+            <path d="M-66,0 C-66,-7 -54,-9.5 -44,-9.5 L50,-9.5 C64,-9.5 72,-4 75,0 C72,4 64,9.5 50,9.5 L-44,9.5 C-54,9.5 -66,7 -66,0Z"/>
+          </g>
+          <linearGradient id="iso-pin-shade" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#fff" stop-opacity=".28"/>
+            <stop offset=".45" stop-color="#fff" stop-opacity="0"/>
+            <stop offset=".55" stop-color="#000" stop-opacity="0"/>
+            <stop offset="1" stop-color="#000" stop-opacity=".18"/>
+          </linearGradient>
+          <filter id="iso-card-shadow" x="-20%" y="-30%" width="140%" height="180%"><feDropShadow dx="0" dy="10" stdDeviation="14" flood-color="#1A1535" flood-opacity=".2"/></filter>
+          <linearGradient id="iso-fuselage" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#FFFFFF"/>
+            <stop offset=".55" stop-color="#F3F1FF"/>
+            <stop offset="1" stop-color="#C9C0F5"/>
+          </linearGradient>
+          <linearGradient id="iso-wing-top" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#FFFFFF"/>
+            <stop offset="1" stop-color="#E6E1FF"/>
+          </linearGradient>
+          <linearGradient id="iso-engine" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#E9E5FF"/>
+            <stop offset="1" stop-color="#A99CF0"/>
+          </linearGradient>
+          <!-- soft rounded island in plan coordinates -->
+          <rect id="iso-slab" x="-14" y="-12" width="388" height="324" rx="84"/>
+          <path id="iso-germany" d="M132.2,48.8 C136.1,41.4 134.4,19.9 140.0,14.8 C145.6,9.7 156.9,15.4 166.0,18.2 C175.1,21.0 184.2,28.4 194.6,31.8 C205.0,35.2 217.1,39.7 228.4,38.6 C239.7,37.5 254.0,23.3 262.2,25.0 C270.4,26.7 274.3,41.4 277.8,48.8 C281.3,56.2 280.8,61.8 283.0,69.2 C285.2,76.6 289.9,84.5 290.8,93.0 C291.7,101.5 286.9,111.7 288.2,120.2 C289.5,128.7 299.9,138.9 298.6,144.0 C297.3,149.1 289.5,146.8 280.4,150.8 C271.3,154.8 253.5,164.4 244.0,167.8 C234.5,171.2 224.5,166.7 223.2,171.2 C221.9,175.7 228.8,186.5 236.2,195.0 C243.6,203.5 265.7,214.8 267.4,222.2 C269.1,229.6 250.1,231.8 246.6,239.2 C243.1,246.6 250.1,262.4 246.6,266.4 C243.1,270.4 234.9,263.0 225.8,263.0 C216.7,263.0 201.1,264.7 192.0,266.4 C182.9,268.1 176.8,273.8 171.2,273.2 C165.6,272.6 164.7,264.7 158.2,263.0 C151.7,261.3 140.9,263.0 132.2,263.0 C123.5,263.0 111.0,267.5 106.2,263.0 C101.4,258.5 101.0,243.7 103.6,235.8 C106.2,227.9 126.6,221.6 121.8,215.4 C117.0,209.2 84.1,205.8 75.0,198.4 C65.9,191.0 68.9,179.7 67.2,171.2 C65.5,162.7 65.5,155.9 64.6,147.4 C63.7,138.9 58.5,126.4 62.0,120.2 C65.5,114.0 80.6,114.5 85.4,110.0 C90.2,105.5 88.9,99.8 90.6,93.0 C92.3,86.2 91.5,74.9 95.8,69.2 C100.1,63.5 110.5,62.4 116.6,59.0 C122.7,55.6 128.3,56.2 132.2,48.8Z"/>
+          <linearGradient id="iso-slab-top" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#FFFFFF"/>
+            <stop offset="1" stop-color="#ECE7FF"/>
+          </linearGradient>
+          <!-- map pin, tip at 0,0 -->
+          <path id="iso-pin" d="M0,0 C-5,-11 -17,-20 -17,-34 A17,17 0 1 1 17,-34 C17,-20 5,-11 0,0Z"/>
+          <!-- traveller, feet at 0,0 -->
+          <g id="iso-traveller">
+            <ellipse cx="6" cy="1" rx="21" ry="6" fill="#1A1535" opacity=".2"/>
+            <!-- back leg + shoe -->
+            <rect x="1" y="-29" width="7" height="28" rx="3.5" style="fill:var(--pants-d)"/>
+            <ellipse cx="6" cy="-1" rx="5.5" ry="3" fill="#120F26"/>
+            <!-- back arm -->
+            <rect x="6" y="-50" width="6" height="21" rx="3" style="fill:var(--top-d)"/>
+            <circle cx="9" cy="-28" r="3" style="fill:var(--skin-d)"/>
+            <!-- suitcase: front, side, top faces -->
+            <polygon points="24,-26 30,-29.5 30,-3.5 24,0" style="fill:var(--case-d)"/>
+            <polygon points="13,-26 19,-29.5 30,-29.5 24,-26" style="fill:var(--case-l)"/>
+            <rect x="13" y="-26" width="11" height="26" rx="1.5" style="fill:var(--case)"/>
+            <path d="M16.5,-22V-4M20.5,-22V-4" stroke="#fff" stroke-opacity=".28" stroke-width="1.4" stroke-linecap="round"/>
+            <circle cx="15.5" cy="1" r="1.7" fill="#120F26"/><circle cx="22" cy="1" r="1.7" fill="#120F26"/>
+            <path d="M16,-26V-35M21,-26V-35M16,-35H21" stroke="#2A2550" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+            <!-- torso: shaded side, then lit side -->
+            <path d="M-9,-30 L-9,-46 Q-9,-55 0.5,-55 Q10,-55 10,-46 L10,-30 Q10,-26 6,-26 L-5,-26 Q-9,-26 -9,-30Z" style="fill:var(--top-d)"/>
+            <path d="M-9,-30 L-9,-46 Q-9,-55 0.5,-55 L2.5,-55 L2.5,-26 L-5,-26 Q-9,-26 -9,-30Z" style="fill:var(--top)"/>
+            <!-- front leg + shoe -->
+            <rect x="-7.5" y="-29" width="7.5" height="29" rx="3.5" style="fill:var(--pants)"/>
+            <ellipse cx="-4" cy="0" rx="6" ry="3.2" fill="#1A1535"/>
+            <!-- front arm reaching the handle -->
+            <path d="M6,-50 Q12,-44 18.5,-36" style="stroke:var(--top)" stroke-width="6" stroke-linecap="round" fill="none"/>
+            <circle cx="18.5" cy="-35" r="3.2" style="fill:var(--skin)"/>
+            <!-- neck, head, hair -->
+            <rect x="-2.6" y="-60" width="5.2" height="7" rx="2" style="fill:var(--skin-d)"/>
+            <circle cx="0.5" cy="-66" r="8.2" style="fill:var(--skin)"/>
+            <path d="M0.5,-74.2 A8.2,8.2 0 0 1 0.5,-57.8 A4.6,8.2 0 0 0 0.5,-74.2Z" style="fill:var(--skin-d)" opacity=".55"/>
+            <path d="M-7.9,-67 C-8.6,-76 9.5,-78 8.8,-67 C6,-71 -3,-71.5 -7.9,-67Z" style="fill:var(--hair)"/>
+          </g>
+          <g id="iso-traveller-w">
+            <ellipse cx="6" cy="1" rx="21" ry="6" fill="#1A1535" opacity=".2"/>
+            <!-- back leg + shoe -->
+            <rect x="1.5" y="-29" width="6" height="28" rx="3" style="fill:var(--pants-d)"/>
+            <ellipse cx="6" cy="-1" rx="5.5" ry="3" fill="#120F26"/>
+            <!-- back arm -->
+            <rect x="6" y="-50" width="6" height="21" rx="3" style="fill:var(--top-d)"/>
+            <circle cx="9" cy="-28" r="3" style="fill:var(--skin-d)"/>
+            <!-- suitcase: front, side, top faces -->
+            <polygon points="24,-26 30,-29.5 30,-3.5 24,0" style="fill:var(--case-d)"/>
+            <polygon points="13,-26 19,-29.5 30,-29.5 24,-26" style="fill:var(--case-l)"/>
+            <rect x="13" y="-26" width="11" height="26" rx="1.5" style="fill:var(--case)"/>
+            <path d="M16.5,-22V-4M20.5,-22V-4" stroke="#fff" stroke-opacity=".28" stroke-width="1.4" stroke-linecap="round"/>
+            <circle cx="15.5" cy="1" r="1.7" fill="#120F26"/><circle cx="22" cy="1" r="1.7" fill="#120F26"/>
+            <path d="M16,-26V-35M21,-26V-35M16,-35H21" stroke="#2A2550" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+            <path d="M-8.6,-67 C-10.5,-58 -10,-50 -6.5,-45 L7.5,-45 C10.5,-50 10.6,-59 8.8,-67Z" style="fill:var(--hair)"/>
+            <path d="M5.5,-60 C8,-55 8.5,-50 7.5,-45 L9.5,-46 C10.8,-51 10.4,-57 8.8,-63Z" fill="#000" opacity=".18"/>
+            <!-- torso: shaded side, then lit side -->
+            <path d="M-8,-29 L-7,-38 L-8.5,-46 Q-8.5,-55 0.5,-55 Q9.5,-55 9.5,-46 L8,-38 L9,-29 Q9,-26 5.5,-26 L-4.5,-26 Q-8,-26 -8,-29Z" style="fill:var(--top-d)"/>
+            <path d="M-8,-29 L-7,-38 L-8.5,-46 Q-8.5,-55 0.5,-55 L2.5,-55 L2.5,-26 L-4.5,-26 Q-8,-26 -8,-29Z" style="fill:var(--top)"/>
+            <!-- front leg + shoe -->
+            <rect x="-6.5" y="-29" width="6.5" height="29" rx="3" style="fill:var(--pants)"/>
+            <ellipse cx="-4" cy="0" rx="6" ry="3.2" fill="#1A1535"/>
+            <!-- front arm reaching the handle -->
+            <path d="M6,-50 Q12,-44 18.5,-36" style="stroke:var(--top)" stroke-width="6" stroke-linecap="round" fill="none"/>
+            <circle cx="18.5" cy="-35" r="3.2" style="fill:var(--skin)"/>
+            <!-- neck, head, hair -->
+            <rect x="-2.6" y="-60" width="5.2" height="7" rx="2" style="fill:var(--skin-d)"/>
+            <circle cx="0.5" cy="-66" r="8.2" style="fill:var(--skin)"/>
+            <path d="M0.5,-74.2 A8.2,8.2 0 0 1 0.5,-57.8 A4.6,8.2 0 0 0 0.5,-74.2Z" style="fill:var(--skin-d)" opacity=".55"/>
+            <path d="M-8.8,-64 C-10,-77 10.5,-79 9.2,-64 C8,-70 3,-72.5 -1,-71 C-4,-70 -7,-68 -8.8,-64Z" style="fill:var(--hair)"/>
+          </g>
+          <!-- route drawn in plan coordinates -->
+          <path id="iso-route" d="M392.1,213.0 Q463.1,252.0 473.4,304.7 Q516.8,327.0 519.7,366.4 Q419.8,381.0 342.4,346.0 Q302.1,385.0 349.8,417.2"/>
+          <mask id="iso-route-mask" maskUnits="userSpaceOnUse" x="0" y="0" width="800" height="600">
+            <path d="M392.1,213.0 Q463.1,252.0 473.4,304.7 Q516.8,327.0 519.7,366.4 Q419.8,381.0 342.4,346.0 Q302.1,385.0 349.8,417.2" class="s-route-mask" fill="none" stroke="#fff" stroke-width="16" stroke-linecap="round" pathLength="1" stroke-dasharray="1 1" stroke-dashoffset="0"/>
+          </mask>
+        </defs>
+
+        <!-- clouds (back) -->
+        <g class="s-cloud" style="--t:0s" opacity=".95">
+          <g transform="translate(600 92)"><ellipse cx="0" cy="6" rx="38" ry="12" fill="#C8BEF8"/><circle cx="-16" cy="0" r="14" fill="#fff"/><circle cx="4" cy="-8" r="19" fill="#fff"/><circle cx="22" cy="0" r="13" fill="#fff"/><rect x="-30" y="-2" width="62" height="10" rx="5" fill="#fff"/></g>
+        </g>
+        <g class="s-cloud" style="--t:-4s" opacity=".9">
+          <g transform="translate(150 168) scale(.8)"><ellipse cx="0" cy="6" rx="38" ry="12" fill="#C8BEF8"/><circle cx="-16" cy="0" r="14" fill="#fff"/><circle cx="4" cy="-8" r="19" fill="#fff"/><circle cx="22" cy="0" r="13" fill="#fff"/><rect x="-30" y="-2" width="62" height="10" rx="5" fill="#fff"/></g>
+        </g>
+
+        <!-- platform -->
+        <g class="s-platform">
+          <ellipse cx="410" cy="540" rx="290" ry="56" fill="#1A1535" opacity=".24" filter="url(#iso-soft)"/>
+          <g transform="translate(0 26)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#8B7BE8"/></g></g>
+          <g transform="translate(0 25)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#8D7DE9"/></g></g>
+          <g transform="translate(0 24)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#8F80E9"/></g></g>
+          <g transform="translate(0 23)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#9282EA"/></g></g>
+          <g transform="translate(0 22)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#9485EB"/></g></g>
+          <g transform="translate(0 21)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#9687EB"/></g></g>
+          <g transform="translate(0 20)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#988AEC"/></g></g>
+          <g transform="translate(0 19)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#9A8CED"/></g></g>
+          <g transform="translate(0 18)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#9D8EED"/></g></g>
+          <g transform="translate(0 17)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#9F91EE"/></g></g>
+          <g transform="translate(0 16)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#A193EF"/></g></g>
+          <g transform="translate(0 15)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#A396EF"/></g></g>
+          <g transform="translate(0 14)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#A598F0"/></g></g>
+          <g transform="translate(0 13)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#A89AF0"/></g></g>
+          <g transform="translate(0 12)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#AA9DF1"/></g></g>
+          <g transform="translate(0 11)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#AC9FF2"/></g></g>
+          <g transform="translate(0 10)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#AEA2F2"/></g></g>
+          <g transform="translate(0 9)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#B0A4F3"/></g></g>
+          <g transform="translate(0 8)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#B2A7F4"/></g></g>
+          <g transform="translate(0 7)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#B5A9F4"/></g></g>
+          <g transform="translate(0 6)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#B7ABF5"/></g></g>
+          <g transform="translate(0 5)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#B9AEF6"/></g></g>
+          <g transform="translate(0 4)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#BBB0F6"/></g></g>
+          <g transform="translate(0 3)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#BDB3F7"/></g></g>
+          <g transform="translate(0 2)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#C0B5F8"/></g></g>
+          <g transform="translate(0 1)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#C2B8F8"/></g></g>
+          <g transform="translate(0 0)"><g transform="matrix(0.866 0.5 -0.866 0.5 380 190)"><use href="#iso-slab" fill="#C4BAF9"/></g></g>
+          <g transform="matrix(0.866 0.5 -0.866 0.5 380 190)">
+            <use href="#iso-slab" fill="url(#iso-slab-top)"/>
+            <use href="#iso-slab" fill="none" stroke="#fff" stroke-opacity=".9" stroke-width="2.5"/>
+            <!-- Germany, slightly raised -->
+            <g transform="translate(3 3)"><use href="#iso-germany" fill="#B8ABF6"/></g>
+            <use href="#iso-germany" fill="#D8CFFF" stroke="#C2B5FA" stroke-width="1.5" stroke-linejoin="round"/>
+            <!-- plane shadow on the map -->
+            <g class="s-plane-shadow">
+              <g transform="translate(44 102) scale(.95)" fill="#1A1535" opacity=".09" filter="url(#iso-soft-sm)"><use href="#iso-plane-shape"/></g>
+            </g>
+            <!-- passport lying on the platform -->
+            <g class="s-doc">
+              <!-- passport -->
+              <g transform="translate(272 236)">
+                <rect x="3" y="3" width="50" height="58" rx="6" fill="#1A1535" opacity=".14"/>
+                <rect width="50" height="58" rx="6" fill="#1A1535"/>
+                <circle cx="25" cy="25" r="11" fill="none" stroke="#C9C2F3" stroke-width="1.6"/>
+                <ellipse cx="25" cy="25" rx="5" ry="11" fill="none" stroke="#C9C2F3" stroke-width="1.2"/>
+                <path d="M14,25H36" stroke="#C9C2F3" stroke-width="1.2"/>
+                <text x="25" y="49" text-anchor="middle" font-family="Inter, sans-serif" font-size="6" font-weight="600" letter-spacing=".8" fill="#C9C2F3">REISEPASS</text>
+              </g>
+            </g>
+          </g>
+        </g>
+
+        <!-- route, in screen space so the dots stay round -->
+        <g mask="url(#iso-route-mask)">
+          <use href="#iso-route" fill="none" stroke="#6B56E2" stroke-opacity=".9" stroke-width="3" stroke-linecap="round" stroke-dasharray="5 8"/>
+        </g>
+
+        <!-- pins: Hamburg (housing), Berlin (health), Frankfurt (finance), Munich (legal) -->
+        <g transform="translate(473.4 304.7) scale(1.3)"><g class="s-pin" style="--t:1.35s">
+          <ellipse cx="0" cy="0" rx="9" ry="3.5" fill="#1A1535" opacity=".22"/>
+          <use href="#iso-pin" fill="#f97316" stroke="#fff" stroke-width="2.5"/>
+          <use href="#iso-pin" fill="url(#iso-pin-shade)"/>
+          <circle cx="0" cy="-34" r="11" fill="#fff"/>
+          <g transform="translate(-6.5 -40.5) scale(.54)" fill="none" stroke="#f97316" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></g></g>
+        </g>
+        <g transform="translate(519.7 366.4) scale(1.3)"><g class="s-pin" style="--t:1.85s">
+          <ellipse cx="0" cy="0" rx="9" ry="3.5" fill="#1A1535" opacity=".22"/>
+          <use href="#iso-pin" fill="#ec4899" stroke="#fff" stroke-width="2.5"/>
+          <use href="#iso-pin" fill="url(#iso-pin-shade)"/>
+          <circle cx="0" cy="-34" r="11" fill="#fff"/>
+          <g transform="translate(-6.5 -40.5) scale(.54)" fill="none" stroke="#ec4899" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></g></g>
+        </g>
+        <g transform="translate(342.4 346) scale(1.3)"><g class="s-pin" style="--t:2.45s">
+          <ellipse cx="0" cy="0" rx="9" ry="3.5" fill="#1A1535" opacity=".22"/>
+          <use href="#iso-pin" fill="#059669" stroke="#fff" stroke-width="2.5"/>
+          <use href="#iso-pin" fill="url(#iso-pin-shade)"/>
+          <circle cx="0" cy="-34" r="11" fill="#fff"/>
+          <g transform="translate(-6.5 -40.5) scale(.54)" fill="none" stroke="#059669" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></g></g>
+        </g>
+        <g transform="translate(349.8 417.2) scale(1.3)"><g class="s-pin" style="--t:3.05s">
+          <ellipse cx="0" cy="0" rx="9" ry="3.5" fill="#1A1535" opacity=".22"/>
+          <use href="#iso-pin" fill="#5B21B6" stroke="#fff" stroke-width="2.5"/>
+          <use href="#iso-pin" fill="url(#iso-pin-shade)"/>
+          <circle cx="0" cy="-34" r="11" fill="#fff"/>
+          <g transform="translate(-6.5 -40.5) scale(.54)" fill="none" stroke="#5B21B6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></g></g>
+        </g>
+
+        <!-- completed checks on the first two stops -->
+        <g transform="translate(490 242)"><g class="s-check" style="--t:2.0s"><circle r="8" fill="#7A9E1F" stroke="#fff" stroke-width="2"/><path d="M-3.5,0 L-1,2.6 L3.8,-2.6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+        <g transform="translate(536 304)"><g class="s-check" style="--t:2.5s"><circle r="8" fill="#7A9E1F" stroke="#fff" stroke-width="2"/><path d="M-3.5,0 L-1,2.6 L3.8,-2.6" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></g></g>
+
+        <!-- travellers, standing on the dotted route and facing their direction of travel -->
+        <g transform="translate(424 233) scale(-0.95 0.95)"><g class="s-person" style="--t:.8s; --pants:#1A1535; --pants-d:#0F0C24; --top:#FFFFFF; --top-d:#D9D3F5; --case:#f97316; --case-d:#C2560F; --case-l:#FDA25F; --skin:#E8B48F; --skin-d:#C98F6A; --hair:#3B2A20"><use href="#iso-traveller"/></g></g>
+        <g transform="translate(452 370) scale(0.95)"><g class="s-person" style="--t:1s; --pants:#3F3A6B; --pants-d:#2A2652; --top:#7A9E1F; --top-d:#5B7814; --case:#ec4899; --case-d:#BE2D75; --case-l:#F58BC0; --skin:#A86F4C; --skin-d:#87553A; --hair:#1A1535"><use href="#iso-traveller-w"/></g></g>
+        <g transform="translate(382 361) scale(0.95)"><g class="s-person" style="--t:1.2s; --pants:#1A1535; --pants-d:#0F0C24; --top:#F59E0B; --top-d:#C47D06; --case:#6B56E2; --case-d:#4A3BC9; --case-l:#9C8CF0; --skin:#F1C9A5; --skin-d:#D6A880; --hair:#7A4A24"><use href="#iso-traveller"/></g></g>
+
+        <!-- plane: 3D isometric, nose pointing along the flight path towards the map -->
+        <g class="s-plane">
+          <g transform="translate(318 104) scale(1.12)">
+            <!-- far side: tailplane, engine, wing (behind the fuselage) -->
+            <g transform="translate(0 -1)"><g transform="matrix(0.866 0.5 -0.866 0.5 0 0)"><polygon points="-50,0 -64,-26 -72,-26 -68,0" fill="#A99CF0" transform="translate(0 0)"/></g></g>
+              <g transform="translate(0 -3)"><g transform="matrix(0.866 0.5 -0.866 0.5 0 0)"><polygon points="-50,0 -64,-26 -72,-26 -68,0" fill="url(#iso-wing-top)"/></g></g>
+            <g transform="translate(26.0 -6.0)"><g transform="matrix(0.866 0.5 0 1 0 0)">
+                <rect x="-6" y="-5" width="24" height="11" rx="5.5" fill="url(#iso-engine)"/>
+                <ellipse cx="18" cy="0.5" rx="2.6" ry="5.5" fill="#3B3470"/>
+              </g></g>
+            <g transform="translate(0 6)"><g transform="matrix(0.866 0.5 -0.866 0.5 0 0)"><polygon points="22,0 -12,-78 -26,-78 -14,0" fill="#A99CF0"/></g></g>
+              <g transform="translate(0 3)"><g transform="matrix(0.866 0.5 -0.866 0.5 0 0)"><polygon points="22,0 -12,-78 -26,-78 -14,0" fill="url(#iso-wing-top)"/><polygon points="22,0 -12,-78 -26,-78 -14,0" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1"/></g></g>
+            <!-- fuselage, drawn on the vertical plane of the flight path -->
+            <g transform="matrix(0.866 0.5 0 1 0 0)">
+              <path d="M-74,-12 L-62,-12 L50,-12 C67,-12 80,-4 83,3 C80,9.5 68,12 54,12 L-40,12 C-56,12 -67,4 -74,-12Z" fill="url(#iso-fuselage)"/>
+              <path d="M-48,5 H62" stroke="#6B56E2" stroke-width="2.4" stroke-linecap="round"/>
+              <rect x="-42" y="-5.5" width="3.4" height="4.4" rx="1.4" fill="#3B3470"/><rect x="-35" y="-5.5" width="3.4" height="4.4" rx="1.4" fill="#3B3470"/><rect x="-28" y="-5.5" width="3.4" height="4.4" rx="1.4" fill="#3B3470"/><rect x="-21" y="-5.5" width="3.4" height="4.4" rx="1.4" fill="#3B3470"/><rect x="-14" y="-5.5" width="3.4" height="4.4" rx="1.4" fill="#3B3470"/><rect x="-7" y="-5.5" width="3.4" height="4.4" rx="1.4" fill="#3B3470"/><rect x="0" y="-5.5" width="3.4" height="4.4" rx="1.4" fill="#3B3470"/><rect x="7" y="-5.5" width="3.4" height="4.4" rx="1.4" fill="#3B3470"/><rect x="14" y="-5.5" width="3.4" height="4.4" rx="1.4" fill="#3B3470"/><rect x="21" y="-5.5" width="3.4" height="4.4" rx="1.4" fill="#3B3470"/><rect x="28" y="-5.5" width="3.4" height="4.4" rx="1.4" fill="#3B3470"/><rect x="35" y="-5.5" width="3.4" height="4.4" rx="1.4" fill="#3B3470"/><rect x="42" y="-5.5" width="3.4" height="4.4" rx="1.4" fill="#3B3470"/>
+              <path d="M62,-8 C69,-8 76,-4.5 79,-1 L64,-1Z" fill="#1A1535"/>
+              <!-- tail fin with a brand-purple band -->
+              <path d="M-74,-12 L-88,-44 L-77,-44 L-52,-12Z" fill="url(#iso-fuselage)"/>
+              <path d="M-74,-12 L-88,-44 L-84.5,-44 L-70,-12Z" fill="#D9D3F5"/>
+              
+              <path d="M-83.5,-34 L-73.5,-34 L-69,-24 L-79,-24Z" fill="#2A2160"/>
+            </g>
+            <!-- near side: tailplane, wing, engine (in front of the fuselage) -->
+            <g transform="translate(0 -1)"><g transform="matrix(0.866 0.5 -0.866 0.5 0 0)"><polygon points="-50,0 -64,26 -72,26 -68,0" fill="#A99CF0" transform="translate(0 0)"/></g></g>
+              <g transform="translate(0 -3)"><g transform="matrix(0.866 0.5 -0.866 0.5 0 0)"><polygon points="-50,0 -64,26 -72,26 -68,0" fill="url(#iso-wing-top)"/></g></g>
+            <g transform="translate(0 6)"><g transform="matrix(0.866 0.5 -0.866 0.5 0 0)"><polygon points="22,0 -12,78 -26,78 -14,0" fill="#A99CF0"/></g></g>
+              <g transform="translate(0 3)"><g transform="matrix(0.866 0.5 -0.866 0.5 0 0)"><polygon points="22,0 -12,78 -26,78 -14,0" fill="url(#iso-wing-top)"/><polygon points="22,0 -12,78 -26,78 -14,0" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="1"/></g></g>
+            <g transform="translate(-26.0 24.0)"><g transform="matrix(0.866 0.5 0 1 0 0)">
+                <rect x="-6" y="-5" width="24" height="11" rx="5.5" fill="url(#iso-engine)"/>
+                <ellipse cx="18" cy="0.5" rx="2.6" ry="5.5" fill="#3B3470"/>
+              </g></g>
+          </g>
+        </g>
+
+        <!-- journey popover, same as the dashboard's -->
+        <g class="s-pop"><g class="s-float">
+          <g transform="translate(500 166)">
+            <rect x="0" y="0" width="196" height="54" rx="16" fill="#fff" stroke="#E2E5EC" filter="url(#iso-card-shadow)"/>
+            <text x="16" y="23" font-family="Inter, sans-serif" font-size="14" font-weight="600" fill="#1A1D23">Anmeldung completed</text>
+            <text x="16" y="41" font-family="Inter, sans-serif" font-size="12" fill="#9CA3AF">Completed Nov 4</text>
+          </g>
+        </g></g>
+
+        <!-- floating document card, from the document page: scanned rental contract with its deadline -->
+        <g class="s-doccard"><g class="s-float" style="--f:-1.6s">
+          <g transform="translate(500 410)">
+            <rect x="0" y="0" width="226" height="112" rx="18" fill="#fff" stroke="#ECEBF3" filter="url(#iso-card-shadow)"/>
+            <g transform="translate(14 14)">
+              <rect width="38" height="48" rx="5" fill="#F7F6FB" stroke="#ECEBF3"/>
+              <rect x="6" y="8" width="20" height="2.6" rx="1.3" fill="#CFC9EA"/>
+              <rect x="6" y="15" width="26" height="2.6" rx="1.3" fill="#E4E1F0"/>
+              <rect x="6" y="21" width="22" height="2.6" rx="1.3" fill="#E4E1F0"/>
+              <rect x="4.5" y="26.5" width="29" height="6" rx="2" fill="#EEEBFD"/>
+              <rect x="6.5" y="28.2" width="16" height="2.6" rx="1.3" fill="#6B56E2"/>
+              <rect x="6" y="37" width="24" height="2.6" rx="1.3" fill="#E4E1F0"/>
+              <g class="s-scan"><rect x="1" y="3" width="36" height="2.4" fill="#6B56E2" filter="url(#iso-glow)" opacity=".8"/><rect x="1" y="3.5" width="36" height="1.2" fill="#6B56E2"/></g>
+            </g>
+            <text x="64" y="27" font-family="Plus Jakarta Sans, Inter, sans-serif" font-size="14" font-weight="700" fill="#1A1A2E">Rental agreement</text>
+            <text x="64" y="44" font-family="Inter, sans-serif" font-size="12" font-style="italic" fill="#6B7280">Mietvertrag</text>
+            <g transform="translate(64 51)"><rect width="56" height="16" rx="8" fill="#EEEBFD"/><text x="28" y="11.2" text-anchor="middle" font-family="Inter, sans-serif" font-size="9.5" font-weight="600" fill="#4433B8">Mandatory</text></g>
+            <g transform="translate(14 74)">
+              <rect width="198" height="26" rx="9" fill="#FFFAEB" stroke="#FDE7B0"/>
+              <g transform="translate(9 6.5) scale(.55)" fill="none" stroke="#B54708" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></g>
+              <text x="27" y="17" font-family="Inter, sans-serif" font-size="11" font-weight="600" fill="#93370D">Deposit due in 5 days</text>
+            </g>
+          </g>
+        </g></g>
+
+        <!-- clouds (front) -->
+        <g class="s-cloud" style="--t:-2s">
+          <g transform="translate(700 236) scale(.7)"><ellipse cx="0" cy="6" rx="38" ry="12" fill="#C8BEF8"/><circle cx="-16" cy="0" r="14" fill="#fff"/><circle cx="4" cy="-8" r="19" fill="#fff"/><circle cx="22" cy="0" r="13" fill="#fff"/><rect x="-30" y="-2" width="62" height="10" rx="5" fill="#fff"/></g>
+        </g>
+      </svg>

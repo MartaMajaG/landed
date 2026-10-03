@@ -1,10 +1,10 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Landing page motion: sections fade in once as they scroll into view, the hero illustration
-// drifts with scroll, and the product preview (real dashboard cards) plays a short sequence:
+// Landing page motion: sections fade in once as they scroll into view, and the product
+// preview (real dashboard cards) plays a short sequence:
 // two Anmeldung steps get ticked off, then the Banking card shows its hover state.
 export default class extends Controller {
-  static targets = ["reveal", "scene", "sceneMedia", "demo"]
+  static targets = ["reveal", "demo"]
 
   connect() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -21,16 +21,6 @@ export default class extends Controller {
         })
       }, { threshold: 0.2, rootMargin: "0px 0px -60px 0px" })
       this.revealTargets.forEach((el) => this.observer.observe(el))
-    }
-
-    if (!reduced && this.hasSceneTarget) {
-      this.onScroll = () => {
-        if (this.frame) return
-        this.frame = requestAnimationFrame(() => { this.frame = null; this.parallax() })
-      }
-      window.addEventListener("scroll", this.onScroll, { passive: true })
-      window.addEventListener("resize", this.onScroll, { passive: true })
-      this.parallax()
     }
 
     // Without motion the preview shows its end state straight away;
@@ -67,20 +57,7 @@ export default class extends Controller {
     }
   }
 
-  // The illustration zooms out and drifts slightly as it scrolls through the viewport
-  parallax() {
-    const rect = this.sceneTarget.getBoundingClientRect()
-    const vh = window.innerHeight
-    if (rect.bottom < 0 || rect.top > vh) return
-    const progress = Math.min(Math.max((vh - rect.top) / (vh + rect.height), 0), 1)
-    this.sceneMediaTarget.style.setProperty("--ps", (1.12 - progress * 0.1).toFixed(4))
-    this.sceneMediaTarget.style.setProperty("--py", `${((0.5 - progress) * 36).toFixed(1)}px`)
-  }
-
   disconnect() {
-    window.removeEventListener("scroll", this.onScroll)
-    window.removeEventListener("resize", this.onScroll)
-    if (this.frame) cancelAnimationFrame(this.frame)
     this.observer?.disconnect()
     this.timers?.forEach(clearTimeout)
   }
