@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
-// Landing page motion: sections fade in once as they scroll into view, the illustration
-// drifts with scroll, and the hero preview (real dashboard cards) plays a short sequence:
+// Landing page motion: sections fade in once as they scroll into view, the hero illustration
+// drifts with scroll, and the product preview (real dashboard cards) plays a short sequence:
 // two Anmeldung steps get ticked off, then the Banking card shows its hover state.
 export default class extends Controller {
   static targets = ["reveal", "scene", "sceneMedia", "demo"]
@@ -17,6 +17,7 @@ export default class extends Controller {
           if (!entry.isIntersecting) return
           entry.target.classList.add("is-in")
           this.observer.unobserve(entry.target)
+          if (this.hasDemoTarget && entry.target.contains(this.demoTarget)) this.playDemo(false)
         })
       }, { threshold: 0.2, rootMargin: "0px 0px -60px 0px" })
       this.revealTargets.forEach((el) => this.observer.observe(el))
@@ -32,7 +33,9 @@ export default class extends Controller {
       this.parallax()
     }
 
-    if (this.hasDemoTarget) this.playDemo(reduced)
+    // Without motion the preview shows its end state straight away;
+    // otherwise it plays when the product section scrolls into view (see observer above)
+    if (this.hasDemoTarget && (reduced || !("IntersectionObserver" in window))) this.playDemo(true)
   }
 
   playDemo(reduced) {

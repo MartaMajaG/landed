@@ -46,6 +46,12 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
     box-shadow: inset 0 0 0 1px $lp-lilac;
     &:hover { background: #fff; color: $text-dark; }
   }
+  &--on-dark {
+    background: transparent;
+    color: #fff;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.4);
+    &:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+  }
   &--light {
     background: #fff;
     color: $lp-navy;
@@ -97,15 +103,6 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 // ── Hero ──
-.lp-hero {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 56px 32px 72px;
-  display: grid;
-  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
-  gap: 48px;
-  align-items: center;
-}
 .lp-hero__title {
   font-family: $font-display;
   font-weight: 800;
@@ -115,13 +112,6 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
   margin: 0 0 22px;
   color: $text-dark;
   span { display: block; }
-}
-.lp-hero__lede {
-  font-size: 18px;
-  line-height: 1.55;
-  color: $text-gray;
-  max-width: 46ch;
-  margin: 0 0 32px;
 }
 .lp-hero__actions { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 36px; }
 .lp-hero__pillars {
@@ -150,6 +140,28 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
 }
 @keyframes lp-rise { to { opacity: 1; transform: none; } }
 
+// ── Product section ──
+.lp-product {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 104px 32px 24px;
+  display: grid;
+  grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+  gap: 56px;
+  align-items: center;
+}
+.lp-product__copy {
+  h2 {
+    font-family: $font-display;
+    font-weight: 800;
+    font-size: clamp(1.9rem, 3vw, 2.5rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin: 0 0 14px;
+  }
+  > p { color: $text-gray; font-size: 17px; line-height: 1.55; margin: 0 0 28px; max-width: 44ch; }
+}
+
 // ── Product preview ──
 // Everything inside is the real dashboard / document markup and styles.
 // This file only places the pieces and drives the animation.
@@ -176,7 +188,6 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
   box-shadow: $lp-glow-lg;
   padding: 18px 18px 6px;
   opacity: 0;
-  animation: lp-card-in 0.9s $lp-ease 0.35s forwards;
 
   .tasks-header { margin-bottom: 0; }
   .kanban { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 12px; }
@@ -205,7 +216,6 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
   bottom: 0;
   width: 360px;
   opacity: 0;
-  animation: lp-card-in 0.8s $lp-ease 1.1s forwards;
   box-shadow: $lp-glow-lg;
 
   .doc-head { padding: 18px 20px; gap: 14px; }
@@ -215,7 +225,12 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
   .doc-banner { padding: 10px 12px; }
   .doc-banner__title { font-size: 14px; }
   .doc-banner__text { font-size: 13px; }
-  .doc-banner { animation: lp-banner 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1.9s both; }
+  .doc-banner { opacity: 0; }
+}
+.lp-product.is-in {
+  .lp-demo__window { animation: lp-card-in 0.9s $lp-ease 0.25s forwards; }
+  .lp-demo__doc { animation: lp-card-in 0.8s $lp-ease 0.9s forwards; }
+  .lp-demo__doc .doc-banner { animation: lp-banner 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 1.7s both; }
 }
 @keyframes lp-banner {
   from { opacity: 0; transform: translateY(6px) scale(0.97); }
@@ -227,8 +242,13 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
 // message, the image drifts with scroll (parallax) and journey-history tags pop up above
 // travellers in a loop.
 $lp-scene-h: clamp(560px, 82vh, 780px);
-.lp-scene {
-  margin-top: 8px;
+.lp-scene--hero .lp-scene__frame { height: clamp(600px, calc(100vh - 80px), 860px); }
+.lp-scene--hero .lp-scene__media { width: max(100%, calc(clamp(600px, calc(100vh - 80px), 860px) * 1347 / 731)); }
+.lp-scene--hero .lp-scene__copy {
+  width: min(640px, 48%);
+  .lp-hero__title { color: #fff; font-size: clamp(2.6rem, 3.8vw, 3.4rem); margin-bottom: 20px; }
+  p { font-size: 18px; max-width: 46ch; }
+  .lp-hero__actions { margin-bottom: 0; }
 }
 .lp-scene__frame {
   position: relative;
@@ -555,7 +575,7 @@ $lp-scene-h: clamp(560px, 82vh, 780px);
 
 // ── Responsive ──
 @media (max-width: 991px) {
-  .lp-hero { grid-template-columns: 1fr; gap: 40px; padding-top: 32px; }
+  .lp-product { grid-template-columns: 1fr; gap: 40px; padding-top: 72px; }
   .lp-demo { max-width: 560px; padding-left: 0; }
   .lp-steps { grid-template-columns: 1fr; }
   .lp-steps::before { display: none; }
@@ -563,8 +583,9 @@ $lp-scene-h: clamp(560px, 82vh, 780px);
   .lp-how { padding-top: 72px; }
 }
 @media (max-width: 767px) {
-  .lp-scene__frame { height: 620px; }
-  .lp-scene__media { width: max(100%, calc(620px * 1347 / 731)); }
+  .lp-scene__frame, .lp-scene--hero .lp-scene__frame { height: 700px; }
+  .lp-scene__media, .lp-scene--hero .lp-scene__media { width: max(100%, calc(700px * 1347 / 731)); }
+  .lp-scene--hero .lp-scene__copy { width: auto; p { font-size: 16px; } }
   .lp-scene__shade {
     background: linear-gradient(0deg, rgba(26, 21, 53, 0.95) 0%, rgba(26, 21, 53, 0.85) 38%, rgba(26, 21, 53, 0) 62%);
   }
@@ -577,12 +598,12 @@ $lp-scene-h: clamp(560px, 82vh, 780px);
     transform: none;
     p { font-size: 16px; margin-bottom: 20px; }
   }
+  .lp-scene--hero .lp-hero__title { font-size: 2.4rem; }
 }
 @media (max-width: 575px) {
-  .lp-nav, .lp-hero, .lp-how, .lp-scanner, .lp-footer { padding-left: 16px; padding-right: 16px; }
+  .lp-nav, .lp-product, .lp-how, .lp-scanner, .lp-footer { padding-left: 16px; padding-right: 16px; }
   .lp-nav__link:not(:last-child) { display: none; }
-  .lp-hero__lede { font-size: 16px; }
-  .lp-demo { padding: 0 0 150px; }
+    .lp-demo { padding: 0 0 150px; }
   .lp-demo__window .kanban { grid-template-columns: 1fr; }
   .lp-demo__window .kanban-col:last-child { display: none; }
   .lp-demo__doc { left: 8px; width: calc(100% - 16px); }
@@ -592,7 +613,8 @@ $lp-scene-h: clamp(560px, 82vh, 780px);
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .lp-rise, .lp-demo__window, .lp-demo__doc, .lp-demo__doc .doc-banner { animation: none; opacity: 1; transform: none; }
+  .lp-rise, .lp-demo__window, .lp-demo__doc, .lp-demo__doc .doc-banner,
+  .lp-product.is-in .lp-demo__window, .lp-product.is-in .lp-demo__doc, .lp-product.is-in .lp-demo__doc .doc-banner { animation: none; opacity: 1; transform: none; }
   [data-landing-target="reveal"], .lp-seq { opacity: 1; transform: none; transition: none; }
   .lp-steps::before { transform: none; transition: none; }
   .lp-scene__media { transform: none; }
