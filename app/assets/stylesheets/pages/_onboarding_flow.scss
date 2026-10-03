@@ -245,6 +245,8 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   &:hover { background: #5A45D1; transform: translateY(-1px); }
   &:focus-visible { outline: 2px solid $indigo-landed; outline-offset: 3px; }
 }
+// Back sits first on the left: pull it in so its arrow lines up with the content edge
+.ob-actions .ob-btn--ghost:first-child { margin-left: -10px; }
 .ob-btn--ghost {
   background: transparent;
   color: $text-gray;

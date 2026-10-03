@@ -186,7 +186,7 @@ export default class extends Controller {
     this.renderCalendar()
     this.markChip(event.currentTarget)
     // No auto-advance here: the user checks the date on the calendar, then presses Continue
-    this.currentStep.querySelector(".ob-actions .ob-btn")?.focus({ preventScroll: true })
+    this.currentStep.querySelector(".ob-actions .ob-btn:not(.ob-btn--ghost)")?.focus({ preventScroll: true })
   }
 
   markChip(chip) {
