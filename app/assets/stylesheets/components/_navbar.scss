@@ -262,3 +262,10 @@ body {
     &:hover { color: #fff; }
   }
 }
+
+// Pages without the sidebar (landing, auth, onboarding) stack top to bottom,
+// so the top navbar spans the full width instead of sitting in the sidebar slot.
+body.no-sidebar {
+  flex-direction: column;
+  .sidebar-main-content { padding: 0; }
+}

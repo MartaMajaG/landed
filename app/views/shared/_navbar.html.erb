@@ -1,16 +1,7 @@
-<% onboarding_page = controller_name == "onboardings" %>
+<%# Landing and onboarding render their own header %>
+<% own_header = controller_name == "onboardings" || (controller_name == "pages" && action_name == "index") %>
 
-<% if onboarding_page %>
-  <nav class="navbar navbar-expand-sm navbar-light navbar-lewagon">
-    <div class="container">
-      <%= link_to "Landed", root_path, class: "navbar-brand" %>
-      <ul class="navbar-nav ms-auto align-items-center gap-1">
-        <li class="nav-item">
-          <%= link_to "Help", "#", class: "nav-link" %>
-        </li>
-      </ul>
-    </div>
-  </nav>
+<% if own_header %>
 <% elsif user_signed_in? %>
   <aside class="landed-sidebar">
     <div class="sidebar-logo">
