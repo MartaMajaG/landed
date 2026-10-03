@@ -21,23 +21,57 @@
     </nav>
   </header>
 
+  <%# Full-bleed scene. Tag positions are % of the illustration itself (not the frame),
+      anchored on travellers' heads, so they stay on the right people at any crop.
+      Each tag is the dashboard's journey-history popover + dot. %>
+  <% scene_tags = [
+    { x: 67.6, y: 31.8, title: "Anmeldung completed",        date: "Nov 4" },
+    { x: 83.4, y: 67.9, title: "Bank account opened",        date: "Nov 12" },
+    { x: 80.0, y: 38.0, title: "Registration submitted",     date: "Oct 21" },
+    { x: 64.5, y: 47.8, title: "Health insurance chosen",    date: "Oct 30" },
+    { x: 89.0, y: 53.4, title: "Liability insurance chosen", date: "Nov 26" }
+  ] %>
   <%# ── HERO ── %>
-  <section class="lp-hero">
-    <div class="lp-hero__copy">
-      <h1 class="lp-hero__title">
-        <span class="lp-rise" style="--d: 0ms">The relocation companion</span>
-        <span class="lp-rise" style="--d: 90ms">that moves with you.</span>
-      </h1>
-      <p class="lp-hero__lede lp-rise" style="--d: 200ms">
-        Tell Landed where you're moving and when you arrive. It turns German bureaucracy into a dated checklist, and explains the official letters you can't read yet.
-      </p>
-      <div class="lp-hero__actions lp-rise" style="--d: 300ms">
-        <%= link_to new_user_registration_path, class: "lp-btn" do %>
-          Get started <%= lucide_icon("arrow_right", size: 16) %>
-        <% end %>
-        <a href="#how" class="lp-btn lp-btn--ghost">See how it works</a>
+  <section class="lp-scene lp-scene--hero is-in">
+    <div class="lp-scene__frame" data-landing-target="scene">
+      <div class="lp-scene__media" data-landing-target="sceneMedia">
+        <%= image_tag "landing_image.png", class: "lp-scene__img", alt: "People arriving at a German airport with luggage" %>
+        <div class="lp-scene__tags" aria-hidden="true">
+          <% scene_tags.each_with_index do |tag, i| %>
+            <span class="lp-tag" style="--x: <%= tag[:x] %>%; --y: <%= tag[:y] %>%; --i: <%= i %>">
+              <span class="journey-history-popover journey-history-popover--open lp-tag__pill">
+                <span class="journey-history-popover__title"><%= tag[:title] %></span>
+                <span class="journey-history-popover__meta">Completed <%= tag[:date] %></span>
+              </span>
+              <span class="journey-history-dot lp-tag__ping"></span>
+            </span>
+          <% end %>
+        </div>
       </div>
-      <ul class="lp-hero__pillars lp-rise" style="--d: 400ms" aria-label="What Landed covers">
+      <div class="lp-scene__shade" aria-hidden="true"></div>
+
+      <div class="lp-scene__copy">
+        <h1 class="lp-hero__title">
+          <span class="lp-rise" style="--d: 0ms">The relocation companion</span>
+          <span class="lp-rise" style="--d: 90ms">that moves with you.</span>
+        </h1>
+        <p class="lp-rise" style="--d: 200ms">Tell Landed where you're moving and when you arrive. It turns German bureaucracy into a dated checklist, and explains the official letters you can't read yet.</p>
+        <div class="lp-hero__actions lp-rise" style="--d: 300ms">
+          <%= link_to new_user_registration_path, class: "lp-btn lp-btn--light" do %>
+            Get started <%= lucide_icon("arrow_right", size: 16) %>
+          <% end %>
+          <a href="#how" class="lp-btn lp-btn--on-dark">See how it works</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%# ── PRODUCT ── %>
+  <section class="lp-product" data-landing-target="reveal">
+    <div class="lp-product__copy">
+      <h2>Your whole move on one board</h2>
+      <p>Every task is dated from your arrival and sorted by what's urgent. Steps open in the right order, and when a German letter arrives, its deadline shows up next to everything else.</p>
+      <ul class="lp-hero__pillars" aria-label="What Landed covers">
         <% pillars.each do |slug, name| %>
           <li class="lp-pillar"><%= pillar_chip_for(slug, name) %></li>
         <% end %>
@@ -110,45 +144,6 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <%# ── ILLUSTRATION ── %>
-  <%# Full-bleed scene. Tag positions are % of the illustration itself (not the frame),
-      anchored on travellers' heads, so they stay on the right people at any crop.
-      Each tag is the dashboard's journey-history popover + dot. %>
-  <% scene_tags = [
-    { x: 67.6, y: 31.8, title: "Anmeldung completed",        date: "Nov 4" },
-    { x: 83.4, y: 67.9, title: "Bank account opened",        date: "Nov 12" },
-    { x: 80.0, y: 38.0, title: "Registration submitted",     date: "Oct 21" },
-    { x: 64.5, y: 47.8, title: "Health insurance chosen",    date: "Oct 30" },
-    { x: 89.0, y: 53.4, title: "Liability insurance chosen", date: "Nov 26" }
-  ] %>
-  <section class="lp-scene" data-landing-target="reveal">
-    <div class="lp-scene__frame" data-landing-target="scene">
-      <div class="lp-scene__media" data-landing-target="sceneMedia">
-        <%= image_tag "landing_image.png", class: "lp-scene__img", alt: "People arriving at a German airport with luggage" %>
-        <div class="lp-scene__tags" aria-hidden="true">
-          <% scene_tags.each_with_index do |tag, i| %>
-            <span class="lp-tag" style="--x: <%= tag[:x] %>%; --y: <%= tag[:y] %>%; --i: <%= i %>">
-              <span class="journey-history-popover journey-history-popover--open lp-tag__pill">
-                <span class="journey-history-popover__title"><%= tag[:title] %></span>
-                <span class="journey-history-popover__meta">Completed <%= tag[:date] %></span>
-              </span>
-              <span class="journey-history-dot lp-tag__ping"></span>
-            </span>
-          <% end %>
-        </div>
-      </div>
-      <div class="lp-scene__shade" aria-hidden="true"></div>
-
-      <div class="lp-scene__copy">
-        <h2>Thousands of people land in Germany every week</h2>
-        <p>Most spend their first weeks working out which office to visit first. Landed has that order worked out before you arrive.</p>
-        <%= link_to new_user_registration_path, class: "lp-btn lp-btn--light" do %>
-          Start your checklist <%= lucide_icon("arrow_right", size: 16) %>
-        <% end %>
       </div>
     </div>
   </section>
