@@ -270,6 +270,53 @@
       <span class="breadcrumb__current" style="max-width:500px;"><%= english_title %></span>
     </div>
 
+    <% if @chat.analysis_failed? %>
+      <%# ── The AI couldn't read this scan: explain, help, and offer a way out ── %>
+      <section class="doc-card" style="padding:32px; display:grid; grid-template-columns:minmax(0, 220px) minmax(0, 1fr); gap:32px; align-items:start;">
+        <% if @chat.document.attached? && @chat.document.content_type.to_s.start_with?("image/") %>
+          <%= link_to url_for(@chat.document), target: "_blank", class: "doc-peek", style: "height:280px;", aria: { label: "Open your photo full size" } do %>
+            <%= image_tag url_for(@chat.document), alt: "" %>
+          <% end %>
+        <% else %>
+          <div class="doc-file"><span class="lucide-icon"><%= icon_file_red.html_safe %></span></div>
+        <% end %>
+
+        <div style="display:flex; flex-direction:column; gap:16px;">
+          <div style="display:flex; gap:14px; align-items:flex-start;">
+            <span style="width:40px; height:40px; border-radius:12px; background:#FDE4E1; color:#B42318; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5z"/><path d="M14 2v6h6"/><path d="M12 12v3"/><path d="M12 18h.01"/></svg>
+            </span>
+            <div>
+              <h1 class="doc-title" style="font-size:26px !important;">We couldn't read this document</h1>
+              <p style="margin:6px 0 0; font-size:15px; line-height:1.6; color:#4B5563;">Your photo is saved, but the analysis didn't work. This usually comes down to the photo itself, and a second try often does it.</p>
+            </div>
+          </div>
+
+          <div style="background:#F8F6FE; border:1px solid #E6E0FB; border-radius:14px; padding:16px 18px;">
+            <p style="margin:0 0 8px; font-size:14px; font-weight:600; color:#1A1A2E;">For a clearer scan</p>
+            <ul style="margin:0; padding-left:18px; font-size:14px; line-height:1.7; color:#374151;">
+              <li>Lay the letter flat and fit the whole page in the frame</li>
+              <li>Use good light and avoid shadows or glare</li>
+              <li>Hold the phone straight above the page, not at an angle</li>
+            </ul>
+          </div>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <%= button_to reanalyze_chat_path(@chat), method: :post, form: { data: { turbo: false }, style: "margin:0;" }, class: "doc-btn doc-btn--primary",
+                  onclick: "this.style.opacity='0.6'; this.querySelector('.tp-label').textContent='Trying again… this takes about 10 seconds';" do %>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M8 16H3v5"/></svg>
+              <span class="tp-label">Try again</span>
+            <% end %>
+            <%= link_to chats_path, class: "doc-btn doc-btn--secondary", style: "text-decoration:none;" do %>
+              Scan a new photo
+            <% end %>
+            <%= button_to "Delete", chat_path(@chat), method: :delete, form: { data: { turbo_confirm: "Delete this document?" }, style: "margin:0;" },
+                  class: "doc-btn", style: "border:1px solid #E5E7EB; background:#fff; color:#4B5563;" %>
+          </div>
+        </div>
+      </section>
+    <% else %>
+
     <%# ── HEADER: what it is, how urgent, what to do, the numbers ── %>
     <section class="doc-card">
       <div class="doc-head">
@@ -499,6 +546,7 @@
       </section>
 
     </div>
+    <% end %>
   </div>
 </div>
 

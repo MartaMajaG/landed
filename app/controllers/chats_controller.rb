@@ -42,11 +42,25 @@ class ChatsController < ApplicationController
           advice: ai_data["advice"]
         )
       end
-      redirect_to chat_path(@chat), notice: "Document scanned and analyzed!"
+      if @chat.analysis_failed?
+        redirect_to chat_path(@chat) # the page itself explains what went wrong
+      else
+        redirect_to chat_path(@chat), notice: "Document scanned and analyzed!"
+      end
     else
       render :new, status: :unprocessable_entity
     end
   end
+  # "Try again" on a document the AI couldn't read
+  def reanalyze
+    @chat = current_user.chats.find(params[:id])
+    if @chat.reanalyze!
+      redirect_to chat_path(@chat), notice: "Document scanned and analyzed!"
+    else
+      redirect_to chat_path(@chat), alert: "Still couldn't read it. A clearer photo usually fixes this."
+    end
+  end
+
   def destroy
   @chat = current_user.chats.find(params[:id])
   @chat.destroy

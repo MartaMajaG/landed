@@ -15,11 +15,10 @@ class Chat < ApplicationRecord
 
     begin
       response = call_anthropic(qa_settings(question))
-      raw_text = response.dig("content", 0, "text")
-      raw_text || "I could not generate a response."
+      response.dig("content", 0, "text").presence
     rescue => e
       Rails.logger.error "Chat Q&A Failed: #{e.message}"
-      "Something went wrong. Please try again."
+      nil # The reply job shows an error bubble with a retry button
     end
   end
 
@@ -35,8 +34,27 @@ class Chat < ApplicationRecord
       parsed
     rescue => e
       Rails.logger.error "Chat AI Analysis Failed: #{e.message}"
-      { "title" => "Manual Review Required", "urgency" => "medium" }
+      { "title" => "Couldn't read this document", "urgency" => "medium" }
     end
+  end
+
+  # The scan was saved but the AI couldn't analyse it (bad photo, timeout, API error)
+  def analysis_failed?
+    document.attached? && advice.blank?
+  end
+
+  # Runs the analysis again on the same file and stores the result
+  def reanalyze!
+    ai_data = analyze_document || {}
+    update(
+      title: ai_data["title"],
+      amount: ai_data["amount"],
+      deadline: ai_data["deadline"],
+      urgency: ai_data["urgency"],
+      document_type: ai_data["document_type"],
+      advice: ai_data["advice"]
+    )
+    !analysis_failed?
   end
 
   def parsed_advice

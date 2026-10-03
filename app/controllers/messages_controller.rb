@@ -26,11 +26,22 @@ class MessagesController < ApplicationController
     end
   end
 
+  # Retry button on a failed or slow AI reply: queue the same question again
+  def regenerate
+    @chat = current_user.chats.find(params[:chat_id])
+    @user_message = @chat.messages.where(role: "user").find(params[:id])
+    AiReplyJob.perform_later(@user_message.id)
+
+    render turbo_stream: turbo_stream.replace(
+      "ai-loading-#{@user_message.id}",
+      partial: "messages/ai_loading",
+      locals: { chat: @chat, user_message: @user_message }
+    )
+  end
+
   private
 
   def message_params
     params.require(:message).permit(:content)
   end
 end
-
-

@@ -12,7 +12,10 @@ Rails.application.routes.draw do
   # Routes for chat functionality and PDF document uploads
   resources :chats, only: [:index, :show, :new, :create, :destroy] do
     # Messages are nested within chats as child resources
-    resources :messages, only: [:create]
+    resources :messages, only: [:create] do
+      member { post :regenerate }
+    end
+    member { post :reanalyze }
     collection do
     delete :bulk_destroy
     end
