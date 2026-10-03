@@ -223,35 +223,77 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 // ── Illustration ──
-// The image drifts with scroll (parallax), and small Landed status tags pop up
-// above travellers in a loop, so the scene reads as people getting their move done.
+// Full-bleed scene: the image runs edge to edge, a navy fade on the left carries a short
+// message, the image drifts with scroll (parallax) and journey-history tags pop up above
+// travellers in a loop.
+$lp-scene-h: clamp(560px, 82vh, 780px);
 .lp-scene {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 32px;
+  margin-top: 8px;
 }
 .lp-scene__frame {
   position: relative;
-  aspect-ratio: 1347 / 600;
-  border-radius: 28px;
+  height: $lp-scene-h;
   overflow: hidden;
-  box-shadow: $lp-glow;
   isolation: isolate;
+  background: #AEB5E3; // the illustration's floor colour, shown while the image loads
 }
+// The media box keeps the illustration's own aspect ratio and covers the frame,
+// so tag anchors (% of the image) always land on the same people.
 .lp-scene__media {
   position: absolute;
-  inset: 0;
-  transform: translate3d(0, var(--py, 0px), 0) scale(var(--ps, 1.06));
-  transform-origin: center 40%;
+  top: 50%;
+  left: 50%;
+  width: max(100%, calc(#{$lp-scene-h} * 1347 / 731));
+  aspect-ratio: 1347 / 731;
+  transform: translate(-50%, calc(-50% + var(--py, 0px))) scale(var(--ps, 1.06));
+  transform-origin: center center;
   will-change: transform;
 }
 .lp-scene__img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  object-position: center 40%;
 }
+.lp-scene__shade {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(26, 21, 53, 0.94) 0%, rgba(26, 21, 53, 0.86) 34%, rgba(26, 21, 53, 0.5) 46%, rgba(26, 21, 53, 0) 62%),
+    linear-gradient(0deg, rgba(26, 21, 53, 0.25) 0%, rgba(26, 21, 53, 0) 30%);
+}
+.lp-scene__copy {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: max(32px, calc((100vw - 1136px) / 2));
+  width: min(480px, 40%);
+  transform: translateY(-50%);
+  color: #fff;
+  h2 {
+    font-family: $font-display;
+    font-weight: 800;
+    font-size: clamp(1.9rem, 2.9vw, 2.6rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin: 0 0 16px;
+  }
+  p {
+    font-size: 17px;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.78);
+    margin: 0 0 28px;
+  }
+  > * {
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity 0.7s $lp-ease, transform 0.7s $lp-ease;
+  }
+  > *:nth-child(2) { transition-delay: 0.12s; }
+  > *:nth-child(3) { transition-delay: 0.24s; }
+}
+.lp-scene.is-in .lp-scene__copy > * { opacity: 1; transform: none; }
 
 .lp-scene__tags { position: absolute; inset: 0; pointer-events: none; }
 .lp-tag {
@@ -295,16 +337,16 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
   }
 }
 
-// Each tag lives for about half of a 12s loop, staggered 2s apart,
+// Each tag lives for about half of a 12s loop, staggered 2.4s apart (five tags),
 // so two or three are always on screen and they keep changing.
 .lp-scene.is-in {
   .lp-tag__pill, .lp-tag__ping {
     animation: lp-tag-cycle 12s cubic-bezier(0.34, 1.4, 0.64, 1) infinite;
-    animation-delay: calc(0.6s + var(--i) * 2s);
+    animation-delay: calc(0.6s + var(--i) * 2.4s);
   }
   .lp-tag__ping::after {
     animation: lp-ping 1.6s ease-out infinite;
-    animation-delay: calc(0.6s + var(--i) * 2s);
+    animation-delay: calc(0.6s + var(--i) * 2.4s);
   }
 }
 @keyframes lp-tag-cycle {
@@ -509,8 +551,7 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
   transition: opacity 0.8s $lp-ease, transform 0.8s $lp-ease;
   &.is-in { opacity: 1; transform: none; }
 }
-.lp-scene[data-landing-target="reveal"] { transform: translateY(24px) scale(0.97); }
-.lp-scene.is-in { transform: none; }
+.lp-scene[data-landing-target="reveal"] { transform: none; }
 
 // ── Responsive ──
 @media (max-width: 991px) {
@@ -521,15 +562,30 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
   .lp-scanner { grid-template-columns: 1fr; gap: 36px; }
   .lp-how { padding-top: 72px; }
 }
+@media (max-width: 767px) {
+  .lp-scene__frame { height: 620px; }
+  .lp-scene__media { width: max(100%, calc(620px * 1347 / 731)); }
+  .lp-scene__shade {
+    background: linear-gradient(0deg, rgba(26, 21, 53, 0.95) 0%, rgba(26, 21, 53, 0.85) 38%, rgba(26, 21, 53, 0) 62%);
+  }
+  .lp-scene__copy {
+    top: auto;
+    bottom: 32px;
+    left: 16px;
+    right: 16px;
+    width: auto;
+    transform: none;
+    p { font-size: 16px; margin-bottom: 20px; }
+  }
+}
 @media (max-width: 575px) {
-  .lp-nav, .lp-hero, .lp-scene, .lp-how, .lp-scanner, .lp-footer { padding-left: 16px; padding-right: 16px; }
+  .lp-nav, .lp-hero, .lp-how, .lp-scanner, .lp-footer { padding-left: 16px; padding-right: 16px; }
   .lp-nav__link:not(:last-child) { display: none; }
   .lp-hero__lede { font-size: 16px; }
   .lp-demo { padding: 0 0 150px; }
   .lp-demo__window .kanban { grid-template-columns: 1fr; }
   .lp-demo__window .kanban-col:last-child { display: none; }
   .lp-demo__doc { left: 8px; width: calc(100% - 16px); }
-  .lp-scene__frame { border-radius: 18px; }
   // too small for labels on a phone: keep the pulsing pins only
   .lp-tag__pill { display: none; }
   .lp-cta { margin: 56px 16px 0; padding: 32px 24px; }

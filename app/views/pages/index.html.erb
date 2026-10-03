@@ -115,15 +115,15 @@
   </section>
 
   <%# ── ILLUSTRATION ── %>
-  <%# Positions are % of the frame, anchored on travellers' heads in the illustration.
+  <%# Full-bleed scene. Tag positions are % of the illustration itself (not the frame),
+      anchored on travellers' heads, so they stay on the right people at any crop.
       Each tag is the dashboard's journey-history popover + dot. %>
   <% scene_tags = [
-    { x: 25.8, y: 36, title: "Anmeldung completed",     date: "Nov 4" },
-    { x: 67.6, y: 30, title: "Bank account opened",     date: "Nov 12" },
-    { x: 40.6, y: 56, title: "Health insurance chosen", date: "Oct 30" },
-    { x: 10.6, y: 16, title: "Registration submitted",  date: "Oct 21" },
-    { x: 83.4, y: 74, title: "Utilities set up",        date: "Nov 18" },
-    { x: 31.6, y: 83, title: "Liability insurance chosen", date: "Nov 26" }
+    { x: 67.6, y: 31.8, title: "Anmeldung completed",        date: "Nov 4" },
+    { x: 83.4, y: 67.9, title: "Bank account opened",        date: "Nov 12" },
+    { x: 80.0, y: 38.0, title: "Registration submitted",     date: "Oct 21" },
+    { x: 64.5, y: 47.8, title: "Health insurance chosen",    date: "Oct 30" },
+    { x: 89.0, y: 53.4, title: "Liability insurance chosen", date: "Nov 26" }
   ] %>
   <section class="lp-scene" data-landing-target="reveal">
     <div class="lp-scene__frame" data-landing-target="scene">
@@ -140,6 +140,15 @@
             </span>
           <% end %>
         </div>
+      </div>
+      <div class="lp-scene__shade" aria-hidden="true"></div>
+
+      <div class="lp-scene__copy">
+        <h2>Thousands of people land in Germany every week</h2>
+        <p>Most spend their first weeks working out which office to visit first. Landed has that order worked out before you arrive.</p>
+        <%= link_to new_user_registration_path, class: "lp-btn lp-btn--light" do %>
+          Start your checklist <%= lucide_icon("arrow_right", size: 16) %>
+        <% end %>
       </div>
     </div>
   </section>
