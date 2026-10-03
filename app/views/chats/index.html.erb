@@ -240,7 +240,11 @@
         <%= f.submit "Scan document", class: "btn-doc-primary", style:"width:100%; justify-content:center; padding:11px; font-size:15px;" %>
       </div>
       <div data-loading-target="loader" class="d-none" style="text-align:center; padding:32px 0;">
-        <div style="width:44px; height:44px; border:3px solid #EEEBFD; border-top-color:var(--brand-indigo); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px;"></div>
+        <div data-loading-target="scan" class="scan-anim d-none" aria-hidden="true">
+          <img data-loading-target="scanImage" alt="">
+          <span class="scan-anim__line"></span>
+        </div>
+        <div data-loading-target="spinner" style="width:44px; height:44px; border:3px solid #EEEBFD; border-top-color:var(--brand-indigo); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px;"></div>
         <p style="font-size:15px; font-weight:500; color:#2C2C2A; margin-bottom:4px;">Analysing your document...</p>
         <p style="font-size:13px; color:#888780;">This takes about 10 seconds</p>
       </div>

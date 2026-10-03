@@ -29,6 +29,8 @@ export default class extends Controller {
 
       const numberEl = stepEl.querySelector(".step__number")
       numberEl.classList.add("step__number--done")
+      this.replay(numberEl, "step__number--pop")
+      this.replay(stepEl.querySelector(".step__card"), "step__card--done-flash")
       numberEl.innerHTML = `
         <form action="${url}" method="post" data-turbo="false">
           <input type="hidden" name="_method" value="patch">
@@ -89,6 +91,7 @@ export default class extends Controller {
           this.stepCountTarget.innerHTML = `<span class="task-steps__fraction">${completedCount}&thinsp;/&thinsp;${totalCount}</span>`
         }
       }
+      if (this.hasStepCountTarget) this.replay(this.stepCountTarget, "task-steps--tick")
 
       this.flashAutosave()
 
@@ -255,5 +258,14 @@ export default class extends Controller {
       }
     }
     animate()
+  }
+
+  // Restarts a one-off CSS animation by removing and re-adding its class
+  replay(el, className) {
+    if (!el) return
+    el.classList.remove(className)
+    void el.offsetWidth
+    el.classList.add(className)
+    el.addEventListener("animationend", () => el.classList.remove(className), { once: true })
   }
 }
