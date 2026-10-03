@@ -839,3 +839,41 @@
   &[data-expanded="true"]::before { content: '↑'; }
   &:hover { color: $indigo-landed; border-color: $indigo-landed; background: #EEEBFD; }
 }
+
+// ── Filter: button bumps, menu grows out of it, options follow ──
+.pillar-filter__btn[aria-expanded="true"] {
+  animation: pf-bump 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.pillar-filter__dropdown {
+  transform-origin: top right;
+  transform: translateY(-6px) scale(0.9);
+  transition: opacity 0.18s ease, transform 0.32s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.pillar-filter__dropdown--open {
+  transform: translateY(0) scale(1);
+}
+.pillar-filter__dropdown--open > * {
+  animation: pf-item-in 0.28s ease both;
+}
+.pillar-filter__dropdown--open > *:nth-child(2) { animation-delay: 0.03s; }
+.pillar-filter__dropdown--open > *:nth-child(3) { animation-delay: 0.06s; }
+.pillar-filter__dropdown--open > *:nth-child(4) { animation-delay: 0.09s; }
+.pillar-filter__dropdown--open > *:nth-child(5) { animation-delay: 0.12s; }
+.pillar-filter__dropdown--open > *:nth-child(6) { animation-delay: 0.15s; }
+.pillar-filter__dropdown--open > *:nth-child(n+7) { animation-delay: 0.18s; }
+
+@keyframes pf-bump {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(0.88); }
+  100% { transform: scale(1); }
+}
+@keyframes pf-item-in {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pillar-filter__btn[aria-expanded="true"],
+  .pillar-filter__dropdown--open > * { animation: none; }
+  .pillar-filter__dropdown { transition: opacity 0.15s ease; transform: none; }
+}
