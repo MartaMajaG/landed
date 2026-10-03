@@ -1,4 +1,4 @@
-<div style="display:flex; gap:8px; align-items:flex-start;">
+<div class="<%= 'ai-bubble-in' if local_assigns[:animate] %>" style="display:flex; gap:8px; align-items:flex-start;">
   <div style="width:28px; height:28px; background:#EEEBFD; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; color:#6B56E2;"><span class="lucide-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/></svg></span></div>
   <div class="ai-reply" style="background:#fff; border:1px solid #C8BCF5; color:#1A1A2E; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:4px 18px 18px 18px; max-width:75%;"><%= format_ai_reply(content) %></div>
 </div>

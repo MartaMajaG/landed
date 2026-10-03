@@ -17,7 +17,7 @@ class AiReplyJob < ApplicationJob
 
     ai_message = chat.messages.create!(role: "assistant", content: ai_response)
     broadcast_bubble(chat, user_message, ApplicationController.render(
-      partial: "messages/ai_bubble", locals: { content: ai_message.content }
+      partial: "messages/ai_bubble", locals: { content: ai_message.content, animate: true }
     ))
   rescue => e
     Rails.logger.error "[AiReplyJob] #{e.class}: #{e.message}"
