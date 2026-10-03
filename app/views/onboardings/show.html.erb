@@ -189,12 +189,11 @@
     <section class="ob-plan" data-onboarding-target="plan" hidden>
       <div class="ob-plan__head">
         <div>
-          <h1 data-onboarding-target="planTitle">Your plan is ready</h1>
+          <h1 data-onboarding-target="planTitle">Your board is ready</h1>
           <p data-onboarding-target="planLede"></p>
         </div>
-        <div class="ob-plan__stats" data-onboarding-target="planStats"></div>
       </div>
-      <div class="ob-plan__phases" data-onboarding-target="planBody"></div>
+      <div class="kanban ob-board" data-onboarding-target="planBody"></div>
       <div class="ob-plan__cta" data-onboarding-target="planCta">
         <p data-onboarding-target="planNext"></p>
         <button type="submit" class="ob-btn">Open my dashboard <%= lucide_icon("arrow_right", size: 16) %></button>

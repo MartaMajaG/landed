@@ -413,90 +413,37 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   }
   p { margin: 0; color: $text-gray; font-size: 16px; max-width: 58ch; }
 }
-.ob-plan__stats { display: flex; gap: 10px; flex-wrap: wrap; }
-.ob-stat {
-  min-width: 112px;
-  padding: 12px 16px;
-  background: #fff;
-  border: 1px solid $ob-line;
-  border-radius: 14px;
-  box-shadow: $ob-glow;
-  b { display: block; font-family: $font-display; font-weight: 800; font-size: 24px; line-height: 1.1; }
-  span { font-size: 13px; color: $text-gray; }
-}
-.ob-stat--lime b { color: $chartreuse; }
-
-.ob-plan__phases {
-  display: grid;
-  grid-template-columns: repeat(var(--cols, 3), minmax(0, 1fr));
-  gap: 20px;
-  align-items: start;
-}
-.ob-phase h3 {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-family: $font-display;
-  font-weight: 700;
-  font-size: 16px;
-  margin: 0 0 2px;
-}
-.ob-phase__count {
-  font-family: $font-ui;
-  font-size: 12px;
-  font-weight: 600;
-  color: $indigo-landed;
-  background: $ob-tint;
-  border-radius: 999px;
-  padding: 1px 8px;
-}
-.ob-phase__range { font-size: 13px; color: $ob-muted; margin: 0 0 14px; }
-.ob-phase__cards { display: flex; flex-direction: column; gap: 12px; }
-
-// Matches the dashboard task cards: pillar colour as a top accent bar
-.ob-task {
-  --accent: #9ca3af;
-  position: relative;
-  background: #fff;
-  border: 1px solid $ob-line;
-  border-radius: 16px;
-  padding: 18px 16px 14px;
-  overflow: hidden;
-  box-shadow: $ob-glow;
+// The board preview uses the dashboard's own kanban columns and task cards
+// (pages/_home.scss); these rules only make the cards compact and animate them in.
+.ob-board { margin-top: 0; }
+.ob-board .task-card.ob-card {
+  min-height: 0;
+  pointer-events: none;
   opacity: 0;
   transform: translateY(12px);
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0 0 auto 0;
-    height: 4px;
-    background: var(--accent);
-  }
   &.is-in { animation: ob-card-in 0.5s $ob-ease forwards; }
+  &.locked.is-in { animation-name: ob-card-in-locked; }
+  .card-title { margin-bottom: 0; }
+  .card-bottom-row { margin-top: 8px; }
 }
 @keyframes ob-card-in { to { opacity: 1; transform: none; } }
-.ob-task--finance_and_banking      { --accent: #059669; }
-.ob-task--health_and_insurance     { --accent: #ec4899; }
-.ob-task--housing_and_registration { --accent: #f97316; }
-.ob-task--legal_and_work           { --accent: #5B21B6; }
-.ob-task__name { font-weight: 600; font-size: 15px; line-height: 1.35; margin: 0 0 6px; }
-.ob-task__why { font-size: 14px; color: $text-gray; line-height: 1.45; margin: 0 0 12px; }
-.ob-task__row { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
-.ob-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 12px;
+@keyframes ob-card-in-locked { to { opacity: 0.5; transform: none; } }
+.ob-start {
+  font-size: 11px;
   font-weight: 600;
-  svg { width: 12px; height: 12px; display: block; }
+  color: $chartreuse;
+  background: rgba(122, 158, 31, 0.12);
+  border-radius: 999px;
+  padding: 2px 8px;
+  white-space: nowrap;
 }
-.ob-task__due {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 12px;
-  font-weight: 500;
-  color: $text-gray;
+.ob-more {
+  margin: 2px 0 0;
+  padding: 0 4px;
+  font-size: 13px;
+  color: $ob-muted;
+  opacity: 0;
+  &.is-in { animation: ob-card-in 0.5s $ob-ease forwards; }
 }
 
 .ob-plan__cta {
@@ -521,7 +468,7 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
 @media (max-width: 991px) {
   .ob-stage { grid-template-columns: 1fr; gap: 32px; }
   .ob-summary { position: static; }
-  .ob-plan__phases { grid-template-columns: 1fr; }
+  .ob-board { grid-template-columns: 1fr; }
 }
 @media (max-width: 640px) {
   .ob-header, .ob-stage, .ob-plan, .ob-gen { padding-left: 16px; padding-right: 16px; }
@@ -534,7 +481,8 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
 
 @media (prefers-reduced-motion: reduce) {
   .ob-step--in, .ob-plan__head, .ob-fact.is-pop .ob-fact__value, .ob-cal__day.is-selected { animation: none; }
-  .ob-task, .ob-plan__cta { opacity: 1; transform: none; animation: none !important; }
+  .ob-board .task-card.ob-card, .ob-more, .ob-plan__cta { opacity: 1; transform: none; animation: none !important; }
+  .ob-board .task-card.ob-card.locked { opacity: 0.5; }
   .ob-gen__dot { animation: none !important; }
   .ob-progress span, .ob-option__tick, .ob-fact__icon > span { transition: none; }
 }
