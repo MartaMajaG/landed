@@ -20,6 +20,13 @@ class ChatsController < ApplicationController
 
   # Save the chat, trigger AI analysis if a document was attached, then redirect to results
   def create
+    # Only photos can be scanned for now. Safety net in case a PDF gets past the upload form.
+    upload = params.dig(:chat, :document)
+    if upload.respond_to?(:content_type) && !upload.content_type.to_s.start_with?("image/")
+      redirect_to chats_path, alert: "PDFs can't be scanned yet. Take a photo or screenshot of the page and upload that instead (JPEG or PNG)."
+      return
+    end
+
     @chat = current_user.chats.build(chat_params)
     @chat.checklist_item_id ||= ChecklistItem.first.id
 
