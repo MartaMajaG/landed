@@ -237,154 +237,60 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
   to   { opacity: 1; transform: none; }
 }
 
-// ── Illustration ──
-// Full-bleed scene: the image runs edge to edge, a navy fade on the left carries a short
-// message, the image drifts with scroll (parallax) and journey-history tags pop up above
-// travellers in a loop.
-$lp-scene-h: clamp(560px, 82vh, 780px);
-.lp-scene--hero .lp-scene__frame { height: clamp(600px, calc(100vh - 80px), 860px); }
-.lp-scene--hero .lp-scene__media { width: max(100%, calc(clamp(600px, calc(100vh - 80px), 860px) * 1347 / 731)); }
-.lp-scene--hero .lp-scene__copy {
-  width: min(640px, 48%);
-  .lp-hero__title { color: #fff; font-size: clamp(2.6rem, 3.8vw, 3.4rem); margin-bottom: 20px; }
-  p { font-size: 18px; max-width: 46ch; }
-  .lp-hero__actions { margin-bottom: 0; }
-}
-.lp-scene__frame {
+// ── Hero ──
+// Brand-purple hero: copy on the left, the isometric relocation scene on the right.
+.lp-hero {
   position: relative;
-  height: $lp-scene-h;
   overflow: hidden;
-  isolation: isolate;
-  background: #AEB5E3; // the illustration's floor colour, shown while the image loads
-}
-// The media box keeps the illustration's own aspect ratio and covers the frame,
-// so tag anchors (% of the image) always land on the same people.
-.lp-scene__media {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: max(100%, calc(#{$lp-scene-h} * 1347 / 731));
-  aspect-ratio: 1347 / 731;
-  transform: translate(-50%, calc(-50% + var(--py, 0px))) scale(var(--ps, 1.06));
-  transform-origin: center center;
-  will-change: transform;
-}
-.lp-scene__img {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-.lp-scene__shade {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  background:
-    linear-gradient(90deg, rgba(26, 21, 53, 0.94) 0%, rgba(26, 21, 53, 0.86) 34%, rgba(26, 21, 53, 0.5) 46%, rgba(26, 21, 53, 0) 62%),
-    linear-gradient(0deg, rgba(26, 21, 53, 0.25) 0%, rgba(26, 21, 53, 0) 30%);
-}
-.lp-scene__copy {
-  position: absolute;
-  z-index: 2;
-  top: 50%;
-  left: max(32px, calc((100vw - 1136px) / 2));
-  width: min(480px, 40%);
-  transform: translateY(-50%);
   color: #fff;
-  h2 {
-    font-family: $font-display;
-    font-weight: 800;
-    font-size: clamp(1.9rem, 2.9vw, 2.6rem);
-    line-height: 1.08;
-    letter-spacing: -0.02em;
-    margin: 0 0 16px;
-  }
-  p {
-    font-size: 17px;
-    line-height: 1.55;
-    color: rgba(255, 255, 255, 0.78);
-    margin: 0 0 28px;
-  }
-  > * {
-    opacity: 0;
-    transform: translateY(14px);
-    transition: opacity 0.7s $lp-ease, transform 0.7s $lp-ease;
-  }
-  > *:nth-child(2) { transition-delay: 0.12s; }
-  > *:nth-child(3) { transition-delay: 0.24s; }
+  background:
+    radial-gradient(60% 70% at 72% 55%, rgba(255, 255, 255, 0.16), transparent 70%),
+    linear-gradient(115deg, #5B45D6 0%, $indigo-landed 45%, #7C6AEB 100%);
 }
-.lp-scene.is-in .lp-scene__copy > * { opacity: 1; transform: none; }
+.lp-hero__inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 56px 32px 40px;
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: 24px;
+  align-items: center;
+}
+.lp-hero__copy { min-width: 0; }
+.lp-hero .lp-hero__title { color: #fff; font-size: clamp(2.4rem, 4.2vw, 3.6rem); margin-bottom: 20px; text-wrap: balance; }
+.lp-hero__lede { font-size: 18px; line-height: 1.55; color: rgba(255, 255, 255, 0.82); margin: 0 0 30px; max-width: 44ch; }
+.lp-hero .lp-hero__actions { margin-bottom: 0; }
+.lp-hero__art { min-width: 0; }
+.lp-iso { display: block; width: 100%; height: auto; max-width: 100%; overflow: visible; }
 
-.lp-scene__tags { position: absolute; inset: 0; pointer-events: none; }
-.lp-tag {
-  position: absolute;
-  left: var(--x);
-  top: var(--y);
-  width: 0;
-  height: 0;
-}
-.lp-tag__pill {
-  // real .journey-history-popover, re-positioned inside the scene
-  &.journey-history-popover {
-    position: absolute;
-    left: 0;
-    bottom: 12px;
-    width: auto;
-    white-space: nowrap;
-    z-index: auto;
-    transform-origin: center bottom;
-    opacity: 0;
-    transform: translate(-50%, 8px) scale(0.85);
-    box-shadow: 0 10px 24px -10px rgba(26, 21, 53, 0.45);
-  }
-  .journey-history-popover__title, .journey-history-popover__meta { display: block; }
-}
-// real .journey-history-dot, with a ring that pulses outward
-.lp-tag__ping.journey-history-dot {
-  top: 0;
-  left: 0;
-  width: 9px;
-  height: 9px;
-  pointer-events: none;
-  opacity: 0;
-  &::after {
-    content: "";
-    position: absolute;
-    inset: -2px;
-    border-radius: 50%;
-    border: 2px solid $indigo-landed;
-    opacity: 0;
-  }
-}
+// Scene animation (runs while .play is on the svg)
+.lp-iso.play .s-platform { animation: iso-rise 0.9s cubic-bezier(.22,1,.36,1) both; }
+.lp-iso.play .s-plane { animation: iso-fly-in 1.6s cubic-bezier(.22,1,.36,1) 0.2s both, iso-hover 4s ease-in-out 1.8s infinite; }
+.lp-iso.play .s-plane-shadow { animation: iso-shadow-in 1.6s cubic-bezier(.22,1,.36,1) 0.2s both; }
+.lp-iso.play .s-route-mask { animation: iso-draw 2.2s cubic-bezier(.45,0,.25,1) 1.1s both; }
+.lp-iso.play .s-pin { animation: iso-drop 0.55s cubic-bezier(.34,1.56,.64,1) both; animation-delay: var(--t); }
+.lp-iso.play .s-check { animation: iso-pop 0.4s cubic-bezier(.34,1.56,.64,1) both; animation-delay: var(--t); }
+.lp-iso.play .s-pop { animation: iso-card 0.5s cubic-bezier(.34,1.4,.64,1) 3.5s both; }
+.lp-iso.play .s-person { animation: iso-rise 0.7s cubic-bezier(.22,1,.36,1) both; animation-delay: var(--t); }
+.lp-iso.play .s-doc { animation: iso-rise 0.7s cubic-bezier(.22,1,.36,1) 0.6s both; }
+.lp-iso.play .s-doccard { animation: iso-card 0.55s cubic-bezier(.34,1.4,.64,1) 4s both; }
+.lp-iso.play .s-float { animation: iso-float 5s ease-in-out infinite; animation-delay: var(--f, 0s); }
+.lp-iso.play .s-scan { animation: iso-scan 2.4s ease-in-out 1.6s infinite; }
+.lp-iso.play .s-cloud { animation: iso-drift 9s ease-in-out infinite alternate; animation-delay: var(--t); }
+.lp-iso .s-pin, .lp-iso .s-check, .lp-iso .s-pop, .lp-iso .s-person, .lp-iso .s-doccard { transform-box: fill-box; transform-origin: 50% 100%; }
 
-// Each tag lives for about half of a 12s loop, staggered 2.4s apart (five tags),
-// so two or three are always on screen and they keep changing.
-.lp-scene.is-in {
-  .lp-tag__pill, .lp-tag__ping {
-    animation: lp-tag-cycle 12s cubic-bezier(0.34, 1.4, 0.64, 1) infinite;
-    animation-delay: calc(0.6s + var(--i) * 2.4s);
-  }
-  .lp-tag__ping::after {
-    animation: lp-ping 1.6s ease-out infinite;
-    animation-delay: calc(0.6s + var(--i) * 2.4s);
-  }
-}
-@keyframes lp-tag-cycle {
-  0%        { opacity: 0; transform: translate(-50%, 8px) scale(0.85); }
-  5%, 52%   { opacity: 1; transform: translate(-50%, 0) scale(1); }
-  58%, 100% { opacity: 0; transform: translate(-50%, -6px) scale(0.95); }
-}
-// the dot is centred differently from the popover, so it gets its own variant of the same timing
-.lp-scene.is-in .lp-tag__ping { animation-name: lp-ping-cycle; }
-@keyframes lp-ping-cycle {
-  0%        { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
-  5%, 52%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  58%, 100% { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
-}
-@keyframes lp-ping {
-  0%   { opacity: 0.8; transform: scale(1); }
-  100% { opacity: 0; transform: scale(3); }
-}
+@keyframes iso-rise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+@keyframes iso-fly-in { from { opacity: 0; transform: translate(-210px, -120px) scale(0.9); } to { opacity: 1; transform: none; } }
+@keyframes iso-shadow-in { from { opacity: 0; transform: translate(-200px, -10px); } to { opacity: 1; transform: none; } }
+@keyframes iso-hover { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes iso-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes iso-drop { from { opacity: 0; transform: translateY(-40px) scale(0.7); } to { opacity: 1; transform: none; } }
+@keyframes iso-pop { from { opacity: 0; transform: scale(0.3); } to { opacity: 1; transform: none; } }
+@keyframes iso-card { from { opacity: 0; transform: translateY(10px) scale(0.92); } to { opacity: 1; transform: none; } }
+@keyframes iso-scan { 0% { transform: translateY(0); } 50% { transform: translateY(38px); } 100% { transform: translateY(0); } }
+@keyframes iso-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+@keyframes iso-drift { from { transform: translateX(-10px); } to { transform: translateX(14px); } }
+
 
 // ── Section heads ──
 .lp-section-head {
@@ -571,7 +477,6 @@ $lp-scene-h: clamp(560px, 82vh, 780px);
   transition: opacity 0.8s $lp-ease, transform 0.8s $lp-ease;
   &.is-in { opacity: 1; transform: none; }
 }
-.lp-scene[data-landing-target="reveal"] { transform: none; }
 
 // ── Responsive ──
 @media (max-width: 991px) {
@@ -582,23 +487,9 @@ $lp-scene-h: clamp(560px, 82vh, 780px);
   .lp-scanner { grid-template-columns: 1fr; gap: 36px; }
   .lp-how { padding-top: 72px; }
 }
-@media (max-width: 767px) {
-  .lp-scene__frame, .lp-scene--hero .lp-scene__frame { height: 700px; }
-  .lp-scene__media, .lp-scene--hero .lp-scene__media { width: max(100%, calc(700px * 1347 / 731)); }
-  .lp-scene--hero .lp-scene__copy { width: auto; p { font-size: 16px; } }
-  .lp-scene__shade {
-    background: linear-gradient(0deg, rgba(26, 21, 53, 0.95) 0%, rgba(26, 21, 53, 0.85) 38%, rgba(26, 21, 53, 0) 62%);
-  }
-  .lp-scene__copy {
-    top: auto;
-    bottom: 32px;
-    left: 16px;
-    right: 16px;
-    width: auto;
-    transform: none;
-    p { font-size: 16px; margin-bottom: 20px; }
-  }
-  .lp-scene--hero .lp-hero__title { font-size: 2.4rem; }
+@media (max-width: 860px) {
+  .lp-hero__inner { grid-template-columns: 1fr; padding-top: 40px; }
+  .lp-hero__art { max-width: 640px; }
 }
 @media (max-width: 575px) {
   .lp-nav, .lp-product, .lp-how, .lp-scanner, .lp-footer { padding-left: 16px; padding-right: 16px; }
@@ -607,8 +498,8 @@ $lp-scene-h: clamp(560px, 82vh, 780px);
   .lp-demo__window .kanban { grid-template-columns: 1fr; }
   .lp-demo__window .kanban-col:last-child { display: none; }
   .lp-demo__doc { left: 8px; width: calc(100% - 16px); }
-  // too small for labels on a phone: keep the pulsing pins only
-  .lp-tag__pill { display: none; }
+  .lp-hero__inner { padding-left: 16px; padding-right: 16px; }
+  .lp-hero__lede { font-size: 16px; }
   .lp-cta { margin: 56px 16px 0; padding: 32px 24px; }
 }
 
@@ -617,10 +508,5 @@ $lp-scene-h: clamp(560px, 82vh, 780px);
   .lp-product.is-in .lp-demo__window, .lp-product.is-in .lp-demo__doc, .lp-product.is-in .lp-demo__doc .doc-banner { animation: none; opacity: 1; transform: none; }
   [data-landing-target="reveal"], .lp-seq { opacity: 1; transform: none; transition: none; }
   .lp-steps::before { transform: none; transition: none; }
-  .lp-scene__media { transform: none; }
-  // tags stay visible and still
-  .lp-scene .lp-tag__pill, .lp-scene.is-in .lp-tag__pill { animation: none; opacity: 1; transform: translate(-50%, 0); }
-  .lp-scene .lp-tag__ping, .lp-scene.is-in .lp-tag__ping { animation: none; opacity: 1; transform: translate(-50%, -50%); }
-  .lp-scene.is-in .lp-tag__ping::after { animation: none; }
-  .lp-tag:nth-child(n+4) { display: none; }
+  .lp-iso.play * { animation: none !important; }
 }
