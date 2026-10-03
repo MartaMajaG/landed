@@ -114,8 +114,31 @@
   </section>
 
   <%# ── ILLUSTRATION ── %>
+  <%# Positions are % of the frame, anchored on travellers' heads in the illustration %>
+  <% scene_tags = [
+    { x: 25.8, y: 36, text: "Anmeldung booked",        color: "#f97316" },
+    { x: 67.6, y: 30, text: "Bank account opened",     color: "#059669" },
+    { x: 40.6, y: 56, text: "Health insurance sorted", color: "#ec4899" },
+    { x: 10.6, y: 16, text: "Lease signed",            color: "#f97316" },
+    { x: 83.4, y: 74, text: "Permit appointment set",  color: "#5B21B6" },
+    { x: 31.6, y: 83, text: "Tax ID arrived",          color: "#059669" }
+  ] %>
   <section class="lp-scene" data-landing-target="reveal">
-    <%= image_tag "landing_image.png", class: "lp-scene__img", alt: "People arriving at a German airport with luggage" %>
+    <div class="lp-scene__frame" data-landing-target="scene">
+      <div class="lp-scene__media" data-landing-target="sceneMedia">
+        <%= image_tag "landing_image.png", class: "lp-scene__img", alt: "People arriving at a German airport with luggage" %>
+        <div class="lp-scene__tags" aria-hidden="true">
+          <% scene_tags.each_with_index do |tag, i| %>
+            <span class="lp-tag" style="--x: <%= tag[:x] %>%; --y: <%= tag[:y] %>%; --i: <%= i %>; --c: <%= tag[:color] %>">
+              <span class="lp-tag__pill">
+                <span class="lp-tag__check"><%= lucide_icon("check", size: 10) %></span><%= tag[:text] %>
+              </span>
+              <span class="lp-tag__ping"></span>
+            </span>
+          <% end %>
+        </div>
+      </div>
+    </div>
   </section>
 
   <%# ── HOW IT WORKS ── %>
