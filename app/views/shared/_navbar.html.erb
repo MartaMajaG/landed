@@ -1,5 +1,5 @@
-<%# Landing and onboarding render their own header %>
-<% own_header = controller_name == "onboardings" || (controller_name == "pages" && action_name == "index") %>
+<%# Landing, onboarding and logged-out auth pages render their own header %>
+<% own_header = controller_name == "onboardings" || (controller_name == "pages" && action_name == "index") || (devise_controller? && !user_signed_in?) %>
 
 <% if own_header %>
 <% elsif user_signed_in? %>

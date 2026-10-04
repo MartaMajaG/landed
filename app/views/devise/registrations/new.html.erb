@@ -1,46 +1,42 @@
 <% content_for :meta_title, "Landed | Create account" %>
 
 <div class="auth-page">
+  <%= render "devise/shared/auth_header" %>
+
   <div class="auth-shell">
     <div class="auth-heading">
-      <h1>Create account</h1>
-      <p>Start your relocation journey</p>
+      <h1>Create your account</h1>
+      <p>Start your relocation journey. It takes a minute.</p>
     </div>
 
-    <%= simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
-      <div class="auth-card">
-        <% if resource.errors.any? %>
-          <div class="auth-alert" role="alert">
-            <%= resource.errors.full_messages.to_sentence %>
-          </div>
+    <%= form_with model: resource, scope: resource_name, url: registration_path(resource_name), class: "auth-card" do |f| %>
+      <%= render "devise/shared/auth_errors" %>
+
+      <div class="auth-field">
+        <%= f.label :email, "Email", class: "auth-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "you@example.com", class: "auth-input" %>
+      </div>
+
+      <div class="auth-field">
+        <%= f.label :password, "Password", class: "auth-label" %>
+        <%= f.password_field :password, autocomplete: "new-password", class: "auth-input" %>
+        <% if @minimum_password_length %>
+          <p class="auth-hint">At least <%= @minimum_password_length %> characters</p>
         <% end %>
-
-        <div class="auth-field">
-          <%= f.label :email, "Email", class: "auth-label" %>
-          <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "auth-input" %>
-        </div>
-
-        <div class="auth-field">
-          <%= f.label :password, "Password", class: "auth-label" %>
-          <%= f.password_field :password, autocomplete: "new-password", class: "auth-input" %>
-          <% if @minimum_password_length %>
-            <p class="auth-hint"><%= @minimum_password_length %> characters minimum</p>
-          <% end %>
-        </div>
-
-        <div class="auth-field">
-          <%= f.label :password_confirmation, "Confirm password", class: "auth-label" %>
-          <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "auth-input" %>
-        </div>
       </div>
 
-      <div class="auth-actions">
-        <%= f.submit "Create account", class: "auth-button" %>
+      <div class="auth-field">
+        <%= f.label :password_confirmation, "Confirm password", class: "auth-label" %>
+        <%= f.password_field :password_confirmation, autocomplete: "new-password", class: "auth-input" %>
       </div>
+
+      <button type="submit" class="auth-button">
+        Create account <%= lucide_icon("arrow_right", size: 16) %>
+      </button>
     <% end %>
 
-    <div class="auth-links">
-      <%= render "devise/shared/links" %>
-    </div>
+    <p class="auth-switch">
+      Already have an account? <%= link_to "Sign in", new_session_path(resource_name) %>
+    </p>
   </div>
 </div>

@@ -1,20 +1,27 @@
 <% content_for :meta_title, "Landed | Reset password" %>
 
-<h2>Forgot your password?</h2>
+<div class="auth-page">
+  <%= render "devise/shared/auth_header" %>
 
-<%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
-  <%= f.error_notification %>
+  <div class="auth-shell">
+    <div class="auth-heading">
+      <h1>Reset your password</h1>
+      <p>Enter your email and we'll send you a link to set a new one.</p>
+    </div>
 
-  <div class="form-inputs">
-    <%= f.input :email,
-                required: true,
-                autofocus: true,
-                input_html: { autocomplete: "email" } %>
+    <%= form_with model: resource, scope: resource_name, url: password_path(resource_name), method: :post, class: "auth-card" do |f| %>
+      <%= render "devise/shared/auth_errors" %>
+
+      <div class="auth-field">
+        <%= f.label :email, "Email", class: "auth-label" %>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "you@example.com", class: "auth-input" %>
+      </div>
+
+      <button type="submit" class="auth-button">Send reset link</button>
+    <% end %>
+
+    <p class="auth-switch">
+      Remembered it? <%= link_to "Sign in", new_session_path(resource_name) %>
+    </p>
   </div>
-
-  <div class="form-actions">
-    <%= f.button :submit, "Send me password reset instructions" %>
-  </div>
-<% end %>
-
-<%= render "devise/shared/links" %>
+</div>

@@ -1,0 +1,11 @@
+<%# Logged-out auth pages share the landing/onboarding header instead of the old navy navbar %>
+<header class="auth-header">
+  <%= link_to root_path, class: "lp-brand", aria: { label: "Landed home" } do %>
+    <%= render "shared/logo", size: 24 %>
+  <% end %>
+  <% if controller_name == "sessions" %>
+    <%= link_to "Create account", new_registration_path(resource_name), class: "auth-header__link" %>
+  <% else %>
+    <%= link_to "Sign in", new_session_path(resource_name), class: "auth-header__link" %>
+  <% end %>
+</header>

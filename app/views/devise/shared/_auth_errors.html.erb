@@ -1,0 +1,5 @@
+<% if resource.errors.any? %>
+  <div class="auth-alert" role="alert" data-turbo-temporary>
+    <%= resource.errors.full_messages.to_sentence %>
+  </div>
+<% end %>
