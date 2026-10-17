@@ -41,6 +41,11 @@
 }
 
 .breadcrumb__link {
+  // A breadcrumb link is a standalone control, not a link inside a sentence,
+  // so it does not get the inline-text exemption from the 24px target size.
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
   color: #4B5563;
   text-decoration: none;
   &:hover { color: #6B56E2; }

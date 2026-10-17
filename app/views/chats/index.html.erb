@@ -62,12 +62,17 @@
   }
   .doc-row:hover .row-checkbox { opacity: 1; }
   .doc-row:hover .doc-icon { opacity: 0 !important; }
+  /* Keyboard focus revealed the focus ring on an invisible checkbox. These
+     make a tabbed-to checkbox behave exactly like a hovered one. */
+  .row-checkbox:focus-visible { opacity: 1; }
+  .doc-icon-wrap:has(.row-checkbox:focus-visible) .doc-icon { opacity: 0 !important; }
   .doc-row.is-selected .row-checkbox { opacity: 1; }
   .doc-row.is-selected .doc-icon { opacity: 0 !important; }
   .doc-row.is-selected { background: #EEEBFD !important; }
   .doc-row.is-selected:hover { background: #D9D2F9 !important; }
   .selection-active .single-delete { display: none !important; }
 
+  #select-all:focus-visible { opacity: 1; }
   #select-all {
     width: 15px; height: 15px;
     accent-color: var(--brand-indigo); cursor: pointer;
@@ -135,7 +140,7 @@
 
     <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:24px;">
       <div>
-        <p style="font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#3E2DB0; margin:0 0 6px;">Document vault</p>
+        <p style="font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#4433B8; margin:0 0 6px;">Document vault</p>
         <h1 style="font-size:26px; font-weight:700; font-family:'Plus Jakarta Sans', Inter, sans-serif; letter-spacing:-0.3px; color:#1A1535; margin:0 0 4px;">My documents</h1>
         <% if @chats.any? %><p style="font-size:13px; color:#5F6775; margin:0;"><%= pluralize(@chats.size, "document") %> scanned</p><% end %>
       </div>
@@ -164,7 +169,7 @@
       <div id="doc-table" style="background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 4px 14px -10px rgba(107,86,226,0.35);">
         <div class="table-header" style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:11px 20px; background:#FBFAFF; border-bottom:0.5px solid #E4E1FD; align-items:center;">
           <div style="display:flex; align-items:center; gap:8px;">
-            <input type="checkbox" id="select-all" onchange="toggleAll(this)">
+            <input type="checkbox" id="select-all" aria-label="Select all documents" onchange="toggleAll(this)">
             <span style="font-size:11px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; color:#5F6775;">Document</span>
           </div>
           <span style="font-size:11px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; color:#5F6775;">Type</span>
@@ -173,6 +178,7 @@
         </div>
 
         <% @chats.each do |chat| %>
+          <% doc_title = (chat.title.presence || chat.document.filename.to_s).sub(/\s*[\[(][^\])]*[\])]\s*\z/, "").strip %>
           <div class="doc-row"
                data-href="<%= chat_path(chat) %>"
                onclick="handleRowClick(event, this)"
@@ -189,10 +195,12 @@
                     <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5F6775" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                   <% end %>
                 </div>
-                <input type="checkbox" class="row-checkbox" value="<%= chat.id %>" onchange="updateBulkBar(); toggleRowTint(this);">
+                <input type="checkbox" class="row-checkbox" value="<%= chat.id %>"
+                       aria-label="Select <%= doc_title %>"
+                       onchange="updateBulkBar(); toggleRowTint(this);">
               </div>
               <div style="min-width:0;">
-                <p style="font-size:14px; font-weight:500; color:#1A1535; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><%= (chat.title.presence || chat.document.filename.to_s).sub(/\s*[\[(][^\])]*[\])]\s*\z/, "").strip %></p>
+                <p style="font-size:14px; font-weight:500; color:#1A1535; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><%= doc_title %></p>
               </div>
               <a class="doc-note-count"
                  href="<%= chat_path(chat) %>#notes"
@@ -227,7 +235,7 @@
             <div style="display:flex; justify-content:space-between; align-items:center;">
               <p style="font-size:12px; color:#5F6775; margin:0;"><%= chat.created_at.strftime("%b %d, %Y") %></p>
               <div class="single-delete" onclick="event.stopPropagation();">
-                <%= button_to "Delete", chat_path(chat), method: :delete, form: { data: { turbo: false } }, onclick: "return confirm('Delete this document?');", style:"background:none; border:0.5px solid #D3D1C7; border-radius:999px; font-size:11px; font-weight:500; color:#5F6775; cursor:pointer; padding:3px 10px;" %>
+                <%= button_to "Delete", chat_path(chat), method: :delete, form: { data: { turbo: false } }, onclick: "return confirm('Delete this document?');", style:"background:none; border:0.5px solid #D3D1C7; border-radius:999px; font-size:11px; font-weight:500; color:#5F6775; cursor:pointer; padding:3px 10px; min-height:24px; display:inline-flex; align-items:center;" %>
               </div>
             </div>
 

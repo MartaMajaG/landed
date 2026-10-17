@@ -452,13 +452,6 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 16px;
-
-  // The note shares the CTA card so it reads as part of the moment the user
-  // commits, rather than as an orphaned line under it. Full basis puts it on
-  // its own row beneath the button instead of competing with it for width.
-  .compliance-note {
-    flex: 1 0 100%;
-  }
   margin-top: 36px;
   padding: 20px 24px;
   background: #fff;
@@ -469,6 +462,17 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   &.is-in { animation: ob-card-in 0.5s $ob-ease forwards; }
   p { margin: 0; font-size: 15px; color: $text-gray; }
   b { color: $text-dark; }
+
+  // The note shares the CTA card so it reads as part of the moment the user
+  // commits, rather than as an orphaned line under it. Full basis puts it on
+  // its own row beneath the button instead of competing with it for width.
+  // The `p` rule above outranks the component, so the component's own size
+  // and colour are restated here at the higher specificity.
+  .compliance-note {
+    flex: 1 0 100%;
+    font-size: 13px;
+    color: $text-muted;
+  }
 }
 
 // ── Responsive ──

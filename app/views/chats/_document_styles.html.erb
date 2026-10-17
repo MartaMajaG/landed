@@ -85,7 +85,7 @@
   /* Two columns */
   .doc-columns { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 20px; align-items: start; }
   .doc-section-title { margin: 0; font-family: "Plus Jakarta Sans", Inter, sans-serif; font-size: 17px; font-weight: 700; color: #1A1535; }
-  .doc-link { font-size: 14px; font-weight: 600; color: #6B56E2; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .doc-link { font-size: 14px; font-weight: 600; color: #6B56E2; text-decoration: none; display: inline-flex; align-items: center; min-height: 24px; gap: 6px; }
   .doc-link:hover { color: #4433B8; }
 
   .doc-left { padding: 24px; display: flex; flex-direction: column; gap: 20px; box-sizing: border-box; }
@@ -129,7 +129,7 @@
   }
   .note-item-text { font-size: 14px; color: #1A1535; line-height: 1.6; margin: 0; }
   .note-item-meta { font-size: 12px; color: #5F6775; margin-top: 3px; }
-  .note-delete-btn { background: none; border: none; cursor: pointer; color: #5F6775; padding: 4px; flex-shrink: 0; }
+  .note-delete-btn { background: none; border: none; cursor: pointer; color: #5F6775; padding: 4px; min-width: 24px; flex-shrink: 0; }
   .note-delete-btn:hover { color: #B42318; }
 
   /* Assistant: stays in view while the page scrolls */
