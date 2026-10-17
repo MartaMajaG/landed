@@ -32,15 +32,7 @@ class ChatsController < ApplicationController
 
     if @chat.save
       if @chat.document.attached?
-        ai_data = @chat.analyze_document
-        @chat.update(
-          title: ai_data["title"],
-          amount: ai_data["amount"],
-          deadline: ai_data["deadline"],
-          urgency: ai_data["urgency"],
-          document_type: ai_data["document_type"],
-          advice: ai_data["advice"]
-        )
+        @chat.apply_analysis!(@chat.analyze_document)
       end
       if @chat.analysis_failed?
         redirect_to chat_path(@chat) # the page itself explains what went wrong
