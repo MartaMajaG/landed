@@ -413,7 +413,15 @@
     const form  = document.getElementById('chat-form-<%= @chat.id %>');
     input.value = question;
     form.requestSubmit();
-    document.getElementById('chat-card-<%= @chat.id %>').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+    // Scroll to the answer, then ring it briefly. Without this the page moves
+    // and nothing tells you which box just became the one to read.
+    const card = document.getElementById('chat-card-<%= @chat.id %>');
+    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    card.classList.remove('doc-card--halo');
+    void card.offsetWidth;  // restart the animation when the button is pressed twice
+    card.classList.add('doc-card--halo');
+    setTimeout(function () { card.classList.remove('doc-card--halo'); }, 1700);
   }
 
   function closeNotePanel(chatId) {
