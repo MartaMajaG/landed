@@ -4,7 +4,6 @@ class DashboardsController < ApplicationController
   def show
     @user    = current_user
     @profile = current_user.profile
-    Task.assign_due_dates(@profile)
     city_id  = current_user.profile.city_id
     @date = params[:month] ? Date.parse(params[:month]) : Date.today
     @arrival_date = current_user.profile.arrival_date
@@ -17,10 +16,9 @@ class DashboardsController < ApplicationController
     # everywhere else — including .task-card--pillar-* classes and .tag-pillar--* pills. Using
     # the pillar directly keeps one single source of truth for category across cards, pills,
     # and calendar chips. Falls back to "uncategorized" for any task without a pillar assigned.
-    task_events = @profile.tasks
-                      .includes(:pillar)
-                      .where.not(due_date: nil)
-                      .map { |t| { name: t.name, category: t.pillar&.slug || "uncategorized", due_date: t.due_date, source: :task } }
+    task_events = Task.with_due_dates(@profile.tasks.includes(:pillar).to_a, @profile)
+                      .select(&:due_on)
+                      .map { |t| { name: t.name, category: t.pillar&.slug || "uncategorized", due_date: t.due_on, source: :task } }
                       .group_by { |e| e[:due_date] }
 
     # Deadlines extracted by the AI document scanner (e.g. a notice period, an insurance
@@ -45,7 +43,7 @@ class DashboardsController < ApplicationController
     base_tasks = base_tasks.where(pillar_id: @active_pillar.id) if @active_pillar
 
     # Split completed vs incomplete
-    all_tasks        = base_tasks.to_a
+    all_tasks        = Task.with_due_dates(base_tasks.to_a, @profile)
     incomplete       = all_tasks.reject { |t| t.completed_by?(current_user) }
     @completed_tasks = all_tasks.select { |t| t.completed_by?(current_user) }
 
@@ -60,18 +58,19 @@ class DashboardsController < ApplicationController
     @open_total     = all_open.size
 
     # Kanban columns from incomplete tasks only
-    @urgent_tasks   = incomplete.select { |t| t.urgency == "high" }
-    @active_tasks   = incomplete.select { |t| t.urgency == "medium" }
-    @upcoming_tasks = incomplete.select { |t| t.urgency == "low" }
+    # Overdue tasks move to Urgent whatever their category, earliest date first.
+    @urgent_tasks   = incomplete.select(&:urgent_now?).sort_by { |t| t.due_on || Date.today }
+    @active_tasks   = incomplete.select { |t| t.urgency == "medium" && !t.urgent_now? }
+    @upcoming_tasks = incomplete.select { |t| t.urgency == "low" && !t.urgent_now? }
 
     # Top urgent task for hero CTA
     @top_urgent_task = @urgent_tasks.first
 
-    @urgent_count       = incomplete.count { |t| t.urgency == "high" }
-    @active_count       = incomplete.count { |t| t.urgency == "medium" }
+    @urgent_count       = @urgent_tasks.size
+    @active_count       = @active_tasks.size
     @docs_count         = current_user.chats.with_attached_document.count
-    @upcoming_count     = incomplete.count { |t| t.urgency == "low" }
-    @total_active_count = incomplete.count { |t| t.urgency == "high" || t.urgency == "medium" }
+    @upcoming_count     = @upcoming_tasks.size
+    @total_active_count = @urgent_count + @active_count
 
     # Checklist progress
     @completed_ids = current_user.user_checklist_items

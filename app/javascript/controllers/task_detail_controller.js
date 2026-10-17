@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["step", "progressBar", "stepCount", "autosave", "completionOverlay"]
+  static targets = ["step", "progressBar", "stepCount", "autosave", "completionOverlay", "dueBadge"]
 
   connect() {
     console.log("Task detail controller connected")
@@ -85,6 +85,11 @@ export default class extends Controller {
       if (completedCount === totalCount) {
         if (this.hasStepCountTarget) {
           this.stepCountTarget.innerHTML = `<span class="task-steps__all-done">All done ✓</span>`
+        }
+        // A finished task is never overdue: swap its deadline badge for Completed
+        if (this.hasDueBadgeTarget) {
+          this.dueBadgeTarget.className = "task-badge task-badge--due"
+          this.dueBadgeTarget.textContent = "Completed"
         }
       } else {
         if (this.hasStepCountTarget) {

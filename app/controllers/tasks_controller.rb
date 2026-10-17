@@ -10,12 +10,13 @@ class TasksController < ApplicationController
   end
 
   def show
-    Task.assign_due_dates(current_user.profile)
-
     @task = Task.includes(:pillar).find_by!(
       id: params[:id],
       city_id: current_user.profile.city_id
     )
+
+    @task.due_on     = @task.due_date_for(current_user.profile)
+    @task_completed  = @task.completed_by?(current_user)
 
     @checklist_items = @task.checklist_items.order(:position)
     item_ids         = @checklist_items.pluck(:id)

@@ -51,7 +51,7 @@ class OnboardingsController < ApplicationController
 
   # Real tasks for each onboarding city, used for the "your plan is ready" preview
   # at the end of the flow. Due dates are worked out client-side from the arrival
-  # date the user picks, using the same urgency rule as Task.assign_due_dates.
+  # date the user picks, using the same urgency rule as Task#due_date_for.
   def plan_tasks_for(cities)
     Task.where(city: cities).includes(:pillar).map do |task|
       {

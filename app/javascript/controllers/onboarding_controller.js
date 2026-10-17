@@ -6,7 +6,7 @@ const ICON = {
 }
 
 // The dashboard's own columns, same urgency split and same due-date rule as
-// Task.assign_due_dates, so the preview and the dashboard show the same board.
+// Task#due_date_for, so the preview and the dashboard show the same board.
 const COLUMNS = [
   { urgency: "high",   title: "Urgent",   key: "urgent",   offset: (arrival, today) => new Date(Math.max(addDays(arrival, -7), today)) },
   { urgency: "medium", title: "Active",   key: "active",   offset: (arrival) => addDays(arrival, 14) },
@@ -326,10 +326,18 @@ export default class extends Controller {
     const today = startOfToday()
     const arrival = this.dateInputTarget.value ? fromISO(this.dateInputTarget.value) : null
 
+    // Same rule as the dashboard: anything past its date is urgent, so Active
+    // and Upcoming only ever show dates still ahead.
+    const dated = tasks.map((t) => {
+      const rule = COLUMNS.find((c) => c.urgency === t.urgency)
+      const due = arrival && rule ? rule.offset(arrival, today) : null
+      return { ...t, due, urgentNow: t.urgency === "high" || (due !== null && due < today) }
+    })
     const columns = COLUMNS.map((col) => ({
       ...col,
-      due: arrival ? col.offset(arrival, today) : null,
-      items: tasks.filter((t) => t.urgency === col.urgency)
+      items: col.key === "urgent"
+        ? dated.filter((t) => t.urgentNow).sort((a, b) => (a.due || today) - (b.due || today))
+        : dated.filter((t) => t.urgency === col.urgency && !t.urgentNow)
     })).filter((c) => c.items.length)
 
     const first = columns[0]
@@ -347,7 +355,7 @@ export default class extends Controller {
           ${isFirst ? `<span class="ob-start">Start here</span>` : ""}
         </div>
         <h4 class="card-title">${esc(t.name)}</h4>
-        ${col.due ? `<div class="card-bottom-row"><span class="card-due ${col.key === "urgent" ? "urgent-due" : ""}" style="display:inline-flex; align-items:center; gap:4px;"><span class="lucide-icon">${ICON.clock}</span>${fmtCard(col.due)}</span></div>` : ""}
+        ${t.due ? `<div class="card-bottom-row"><span class="card-due ${col.key === "urgent" ? "urgent-due" : ""}" style="display:inline-flex; align-items:center; gap:4px;"><span class="lucide-icon">${ICON.clock}</span>${fmtCard(t.due)}</span></div>` : ""}
       </div>`
 
     this.planBodyTarget.innerHTML = columns.map((col) => {
