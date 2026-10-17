@@ -31,6 +31,32 @@ namespace :tasks do
     puts "\n✅ Done. To verify:\n  bin/rails runner 'Task.all.each { |t| puts \"#{t.name}: #{t.expert_tips.length} tips\" }'\n\n"
   end
 
+  desc "Regenerate expert tips for every task, keeping a task's existing tips if the new call returns nothing"
+  task regenerate_expert_tips: :environment do
+    tasks = Task.all.order(:id)
+    total = tasks.count
+
+    puts "\n⚡ Regenerating expert tips for #{total} tasks...\n\n"
+
+    tasks.each_with_index do |task, index|
+      prefix = "[#{index + 1}/#{total}]"
+      print "#{prefix} Generating... #{task.name}"
+      tips = TaskInsightsService.new(task).call
+
+      if tips.any?
+        task.update!(expert_tips: tips)
+        linked = tips.count { |t| t["resource_url"].present? }
+        puts " → ✓ #{tips.length} tips saved (#{linked} with a link)"
+      else
+        puts " → ✗ API returned empty, kept the existing #{task.expert_tips.length} tips"
+      end
+
+      sleep(0.5) unless index == total - 1
+    end
+
+    puts "\n✅ Done.\n\n"
+  end
+
   desc "Clear all expert tips (useful for regenerating from scratch)"
   task clear_expert_tips: :environment do
     count = Task.where.not(expert_tips: []).count
