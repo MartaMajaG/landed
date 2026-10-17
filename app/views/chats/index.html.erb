@@ -1,11 +1,33 @@
 <% content_for :meta_title, "Landed | Documents" %>
 
+<%= render "chats/notes_store" %>
+
 <style>
   .doc-row { cursor: pointer; transition: background 0.1s; }
 
   /* Thumbnail of the actual scan instead of a generic icon */
   .doc-icon--thumb { background: #fff; border: 1px solid #ECEBF3; overflow: hidden; }
   .doc-icon--thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+
+  /* How many notes sit on this document. Hidden at zero, because a grey "0"
+     on every row buries the rows that actually have something on them. */
+  .doc-note-count {
+    flex-shrink: 0;
+    min-width: 24px;
+    height: 24px;
+    padding: 0 7px;
+    border-radius: 999px;
+    background: #EEEBFD;
+    color: #4433B8;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+  }
+  .doc-note-count:hover { background: #E0DAFB; }
+  .doc-note-count[hidden] { display: none; }
 
   /* Deadline urgency, same colours as the rest of the app */
   .doc-due { display: inline-block; margin-top: 3px; font-size: 12px; font-weight: 500; color: #5F6775; }
@@ -172,6 +194,11 @@
               <div style="min-width:0;">
                 <p style="font-size:14px; font-weight:500; color:#1A1535; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><%= (chat.title.presence || chat.document.filename.to_s).sub(/\s*[\[(][^\])]*[\])]\s*\z/, "").strip %></p>
               </div>
+              <a class="doc-note-count"
+                 href="<%= chat_path(chat) %>#notes"
+                 data-note-count="<%= chat.id %>"
+                 onclick="event.stopPropagation();"
+                 hidden></a>
             </div>
 
             <div>
@@ -277,6 +304,15 @@
 </div>
 
 <script>
+  // Read each row's note count out of this browser's storage.
+  document.querySelectorAll('[data-note-count]').forEach(function (el) {
+    const n = window.LandedNotes.count(el.dataset.noteCount);
+    if (n < 1) return;
+    el.textContent = n;
+    el.setAttribute('aria-label', n + (n === 1 ? ' note' : ' notes') + ' on this document');
+    el.hidden = false;
+  });
+
   function handleRowClick(event, row) {
     window.location = row.dataset.href;
   }

@@ -1,0 +1,59 @@
+<script>
+  // ── Where notes live ──────────────────────────────────────────────────────
+  // The product has no notes table. Until it does, notes are kept in this
+  // browser, keyed by document. A note that survives on one device beats a
+  // note that disappears the moment you navigate, which is what happened
+  // before: saveNote built a DOM node and nothing else.
+  //
+  // Every read and write is wrapped, because localStorage throws rather than
+  // returning null in private windows and when site data is blocked. A reader
+  // who cannot store notes still gets a working page, just an empty list.
+  window.LandedNotes = (function () {
+    function key(chatId) { return "landed:notes:" + chatId; }
+
+    function read(chatId) {
+      try {
+        var raw = window.localStorage.getItem(key(chatId));
+        var parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function write(chatId, notes) {
+      try {
+        window.localStorage.setItem(key(chatId), JSON.stringify(notes));
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function add(chatId, text) {
+      var notes = read(chatId);
+      var note = { id: "n" + Date.now(), text: text, at: new Date().toISOString() };
+      notes.push(note);
+      write(chatId, notes);
+      return note;
+    }
+
+    function remove(chatId, noteId) {
+      write(chatId, read(chatId).filter(function (n) { return n.id !== noteId; }));
+    }
+
+    function count(chatId) { return read(chatId).length; }
+
+    // "Today at 23:40" while it is still today, then a date, so a note added
+    // last week does not claim to be from this afternoon.
+    function label(iso) {
+      var d = new Date(iso);
+      if (isNaN(d.getTime())) return "";
+      var time = d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      if (d.toDateString() === new Date().toDateString()) return "Today at " + time;
+      return d.toLocaleDateString([], { day: "numeric", month: "short" }) + " at " + time;
+    }
+
+    return { read: read, add: add, remove: remove, count: count, label: label };
+  })();
+</script>
