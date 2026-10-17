@@ -1,0 +1,28 @@
+// ── Compliance note ────────────────────────────────────────────────────────
+// Deliberately quiet. Amber and red in this palette are reserved for
+// deadlines and overdue documents, which are the signals a user has to act
+// on. A disclaimer styled as a warning would compete with those for the same
+// attention, and the disclaimer is the less urgent of the two. So it reads as
+// a muted note set off by a rule, not as an alert.
+//
+// 13px in $text-muted is 4.87:1 on every surface it sits on, so it stays
+// legible rather than being decorative small print.
+.compliance-note {
+  margin: 0;
+  padding-top: 16px;
+  border-top: 1px solid #ECEBF3;
+  font-size: 13px;
+  line-height: 1.6;
+  color: $text-muted;
+
+  strong {
+    font-weight: 600;
+    color: $text-dark;
+  }
+
+  // A second paragraph continues the same note, so it gets no second rule.
+  & + .compliance-note {
+    padding-top: 8px;
+    border-top: 0;
+  }
+}
