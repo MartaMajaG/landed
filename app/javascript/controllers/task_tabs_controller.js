@@ -50,6 +50,14 @@ export default class extends Controller {
       card.addEventListener("click", () => {
         window.location.href = card.dataset.href
       })
+      card.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " " || e.key === "Spacebar") {
+          e.preventDefault()
+          window.location.href = card.dataset.href
+        }
+      })
+      card.setAttribute("role", "link")
+      card.setAttribute("tabindex", "0")
     })
   }
 }

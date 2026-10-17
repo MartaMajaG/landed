@@ -52,7 +52,7 @@
     height: 32px;
     border-radius: 9px;
     background: #F1F0F6;
-    color: #9CA3AF;
+    color: #5F6775;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -303,9 +303,9 @@
                       has .step--locked, so JS unlocking (class toggle) needs no changes. %>
                   <div class="step__locked-placeholder" style="<%= is_locked ? 'display:flex !important; flex-direction:column !important; align-items:center !important; text-align:center !important; gap:8px !important;' : 'display:none !important;' %>">
                     <span class="step__locked-placeholder-icon lucide-icon"><%= locked_step_icon.call(item.title).html_safe %></span>
-                    <p style="font-size:14px; font-weight:600; color:#6B7280; margin:0;"><%= item.title %></p>
-                    <p style="font-size:13px; color:#B4B2C4; margin:0; line-height:1.5;"><%= item.description.to_s.split(".").first.to_s.strip %><%= "." if item.description.to_s.include?(".") %></p>
-                    <div style="display:flex; align-items:center; justify-content:center; gap:8px; color:#B4B2C4; font-size:13px;">
+                    <p style="font-size:14px; font-weight:600; color:#5F6775; margin:0;"><%= item.title %></p>
+                    <p style="font-size:13px; color:#5F6775; margin:0; line-height:1.5;"><%= item.description.to_s.split(".").first.to_s.strip %><%= "." if item.description.to_s.include?(".") %></p>
+                    <div style="display:flex; align-items:center; justify-content:center; gap:8px; color:#5F6775; font-size:13px;">
                       <span class="lucide-icon">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                       </span>

@@ -5,7 +5,7 @@
 
 $auth-line:  #ECEBF3;
 $auth-lilac: #D0C2F5;
-$auth-muted: #8B8AA0;
+$auth-muted: $text-muted;  // was #8B8AA0 (3.36:1)
 $auth-glow:  0 14px 32px -18px rgba(107, 86, 226, 0.45), 0 1px 2px rgba(26, 21, 53, 0.04);
 $auth-ease:  cubic-bezier(0.22, 1, 0.36, 1);
 

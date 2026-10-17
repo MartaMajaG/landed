@@ -11,6 +11,17 @@ $page-bg:    #FAFAFC;
 $amber:      #F59E0B;
 $dark-card:  #1a1f2e;
 
+// ── Corrected accessible values ────────────────────────────────────────────
+// Derived by holding hue and saturation and lowering lightness until the pair
+// clears WCAG AA on every background it actually sits on. See the design system.
+$text-muted:      #5F6775;  // 4.87:1 worst case across all 13 surfaces in the app
+$due-text:        #C04400;  // 5.16:1 on white, 4.95:1 worst case
+$danger-text:     #C01C1C;  // 5.02:1 on #FEE2E2
+$warning-text:    #9A5504;  // 5.13:1 on #FEF3C7
+$status-upcoming: #5F6775;  // neutral: category owns hue, status is a severity ramp
+$chartreuse-text: #617D19;  // 4.52:1 — $chartreuse itself is 2.99:1, below AA even at 48px
+$focus-ring:      $indigo-landed;
+
 :root {
   --brand-indigo: #{$indigo-landed};
   --blue-action:  #{$blue-action};
