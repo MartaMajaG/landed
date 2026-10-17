@@ -556,12 +556,16 @@
     &::before { transform: scaleX(1); }
   }
 
-  // Locked (upcoming) and done cards are inert — no glow, no accent, no hover lift.
+  // Locked (upcoming) cards are inert: no glow, no accent, no hover lift, not
+  // focusable. They recede through a flatter surface and a softer title, not
+  // through opacity, so every line on them still clears 4.5:1.
   &.locked {
-    opacity: 0.5;
+    background: #FAFAFC;
+    border-color: #ECEBF3;
     pointer-events: none;
     box-shadow: none;
     &::before { display: none; }
+    .card-title { color: $text-gray; }
   }
   &--done {
     opacity: 0.75;
@@ -593,7 +597,9 @@
 }
 .card-menu   { font-size: 13px; color: $text-muted; cursor: pointer; }
 .card-avatar { width: 21px; height: 21px; border-radius: 50%; object-fit: cover; }
-.card-due    { font-size: 11px; font-weight: 500; }
+// The deadline is the most important string on the card, so it is the largest
+// line in the footer. Ink by default; $due-text once the task is urgent.
+.card-due    { font-size: 12.5px; font-weight: 600; color: $text-dark; }
 .card-done-badge { color: #10b981; font-weight: 600; }
 .urgent-due  { color: $due-text; }
 .card-top    { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }

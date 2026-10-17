@@ -297,7 +297,7 @@
         </div>
         <%= f.submit "Scan document", class: "btn-doc-primary", style:"width:100%; justify-content:center;" %>
       </div>
-      <div data-loading-target="loader" class="d-none" style="text-align:center; padding:32px 0;">
+      <div data-loading-target="loader" class="d-none" role="status" aria-live="polite" style="text-align:center; padding:32px 0;">
         <div data-loading-target="scan" class="scan-anim d-none" aria-hidden="true">
           <img data-loading-target="scanImage" alt="">
           <span class="scan-anim__line"></span>

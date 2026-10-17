@@ -36,6 +36,19 @@ module ApplicationHelper
   # Now the icon span carries no inline color at all, so it inherits currentColor from the
   # parent .tag-pillar--{slug} class — icon and text can never drift out of sync again.
 
+  # One deadline format everywhere: day before month, the way dates read in
+  # Germany, and a relative word only ever beside the date, never instead of it.
+  def due_label(date, today: Date.today)
+    return nil unless date
+    day = date.strftime("%-d %b")
+    days_left = (date - today).to_i
+    if days_left.negative? then "Overdue since #{day}"
+    elsif days_left.zero?  then "Due today, #{day}"
+    elsif days_left == 1   then "Due tomorrow, #{day}"
+    else "Due #{day}"
+    end
+  end
+
   def pillar_chip(task)
     return unless task.pillar
     pillar_chip_for(task.pillar.slug, task.pillar.name)

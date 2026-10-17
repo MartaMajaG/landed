@@ -20,7 +20,15 @@ function toISO(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padSta
 function fromISO(s) { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d) }
 function fmt(d) { return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }) }
 // Dashboard card date format (strftime "%b %d"), e.g. "Nov 08"
-function fmtCard(d) { return `${d.toLocaleDateString("en-US", { month: "short" })} ${String(d.getDate()).padStart(2, "0")}` }
+// Same format as ApplicationHelper#due_label: day before month, relative word beside the date
+function fmtCard(d) {
+  const day = `${d.getDate()} ${d.toLocaleDateString("en-US", { month: "short" })}`
+  const daysLeft = Math.round((d - startOfToday()) / 86400000)
+  if (daysLeft < 0) return `Overdue since ${day}`
+  if (daysLeft === 0) return `Due today, ${day}`
+  if (daysLeft === 1) return `Due tomorrow, ${day}`
+  return `Due ${day}`
+}
 function esc(s) { const el = document.createElement("span"); el.textContent = s ?? ""; return el.innerHTML }
 
 export default class extends Controller {

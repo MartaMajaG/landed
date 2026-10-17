@@ -427,7 +427,7 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   .card-bottom-row { margin-top: 8px; }
 }
 @keyframes ob-card-in { to { opacity: 1; transform: none; } }
-@keyframes ob-card-in-locked { to { opacity: 0.5; transform: none; } }
+@keyframes ob-card-in-locked { to { opacity: 1; transform: none; } }
 .ob-start {
   font-size: 11px;
   font-weight: 600;
@@ -493,7 +493,6 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
 @media (prefers-reduced-motion: reduce) {
   .ob-step--in, .ob-plan__head, .ob-fact.is-pop .ob-fact__value, .ob-cal__day.is-selected { animation: none; }
   .ob-board .task-card.ob-card, .ob-more, .ob-plan__cta { opacity: 1; transform: none; animation: none !important; }
-  .ob-board .task-card.ob-card.locked { opacity: 0.5; }
   .ob-gen__dot { animation: none !important; }
   .ob-progress span, .ob-option__tick, .ob-fact__icon > span { transition: none; }
 }
