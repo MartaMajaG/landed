@@ -855,7 +855,7 @@
     cursor: pointer;
     opacity: 0.7;
     transition: opacity 0.15s ease, color 0.15s ease, background 0.15s ease;
-    &:hover, &:focus-visible { opacity: 1; color: #6B56E2; background: #F3F0FE; }
+    &:hover, &:focus-visible { opacity: 1; color: #6B56E2; background: #EEEBFD; }
   }
   .step--completed .step__card:hover .step__undo-link { opacity: 1; }
 }

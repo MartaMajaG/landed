@@ -474,7 +474,7 @@
   color: $text-dark;
   text-decoration: none;
   &:hover { background: #F8F6FE; color: $text-dark; text-decoration: none; }
-  &.is-selected { background: #F3F0FE; }
+  &.is-selected { background: #EEEBFD; }
   &.is-selected .pillar-filter__name { font-weight: 600; }
   &.is-selected .pillar-filter__check { visibility: visible; }
 }
