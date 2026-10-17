@@ -75,14 +75,27 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
   text-decoration: none;
   &:hover { text-decoration: none; }
 }
-// Landed logo: plane mark + wordmark, in the brand indigo, same as favicon.svg
+// Landed logo: the L tile plus the wordmark, both in Plus Jakarta Sans so the
+// L in the tile and the L in "Landed" are the same letter. One mark everywhere:
+// sidebar, landing, auth, onboarding and the favicon.
 .landed-logo {
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  color: #6B56E2;
+  color: $text-dark;
 }
-.landed-logo__mark { display: block; flex: none; }
+.landed-logo__mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  background: $indigo-landed;
+  color: #fff;
+  font-family: $font-display;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
 .landed-logo__word {
   font-family: $font-display;
   font-weight: 800;
