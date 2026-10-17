@@ -62,12 +62,14 @@
 
           <%= f.hidden_field :arrival_date, data: { onboarding_target: "dateInput" } %>
 
+          <%# The calendar takes the width of the quick picks row, so both end at the same edge %>
+          <div class="ob-date">
           <div class="ob-quick" role="group" aria-label="Quick picks">
             <button type="button" class="ob-chip" data-days="0"  data-action="onboarding#quickDate">I'm already here</button>
             <button type="button" class="ob-chip" data-days="14" data-action="onboarding#quickDate">In 2 weeks</button>
             <button type="button" class="ob-chip" data-days="30" data-action="onboarding#quickDate">In a month</button>
             <button type="button" class="ob-chip" data-days="90" data-action="onboarding#quickDate">In 3 months</button>
-            <button type="button" class="ob-chip ob-chip--unsure" data-action="onboarding#skipDate">I don't know yet</button>
+            <button type="button" class="ob-chip" data-action="onboarding#skipDate">I don't know yet</button>
           </div>
 
           <div class="ob-cal">
@@ -80,6 +82,7 @@
               <% %w[Mon Tue Wed Thu Fri Sat Sun].each do |day| %><span><%= day %></span><% end %>
             </div>
             <div class="ob-cal__grid" data-onboarding-target="calendarGrid"></div>
+          </div>
           </div>
 
           <div class="ob-actions">

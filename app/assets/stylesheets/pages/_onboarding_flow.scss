@@ -166,7 +166,10 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
 .ob-option__input:disabled + .ob-option__card { opacity: 0.45; cursor: not-allowed; }
 
 // ── Date step ──
-.ob-quick { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+// Quick picks and calendar share one width: whatever the pills row needs,
+// capped by the column. On a phone the pills wrap and the calendar fills the width.
+.ob-date { display: grid; gap: 16px; width: fit-content; max-width: 100%; }
+.ob-quick { display: flex; flex-wrap: wrap; gap: 8px; }
 .ob-chip {
   border: 1.5px solid $ob-line;
   background: #fff;
@@ -181,12 +184,8 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   &:focus-visible { outline: 2px solid $indigo-landed; outline-offset: 2px; }
   &.is-selected { background: $indigo-landed; border-color: $indigo-landed; color: #fff; }
 }
-// "I don't know yet" is an answer too, set apart by a dashed edge
-.ob-chip--unsure { border-style: dashed; color: $text-gray; }
-
-// The calendar spans the question column, like the answer cards on the other steps
+// The calendar fills the .ob-date width set by the quick picks above it
 .ob-cal {
-  width: 100%;
   background: #fff;
   border: 1px solid $ob-line;
   border-radius: 20px;
@@ -217,7 +216,11 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
 .ob-cal__weekdays { margin-bottom: 4px; }
 .ob-cal__weekdays span { text-align: center; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: $ob-muted; padding: 4px 0; }
 .ob-cal__day {
+  // A fixed square centred in its column, so today's ring and the selected
+  // fill stay compact however wide the calendar is
+  width: 40px;
   height: 40px;
+  justify-self: center;
   font-weight: 500;
   border: 0;
   border-radius: 10px;
