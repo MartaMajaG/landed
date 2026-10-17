@@ -46,16 +46,16 @@
   if @chat.deadline.present?
     days_left = (@chat.deadline - Date.today).to_i
     due_on    = @chat.deadline.strftime("%b %-d, %Y")
+    # Status only. What to do about it lives in the AI panel, the amount lives in
+    # the stat strip; repeating either here just made the loudest box the emptiest.
     if days_left < 0
-      banner_tone  = "overdue"
-      banner_title = "Overdue since #{@chat.deadline.strftime('%B %Y')}"
-      banner_text  = show_pay ? "Payment was due on #{due_on}. Paying soon helps you avoid extra fees." : "This was due on #{due_on}. It's worth acting on it as soon as you can."
+      banner_tone, banner_title, banner_meta = "overdue", "Overdue", "was due #{due_on}"
     elsif days_left == 0
-      banner_tone, banner_title, banner_text = "soon", "Due today", "The deadline is #{due_on}."
+      banner_tone, banner_title, banner_meta = "soon", "Due today", due_on
     elsif days_left <= 14
-      banner_tone, banner_title, banner_text = "soon", "Due in #{days_left} #{'day'.pluralize(days_left)}", "The deadline is #{due_on}."
+      banner_tone, banner_title, banner_meta = "soon", "Due in #{days_left} #{'day'.pluralize(days_left)}", due_on
     else
-      banner_tone, banner_title, banner_text = "calm", "Due #{due_on}", "You have #{days_left} days."
+      banner_tone, banner_title, banner_meta = "calm", "Due #{due_on}", nil
     end
   end
 
@@ -238,10 +238,8 @@
         <% if @chat.deadline.present? %>
           <div class="doc-banner doc-banner--<%= banner_tone %>">
             <div class="doc-banner__icon"><span class="lucide-icon doc-banner__svg"><%= (banner_tone == "calm" ? icon_cal_plus : icon_warn).html_safe %></span></div>
-            <div>
-              <p class="doc-banner__title"><%= banner_title %></p>
-              <p class="doc-banner__text"><%= banner_text %></p>
-            </div>
+            <p class="doc-banner__title"><%= banner_title %></p>
+            <% if banner_meta.present? %><p class="doc-banner__text"><%= banner_meta %></p><% end %>
           </div>
         <% end %>
       </div>

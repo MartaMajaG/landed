@@ -34,11 +34,12 @@
   .doc-btn--primary:hover { background: #5B47D6; }
 
   /* Deadline banner */
-  .doc-banner { display: flex; align-items: center; gap: 14px; border-radius: 16px; padding: 14px 18px; border: 1px solid; }
-  .doc-banner__icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .doc-banner__svg svg { width: 18px; height: 18px; }
-  .doc-banner__title { margin: 0; font-size: 15px; font-weight: 600; }
-  .doc-banner__text { margin: 2px 0 0; font-size: 14px; }
+  .doc-banner { display: flex; align-items: center; gap: 10px; border-radius: 12px; padding: 10px 14px; border: 1px solid; }
+  .doc-banner__icon { width: 28px; height: 28px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .doc-banner__svg svg { width: 16px; height: 16px; }
+  .doc-banner__title { margin: 0; font-size: 14px; font-weight: 600; }
+  .doc-banner__text { margin: 0; font-size: 14px; }
+  .doc-banner__text::before { content: "\00B7"; margin-right: 8px; opacity: 0.55; }
   .doc-banner--overdue { background: #FEF3F2; border-color: #FBD5D1; }
   .doc-banner--overdue .doc-banner__icon { background: #FDE4E1; color: #B42318; }
   .doc-banner--overdue .doc-banner__title { color: #912018; }
