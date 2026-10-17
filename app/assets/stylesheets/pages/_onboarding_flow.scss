@@ -5,7 +5,7 @@
 $ob-navy:  #1A1535;
 $ob-line:  #ECEBF3;
 $ob-lilac: #D0C2F5;
-$ob-tint:  #F3F0FD;
+$ob-tint:  #EEEBFD;
 $ob-muted: $text-muted;  // was #8B8AA0 (3.36:1)
 $ob-glow:  0 4px 14px -10px rgba(107, 86, 226, 0.35);
 $ob-glow-strong: 0 14px 32px -18px rgba(107, 86, 226, 0.55), 0 1px 2px rgba(26, 21, 53, 0.04);
@@ -263,7 +263,7 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   cursor: pointer;
   box-shadow: 0 10px 22px -12px rgba(107, 86, 226, 0.9);
   transition: background 0.15s, transform 0.15s;
-  &:hover { background: #5A45D1; transform: translateY(-1px); }
+  &:hover { background: #5B47D6; transform: translateY(-1px); }
   &:focus-visible { outline: 2px solid $indigo-landed; outline-offset: 3px; }
 }
 // Back sits first on the left: pull it in so its arrow lines up with the content edge
@@ -303,7 +303,7 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
 }
 .ob-summary__head {
   padding: 20px 22px 14px;
-  border-bottom: 1px solid #F3F2F8;
+  border-bottom: 1px solid #ECEBF3;
   h2 { font-family: $font-display; font-weight: 700; font-size: 18px; margin: 0; }
   p { margin: 2px 0 0; font-size: 13px; color: $ob-muted; }
 }
@@ -320,7 +320,7 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   height: 34px;
   flex: none;
   border-radius: 10px;
-  background: #F6F5FA;
+  background: #F0F2F7;
   color: $ob-muted;
   display: grid;
   place-items: center;
@@ -349,8 +349,8 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   align-items: center;
   gap: 10px;
   padding: 14px 22px 18px;
-  background: #FAF9FD;
-  border-top: 1px solid #F3F2F8;
+  background: #FAFAFC;
+  border-top: 1px solid #ECEBF3;
   font-size: 14px;
   color: $text-gray;
   b {

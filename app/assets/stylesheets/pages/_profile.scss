@@ -86,12 +86,12 @@
   height: 44px; padding: 0 16px; border-radius: 10px;
   display: inline-flex; align-items: center; gap: 8px;
   font-size: 14px; font-weight: 600; text-decoration: none;
-  border: 1px solid #DCD5FA; background: #F6F4FE; color: #4433B8;
+  border: 1px solid #D0C2F5; background: #EEEBFD; color: #4433B8;
   transition: background 0.15s ease;
-  &:hover { background: #ECE8FD; color: #4433B8; text-decoration: none; }
+  &:hover { background: #E4E1FD; color: #4433B8; text-decoration: none; }
 }
 .prof-btn--quiet {
-  border-color: #E5E7EB; background: #fff; color: #374151;
+  border-color: #E5E7EB; background: #fff; color: #4B5563;
   &:hover { background: #F9FAFB; color: $text-dark; }
 }
 
@@ -111,14 +111,14 @@
 .prof-step__dot {
   position: relative; z-index: 1; width: 24px; height: 24px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  background: #fff; border: 2px solid #DCD5FA; color: #fff;
+  background: #fff; border: 2px solid #D0C2F5; color: #fff;
   svg { width: 14px; height: 14px; }
 }
 .prof-step--done .prof-step__dot { background: #6B56E2; border-color: #6B56E2; }
 .prof-step--current .prof-step__dot { border-color: #6B56E2; box-shadow: 0 0 0 4px #EEEBFD; }
 .prof-step--current .prof-step__dot::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #6B56E2; }
 .prof-step--current .prof-step__name { color: $text-dark; font-weight: 600; }
-.prof-step--done .prof-step__name { color: #374151; }
+.prof-step--done .prof-step__name { color: #4B5563; }
 
 .prof-section-head { margin-bottom: 20px; }
 .prof-title { margin: 0; font-family: $headers-font; font-size: 17px; font-weight: 700; color: $text-dark; }
@@ -128,7 +128,7 @@
 .prof-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .prof-detail {
   display: flex; gap: 14px; align-items: flex-start;
-  padding: 16px 18px; border: 1px solid #ECEBF3; border-radius: 16px; background: #FCFCFE;
+  padding: 16px 18px; border: 1px solid #ECEBF3; border-radius: 16px; background: #FAFAFC;
 }
 .prof-detail__icon {
   width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;

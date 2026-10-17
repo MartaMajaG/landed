@@ -184,7 +184,7 @@ $auth-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   box-shadow: 0 10px 22px -12px rgba(107, 86, 226, 0.9);
   transition: background 0.15s, transform 0.15s;
 
-  &:hover { background: #5A45D1; transform: translateY(-1px); }
+  &:hover { background: #5B47D6; transform: translateY(-1px); }
   &:active { transform: none; }
   &:focus-visible { outline: 2px solid $indigo-landed; outline-offset: 3px; }
 

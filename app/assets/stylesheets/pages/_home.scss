@@ -221,7 +221,7 @@
 }
 .journey-track-fill {
   height: 100%;
-  background: #9585E8;
+  background: #6B56E2;
   border-radius: 2px;
   transition: width 0.4s ease;
 }
@@ -273,7 +273,7 @@
 .journey-history-popover {
   position: fixed;
   background: white;
-  border: 0.5px solid #e2e5ec;
+  border: 0.5px solid #E5E7EB;
   border-radius: 16px;
   padding: 9px 13px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.10);
@@ -330,7 +330,7 @@
 
 .journey-step--done {
   .journey-dot {
-    background: #9585E8;
+    background: #6B56E2;
     color: #fff;
   }
   .journey-step-label { font-weight: 500; color: #4433B8; }
@@ -463,7 +463,7 @@
   margin: 4px 10px 6px;
   font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: $text-muted;
 }
-.pillar-filter__divider { height: 1px; background: #F1F0F6; margin: 6px 4px; }
+.pillar-filter__divider { height: 1px; background: #ECEBF3; margin: 6px 4px; }
 
 .pillar-filter__option {
   display: flex;
@@ -473,7 +473,7 @@
   border-radius: 10px;
   color: $text-dark;
   text-decoration: none;
-  &:hover { background: #F8F6FE; color: $text-dark; text-decoration: none; }
+  &:hover { background: #FAFAFC; color: $text-dark; text-decoration: none; }
   &.is-selected { background: #EEEBFD; }
   &.is-selected .pillar-filter__name { font-weight: 600; }
   &.is-selected .pillar-filter__check { visibility: visible; }
@@ -483,7 +483,7 @@
 .pillar-filter__body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
 .pillar-filter__name { font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pillar-filter__bar {
-  display: block; height: 4px; border-radius: 999px; background: #F1F0F6; overflow: hidden;
+  display: block; height: 4px; border-radius: 999px; background: #ECEBF3; overflow: hidden;
   span { display: block; height: 100%; border-radius: 999px; }
 }
 .pillar-filter__meta { flex-shrink: 0; font-size: 12px; font-weight: 500; color: $text-muted; }
@@ -493,7 +493,7 @@
   display: flex; align-items: center; gap: 6px;
   padding: 10px; border-radius: 10px;
   font-size: 14px; font-weight: 600; color: $indigo-landed; text-decoration: none;
-  &:hover { background: #F8F6FE; color: $indigo-landed; text-decoration: none; }
+  &:hover { background: #FAFAFC; color: $indigo-landed; text-decoration: none; }
 }
 
 // ── Kanban ──
@@ -651,7 +651,7 @@
 .card-footer { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
 .card-progress-label { font-size: 11px; color: $text-muted; }
 .card-pct   { font-size: 11px; font-weight: 600; color: $text-dark; }
-.card-track { height: 4px; background: #e9ecef; border-radius: 2px; overflow: hidden; }
+.card-track { height: 4px; background: #F0F2F7; border-radius: 2px; overflow: hidden; }
 
 .card-fill {
   height: 100%;
@@ -659,7 +659,7 @@
   background: #7A9E1F;
 }
 .urgent-card .card-fill { background: #E53E3E; }
-.locked      .card-fill { background: #C7C5E5; }
+.locked      .card-fill { background: #D0C2F5; }
 
 // ── Calendar ──
 .calendar-section { margin-top: 20px; }
@@ -675,7 +675,7 @@
   display: flex;
   align-items: center;
   padding: 12px 16px;
-  border-bottom: 0.5px solid #e2e5ec;
+  border-bottom: 0.5px solid #E5E7EB;
   gap: 16px;
 }
 .cal-view-toggle { display: flex; background: #f0f2f7; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
@@ -690,7 +690,7 @@
 .cal-nav    { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: auto; }
 .cal-month-title { font-size: 15px; font-weight: 700; color: $text-dark; min-width: 84px; text-align: center; }
 .cal-nav-btn {
-  width: 26px; height: 26px; border-radius: 10px; border: 0.5px solid #e2e5ec;
+  width: 26px; height: 26px; border-radius: 10px; border: 0.5px solid #E5E7EB;
   background: #fff; font-size: 14px; color: $text-muted;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer; line-height: 1; text-decoration: none;
@@ -700,11 +700,11 @@
   grid-template-columns: repeat(7, 1fr);
   grid-template-rows: auto;
   grid-auto-rows: minmax(100px, auto);
-  border-top: 0.5px solid #e2e5ec;
+  border-top: 0.5px solid #E5E7EB;
 }
 .cal-dow {
   padding: 10px 12px 8px; font-size: 11.5px; font-weight: 600; color: $text-muted;
-  text-align: left; border-bottom: 0.5px solid #e2e5ec; letter-spacing: 0.02em;
+  text-align: left; border-bottom: 0.5px solid #E5E7EB; letter-spacing: 0.02em;
 }
 .cal-cell {
   padding: 10px 12px;
@@ -712,7 +712,7 @@
   display: flex; flex-direction: column; gap: 5px;
   &:nth-child(7n) { border-right: none; }
   &.muted .cal-date { color: $text-muted; }
-  &.weekend { background: #FAFAFE; }
+  &.weekend { background: #FAFAFC; }
 }
 .cal-date { font-size: 13px; font-weight: 500; color: $text-dark; margin-bottom: 3px; }
 .today-num {
@@ -737,7 +737,7 @@
   &.legal_and_work           { background: #ede9fe; color: #5b21b6; border-left-color: #5B21B6; }
   &.health_and_insurance     { background: #fce7f3; color: #9d174d; border-left-color: #ec4899; }
   &.scanned_document         { background: #ECFCCB; color: #3F6212; border-left-color: #7A9E1F; }
-  &.uncategorized            { background: #F0F0F8; color: $text-muted; border-left-color: #9CA3AF; }
+  &.uncategorized            { background: #F0F2F7; color: $text-muted; border-left-color: #9CA3AF; }
 }
 .cal-event__text {
   display: -webkit-box;
@@ -807,7 +807,7 @@
 .cal-popover {
   position: fixed;
   background: white;
-  border: 0.5px solid #e2e5ec;
+  border: 0.5px solid #E5E7EB;
   border-radius: 16px;
   padding: 9px 13px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.10);
@@ -817,7 +817,7 @@
   &__date  { font-size: 10.5px; color: $text-muted; margin: 0 0 9px; }
   &__actions {
     display: flex; flex-direction: column; gap: 6px;
-    border-top: 0.5px solid #e2e5ec; padding-top: 9px;
+    border-top: 0.5px solid #E5E7EB; padding-top: 9px;
   }
   &__btn {
     font-size: 10.5px; font-weight: 600; padding: 6px 9px;
