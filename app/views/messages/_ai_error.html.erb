@@ -1,7 +1,7 @@
 <%# Shown instead of an AI reply when the answer failed. Same id as the loading bubble, so a retry replaces it. %>
 <div id="ai-loading-<%= user_message.id %>" style="display:flex; gap:8px; align-items:flex-start;"
      data-controller="ai-reply" data-ai-reply-url-value="<%= regenerate_chat_message_path(chat, user_message) %>">
-  <div style="width:28px; height:28px; background:#FDE4E1; border-radius:8px; display:flex; align-items:center; justify-content:center; flex-shrink:0; color:#B42318;">
+  <div style="width:28px; height:28px; background:#FDE4E1; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; color:#B42318;">
     <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>
   </div>
   <div role="alert" style="background:#FEF3F2; border:1px solid #FBD5D1; padding:10px 14px; border-radius:4px 18px 18px 18px; max-width:75%; font-size:14px; line-height:1.5;">
