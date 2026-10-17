@@ -8,7 +8,7 @@
   .doc-icon--thumb img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
 
   /* Deadline urgency, same colours as the rest of the app */
-  .doc-due { display: inline-block; margin-top: 3px; font-size: 12px; font-weight: 500; color: #6B7280; }
+  .doc-due { display: inline-block; margin-top: 3px; font-size: 12px; font-weight: 500; color: #5F6775; }
   .doc-due--soon { color: #B54708; }
   .doc-due--overdue { color: #B42318; }
 
@@ -59,7 +59,7 @@
 
   #bulk-bar {
     position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
-    z-index: 100; background: #2C2C2A; border-radius: 16px;
+    z-index: 100; background: #1A1535; border-radius: 16px;
     padding: 12px 16px; display: none; align-items: center; gap: 20px;
     box-shadow: 0 8px 24px -6px rgba(44,44,42,0.35);
     min-width: 340px; white-space: nowrap;
@@ -114,7 +114,7 @@
       <div>
         <p style="font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#3E2DB0; margin:0 0 6px;">Document vault</p>
         <h1 style="font-size:26px; font-weight:700; font-family:'Plus Jakarta Sans', Inter, sans-serif; letter-spacing:-0.3px; color:#1A1535; margin:0 0 4px;">My documents</h1>
-        <% if @chats.any? %><p style="font-size:13px; color:#888780; margin:0;"><%= pluralize(@chats.size, "document") %> scanned</p><% end %>
+        <% if @chats.any? %><p style="font-size:13px; color:#5F6775; margin:0;"><%= pluralize(@chats.size, "document") %> scanned</p><% end %>
       </div>
       <% if @chats.any? %>
         <button onclick="document.getElementById('upload-modal').style.display='flex'" class="btn-doc-primary" style="padding:9px 18px;">
@@ -129,8 +129,8 @@
         <div style="width:56px; height:56px; background:#EEEBFD; border-radius:16px; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand-indigo)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         </div>
-        <h2 style="font-size:18px; font-weight:500; color:#2C2C2A; margin-bottom:8px;">No documents yet</h2>
-        <p style="font-size:14px; color:#888780; margin-bottom:28px; max-width:320px; margin-left:auto; margin-right:auto;">Scan your first German document and get a plain-English summary in seconds.</p>
+        <h2 style="font-size:18px; font-weight:500; color:#1A1535; margin-bottom:8px;">No documents yet</h2>
+        <p style="font-size:14px; color:#5F6775; margin-bottom:28px; max-width:320px; margin-left:auto; margin-right:auto;">Scan your first German document and get a plain-English summary in seconds.</p>
         <button onclick="document.getElementById('upload-modal').style.display='flex'" class="btn-doc-primary" style="padding:10px 20px;">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Scan your first document
@@ -142,11 +142,11 @@
         <div class="table-header" style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:11px 20px; background:#FBFAFF; border-bottom:0.5px solid #E4E1FD; align-items:center;">
           <div style="display:flex; align-items:center; gap:8px;">
             <input type="checkbox" id="select-all" onchange="toggleAll(this)">
-            <span style="font-size:11px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; color:#888780;">Document</span>
+            <span style="font-size:11px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; color:#5F6775;">Document</span>
           </div>
-          <span style="font-size:11px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; color:#888780;">Type</span>
-          <span style="font-size:11px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; color:#888780;">Deadline</span>
-          <span style="font-size:11px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; color:#888780;">Scanned</span>
+          <span style="font-size:11px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; color:#5F6775;">Type</span>
+          <span style="font-size:11px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; color:#5F6775;">Deadline</span>
+          <span style="font-size:11px; font-weight:500; letter-spacing:0.04em; text-transform:uppercase; color:#5F6775;">Scanned</span>
         </div>
 
         <% @chats.each do |chat| %>
@@ -163,7 +163,7 @@
                   <% if chat.document.attached? && chat.document.content_type.to_s.start_with?("image/") %>
                     <%= image_tag url_for(chat.document), alt: "", loading: "lazy" %>
                   <% else %>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#888780" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5F6775" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
                   <% end %>
                 </div>
                 <input type="checkbox" class="row-checkbox" value="<%= chat.id %>" onchange="updateBulkBar(); toggleRowTint(this);">
@@ -197,9 +197,9 @@
             </div>
 
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <p style="font-size:12px; color:#888780; margin:0;"><%= chat.created_at.strftime("%b %d, %Y") %></p>
+              <p style="font-size:12px; color:#5F6775; margin:0;"><%= chat.created_at.strftime("%b %d, %Y") %></p>
               <div class="single-delete" onclick="event.stopPropagation();">
-                <%= button_to "Delete", chat_path(chat), method: :delete, form: { data: { turbo: false } }, onclick: "return confirm('Delete this document?');", style:"background:none; border:0.5px solid #D3D1C7; border-radius:999px; font-size:11px; font-weight:500; color:#888780; cursor:pointer; padding:3px 10px;" %>
+                <%= button_to "Delete", chat_path(chat), method: :delete, form: { data: { turbo: false } }, onclick: "return confirm('Delete this document?');", style:"background:none; border:0.5px solid #D3D1C7; border-radius:999px; font-size:11px; font-weight:500; color:#5F6775; cursor:pointer; padding:3px 10px;" %>
               </div>
             </div>
 
@@ -222,8 +222,8 @@
 <div id="upload-modal">
   <div style="background:#fff; border-radius:16px; padding:32px; width:100%; max-width:480px; margin:20px;">
     <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
-      <h2 style="font-size:18px; font-weight:500; color:#2C2C2A; margin:0;">Scan new document</h2>
-      <button onclick="document.getElementById('upload-modal').style.display='none'" style="background:none; border:none; cursor:pointer; color:#888780; font-size:20px; line-height:1;">✕</button>
+      <h2 style="font-size:18px; font-weight:500; color:#1A1535; margin:0;">Scan new document</h2>
+      <button onclick="document.getElementById('upload-modal').style.display='none'" style="background:none; border:none; cursor:pointer; color:#5F6775; font-size:20px; line-height:1;">✕</button>
     </div>
     <%= form_with model: @chat, local: true, multipart: true, data: { controller: "loading", action: "submit->loading#submit" } do |f| %>
       <div data-loading-target="form">
@@ -267,8 +267,8 @@
           <span class="scan-anim__line"></span>
         </div>
         <div data-loading-target="spinner" style="width:44px; height:44px; border:3px solid #EEEBFD; border-top-color:var(--brand-indigo); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px;"></div>
-        <p style="font-size:15px; font-weight:500; color:#2C2C2A; margin-bottom:4px;">Analysing your document...</p>
-        <p style="font-size:13px; color:#888780;">This takes about 10 seconds</p>
+        <p style="font-size:15px; font-weight:500; color:#1A1535; margin-bottom:4px;">Analysing your document...</p>
+        <p style="font-size:13px; color:#5F6775;">This takes about 10 seconds</p>
       </div>
       <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
     <% end %>

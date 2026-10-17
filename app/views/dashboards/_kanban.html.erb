@@ -15,7 +15,7 @@
       </div>
       <div class="completed-grid">
         <% completed_tasks.each do |task| %>
-          <div class="task-card task-card--done task-card--pillar-<%= task.pillar&.slug %>" data-href="<%= task_path(task) %>" style="cursor:pointer;">
+          <div class="task-card task-card--done task-card--pillar-<%= task.pillar&.slug %>" data-href="<%= task_path(task) %>" role="link" tabindex="0" style="cursor:pointer;">
             <div class="card-top">
               <div class="card-tags">
                 <%= pillar_chip(task) %>
@@ -49,12 +49,12 @@
     <span class="col-count"><%= urgent_count %></span>
   </div>
   <% if urgent_tasks.empty? %>
-    <div style="padding: 16px 12px; text-align: center; border: 1.5px dashed #FECACA; border-radius: 16px; color: #9ca3af; font-size: 12px; font-weight: 500; line-height: 1.5;">
+    <div style="padding: 16px 12px; text-align: center; border: 1.5px dashed #FECACA; border-radius: 16px; color: #5F6775; font-size: 12px; font-weight: 500; line-height: 1.5;">
       No urgent tasks —<br>you're on track 👍
     </div>
   <% else %>
     <% urgent_tasks.each_with_index do |task, index| %>
-      <div class="task-card urgent-card task-card--pillar-<%= task.pillar&.slug %> <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>" style="cursor:pointer;">
+      <div class="task-card urgent-card task-card--pillar-<%= task.pillar&.slug %> <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>" role="link" tabindex="0" style="cursor:pointer;">
         <div class="card-top">
           <div class="card-tags">
             <%= pillar_chip(task) %>
@@ -109,7 +109,7 @@
     <span class="col-count"><%= active_count %></span>
   </div>
   <% active_tasks.each_with_index do |task, index| %>
-    <div class="task-card task-card--pillar-<%= task.pillar&.slug %> <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>" style="cursor:pointer;">
+    <div class="task-card task-card--pillar-<%= task.pillar&.slug %> <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>" role="link" tabindex="0" style="cursor:pointer;">
       <div class="card-top">
         <div class="card-tags">
           <%= pillar_chip(task) %>
@@ -153,7 +153,7 @@
     <span class="col-count"><%= upcoming_count %></span>
   </div>
   <% upcoming_tasks.each_with_index do |task, index| %>
-    <div class="task-card locked task-card--pillar-<%= task.pillar&.slug %> <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>">
+    <div class="task-card locked task-card--pillar-<%= task.pillar&.slug %> <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>" role="link" tabindex="0">
       <div class="card-top">
         <div class="card-tags">
           <%= pillar_chip(task) %>

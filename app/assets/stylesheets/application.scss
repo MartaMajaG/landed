@@ -12,6 +12,30 @@
 @import "pages/index";
 @import "pages/home";
 
+
+// ── Keyboard focus ─────────────────────────────────────────────────────────
+// The product previously authored no focus style at all, so keyboard focus
+// fell back to the browser default (Chrome: rgb(0,95,204)), a blue that is
+// not in the palette. 2px ring at 2px offset.
+// Contrast of the ring against its ground: 5.18:1 on white, 4.97:1 on the
+// page background, 3.37:1 on the dark rail — all clear the 3:1 required for
+// a non-text indicator. The rail uses white anyway, at 17.46:1.
+:focus-visible {
+  outline: 2px solid $focus-ring;
+  outline-offset: 2px;
+}
+
+.landed-sidebar :focus-visible {
+  outline-color: #fff;
+}
+
+// The task card is the primary action on the dashboard. It is a div with
+// role="link" and tabindex="0", so it needs the ring to clear its own shadow.
+.task-card:focus-visible {
+  outline: 2px solid $focus-ring;
+  outline-offset: 2px;
+}
+
 html {
   scroll-behavior: auto;
 }

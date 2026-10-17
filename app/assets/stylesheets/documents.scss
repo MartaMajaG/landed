@@ -35,7 +35,7 @@
 .doc-title {
   font-size: 1.5rem;
   font-weight: 500;
-  color: #2C2C2A;
+  color: $text-dark;
   margin: 0;
   line-height: 1.3;
 }
@@ -85,7 +85,7 @@
   .deadline-date {
     font-size: 1.375rem;
     font-weight: 500;
-    color: #2C2C2A;
+    color: $text-dark;
     line-height: 1.2;
     margin-bottom: 0.25rem;
   }
@@ -111,14 +111,14 @@
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.04em;
-    color: #888780;
+    color: $text-muted;
     margin-bottom: 0.6rem;
   }
 
   .amount-value {
     font-size: 1.375rem;
     font-weight: 500;
-    color: #2C2C2A;
+    color: $text-dark;
     line-height: 1.2;
     margin-bottom: 0.4rem;
   }
@@ -264,13 +264,13 @@
 .analysis-result-title {
   font-size: 1rem;
   font-weight: 500;
-  color: #2C2C2A;
+  color: $text-dark;
   margin: 0 0 2px;
 }
 
 .analysis-result-confidence {
   font-size: 0.78rem;
-  color: #888780;
+  color: $text-muted;
   margin: 0;
 }
 
@@ -315,7 +315,7 @@
   padding-top: 0.75rem;
   border-top: 0.5px solid #EFEEE9;
   font-size: 0.78rem;
-  color: #888780;
+  color: $text-muted;
 
   strong { color: #444441; font-weight: 500; }
   .lucide-icon { font-size: 0.9rem; }

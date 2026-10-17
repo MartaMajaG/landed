@@ -365,7 +365,7 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
   font-family: $font-display;
   font-weight: 800;
   font-size: 14px;
-  color: #B9B3DA;
+  color: $text-muted;
 }
 .lp-how.is-in .lp-step:nth-child(1) .lp-step__icon { transition-delay: 0.3s; }
 .lp-how.is-in .lp-step:nth-child(2) .lp-step__icon { transition-delay: 0.7s; }
@@ -402,7 +402,7 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
     font-weight: 800;
     font-size: 48px;
     line-height: 1;
-    color: $chartreuse;
+    color: $chartreuse-text;
     letter-spacing: -0.03em;
   }
   span { font-size: 14px; color: $text-gray; line-height: 1.45; }
@@ -466,7 +466,7 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
   align-items: center;
   gap: 16px;
   flex-wrap: wrap;
-  color: #8B8AA0;
+  color: $text-muted;
   font-size: 13px;
 }
 

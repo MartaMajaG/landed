@@ -3,8 +3,8 @@
 .tp-wrap { max-width: 880px; margin: 0 auto; padding: 0 12px; display: flex; flex-direction: column; gap: 20px; }
 
 .tp-crumbs {
-  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; color: #6B7280;
-  a { color: #6B7280; text-decoration: none; &:hover { color: #4433B8; } }
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; color: $text-muted;
+  a { color: $text-muted; text-decoration: none; &:hover { color: #4433B8; } }
 }
 .tp-crumbs__current { color: #1A1A2E; font-weight: 500; }
 
@@ -39,19 +39,19 @@
   position: absolute; top: calc(100% + 6px); right: 0; z-index: 100; min-width: 240px;
   background: #fff; border: 1px solid #ECEBF3; border-radius: 14px; overflow: hidden;
   box-shadow: 0 16px 40px -16px rgba(26, 21, 53, 0.25);
-  a { display: flex; align-items: center; gap: 10px; padding: 11px 14px; font-size: 14px; color: #1A1A2E; text-decoration: none; border-top: 1px solid #F3F4F6; svg { color: #9CA3AF; } }
+  a { display: flex; align-items: center; gap: 10px; padding: 11px 14px; font-size: 14px; color: #1A1A2E; text-decoration: none; border-top: 1px solid #F3F4F6; svg { color: $text-muted; } }
   a:hover { background: #F8F6FE; }
 }
 .tp-remind__date {
   padding: 12px 14px;
-  label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #6B7280; }
+  label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: $text-muted; }
   input { width: 100%; font-size: 14px; border: 1px solid #E5E7EB; border-radius: 8px; padding: 6px 8px; color: #1A1A2E; }
 }
 
 .tp-progress { display: flex; flex-direction: column; gap: 8px; }
 .tp-progress__row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
 .tp-progress__label { margin: 0; font-size: 14px; font-weight: 600; color: #1A1A2E; }
-.tp-progress__note { margin: 0; font-size: 14px; color: #6B7280; }
+.tp-progress__note { margin: 0; font-size: 14px; color: $text-muted; }
 .tp-progress__bar {
   height: 8px; border-radius: 999px; background: #F1F0F6; overflow: hidden;
   span { display: block; height: 100%; border-radius: 999px; background: #6B56E2; }
@@ -91,14 +91,14 @@
 }
 .tp-link__text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
 .tp-link__title { font-size: 14px; font-weight: 600; color: #1A1A2E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.tp-link__domain { font-size: 12px; color: #6B7280; }
-.tp-link__out { margin-left: auto; color: #9CA3AF; display: flex; }
+.tp-link__domain { font-size: 12px; color: $text-muted; }
+.tp-link__out { margin-left: auto; color: $text-muted; display: flex; }
 
 // Sections
 .tp-section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
 .tp-section-title { margin: 0; font-family: $headers-font; font-size: 17px; font-weight: 700; color: #1A1A2E; }
 .tp-section-title--solo { margin-bottom: 14px; }
-.tp-section-note { font-size: 14px; color: #6B7280; }
+.tp-section-note { font-size: 14px; color: $text-muted; }
 .tp-section-intro { margin: 0 0 16px; font-size: 14px; color: #4B5563; }
 .tp-section-head + .tp-steps, .tp-section-head + .tp-optional { margin-top: 14px; }
 .tp-steps { display: flex; flex-direction: column; gap: 10px; }
@@ -111,7 +111,7 @@
 }
 .tp-num--focus    { background: #6B56E2; border-color: #6B56E2; color: #fff; }
 .tp-num--done     { background: #7A9E1F; border-color: #7A9E1F; color: #fff; }
-.tp-num--waiting  { border: none; background: #F1F1F5; color: #6B7280; }
+.tp-num--waiting  { border: none; background: #F1F1F5; color: $text-muted; }
 .tp-num--optional { border: 2px dashed #C9C6D6; }
 
 // The step to do first
@@ -136,8 +136,8 @@
 .tp-row[open] > summary .tp-row__chev { transform: rotate(180deg); }
 .tp-row__text { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
 .tp-row__title { font-size: 15px; font-weight: 600; color: #1A1A2E; }
-.tp-row__desc { font-size: 14px; color: #6B7280; line-height: 1.5; }
-.tp-row__chev { color: #9CA3AF; display: flex; transition: transform 0.15s ease; flex-shrink: 0; }
+.tp-row__desc { font-size: 14px; color: $text-muted; line-height: 1.5; }
+.tp-row__chev { color: $text-muted; display: flex; transition: transform 0.15s ease; flex-shrink: 0; }
 .tp-row__more { padding: 0 18px 18px 60px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
 
 .tp-row--done { background: #fff; }
@@ -164,7 +164,7 @@
   font-size: 14px; font-weight: 600; color: #5B47D6; cursor: pointer; border-radius: 8px;
   &:hover { background: #F8F6FE; }
 }
-.tp-text-btn--muted { color: #6B7280; }
+.tp-text-btn--muted { color: $text-muted; }
 .tp-card form { margin: 0; }
 
 @media (max-width: 640px) {

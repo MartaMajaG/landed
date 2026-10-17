@@ -283,6 +283,12 @@
 <script>
   document.querySelectorAll('.task-card[data-href]').forEach(function(card) {
     card.addEventListener('click', function() { window.location.href = card.dataset.href; });
+    card.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        window.location.href = card.dataset.href;
+      }
+    });
   });
 
   var filterBtn = document.getElementById('pillarFilterBtn');
