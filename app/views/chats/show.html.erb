@@ -121,13 +121,13 @@
   <div class="container-xl doc-wrap">
 
     <%# ── BREADCRUMB ── %>
-    <div class="task-breadcrumb-nav">
+    <nav class="task-breadcrumb-nav" aria-label="Breadcrumb">
       <%= link_to "Dashboard", dashboard_path, class: "breadcrumb__link" %>
-      <span class="breadcrumb__divider">›</span>
+      <span class="breadcrumb__divider" aria-hidden="true">›</span>
       <%= link_to "Documents", chats_path, class: "breadcrumb__link" %>
-      <span class="breadcrumb__divider">›</span>
-      <span class="breadcrumb__current" style="max-width:500px;"><%= english_title %></span>
-    </div>
+      <span class="breadcrumb__divider" aria-hidden="true">›</span>
+      <span class="breadcrumb__current" style="max-width:500px;" aria-current="page"><%= english_title %></span>
+    </nav>
 
     <% if @chat.analysis_failed? %>
       <%# ── The AI couldn't read this scan: explain, help, and offer a way out ── %>
