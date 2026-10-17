@@ -556,16 +556,17 @@
     &::before { transform: scaleX(1); }
   }
 
-  // Locked (upcoming) cards are inert: no glow, no accent, no hover lift, not
-  // focusable. They recede through a flatter surface and a softer title, not
-  // through opacity, so every line on them still clears 4.5:1.
+  // Upcoming cards (class .locked) are not urgent yet, but people can still open
+  // and read them. They recede through a flatter surface and a softer title, not
+  // through opacity, so every line clears 4.5:1. No glow or lift; hover only
+  // firms up the border so the card still reads as something you can open.
   &.locked {
     background: #FAFAFC;
     border-color: #ECEBF3;
-    pointer-events: none;
     box-shadow: none;
     &::before { display: none; }
     .card-title { color: $text-gray; }
+    &:hover { box-shadow: none; transform: none; border-color: #D0C2F5; }
   }
   &--done {
     opacity: 0.75;

@@ -143,7 +143,7 @@
     <span class="col-count"><%= upcoming_count %></span>
   </div>
   <% upcoming_tasks.each_with_index do |task, index| %>
-    <div class="task-card locked task-card--pillar-<%= task.pillar&.slug %> <%= 'kanban-hidden' if index >= 2 %>">
+    <div class="task-card locked task-card--pillar-<%= task.pillar&.slug %> <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>" role="link" tabindex="0" style="cursor:pointer;">
       <div class="card-top">
         <div class="card-tags">
           <%= pillar_chip(task) %>
