@@ -104,11 +104,22 @@ $auth-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   font-weight: 600;
 }
 .auth-label-link {
+  position: relative;
   font-size: 13px;
   font-weight: 500;
   color: $indigo-landed;
   text-decoration: none;
   &:hover { text-decoration: underline; }
+  // 24px target without shifting the baseline row
+  &::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    height: 24px;
+    transform: translateY(-50%);
+  }
 }
 
 .auth-input {
@@ -140,6 +151,7 @@ $auth-ease:  cubic-bezier(0.22, 1, 0.36, 1);
 .auth-remember {
   display: flex;
   align-items: center;
+  min-height: 24px;
   gap: 10px;
   margin: -4px 0 0;
   font-size: 14px;
@@ -163,10 +175,10 @@ $auth-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   min-height: 48px;
   margin-top: 4px;
   border: 0;
-  border-radius: 12px;
+  border-radius: 10px;
   background: $indigo-landed;
   color: #fff;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   cursor: pointer;
   box-shadow: 0 10px 22px -12px rgba(107, 86, 226, 0.9);

@@ -245,6 +245,18 @@
   pointer-events: auto;
   transition: transform 0.12s ease;
 
+  // The dot reads as 7px but was also only 7px to hit. This gives it a 24px
+  // target without touching how it looks.
+  &::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 24px;
+    height: 24px;
+    transform: translate(-50%, -50%);
+  }
+
   &:hover {
     transform: translate(-50%, -50%) scale(1.35);
   }
@@ -497,7 +509,7 @@
   &.upcoming-dot { background: $status-upcoming; }
 }
 .col-title { font-size: 12.5px; font-weight: 600; color: $text-dark; flex: 1; }
-.col-count { font-size: 10px; color: $text-muted; background: #f0f2f7; border-radius: 4px; padding: 1px 5px; }
+.col-count { font-size: 10.5px; color: $text-muted; background: #f0f2f7; border-radius: 4px; padding: 1px 5px; }
 
 .kanban-hidden { display: none !important; }
 

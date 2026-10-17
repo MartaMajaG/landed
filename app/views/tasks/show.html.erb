@@ -194,7 +194,7 @@
 
           <% completed_steps = @checklist_items.select { |i| @user_checklist_items[i.id]&.completed }.count %>
           <div class="task-steps__header">
-            <span class="task-steps__label">Checklist</span>
+            <h2 class="task-steps__label">Checklist</h2>
             <span class="task-steps__count" data-task-detail-target="stepCount">
               <% if completed_steps == @checklist_items.count %>
                 <span class="task-steps__all-done">All done ✓</span>
