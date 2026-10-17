@@ -43,19 +43,23 @@
   doc_type  = @chat.document_type.to_s.split("/").first.to_s.strip
 
   # Deadline state, shown once in the banner
+  banner_tone = banner_title = banner_meta = nil
+  deadline_chip_tone = deadline_chip_text = nil
   if @chat.deadline.present?
     days_left = (@chat.deadline - Date.today).to_i
     due_on    = @chat.deadline.strftime("%b %-d, %Y")
-    # Status only. What to do about it lives in the AI panel, the amount lives in
-    # the stat strip; repeating either here just made the loudest box the emptiest.
+    # A full-width tinted bar is alert furniture: it is for "you are late" or
+    # "this is today". Anything further out is metadata and belongs in the tag
+    # row beside the document type. A banner on every document cries wolf, and
+    # then the one that matters reads the same as the one that doesn't.
     if days_left < 0
       banner_tone, banner_title, banner_meta = "overdue", "Overdue", "was due #{due_on}"
     elsif days_left == 0
       banner_tone, banner_title, banner_meta = "soon", "Due today", due_on
-    elsif days_left <= 14
-      banner_tone, banner_title, banner_meta = "soon", "Due in #{days_left} #{'day'.pluralize(days_left)}", due_on
+    elsif days_left <= 7
+      deadline_chip_tone, deadline_chip_text = "soon", "Due in #{days_left} #{'day'.pluralize(days_left)}"
     else
-      banner_tone, banner_title, banner_meta = "calm", "Due #{due_on}", nil
+      deadline_chip_tone, deadline_chip_text = "calm", "Due #{due_on}"
     end
   end
 
@@ -178,6 +182,7 @@
             <div class="doc-tags">
               <span class="doc-tag doc-tag--brand"><%= mandatory ? "Mandatory" : "Optional" %></span>
               <% if doc_type.present? %><span class="doc-tag"><%= doc_type %></span><% end %>
+              <% if deadline_chip_text.present? %><span class="doc-tag doc-tag--due-<%= deadline_chip_tone %>"><%= deadline_chip_text %></span><% end %>
               <span class="doc-processed">Processed <%= @chat.created_at.strftime("%b %-d, %Y") %></span>
             </div>
             <h1 class="doc-title"><%= english_title %></h1>
@@ -235,7 +240,7 @@
           </div>
         </div>
 
-        <% if @chat.deadline.present? %>
+        <% if banner_title.present? %>
           <div class="doc-banner doc-banner--<%= banner_tone %>">
             <div class="doc-banner__icon"><span class="lucide-icon doc-banner__svg"><%= (banner_tone == "calm" ? icon_cal_plus : icon_warn).html_safe %></span></div>
             <p class="doc-banner__title"><%= banner_title %></p>
