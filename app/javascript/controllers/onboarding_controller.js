@@ -18,11 +18,14 @@ function addDays(date, n) { const d = new Date(date); d.setDate(d.getDate() + n)
 function startOfToday() { const d = new Date(); d.setHours(0, 0, 0, 0); return d }
 function toISO(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}` }
 function fromISO(s) { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d) }
-function fmt(d) { return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }) }
-// Dashboard card date format (strftime "%b %d"), e.g. "Nov 08"
+// Same as ApplicationHelper#short_date: day before month, the year only when it is not this year
+function fmt(d) {
+  const day = `${d.getDate()} ${d.toLocaleDateString("en-US", { month: "short" })}`
+  return d.getFullYear() === new Date().getFullYear() ? day : `${day} ${d.getFullYear()}`
+}
 // Same format as ApplicationHelper#due_label: day before month, relative word beside the date
 function fmtCard(d) {
-  const day = `${d.getDate()} ${d.toLocaleDateString("en-US", { month: "short" })}`
+  const day = fmt(d)
   const daysLeft = Math.round((d - startOfToday()) / 86400000)
   if (daysLeft < 0) return `Overdue since ${day}`
   if (daysLeft === 0) return `Due today, ${day}`

@@ -225,7 +225,7 @@
                   tone = if days_left <= 0 then "overdue" elsif days_left <= 14 then "soon" else "later" end
                   when_text = if days_left < 0 then "Overdue" elsif days_left == 0 then "Due today" else "#{days_left} #{'day'.pluralize(days_left)} left" end
                 %>
-                <p style="font-size:14px; font-weight:500; color:#1A1535; margin:0;"><%= chat.deadline.strftime("%b %d, %Y") %></p>
+                <p style="font-size:14px; font-weight:500; color:#1A1535; margin:0;"><%= short_date(chat.deadline) %></p>
                 <span class="doc-due doc-due--<%= tone %>"><%= when_text %></span>
               <% else %>
                 <span style="font-size:12px; color:#D3D1C7;">—</span>
@@ -233,7 +233,7 @@
             </div>
 
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <p style="font-size:12px; color:#5F6775; margin:0;"><%= chat.created_at.strftime("%b %d, %Y") %></p>
+              <p style="font-size:12px; color:#5F6775; margin:0;"><%= short_date(chat.created_at.to_date) %></p>
               <div class="single-delete" onclick="event.stopPropagation();">
                 <%= button_to "Delete", chat_path(chat), method: :delete, form: { data: { turbo: false } }, onclick: "return confirm('Delete this document?');", style:"background:none; border:0.5px solid #D3D1C7; border-radius:999px; font-size:11px; font-weight:500; color:#5F6775; cursor:pointer; padding:3px 10px; min-height:24px; display:inline-flex; align-items:center;" %>
               </div>

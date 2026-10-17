@@ -38,9 +38,15 @@ module ApplicationHelper
 
   # One deadline format everywhere: day before month, the way dates read in
   # Germany, and a relative word only ever beside the date, never instead of it.
+  # Every date in the app: day before month, the year only when it is not this year.
+  def short_date(date, today: Date.today)
+    return nil unless date
+    date.year == today.year ? date.strftime("%-d %b") : date.strftime("%-d %b %Y")
+  end
+
   def due_label(date, today: Date.today)
     return nil unless date
-    day = date.strftime("%-d %b")
+    day = short_date(date, today: today)
     days_left = (date - today).to_i
     if days_left.negative? then "Overdue since #{day}"
     elsif days_left.zero?  then "Due today, #{day}"

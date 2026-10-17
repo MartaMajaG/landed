@@ -51,7 +51,10 @@
       if (isNaN(d.getTime())) return "";
       var time = d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
       if (d.toDateString() === new Date().toDateString()) return "Today at " + time;
-      return d.toLocaleDateString([], { day: "numeric", month: "short" }) + " at " + time;
+      // Same as the rest of the app: day before month, e.g. "3 Nov"
+      var day = d.getDate() + " " + d.toLocaleDateString("en-US", { month: "short" });
+      if (d.getFullYear() !== new Date().getFullYear()) day += " " + d.getFullYear();
+      return day + " at " + time;
     }
 
     return { read: read, add: add, remove: remove, count: count, label: label };
