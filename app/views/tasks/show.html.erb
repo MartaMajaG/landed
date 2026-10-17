@@ -93,11 +93,11 @@
   <%# ── BREADCRUMB ── %>
   <div style="padding: 34px 0 16px; position: relative; z-index: 1;">
     <div class="container" style="max-width: 1160px; margin: 0 auto;">
-      <div class="task-breadcrumb-nav">
+      <nav class="task-breadcrumb-nav" aria-label="Breadcrumb">
         <%= link_to "Dashboard", dashboard_path, class: "breadcrumb__link" %>
-        <span class="breadcrumb__divider">›</span>
-        <span class="breadcrumb__current"><%= @task.name %></span>
-      </div>
+        <span class="breadcrumb__divider" aria-hidden="true">›</span>
+        <span class="breadcrumb__current" aria-current="page"><%= @task.name %></span>
+      </nav>
     </div>
   </div>
 
