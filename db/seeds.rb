@@ -493,6 +493,187 @@ supplementary_steps = [
 
 sync_steps!(supplementary, supplementary_steps)
 
+# ── Upcoming tasks ──────────────────────────────────────────────────────────
+# These four existed in the database without any steps, so their task page
+# could never be completed. Task fields below match what was already stored;
+# only the steps are new.
+
+savings = Task.find_or_initialize_by(name: "Open a Savings Account", city: munich)
+savings.update!(
+  pillar:         pillar_housing,
+  category:       "housing_and_registration",
+  description:    "Consider opening a Tagesgeldkonto (overnight money account) for emergency savings. German banks like DKB and ING offer competitive rates.",
+  why_it_matters: "Building a financial buffer in Germany is essential for unexpected costs like deposits, repairs, or job gaps.",
+  urgency:        "low"
+)
+
+savings_steps = [
+  {
+    position:              1,
+    title:                 "Compare Tagesgeld and Festgeld",
+    description:           "A Tagesgeldkonto lets you take money out at any time. A Festgeldkonto locks it away for a fixed term at a fixed rate. For an emergency buffer, Tagesgeld is the usual choice.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              2,
+    title:                 "Check the deposit protection",
+    description:           "Savings at banks in the EU are protected up to €100,000 per person per bank. Check which country's scheme covers the bank you pick, especially for online banks based abroad.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              3,
+    title:                 "Open the account online",
+    description:           "Most banks open a savings account online in a few minutes. You will verify your identity by video call or at a post office, and the bank will ask for your tax ID (Steuer-ID).",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: 1
+  },
+  {
+    position:              4,
+    title:                 "Set up a tax exemption order (Freistellungsauftrag)",
+    description:           "Interest is taxed automatically in Germany. A Freistellungsauftrag tells the bank to leave interest untaxed up to your yearly allowance (€1,000 for a single person). You set it up in your online banking.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: 3
+  }
+]
+
+sync_steps!(savings, savings_steps)
+
+german = Task.find_or_initialize_by(name: "Learn Basic German", city: munich)
+german.update!(
+  pillar:         pillar_finance,
+  category:       "finance_and_banking",
+  description:    "Enroll in an integration course (Integrationskurs) or use apps like Duolingo, Babbel, or Volkshochschule classes to build everyday German skills.",
+  why_it_matters: "Basic German makes daily life significantly easier — from reading letters to navigating bureaucracy and building local connections.",
+  urgency:        "low"
+)
+
+german_steps = [
+  {
+    position:              1,
+    title:                 "Check if you can join an integration course",
+    description:           "Integration courses (Integrationskurse) are run with the Federal Office for Migration and Refugees (BAMF) and cost far less than private classes. Some residence permits make them compulsory. Ask the immigration office (Ausländerbehörde) or check the BAMF website.",
+    category:              "finance_and_banking",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              2,
+    title:                 "Find a course near you",
+    description:           "The Volkshochschule (in Munich, the MVHS) runs affordable evening and weekend courses at every level. Many language schools offer integration courses too.",
+    category:              "finance_and_banking",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              3,
+    title:                 "Practise a little every day",
+    description:           "Ten minutes a day with an app, a podcast or a German news site for learners does more than one long session a week.",
+    category:              "finance_and_banking",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              4,
+    title:                 "Plan for a certificate if you will need one",
+    description:           "A B1 certificate (from telc or the Goethe-Institut, for example) is usually needed for permanent residence and citizenship. You don't need it now, but it is worth knowing where you are heading.",
+    category:              "finance_and_banking",
+    is_optional:           true,
+    unlock_after_position: nil
+  }
+]
+
+sync_steps!(german, german_steps)
+
+phone = Task.find_or_initialize_by(name: "Set Up a German Phone Plan", city: munich)
+phone.update!(
+  pillar:         pillar_finance,
+  category:       "finance_and_banking",
+  description:    "Switch to a German SIM card with a local number. Providers like Aldi Talk, Congstar, or O2 offer affordable prepaid and contract options.",
+  why_it_matters: "A local number is required for many official registrations, bank accounts, and job applications in Germany.",
+  urgency:        "low"
+)
+
+phone_steps = [
+  {
+    position:              1,
+    title:                 "Choose prepaid or a contract",
+    description:           "Prepaid needs no credit check and no German bank account, so it is the easy start. A contract is often cheaper per month but usually needs a German IBAN and a credit check (Schufa), which you may not have yet.",
+    category:              "finance_and_banking",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              2,
+    title:                 "Get your ID ready",
+    description:           "Every German SIM card, prepaid included, has to be registered to a verified identity. Keep your passport at hand: activation is done by video call, in a shop, or at a post office.",
+    category:              "finance_and_banking",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              3,
+    title:                 "Order and activate your SIM",
+    description:           "Buy the SIM online or in a supermarket or phone shop, then follow the activation steps. It usually works within a day.",
+    category:              "finance_and_banking",
+    is_optional:           false,
+    unlock_after_position: 1
+  },
+  {
+    position:              4,
+    title:                 "Share your new number",
+    description:           "Give your German number to your employer, your bank, your health insurer and your landlord, so calls and verification codes reach you.",
+    category:              "finance_and_banking",
+    is_optional:           false,
+    unlock_after_position: 3
+  }
+]
+
+sync_steps!(phone, phone_steps)
+
+debits = Task.find_or_initialize_by(name: "Set Up Direct Debits and Standing Orders", city: munich)
+debits.update!(
+  pillar:         pillar_housing,
+  category:       "housing_and_registration",
+  description:    "Configure Lastschrift (direct debit) and Dauerauftrag (standing orders) for rent, utilities, and subscriptions through your German bank account.",
+  why_it_matters: "Most German landlords and utility providers require direct debit. Missing payments can affect your rental agreement and credit score.",
+  urgency:        "low"
+)
+
+debits_steps = [
+  {
+    position:              1,
+    title:                 "Set up a standing order for rent (Dauerauftrag)",
+    description:           "If your landlord asks you to transfer the rent, set up a Dauerauftrag in your online banking a few days before it is due each month, using the IBAN and reference from your lease.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              2,
+    title:                 "Give direct debit mandates (SEPA-Lastschrift)",
+    description:           "Electricity, internet, phone, insurance and the broadcasting fee (Rundfunkbeitrag) are usually paid by direct debit. Each provider asks for your IBAN and permission to collect.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              3,
+    title:                 "Check your first statements",
+    description:           "Make sure every payment arrived and nothing was charged twice. If a direct debit is wrong, you can ask your bank to reverse it within eight weeks.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: 2
+  }
+]
+
+sync_steps!(debits, debits_steps)
+
 puts "Subtasks seeded: #{ChecklistItem.count} total."
 
 puts "Seeds complete. #{DocumentType.count} document types | #{Pillar.count} pillars | #{Task.count} tasks | #{ChecklistItem.count} subtasks."
