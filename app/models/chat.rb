@@ -43,17 +43,42 @@ class Chat < ApplicationRecord
     document.attached? && advice.blank?
   end
 
-  # Runs the analysis again on the same file and stores the result
-  def reanalyze!
-    ai_data = analyze_document || {}
+  # Whether a deadline has passed is arithmetic, not judgement, so it is computed
+  # here instead of being trusted from the model. The deadline banner is computed
+  # from the same date, which means the two can no longer disagree.
+  def self.urgency_for(deadline, fallback)
+    return fallback if deadline.blank?
+    date =
+      begin
+        deadline.is_a?(Date) ? deadline : Date.parse(deadline.to_s)
+      rescue ArgumentError, TypeError
+        nil
+      end
+    return fallback if date.nil?
+
+    days_left = (date - Date.today).to_i
+    return "high"   if days_left <= 0
+    return "medium" if days_left <= 14
+    "low"
+  end
+
+  # The single place an analysis result is written, used by both the upload and
+  # the retry path so they can never drift apart.
+  def apply_analysis!(ai_data)
+    ai_data ||= {}
     update(
       title: ai_data["title"],
       amount: ai_data["amount"],
       deadline: ai_data["deadline"],
-      urgency: ai_data["urgency"],
+      urgency: self.class.urgency_for(ai_data["deadline"], ai_data["urgency"]),
       document_type: ai_data["document_type"],
       advice: ai_data["advice"]
     )
+  end
+
+  # Runs the analysis again on the same file and stores the result
+  def reanalyze!
+    apply_analysis!(analyze_document)
     !analysis_failed?
   end
 
@@ -119,17 +144,27 @@ class Chat < ApplicationRecord
     <<~PROMPT
       Today's date is #{Date.today.strftime("%Y-%m-%d")}.
 
+      TIMING IS NOT YOURS TO JUDGE. Never state or imply whether a deadline has
+      passed, is overdue, is today, or how much time is left. The app computes
+      that from the date and displays it directly above your text. Saying
+      "overdue" or "act today" while the app says "Due in 3 days" makes the
+      product contradict itself on a document with legal and financial
+      consequences, which is the one thing it must never do.
+      Never use: overdue, late, has passed, expired, act today, immediately.
+      Write about what the document is and what to do, never about when.
+      Use plain punctuation. Never use em dashes.
+
       Analyze this document and return ONLY a JSON object with these keys:
       1. 'title' (English with German in brackets)
       2. 'amount' (Float)
       3. 'deadline' (YYYY-MM-DD)
-      4. 'urgency' (high, medium, low) — set to 'high' if the deadline (if any) is today or has already passed relative to today's date above
+      4. 'urgency' (high, medium, low) — judge ONLY from the document's own content: the penalty for inaction, legal consequence, whether action is required at all. Ignore the date entirely. The app computes deadline urgency itself and overrides this value.
       5. 'document_type' — a SHORT category label, maximum 2 words, no slashes, no compound phrases (e.g. 'Krankenkasse', 'Finanzamt', 'Utility Bill', 'Tax Notice'). Never combine two category names with a slash.
       6. 'advice' as a nested object with:
-         - 'summary': one plain-English action sentence telling the user what they need to do — not a document definition, not a description, but a direct action prompt (e.g. 'You need to submit this form to confirm your address with the Munich authorities.'). If the deadline has already passed relative to today's date, say so plainly here and stress urgency.
-         - 'explanation': write 3-4 sentences directly to the user as if you are a knowledgeable friend helping them navigate German bureaucracy. Be warm, specific, and reassuring. Tell them what this document means for their situation, what they should do next, and what to watch out for. Use you and your throughout. Never be generic. If the deadline has already passed relative to today's date, acknowledge that clearly and explain what to do next given that it's overdue. Wrap every concrete number, amount, or date that appears in this sentence in double asterisks, e.g. "You owe **€194.78** by **February 12, 2026**." Do this for every such value, not just the first one.
+         - 'summary': one plain-English action sentence telling the user what they need to do — not a document definition, not a description, but a direct action prompt (e.g. 'You need to submit this form to confirm your address with the Munich authorities.').
+         - 'explanation': write 3-4 sentences directly to the user as if you are a knowledgeable friend helping them navigate German bureaucracy. Be warm, specific, and reassuring. Tell them what this document means for their situation, what they should do next, and what to watch out for. Use you and your throughout. Never be generic. Wrap every concrete number, amount, or date that appears in this sentence in double asterisks, e.g. "You owe **€194.78** by **February 12, 2026**." Do this for every such value, not just the first one.
          - 'stats': array of up to 4 objects, each with 'label', 'value', 'sub', and optional 'highlight' (warn or critical). The value must be short — maximum 3 words, no sentences. Always prioritise these categories in this order if present in the document: amount or fee owed, deadline or due date, penalty for missing deadline, contest or appeal window. Only use other categories if none of these apply. Labels must be short and clear in plain English — never use German institution names as a value. Always format currency values with the euro symbol before the number with no space (e.g. the symbol comes first, then the digits).
-         - 'key_facts': array of 3 objects with 'n' (1,2,3) and 'text' (warm and friendly, written directly to the user using you and your, like helping a friend navigate German bureaucracy — be reassuring and practical, not robotic). These are shown under the heading 'What to watch out for', next to a panel that already shows the amount, the deadline and the stats. So never restate the amount, the deadline or any stat value. Each fact must be something to check, something that happens next, or a risk to watch out for. Wrap any other concrete value you mention in double asterisks the same way as in 'explanation'.
+         - 'key_facts': array of 3 objects with 'n' (1,2,3) and 'text' (warm and friendly, written directly to the user using you and your, like helping a friend navigate German bureaucracy — be reassuring and practical, not robotic). These are shown under the heading 'What to watch out for', next to a panel that already shows the amount, the deadline and the stats. So never restate the amount, the deadline, any stat value, or anything about how much time is left. Each fact must be something to check, something that happens next, or a risk to watch out for. Wrap any other concrete value you mention in double asterisks the same way as in 'explanation'.
          - 'contact_info': any phone number, email address, or physical office address found in the document for contacting the issuing authority or customer service. Combine all found details into one short plain-text string (e.g. "Phone: +49 38203 713-0, Email: service@zvk-dbr.de, Mon-Thu 7:00-17:00, Fri 7:00-15:00"). Use null if genuinely no contact details appear anywhere in the document.
          - 'regions': array of objects identifying which section of the document contains each key value. Each object must have: 'field' (one of: deadline, amount, recipient_name, reference_number), 'label' (short display label e.g. 'Fee', 'Deadline'), 'y' (top edge of the section as % of image height — start exactly at the section header line, e.g. the line that reads 'Gebühr', not the element above it), 'h' (height of a single line as % of image height — typically 2-3%, never more than 4%). 'y' must point to the exact line containing the printed value, not the section header above it. Always span the full width: 'x' is always 0, 'w' is always 100. If you cannot locate the exact line with confidence, omit that region entirely.
          - 'Never start a fact with "It\'s" or "This". Every fact must open with "You", "Your", or "Make sure you".'
