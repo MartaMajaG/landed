@@ -24,7 +24,7 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 13px 22px;
+  padding: 12px 22px;
   border-radius: 12px;
   background: $indigo-landed;
   color: #fff;
@@ -39,7 +39,7 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
   .lucide-icon { transition: transform 0.2s $lp-ease; }
   &:hover .lucide-icon { transform: translateX(3px); }
 
-  &--sm { padding: 9px 16px; font-size: 14px; border-radius: 10px; }
+  &--sm { padding: 8px 16px; font-size: 14px; border-radius: 10px; }
   &--ghost {
     background: transparent;
     color: $text-dark;
@@ -81,7 +81,7 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
 .landed-logo {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
+  gap: 8px;
   color: $text-dark;
 }
 .landed-logo__mark {
@@ -138,7 +138,7 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
 .lp-pillar {
   display: inline-flex;
   align-items: center;
-  padding: 7px 12px;
+  padding: 8px 12px;
   border-radius: 999px;
   background: #fff;
   box-shadow: inset 0 0 0 1px $lp-line;

@@ -25,7 +25,7 @@
             <p class="card-desc"><%= first_sentence(task.description) %></p>
             <div class="card-footer-group">
               <div class="card-bottom-row">
-                <span class="card-due card-done-badge" style="display:inline-flex; align-items:center; gap:4px;">
+                <span class="card-due card-done-badge" style="display:inline-flex; align-items:center; gap: 4px;">
                   <span class="lucide-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                   </span>
@@ -73,7 +73,7 @@
             <div class="card-fill" style="width: <%= total > 0 ? ((done.to_f / total) * 100).round : 0 %>%;"></div>
           </div>
           <div class="card-bottom-row">
-            <span class="card-due urgent-due" style="display:inline-flex; align-items:center; gap:4px;">
+            <span class="card-due urgent-due" style="display:inline-flex; align-items:center; gap: 4px;">
               <span class="lucide-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
               </span>
@@ -118,7 +118,7 @@
           <div class="card-fill" style="width: <%= total > 0 ? ((done.to_f / total) * 100).round : 0 %>%;"></div>
         </div>
         <div class="card-bottom-row" <%= ('style="display:none;"').html_safe unless task.due_on %>>
-          <span class="card-due <%= 'urgent-due' if task.overdue? %>" style="display:inline-flex; align-items:center; gap:4px;">
+          <span class="card-due <%= 'urgent-due' if task.overdue? %>" style="display:inline-flex; align-items:center; gap: 4px;">
             <span class="lucide-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             </span>
@@ -162,7 +162,7 @@
           <div class="card-fill" style="width: <%= total > 0 ? ((done.to_f / total) * 100).round : 0 %>%;"></div>
         </div>
         <div class="card-bottom-row" <%= ('style="display:none;"').html_safe unless task.due_on %>>
-          <span class="card-due <%= 'urgent-due' if task.overdue? %>" style="display:inline-flex; align-items:center; gap:4px;">
+          <span class="card-due <%= 'urgent-due' if task.overdue? %>" style="display:inline-flex; align-items:center; gap: 4px;">
             <span class="lucide-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             </span>

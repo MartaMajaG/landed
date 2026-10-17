@@ -153,7 +153,7 @@
 .destination-chip {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   color: #fff;
   font-size: 11px;
   font-weight: 500;
@@ -163,12 +163,12 @@
 .arrival-chip {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
   background: rgba(255, 255, 255, 0.16);
   color: rgba(255, 255, 255, 0.85);
   font-size: 10.5px;
   font-weight: 600;
-  padding: 3px 9px;
+  padding: 4px 8px;
   border-radius: 20px;
   white-space: nowrap;
 }
@@ -275,7 +275,7 @@
   background: white;
   border: 0.5px solid #E5E7EB;
   border-radius: 16px;
-  padding: 9px 13px;
+  padding: 8px 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.10);
   z-index: 300;
   width: 200px;
@@ -293,7 +293,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
 }
 
 .journey-dot {
@@ -366,7 +366,7 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  padding: 3px 9px;
+  padding: 4px 8px;
   border-radius: 20px;
   font-size: 11px;
   font-weight: 600;
@@ -385,7 +385,7 @@
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 999px;
-  padding: 3px;
+  padding: 4px;
   gap: 2px;
   box-shadow: 0 4px 16px rgba(107, 86, 226, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.5);
 }
@@ -505,10 +505,10 @@
   margin-bottom: 24px;
   margin-top: 14px;
 }
-.kanban-col { display: flex; flex-direction: column; gap: 9px; }
+.kanban-col { display: flex; flex-direction: column; gap: 8px; }
 .col-header {
   display: flex; align-items: center; gap: 6px; margin-bottom: 6px;
-  padding: 5px 9px;
+  padding: 4px 8px;
 }
 .col-dot {
   width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
@@ -517,7 +517,7 @@
   &.upcoming-dot { background: $status-upcoming; }
 }
 .col-title { font-size: 12.5px; font-weight: 600; color: $text-dark; flex: 1; }
-.col-count { font-size: 10.5px; color: $text-muted; background: #f0f2f7; border-radius: 4px; padding: 1px 5px; }
+.col-count { font-size: 10.5px; color: $text-muted; background: #f0f2f7; border-radius: 4px; padding: 1px 4px; }
 
 .kanban-hidden { display: none !important; }
 
@@ -608,13 +608,13 @@
 // The word carries the meaning; green #10b981 was 2.5:1 as text.
 .card-done-badge { color: $text-gray; font-weight: 600; }
 .urgent-due  { color: $due-text; }
-.card-top    { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
+.card-top    { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
 .card-tags   { display: flex; gap: 4px; flex-wrap: wrap; }
 .tag {
   font-size: 11px;
   font-weight: 600;
   border-radius: 4px;
-  padding: 2px 5px;
+  padding: 2px 4px;
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -709,23 +709,23 @@
 .cal-cell {
   padding: 10px 12px;
   border-right: 0.5px solid #f0f2f7; border-bottom: 0.5px solid #f0f2f7; min-width: 0;
-  display: flex; flex-direction: column; gap: 5px;
+  display: flex; flex-direction: column; gap: 4px;
   &:nth-child(7n) { border-right: none; }
   &.muted .cal-date { color: $text-muted; }
   &.weekend { background: #FAFAFC; }
 }
-.cal-date { font-size: 13px; font-weight: 500; color: $text-dark; margin-bottom: 3px; }
+.cal-date { font-size: 13px; font-weight: 500; color: $text-dark; margin-bottom: 4px; }
 .today-num {
   font-size: 13px; font-weight: 700; background: $indigo-landed; color: #fff;
   width: 23px; height: 23px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center; margin-bottom: 3px;
+  display: flex; align-items: center; justify-content: center; margin-bottom: 4px;
 }
 .cal-event {
   cursor: pointer;
   font-size: 11px;
   font-weight: 600;
   border-radius: 4px;
-  padding: 4px 8px 4px 9px;
+  padding: 4px 8px 4px 8px;
   display: block;
   max-width: 100%;
   line-height: 1.4;
@@ -750,7 +750,7 @@
   font-size: 11px;
   font-weight: 600;
   color: $indigo-landed;
-  padding: 2px 3px;
+  padding: 2px 4px;
   cursor: pointer;
   line-height: 1.4;
   &:hover { text-decoration: underline; }
@@ -809,18 +809,18 @@
   background: white;
   border: 0.5px solid #E5E7EB;
   border-radius: 16px;
-  padding: 9px 13px;
+  padding: 8px 12px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.10);
   z-index: 300;
   width: 220px;
   &__title { font-size: 11px; font-weight: 600; color: $text-dark; margin: 0 0 2px; line-height: 1.4; }
-  &__date  { font-size: 10.5px; color: $text-muted; margin: 0 0 9px; }
+  &__date  { font-size: 10.5px; color: $text-muted; margin: 0 0 8px; }
   &__actions {
     display: flex; flex-direction: column; gap: 6px;
-    border-top: 0.5px solid #E5E7EB; padding-top: 9px;
+    border-top: 0.5px solid #E5E7EB; padding-top: 8px;
   }
   &__btn {
-    font-size: 10.5px; font-weight: 600; padding: 6px 9px;
+    font-size: 10.5px; font-weight: 600; padding: 6px 8px;
     border-radius: 10px; text-decoration: none; text-align: center; display: block;
     &--google { background: #E4E1FD; color: #4433B8; }
     &--apple  { background: #f0f2f7; color: $text-dark; }
@@ -834,7 +834,7 @@
 .completed-section {
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 8px;
   grid-column: 1 / -1;
 
   > .col-header { width: fit-content; }
@@ -851,7 +851,7 @@
 
 .col-show-more {
   width: 100%;
-  padding: 9px;
+  padding: 8px;
   font-size: 11px;
   font-weight: 600;
   color: $text-muted;
@@ -864,7 +864,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 4px;
   transition: all 0.15s ease;
 
   &::before { content: '↓'; font-size: 10.5px; }

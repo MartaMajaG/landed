@@ -593,7 +593,7 @@
   align-items: center;
   font-size: 10.5px;
   font-weight: 600;
-  padding: 2px 7px;
+  padding: 2px 8px;
   border-radius: 20px;
   letter-spacing: 0.04em;
 
@@ -686,7 +686,7 @@
     color: #fff;
     font-size: 10.5px;
     font-weight: 500;
-    padding: 3px 7px;
+    padding: 4px 8px;
     border-radius: 4px;
     white-space: nowrap;
   }
@@ -731,7 +731,7 @@
   font-size: 12px;
   color: $text-muted;
   background: #F0F2F7;
-  padding: 2px 9px;
+  padding: 2px 8px;
   border-radius: 10px;
   font-weight: 500;
 }
@@ -747,7 +747,7 @@
 .breadcrumb__pillar-tag {
   display: inline-flex !important;
   align-items: center !important;
-  gap: 5px !important;
+  gap: 4px !important;
 
   svg {
     width: 11px;

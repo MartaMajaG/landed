@@ -1,7 +1,7 @@
 <%# 1. Append the user's message bubble (same style as on page load) %>
 <%= turbo_stream.append "chat-messages-#{@chat.id}" do %>
   <div style="display:flex; justify-content:flex-end;">
-    <div style="background:#6B56E2; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:20px 4px 18px 18px; max-width:75%;"><%= @user_message.content %></div>
+    <div style="background:#6B56E2; color:#fff; font-size:14px; line-height:1.6; padding: 10px 14px; border-radius:20px 4px 18px 18px; max-width:75%;"><%= @user_message.content %></div>
   </div>
 <% end %>
 
