@@ -6,7 +6,7 @@
   display: flex; align-items: center; gap: 8px; flex-wrap: wrap; font-size: 14px; color: $text-muted;
   a { color: $text-muted; text-decoration: none; &:hover { color: #4433B8; } }
 }
-.tp-crumbs__current { color: #1A1A2E; font-weight: 500; }
+.tp-crumbs__current { color: $text-dark; font-weight: 500; }
 
 .tp-card {
   background: #fff; border: 1px solid #ECEBF3; border-radius: 20px;
@@ -30,27 +30,27 @@
 .tp-due--later   { background: #F1F1F5; color: #374151; }
 .tp-due--done    { background: #ECFCCB; color: #3F6212; }
 
-.tp-title { margin: 0; font-family: $headers-font; font-size: 32px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.15; color: #1A1A2E; }
+.tp-title { margin: 0; font-family: $headers-font; font-size: 32px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.15; color: $text-dark; }
 .tp-desc { margin: 0; font-size: 15px; line-height: 1.6; color: #4B5563; }
 
 // Remind me
 .tp-remind { position: relative; }
 .tp-remind__menu {
   position: absolute; top: calc(100% + 6px); right: 0; z-index: 100; min-width: 240px;
-  background: #fff; border: 1px solid #ECEBF3; border-radius: 14px; overflow: hidden;
+  background: #fff; border: 1px solid #ECEBF3; border-radius: 16px; overflow: hidden;
   box-shadow: 0 16px 40px -16px rgba(26, 21, 53, 0.25);
-  a { display: flex; align-items: center; gap: 10px; padding: 11px 14px; font-size: 14px; color: #1A1A2E; text-decoration: none; border-top: 1px solid #F3F4F6; svg { color: $text-muted; } }
+  a { display: flex; align-items: center; gap: 10px; padding: 11px 14px; font-size: 14px; color: $text-dark; text-decoration: none; border-top: 1px solid #F3F4F6; svg { color: $text-muted; } }
   a:hover { background: #F8F6FE; }
 }
 .tp-remind__date {
   padding: 12px 14px;
   label { display: block; margin-bottom: 6px; font-size: 12px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: $text-muted; }
-  input { width: 100%; font-size: 14px; border: 1px solid #E5E7EB; border-radius: 8px; padding: 6px 8px; color: #1A1A2E; }
+  input { width: 100%; font-size: 14px; border: 1px solid #E5E7EB; border-radius: 10px; padding: 6px 8px; color: $text-dark; }
 }
 
 .tp-progress { display: flex; flex-direction: column; gap: 8px; }
 .tp-progress__row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
-.tp-progress__label { margin: 0; font-size: 14px; font-weight: 600; color: #1A1A2E; }
+.tp-progress__label { margin: 0; font-size: 14px; font-weight: 600; color: $text-dark; }
 .tp-progress__note { margin: 0; font-size: 14px; color: $text-muted; }
 .tp-progress__bar {
   height: 8px; border-radius: 999px; background: #F1F0F6; overflow: hidden;
@@ -59,7 +59,7 @@
 
 .tp-complete {
   display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
-  background: #F7FEE7; border: 1px solid #D9F99D; border-radius: 14px; padding: 16px 18px;
+  background: #F7FEE7; border: 1px solid #D9F99D; border-radius: 16px; padding: 16px 18px;
 }
 .tp-complete__icon { width: 40px; height: 40px; border-radius: 12px; background: #ECFCCB; color: #3F6212; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .tp-complete__title { margin: 0; font-size: 15px; font-weight: 600; color: #1A2E05; }
@@ -68,12 +68,12 @@
 
 .tp-before {
   display: flex; gap: 14px; align-items: flex-start;
-  background: #F8F6FE; border: 1px solid #E6E0FB; border-radius: 14px; padding: 16px 18px;
+  background: #F8F6FE; border: 1px solid #E6E0FB; border-radius: 16px; padding: 16px 18px;
 }
 .tp-before__icon { width: 36px; height: 36px; border-radius: 10px; background: #EEEBFD; color: #5B47D6; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
 .tp-before__body { display: flex; flex-direction: column; gap: 6px; min-width: 0; flex: 1; }
 .tp-before__body .tp-link { margin-top: 4px; }
-.tp-before__title { margin: 0; font-size: 15px; font-weight: 600; color: #1A1A2E; }
+.tp-before__title { margin: 0; font-size: 15px; font-weight: 600; color: $text-dark; }
 .tp-before__text { margin: 0; font-size: 14px; line-height: 1.6; color: #374151; }
 
 // Link card with the site's icon
@@ -85,18 +85,18 @@
   &:hover .tp-link__out { color: #6B56E2; }
 }
 .tp-link__icon {
-  width: 36px; height: 36px; border-radius: 9px; background: #F4F4F7; border: 1px solid #ECEBF3;
+  width: 36px; height: 36px; border-radius: 10px; background: #F4F4F7; border: 1px solid #ECEBF3;
   display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-sizing: border-box;
   img { width: 18px; height: 18px; border-radius: 4px; }
 }
 .tp-link__text { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-.tp-link__title { font-size: 14px; font-weight: 600; color: #1A1A2E; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tp-link__title { font-size: 14px; font-weight: 600; color: $text-dark; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .tp-link__domain { font-size: 12px; color: $text-muted; }
 .tp-link__out { margin-left: auto; color: $text-muted; display: flex; }
 
 // Sections
 .tp-section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
-.tp-section-title { margin: 0; font-family: $headers-font; font-size: 17px; font-weight: 700; color: #1A1A2E; }
+.tp-section-title { margin: 0; font-family: $headers-font; font-size: 17px; font-weight: 700; color: $text-dark; }
 .tp-section-title--solo { margin-bottom: 14px; }
 .tp-section-note { font-size: 14px; color: $text-muted; }
 .tp-section-intro { margin: 0 0 16px; font-size: 14px; color: #4B5563; }
@@ -123,19 +123,19 @@
 .tp-focus__head { display: flex; gap: 14px; align-items: flex-start; }
 .tp-focus__text { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .tp-focus__title-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-.tp-focus__title { margin: 0; font-size: 16px; font-weight: 600; color: #1A1A2E; }
+.tp-focus__title { margin: 0; font-size: 16px; font-weight: 600; color: $text-dark; }
 .tp-focus__actions { display: flex; flex-direction: column; gap: 12px; padding-left: 42px; }
 .tp-tag { font-size: 12px; font-weight: 600; color: #4433B8; background: #EEEBFD; padding: 3px 9px; border-radius: 999px; }
 .tp-step__desc { margin: 0; font-size: 14px; line-height: 1.6; color: #374151; }
 
 // Compact rows
-.tp-row { border: 1px solid #ECEBF3; border-radius: 14px; background: #FCFCFE; }
+.tp-row { border: 1px solid #ECEBF3; border-radius: 16px; background: #FCFCFE; }
 .tp-row > summary, .tp-row--done, .tp-row--waiting { display: flex; gap: 14px; align-items: center; padding: 14px 18px; }
-.tp-row > summary { cursor: pointer; list-style: none; border-radius: 14px; &::-webkit-details-marker { display: none; } }
+.tp-row > summary { cursor: pointer; list-style: none; border-radius: 16px; &::-webkit-details-marker { display: none; } }
 .tp-row > summary:focus-visible { outline: 2px solid #6B56E2; outline-offset: 2px; }
 .tp-row[open] > summary .tp-row__chev { transform: rotate(180deg); }
 .tp-row__text { display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; }
-.tp-row__title { font-size: 15px; font-weight: 600; color: #1A1A2E; }
+.tp-row__title { font-size: 15px; font-weight: 600; color: $text-dark; }
 .tp-row__desc { font-size: 14px; color: $text-muted; line-height: 1.5; }
 .tp-row__chev { color: $text-muted; display: flex; transition: transform 0.15s ease; flex-shrink: 0; }
 .tp-row__more { padding: 0 18px 18px 60px; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
@@ -161,7 +161,7 @@
 .tp-btn--secondary { border: 1px solid #DCD5FA; background: #F6F4FE; color: #4433B8; padding: 0 16px; &:hover { background: #ECE8FD; color: #4433B8; text-decoration: none; } }
 .tp-text-btn {
   flex-shrink: 0; min-height: 44px; padding: 0 12px; border: none; background: transparent; white-space: nowrap;
-  font-size: 14px; font-weight: 600; color: #5B47D6; cursor: pointer; border-radius: 8px;
+  font-size: 14px; font-weight: 600; color: #5B47D6; cursor: pointer; border-radius: 10px;
   &:hover { background: #F8F6FE; }
 }
 .tp-text-btn--muted { color: $text-muted; }

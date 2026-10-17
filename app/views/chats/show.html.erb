@@ -145,8 +145,8 @@
             </div>
           </div>
 
-          <div style="background:#F8F6FE; border:1px solid #E6E0FB; border-radius:14px; padding:16px 18px;">
-            <p style="margin:0 0 8px; font-size:14px; font-weight:600; color:#1A1A2E;">For a clearer scan</p>
+          <div style="background:#F8F6FE; border:1px solid #E6E0FB; border-radius:16px; padding:16px 18px;">
+            <p style="margin:0 0 8px; font-size:14px; font-weight:600; color:#1A1535;">For a clearer scan</p>
             <ul style="margin:0; padding-left:18px; font-size:14px; line-height:1.7; color:#374151;">
               <li>Lay the letter flat and fit the whole page in the frame</li>
               <li>Use good light and avoid shadows or glare</li>
@@ -197,14 +197,14 @@
                   <span class="lucide-icon"><%= icon_cal_plus.html_safe %></span>
                   Remind me
                 </button>
-                <div id="rm-<%= @chat.id %>" style="display:none; position:absolute; top:calc(100% + 4px); right:0; background:#fff; border:1px solid #E5E7EB; border-radius:14px; box-shadow:0 12px 28px -12px rgba(107,86,226,0.30); min-width:240px; overflow:hidden; z-index:100;">
+                <div id="rm-<%= @chat.id %>" style="display:none; position:absolute; top:calc(100% + 4px); right:0; background:#fff; border:1px solid #E5E7EB; border-radius:16px; box-shadow:0 12px 28px -12px rgba(107,86,226,0.30); min-width:240px; overflow:hidden; z-index:100;">
                   <div style="padding:12px 14px; border-bottom:1px solid #F3F4F6;">
                     <label for="reminder-date-<%= @chat.id %>" style="font-size:12px; font-weight:600; color:#5F6775; text-transform:uppercase; letter-spacing:0.04em; display:block; margin-bottom:6px;">Reminder date</label>
-                    <input type="date" id="reminder-date-<%= @chat.id %>" value="<%= default_reminder_date.strftime("%Y-%m-%d") %>" style="width:100%; font-size:14px; border:1px solid #E5E7EB; border-radius:8px; padding:6px 8px; color:#1A1A2E;" onclick="event.stopPropagation()">
+                    <input type="date" id="reminder-date-<%= @chat.id %>" value="<%= default_reminder_date.strftime("%Y-%m-%d") %>" style="width:100%; font-size:14px; border:1px solid #E5E7EB; border-radius:10px; padding:6px 8px; color:#1A1535;" onclick="event.stopPropagation()">
                   </div>
-                  <a href="#" id="google-cal-link-<%= @chat.id %>" target="_blank" style="display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:14px; color:#1A1A2E; text-decoration:none; border-bottom:1px solid #F3F4F6;"><span class="lucide-icon"><%= icon_cal_plus.html_safe %></span>Google Calendar</a>
-                  <a href="#" id="outlook-link-<%= @chat.id %>" target="_blank" style="display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:14px; color:#1A1A2E; text-decoration:none; border-bottom:1px solid #F3F4F6;"><span class="lucide-icon"><%= icon_cal_plus.html_safe %></span>Outlook</a>
-                  <a href="#" id="apple-link-<%= @chat.id %>" style="display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:14px; color:#1A1A2E; text-decoration:none;"><span class="lucide-icon"><%= icon_cal_plus.html_safe %></span>Apple Calendar</a>
+                  <a href="#" id="google-cal-link-<%= @chat.id %>" target="_blank" style="display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:14px; color:#1A1535; text-decoration:none; border-bottom:1px solid #F3F4F6;"><span class="lucide-icon"><%= icon_cal_plus.html_safe %></span>Google Calendar</a>
+                  <a href="#" id="outlook-link-<%= @chat.id %>" target="_blank" style="display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:14px; color:#1A1535; text-decoration:none; border-bottom:1px solid #F3F4F6;"><span class="lucide-icon"><%= icon_cal_plus.html_safe %></span>Outlook</a>
+                  <a href="#" id="apple-link-<%= @chat.id %>" style="display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:14px; color:#1A1535; text-decoration:none;"><span class="lucide-icon"><%= icon_cal_plus.html_safe %></span>Apple Calendar</a>
                 </div>
                 <script>
                   document.addEventListener('click',function(){const m=document.getElementById('rm-<%= @chat.id %>');if(m)m.style.display='none';});
@@ -370,7 +370,7 @@
           <% @chat.messages.order(:created_at).each do |message| %>
             <% if message.role == "user" %>
               <div style="display:flex; justify-content:flex-end;">
-                <div style="background:#6B56E2; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:18px 4px 18px 18px; max-width:75%;"><%= message.content %></div>
+                <div style="background:#6B56E2; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:20px 4px 18px 18px; max-width:75%;"><%= message.content %></div>
               </div>
             <% else %>
               <%= render "messages/ai_bubble", content: message.content %>

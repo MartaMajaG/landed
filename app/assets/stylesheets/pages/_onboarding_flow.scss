@@ -36,7 +36,7 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   color: $ob-muted;
   text-decoration: none;
   padding: 6px 10px;
-  border-radius: 8px;
+  border-radius: 10px;
   &:hover { color: $text-dark; background: rgba(107, 86, 226, 0.06); }
 }
 .ob-progress {
@@ -131,7 +131,7 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   width: 40px;
   height: 40px;
   flex: none;
-  border-radius: 11px;
+  border-radius: 12px;
   background: $ob-tint;
   color: $indigo-landed;
   display: grid;
@@ -185,7 +185,7 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   max-width: 440px;
   background: #fff;
   border: 1px solid $ob-line;
-  border-radius: 18px;
+  border-radius: 20px;
   padding: 16px 18px 18px;
   box-shadow: $ob-glow;
 }
@@ -276,7 +276,7 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
     background: #fff;
     border: 1px solid $ob-line;
     border-bottom-width: 2px;
-    border-radius: 6px;
+    border-radius: 4px;
     padding: 1px 6px;
   }
 }
@@ -456,7 +456,7 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   padding: 20px 24px;
   background: #fff;
   border: 1px solid $ob-line;
-  border-radius: 18px;
+  border-radius: 20px;
   box-shadow: $ob-glow;
   opacity: 0;
   &.is-in { animation: ob-card-in 0.5s $ob-ease forwards; }

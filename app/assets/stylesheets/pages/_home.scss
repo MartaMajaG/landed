@@ -187,7 +187,7 @@
   font-family: $headers-font;
   font-size: 18px;
   font-weight: 700;
-  color: #1a1535;
+  color: $text-dark;
   margin: 2px 0 0;
   letter-spacing: -0.01em;
 }
@@ -214,7 +214,7 @@
 .journey-track-fill {
   height: 100%;
   background: #9585E8;
-  border-radius: 1px;
+  border-radius: 2px;
   transition: width 0.4s ease;
 }
 
@@ -263,7 +263,7 @@
 
   &--open { display: block; }
 
-  &__title { font-size: 11.5px; font-weight: 600; color: #1a1d23; margin: 0 0 2px; line-height: 1.4; }
+  &__title { font-size: 11.5px; font-weight: 600; color: $text-dark; margin: 0 0 2px; line-height: 1.4; }
   &__meta  { font-size: 10px; color: $text-muted; margin: 0; }
 }
 
@@ -337,7 +337,7 @@
 .tasks-label {
   font-size: 18px;
   font-weight: 700;
-  color: #1a1d23;
+  color: $text-dark;
   letter-spacing: -0.02em;
   margin: 0;
 }
@@ -451,9 +451,9 @@
   gap: 10px;
   padding: 10px;
   border-radius: 10px;
-  color: #1A1A2E;
+  color: $text-dark;
   text-decoration: none;
-  &:hover { background: #F8F6FE; color: #1A1A2E; text-decoration: none; }
+  &:hover { background: #F8F6FE; color: $text-dark; text-decoration: none; }
   &.is-selected { background: #F3F0FE; }
   &.is-selected .pillar-filter__name { font-weight: 600; }
   &.is-selected .pillar-filter__check { visibility: visible; }
@@ -496,7 +496,7 @@
   &.active-dot   { background: #e6a817; }
   &.upcoming-dot { background: $status-upcoming; }
 }
-.col-title { font-size: 12.5px; font-weight: 600; color: #1a1535; flex: 1; }
+.col-title { font-size: 12.5px; font-weight: 600; color: $text-dark; flex: 1; }
 .col-count { font-size: 10px; color: $text-muted; background: #f0f2f7; border-radius: 4px; padding: 1px 5px; }
 
 .kanban-hidden { display: none !important; }
@@ -604,7 +604,7 @@
 
 .card-date  { font-size: 11px; color: $text-muted; white-space: nowrap; }
 .card-title {
-  font-size: 13px; font-weight: 600; color: #1a1535; margin: 4px 0 2px; letter-spacing: -0.01em;
+  font-size: 13px; font-weight: 600; color: $text-dark; margin: 4px 0 2px; letter-spacing: -0.01em;
   display: -webkit-box;
   -webkit-line-clamp: 1;
   -webkit-box-orient: vertical;
@@ -618,7 +618,7 @@
 .card-footer-group { display: flex; flex-direction: column; margin-top: auto; padding-top: 0; }
 .card-footer { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; }
 .card-progress-label { font-size: 11px; color: $text-muted; }
-.card-pct   { font-size: 11px; font-weight: 600; color: #1a1535; }
+.card-pct   { font-size: 11px; font-weight: 600; color: $text-dark; }
 .card-track { height: 4px; background: #e9ecef; border-radius: 2px; overflow: hidden; }
 
 .card-fill {
@@ -646,17 +646,17 @@
   border-bottom: 0.5px solid #e2e5ec;
   gap: 16px;
 }
-.cal-view-toggle { display: flex; background: #f0f2f7; border-radius: 8px; overflow: hidden; flex-shrink: 0; }
+.cal-view-toggle { display: flex; background: #f0f2f7; border-radius: 10px; overflow: hidden; flex-shrink: 0; }
 .cal-view-btn {
   padding: 6px 14px; font-size: 12px; font-weight: 500; border: none;
-  background: transparent; color: $text-muted; cursor: pointer; border-radius: 6px;
-  &.active { background: #fff; color: #1a1d23; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  background: transparent; color: $text-muted; cursor: pointer; border-radius: 4px;
+  &.active { background: #fff; color: $text-dark; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
 }
 .cal-legend { display: flex; align-items: center; gap: 14px; }
 .leg-item   { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: $text-muted; }
 .leg-dot    { width: 8px; height: 8px; border-radius: 50%; }
 .cal-nav    { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: auto; }
-.cal-month-title { font-size: 15px; font-weight: 700; color: #1a1535; min-width: 84px; text-align: center; }
+.cal-month-title { font-size: 15px; font-weight: 700; color: $text-dark; min-width: 84px; text-align: center; }
 .cal-nav-btn {
   width: 26px; height: 26px; border-radius: 10px; border: 0.5px solid #e2e5ec;
   background: #fff; font-size: 14px; color: $text-muted;
@@ -682,7 +682,7 @@
   &.muted .cal-date { color: $text-muted; }
   &.weekend { background: #FAFAFE; }
 }
-.cal-date { font-size: 13px; font-weight: 500; color: #1a1d23; margin-bottom: 3px; }
+.cal-date { font-size: 13px; font-weight: 500; color: $text-dark; margin-bottom: 3px; }
 .today-num {
   font-size: 13px; font-weight: 700; background: $indigo-landed; color: #fff;
   width: 23px; height: 23px; border-radius: 50%;
@@ -692,7 +692,7 @@
   cursor: pointer;
   font-size: 11px;
   font-weight: 600;
-  border-radius: 6px;
+  border-radius: 4px;
   padding: 4px 8px 4px 9px;
   display: block;
   max-width: 100%;
@@ -781,7 +781,7 @@
   box-shadow: 0 4px 20px rgba(0,0,0,0.10);
   z-index: 300;
   width: 220px;
-  &__title { font-size: 11px; font-weight: 600; color: #1a1d23; margin: 0 0 2px; line-height: 1.4; }
+  &__title { font-size: 11px; font-weight: 600; color: $text-dark; margin: 0 0 2px; line-height: 1.4; }
   &__date  { font-size: 10px; color: $text-muted; margin: 0 0 9px; }
   &__actions {
     display: flex; flex-direction: column; gap: 6px;
@@ -791,7 +791,7 @@
     font-size: 10px; font-weight: 600; padding: 6px 9px;
     border-radius: 10px; text-decoration: none; text-align: center; display: block;
     &--google { background: #E4E1FD; color: #3E2DB0; }
-    &--apple  { background: #f0f2f7; color: #1a1535; }
+    &--apple  { background: #f0f2f7; color: $text-dark; }
   }
 }
 

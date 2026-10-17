@@ -37,7 +37,7 @@
 .onboarding-progress__track {
   height: 5px;
   margin-top: 8px;
-  border-radius: 3px;
+  border-radius: 2px;
   background: rgba($text-gray, 0.14);
   overflow: hidden;
 }
@@ -52,7 +52,7 @@
   max-width: 580px;
   margin: 0 auto 20px;
   border: 0.5px solid rgba($urgent-red, 0.28);
-  border-radius: 8px;
+  border-radius: 10px;
   background: rgba($urgent-red, 0.08);
   color: $urgent-red;
   padding: 12px 14px;
@@ -144,7 +144,7 @@
   width: 100%;
   height: 44px;
   border: 0.5px solid rgba($text-gray, 0.18);
-  border-radius: 8px;
+  border-radius: 10px;
   appearance: none;
   -webkit-appearance: none;
   background: rgba($page-bg, 0.58);
@@ -260,7 +260,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 6px;
+  border-radius: 4px;
   background: rgba($success-text, 0.14);
   color: $success-text;
   font-size: 16px;
@@ -311,7 +311,7 @@
   width: 28px;
   height: 28px;
   border: 0.5px solid rgba($text-gray, 0.18);
-  border-radius: 6px;
+  border-radius: 4px;
   background: rgba($page-bg, 0.58);
   color: $text-gray;
   display: inline-flex;
@@ -351,7 +351,7 @@
   aspect-ratio: 1;
   min-height: 32px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 10px;
   background: transparent;
   color: $text-dark;
   font-size: 13px;
@@ -392,7 +392,7 @@
   min-width: 220px;
   min-height: 46px;
   border: 0;
-  border-radius: 8px;
+  border-radius: 10px;
   background: $blue-action;
   color: $gray-bg;
   font-size: 14px;
