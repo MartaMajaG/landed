@@ -31,8 +31,15 @@
     .doc-card--halo { animation: none; outline-color: rgba(107, 86, 226, 0.45); }
   }
 
-  .doc-tag--due-calm { background: #F1F0F6; color: #4B5563; }   /* 6.67:1 */
-  .doc-tag--due-soon { background: #FEF0C7; color: #93370D; }   /* 6.62:1 */
+  /* The deadline is the third line of the title block: what it is, what it is
+     called in German, when it is due. Not a pill, because a pill row answers
+     "what kind of document is this" and a deadline answers "when must you act". */
+  .doc-deadline { display: flex; align-items: center; gap: 8px; margin: 10px 0 0; font-size: 14px; }
+  .doc-deadline__icon svg { width: 16px; height: 16px; }
+  .doc-deadline__meta::before { content: "\00B7"; margin-right: 8px; opacity: 0.55; }
+  .doc-deadline__meta { opacity: 0.8; }
+  .doc-deadline--calm { color: #4B5563; }
+  .doc-deadline--soon { color: #93370D; }
   .doc-processed { font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #5F6775; margin-left: 4px; }
   .doc-title { margin: 0; font-family: "Plus Jakarta Sans", Inter, sans-serif; font-size: 32px; font-weight: 700; letter-spacing: -0.5px; line-height: 1.15; color: #1A1535; }
   .doc-subtitle { margin: 8px 0 0; font-size: 14px; color: #5F6775; font-style: italic; }

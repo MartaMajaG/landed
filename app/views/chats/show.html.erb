@@ -44,7 +44,7 @@
 
   # Deadline state, shown once in the banner
   banner_tone = banner_title = banner_meta = nil
-  deadline_chip_tone = deadline_chip_text = nil
+  due_tone = due_label = due_meta = nil
   if @chat.deadline.present?
     days_left = (@chat.deadline - Date.today).to_i
     due_on    = @chat.deadline.strftime("%b %-d, %Y")
@@ -53,13 +53,15 @@
     # row beside the document type. A banner on every document cries wolf, and
     # then the one that matters reads the same as the one that doesn't.
     if days_left < 0
+      # Genuinely late is the one case that earns alert furniture. The line is
+      # suppressed here so the same fact is not stated twice.
       banner_tone, banner_title, banner_meta = "overdue", "Overdue", "was due #{due_on}"
     elsif days_left == 0
-      banner_tone, banner_title, banner_meta = "soon", "Due today", due_on
+      due_tone, due_label, due_meta = "soon", "Due today", due_on
     elsif days_left <= 7
-      deadline_chip_tone, deadline_chip_text = "soon", "Due in #{days_left} #{'day'.pluralize(days_left)}"
+      due_tone, due_label, due_meta = "soon", "Due #{due_on}", "in #{days_left} #{'day'.pluralize(days_left)}"
     else
-      deadline_chip_tone, deadline_chip_text = "calm", "Due #{due_on}"
+      due_tone, due_label, due_meta = "calm", "Due #{due_on}", "in #{days_left} days"
     end
   end
 
@@ -182,11 +184,17 @@
             <div class="doc-tags">
               <span class="doc-tag doc-tag--brand"><%= mandatory ? "Mandatory" : "Optional" %></span>
               <% if doc_type.present? %><span class="doc-tag"><%= doc_type %></span><% end %>
-              <% if deadline_chip_text.present? %><span class="doc-tag doc-tag--due-<%= deadline_chip_tone %>"><%= deadline_chip_text %></span><% end %>
               <span class="doc-processed">Processed <%= @chat.created_at.strftime("%b %-d, %Y") %></span>
             </div>
             <h1 class="doc-title"><%= english_title %></h1>
             <% if german_title.present? %><p class="doc-subtitle"><%= german_title %></p><% end %>
+            <% if due_label.present? %>
+              <p class="doc-deadline doc-deadline--<%= due_tone %>">
+                <span class="lucide-icon doc-deadline__icon"><%= (due_tone == "soon" ? icon_warn : icon_cal_plus).html_safe %></span>
+                <strong><%= due_label %></strong>
+                <% if due_meta.present? %><span class="doc-deadline__meta"><%= due_meta %></span><% end %>
+              </p>
+            <% end %>
           </div>
 
           <div class="doc-actions">
