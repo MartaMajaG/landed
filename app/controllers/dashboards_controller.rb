@@ -35,7 +35,8 @@ class DashboardsController < ApplicationController
     @calendar_tasks = task_events.merge(doc_events) { |_date, a, b| a + b }
 
     # Pillar filter
-    @pillars       = Pillar.where(city_id: city_id).order(:position)
+    # One set of pillars serves every city (slugs are unique); tasks carry the city
+    @pillars       = Pillar.order(:position)
     @active_pillar = params[:pillar].present? ? @pillars.find_by(slug: params[:pillar]) : nil
 
     # Base task scope

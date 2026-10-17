@@ -124,7 +124,7 @@ registration_steps = [
   {
     position:              1,
     title:                 "Book Bürgerbüro appointment",
-    description:           "Book your Anmeldung appointment online at the Munich Bürgerbüro (KVR). Slots fill quickly, so book as early as you can. You don't need your documents ready to book.",
+    description:           "Book your Anmeldung appointment online at your local Bürgeramt or Bürgerbüro. Slots fill quickly, so book as early as you can. You don't need your documents ready to book.",
     category:              "housing_and_registration",
     is_optional:           false,
     unlock_after_position: nil
@@ -204,7 +204,7 @@ household.update!(
   pillar:         pillar_housing,
   category:       "housing_and_registration",
   description:    "Register for the broadcasting fee, set up your electricity contract, and arrange your internet connection.",
-  why_it_matters: "The Rundfunkbeitrag is legally mandatory for every household. Signing your own electricity contract prevents you from being billed at the expensive default SWM Grundversorgung tariff.",
+  why_it_matters: "The Rundfunkbeitrag is legally mandatory for every household. Signing your own electricity contract prevents you from being billed at the local supplier's expensive default tariff (Grundversorgung).",
   urgency:        "medium"
 )
 
@@ -220,7 +220,7 @@ household_steps = [
   {
     position:              2,
     title:                 "Set up electricity contract",
-    description:           "Sign up with a private electricity provider to avoid the expensive SWM Grundversorgung default tariff. You will need your meter reading (Zählerstand) and meter number (Zählernummer) from move-in day.",
+    description:           "Sign up with a private electricity provider to avoid the local supplier's expensive default tariff (Grundversorgung). You will need your meter reading (Zählerstand) and meter number (Zählernummer) from move-in day.",
     category:              "housing_and_registration",
     is_optional:           false,
     unlock_after_position: nil
@@ -284,7 +284,7 @@ health_steps = [
   {
     position:              4,
     title:                 "Choose your health insurance provider",
-    description:           "For GKV, compare funds such as TK (Techniker Krankenkasse), AOK Bayern, Barmer, or DAK. All charge the same base rate (14.6% of gross salary) but differ in additional services and English-language support. For PKV, obtain quotes from at least 3 providers, as premiums vary by age and health status.",
+    description:           "For GKV, compare funds such as TK (Techniker Krankenkasse), AOK, Barmer, or DAK. All charge the same base rate (14.6% of gross salary) but differ in additional services and English-language support. For PKV, obtain quotes from at least 3 providers, as premiums vary by age and health status.",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: 2   # After checking GKV vs PKV eligibility
@@ -340,7 +340,7 @@ haftpflicht_steps = [
   {
     position:              1,
     title:                 "Understand what to look for in a policy",
-    description:           "A good Privathaftpflicht policy for expats in Munich should include: Schlüsselverlust (key loss), Mietsachschäden (rental damage), Forderungsausfalldeckung (protection if an uninsured third party injures you), grobe Fahrlässigkeit (gross negligence), and Gefälligkeitshandlungen (damage while helping friends).",
+    description:           "A good Privathaftpflicht policy for expats should include: Schlüsselverlust (key loss), Mietsachschäden (rental damage), Forderungsausfalldeckung (protection if an uninsured third party injures you), grobe Fahrlässigkeit (gross negligence), and Gefälligkeitshandlungen (damage while helping friends).",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: nil
@@ -388,7 +388,7 @@ hausrat_steps = [
   {
     position:              2,
     title:                 "Choose a policy — ensure bicycle theft add-on is included",
-    description:           "Bicycle theft is extremely common in Munich and Berlin. When comparing policies, specifically look for the 'Fahrraddiebstahl' add-on and check that there is no Nachtklausel (night clause) excluding thefts between 22:00–06:00. Recommended providers: Getsafe, ARAG, Allianz.",
+    description:           "Bicycle theft is extremely common in German cities. When comparing policies, specifically look for the 'Fahrraddiebstahl' add-on and check that there is no Nachtklausel (night clause) excluding thefts between 22:00–06:00. Recommended providers: Getsafe, ARAG, Allianz.",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: nil
@@ -565,7 +565,7 @@ german_steps = [
   {
     position:              2,
     title:                 "Find a course near you",
-    description:           "The Volkshochschule (in Munich, the MVHS) runs affordable evening and weekend courses at every level. Many language schools offer integration courses too.",
+    description:           "The Volkshochschule (VHS) in your city runs affordable evening and weekend courses at every level. Many language schools offer integration courses too.",
     category:              "finance_and_banking",
     is_optional:           false,
     unlock_after_position: nil
@@ -673,6 +673,22 @@ debits_steps = [
 ]
 
 sync_steps!(debits, debits_steps)
+
+# ── Same plan in every city ─────────────────────────────────────────────────
+# Landed shows one German checklist wherever you move. The tasks above are
+# written once, on Munich, and copied to the other cities so the content has
+# a single source. The four pillars are shared (their slugs are unique).
+# Re-running is safe: tasks are matched by name and steps by title.
+[berlin, hamburg].each do |city|
+  Task.where(city: munich).includes(:checklist_items).find_each do |source|
+    task = Task.find_or_initialize_by(name: source.name, city: city)
+    task.update!(source.attributes.slice("pillar_id", "category", "description", "why_it_matters", "urgency", "expert_tips"))
+    steps = source.checklist_items.order(:position).map do |item|
+      item.attributes.slice("position", "title", "description", "category", "is_optional", "unlock_after_position", "action_note").symbolize_keys
+    end
+    sync_steps!(task, steps)
+  end
+end
 
 puts "Subtasks seeded: #{ChecklistItem.count} total."
 
