@@ -36,6 +36,7 @@ function esc(s) { const el = document.createElement("span"); el.textContent = s 
 
 export default class extends Controller {
   static targets = [
+    "visaTypes",
     "form", "stage", "step", "stepLabel", "progressBar",
     "dateInput", "monthLabel", "calendarGrid",
     "fact", "taskCount",
@@ -136,7 +137,9 @@ export default class extends Controller {
 
     const n = parseInt(event.key, 10)
     if (!n) return
+    // Only options on screen: the visa types stay hidden until "Yes"
     const inputs = [...this.currentStep.querySelectorAll(".ob-option__input:not(:disabled)")]
+      .filter((input) => input.closest("[hidden]") === null)
     if (inputs[n - 1]) {
       inputs[n - 1].checked = true
       inputs[n - 1].dispatchEvent(new Event("change", { bubbles: true }))
@@ -171,8 +174,24 @@ export default class extends Controller {
     this.taskCountTarget.textContent = cityId ? this.tasksFor(cityId).length : "–"
   }
 
+  // The last checked answer wins, so "Visa needed" gives way to the visa type once one is picked
   checkedLabel(key) {
-    return this.element.querySelector(`.ob-option__input[data-summary-key="${key}"]:checked`)?.dataset.summaryLabel
+    return [...this.element.querySelectorAll(`.ob-option__input[data-summary-key="${key}"]:checked`)].pop()?.dataset.summaryLabel
+  }
+
+  // "No" stores eu_citizen straight away. "Yes" reveals the visa types and
+  // clears any earlier answer, so the step only counts as done once one is picked.
+  chooseVisaNeed(event) {
+    const needsVisa = event.target.value === "yes"
+    const euRadio = this.element.querySelector(".ob-visa-eu")
+    this.visaTypesTarget.hidden = !needsVisa
+    if (needsVisa) {
+      euRadio.checked = false
+    } else {
+      euRadio.checked = true
+      this.visaTypesTarget.querySelectorAll("input").forEach((input) => { input.checked = false })
+    }
+    this.choose(event)
   }
 
   dateSummary() {

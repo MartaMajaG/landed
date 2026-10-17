@@ -10,11 +10,13 @@ class OnboardingsController < ApplicationController
     "Hamburg" => { icon: "anchor",   description: "Kundenzentrum in every district." }
   }.freeze
 
+  # Asked only after "Yes, I need a visa". EU, EEA and Swiss citizens answer
+  # "No" and are stored as eu_citizen, so a person can no longer pick two
+  # answers that are both true (a job offer and an EU passport).
   VISA_OPTIONS = [
-    { value: "employment", icon: "briefcase", title: "Job offer",          description: "I'm employed by a company in Germany or relocating with my employer." },
-    { value: "freelancer", icon: "laptop",    title: "Freelancer",         description: "I'm self-employed or work remotely for clients." },
-    { value: "student",    icon: "grad",      title: "Student",            description: "I'm enrolled at a university or a recognised language school." },
-    { value: "eu_citizen", icon: "globe",     title: "EU citizen",         description: "I have an EU, EEA or Swiss passport, so I don't need a visa." }
+    { value: "employment", icon: "briefcase", title: "Work",          summary: "Work visa",          description: "For a job in Germany, including the EU Blue Card." },
+    { value: "freelancer", icon: "laptop",    title: "Self-employed", summary: "Self-employed visa", description: "Freelance work or running your own business." },
+    { value: "student",    icon: "grad",      title: "Study",         summary: "Student visa",       description: "University or a recognised language school." }
   ].freeze
 
   HOME_OPTIONS = [

@@ -93,27 +93,51 @@
         </section>
 
         <%# ── 3. Visa ── %>
+        <% visa_need = @profile.visa_status.blank? ? nil : (@profile.visa_status == "eu_citizen" ? "no" : "yes") %>
         <section class="ob-step" data-onboarding-target="step" aria-labelledby="ob-q3" hidden>
-          <h1 id="ob-q3">What brings you to Germany?</h1>
-          <p class="ob-lede">Your reason for moving decides which permits and registrations you need.</p>
+          <h1 id="ob-q3">Do you need a visa for Germany?</h1>
+          <p class="ob-lede">EU, EEA and Swiss citizens don't. Everyone else needs a residence permit, and its type decides your paperwork.</p>
 
           <div class="ob-options ob-options--2" role="radiogroup" aria-labelledby="ob-q3">
-            <% @visa_options.each do |option| %>
-              <% input_id = "profile_visa_status_#{option[:value]}" %>
+            <% [["no", "globe", "No, I don't", "I have an EU, EEA or Swiss passport.", "Not needed"],
+                ["yes", "passport", "Yes, I do", "I'm coming from outside the EU, EEA and Switzerland.", "Visa needed"]].each do |value, icon, title, desc, summary| %>
               <div class="ob-option">
-                <%= f.radio_button :visa_status, option[:value], id: input_id, required: true,
+                <%= radio_button_tag "needs_visa", value, visa_need == value, id: "needs_visa_#{value}", required: true,
                       class: "ob-option__input",
-                      data: { action: "change->onboarding#choose", summary_key: "visa", summary_label: option[:title] } %>
-                <label class="ob-option__card ob-option__card--row" for="<%= input_id %>">
-                  <span class="ob-option__icon"><%= lucide_icon(option[:icon], size: 20) %></span>
+                      data: { action: "change->onboarding#chooseVisaNeed", summary_key: "visa", summary_label: summary } %>
+                <label class="ob-option__card ob-option__card--row" for="needs_visa_<%= value %>">
+                  <span class="ob-option__icon"><%= lucide_icon(icon, size: 20) %></span>
                   <span>
-                    <span class="ob-option__title"><%= option[:title] %></span>
-                    <span class="ob-option__desc"><%= option[:description] %></span>
+                    <span class="ob-option__title"><%= title %></span>
+                    <span class="ob-option__desc"><%= desc %></span>
                   </span>
                   <span class="ob-option__tick"><%= lucide_icon("check", size: 12) %></span>
                 </label>
               </div>
             <% end %>
+          </div>
+
+          <%# "No" is stored as eu_citizen through this hidden radio, so visa_status keeps its four values %>
+          <%= f.radio_button :visa_status, "eu_citizen", id: "profile_visa_status_eu_citizen", required: true, hidden: true, class: "ob-visa-eu", tabindex: -1 %>
+
+          <div class="ob-followup" data-onboarding-target="visaTypes" <%= "hidden" unless visa_need == "yes" %>>
+            <p class="ob-followup__q" id="ob-q3b">Which kind of visa?</p>
+            <div class="ob-options ob-options--3" role="radiogroup" aria-labelledby="ob-q3b">
+              <% @visa_options.each do |option| %>
+                <% input_id = "profile_visa_status_#{option[:value]}" %>
+                <div class="ob-option">
+                  <%= f.radio_button :visa_status, option[:value], id: input_id, required: true,
+                        class: "ob-option__input",
+                        data: { action: "change->onboarding#choose", summary_key: "visa", summary_label: option[:summary] } %>
+                  <label class="ob-option__card" for="<%= input_id %>">
+                    <span class="ob-option__icon"><%= lucide_icon(option[:icon], size: 20) %></span>
+                    <span class="ob-option__title"><%= option[:title] %></span>
+                    <span class="ob-option__desc"><%= option[:description] %></span>
+                    <span class="ob-option__tick"><%= lucide_icon("check", size: 12) %></span>
+                  </label>
+                </div>
+              <% end %>
+            </div>
           </div>
 
           <div class="ob-actions">
@@ -160,7 +184,7 @@
           <p>Updates as you answer</p>
         </div>
         <ul class="ob-summary__rows">
-          <% [["city", "Destination", "pin"], ["date", "Arrival", "calendar"], ["visa", "Reason for moving", "passport"], ["home", "Housing", "home"]].each do |key, label, icon| %>
+          <% [["city", "Destination", "pin"], ["date", "Arrival", "calendar"], ["visa", "Visa", "passport"], ["home", "Housing", "home"]].each do |key, label, icon| %>
             <li class="ob-fact" data-onboarding-target="fact" data-key="<%= key %>">
               <span class="ob-fact__icon">
                 <span class="ob-fact__idle"><%= lucide_icon(icon, size: 16) %></span>

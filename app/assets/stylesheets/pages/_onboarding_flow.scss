@@ -100,6 +100,9 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
 .ob-options { display: grid; gap: 12px; }
 .ob-options--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .ob-options--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+// A follow-up question that appears under an answer, e.g. the visa type after "Yes"
+.ob-followup { margin-top: 28px; }
+.ob-followup__q { margin: 0 0 12px; font-size: 16px; font-weight: 600; color: $text-dark; }
 .ob-option { position: relative; }
 .ob-option__input {
   position: absolute;
@@ -163,7 +166,15 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   .ob-option__tick { opacity: 1; transform: none; }
 }
 .ob-option__input:focus-visible + .ob-option__card { outline: 2px solid $indigo-landed; outline-offset: 3px; }
-.ob-option__input:disabled + .ob-option__card { opacity: 0.45; cursor: not-allowed; }
+// Not available yet (a city without tasks). Recedes through surface and a
+// dashed edge rather than opacity, so its text still reads at full contrast.
+.ob-option__input:disabled + .ob-option__card {
+  cursor: not-allowed;
+  background: #FAFAFC;
+  border-style: dashed;
+  box-shadow: none;
+  .ob-option__icon { background: #F0F2F7; color: $text-muted; }
+}
 
 // ── Date step ──
 // Quick picks and calendar share one width: whatever the pills row needs,
@@ -314,7 +325,10 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   display: grid;
   place-items: center;
   transition: background 0.3s, color 0.3s;
-  > span { grid-area: 1 / 1; transition: opacity 0.2s, transform 0.3s; }
+  // Each layer is its own centred box, and the svg a block, so the icon sits in
+  // the middle instead of on the text baseline (it rode about 2px high)
+  > span { grid-area: 1 / 1; display: grid; place-items: center; transition: opacity 0.2s, transform 0.3s; }
+  svg { display: block; }
 }
 .ob-fact__done { opacity: 0; transform: scale(0.5); }
 .ob-fact__label { display: block; font-size: 12px; color: $ob-muted; line-height: 1.2; }
