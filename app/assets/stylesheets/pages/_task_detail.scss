@@ -156,6 +156,8 @@
   font-size: 14px;
   color: $text-gray;
   line-height: 1.6;
+  max-width: 72ch;
+  text-wrap: pretty;
 }
 
 .autosave {
@@ -197,6 +199,8 @@
 
 .task-why p {
   margin: 0;
+  max-width: 72ch;
+  text-wrap: pretty;
 }
 
 // ── Badges ────────────────────────────────────────
@@ -236,9 +240,6 @@
 
 .step__tip {
   margin-top: 0.875rem;
-  padding: 0.875rem 1rem;
-  background: #F6F5FA;
-  border-radius: 10px;
 }
 
 .step__tip-body {
@@ -249,6 +250,8 @@
     color: $text-dark;
     line-height: 1.55;
     margin: 0 0 8px;
+    max-width: 72ch;
+    text-wrap: pretty;
 
     strong { font-weight: 700; }
   }
@@ -262,7 +265,7 @@
   align-items: center;
   gap: 10px;
   padding: 8px;
-  background: rgba(255, 255, 255, 0.55);
+  background: #F8F6FE;
   border: 1px solid rgba(107, 86, 226, 0.14);
   border-radius: 10px;
   text-decoration: none;
@@ -523,6 +526,8 @@
   color: $text-gray;
   line-height: 1.55;
   margin: 0;
+  max-width: 72ch;
+  text-wrap: pretty;
 }
 
 .step__checkbox {
@@ -778,6 +783,8 @@
 
 .step__action-note {
   margin-top: 0.5rem;
+  max-width: 72ch;
+  text-wrap: pretty;
   font-size: 14px;
   color: #92400E;
   background: #FFFBEB;

@@ -180,7 +180,7 @@ banking_steps = [
   {
     position:              1,
     title:                 "Open a German bank account",
-    description:           "Choose a bank that suits expats — N26, Deutsche Bank, or Commerzbank all offer English-language onboarding. You will need your passport and Meldebescheinigung. N26 and most online banks can be opened fully digitally via video ID.",
+    description:           "Choose a bank that suits expats. N26, Deutsche Bank, or Commerzbank all offer English-language onboarding. You will need your passport and Meldebescheinigung. N26 and most online banks can be opened fully digitally via video ID.",
     category:              "finance_and_banking",
     is_optional:           false,
     unlock_after_position: nil
@@ -212,7 +212,7 @@ household_steps = [
   {
     position:              1,
     title:                 "Register for broadcasting fee (Rundfunkbeitrag)",
-    description:           "Register your household with ARD ZDF Deutschlandradio Beitragsservice to pay the €18.36/month broadcasting fee. In shared flats (WGs), ask the main tenant for their Beitragsnummer — you can be added as a co-occupant instead of creating a new account.",
+    description:           "Register your household with ARD ZDF Deutschlandradio Beitragsservice to pay the €18.36/month broadcasting fee. In shared flats (WGs), ask the main tenant for their Beitragsnummer, since you can be added as a co-occupant instead of creating a new account.",
     category:              "housing_and_registration",
     is_optional:           false,
     unlock_after_position: nil
@@ -228,7 +228,7 @@ household_steps = [
   {
     position:              3,
     title:                 "Set up internet/broadband contract",
-    description:           "Sign a broadband internet contract with a provider such as Deutsche Telekom, Vodafone, or O2. You will need your passport and IBAN. Lead times can be 2–4 weeks — book early.",
+    description:           "Sign a broadband internet contract with a provider such as Deutsche Telekom, Vodafone, or O2. You will need your passport and IBAN. Lead times can be 2–4 weeks, so book early.",
     category:              "housing_and_registration",
     is_optional:           false,
     unlock_after_position: nil
@@ -276,7 +276,7 @@ health_steps = [
   {
     position:              3,
     title:                 "Gather required documents",
-    description:           "Prepare: valid passport, Meldebescheinigung (registration certificate), employment contract or salary statement, and — if moving from another EU country — the E104 form from your previous insurer to ensure seamless GKV enrolment.",
+    description:           "Prepare: valid passport, Meldebescheinigung (registration certificate), employment contract or salary statement, and, if moving from another EU country, the E104 form from your previous insurer to ensure seamless GKV enrolment.",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: nil
@@ -284,7 +284,7 @@ health_steps = [
   {
     position:              4,
     title:                 "Choose your health insurance provider",
-    description:           "For GKV, compare funds such as TK (Techniker Krankenkasse), AOK Bayern, Barmer, or DAK. All charge the same base rate (14.6% of gross salary) but differ in additional services and English-language support. For PKV, obtain quotes from at least 3 providers — premiums vary by age and health status.",
+    description:           "For GKV, compare funds such as TK (Techniker Krankenkasse), AOK Bayern, Barmer, or DAK. All charge the same base rate (14.6% of gross salary) but differ in additional services and English-language support. For PKV, obtain quotes from at least 3 providers, as premiums vary by age and health status.",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: 2   # After checking GKV vs PKV eligibility
@@ -308,7 +308,7 @@ health_steps = [
   {
     position:              7,
     title:                 "Obtain Sozialversicherungsnummer and share with employer",
-    description:           "Your GKV enrolment automatically triggers the issuance of your permanent Sozialversicherungsnummer (social security number). Once received (by post), forward it to HR — it is required for legal payroll processing.",
+    description:           "Your GKV enrolment automatically triggers the issuance of your permanent Sozialversicherungsnummer (social security number). Once received (by post), forward it to HR, as it is required for legal payroll processing.",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: 5   # Issued after enrolment
@@ -356,7 +356,7 @@ haftpflicht_steps = [
   {
     position:              3,
     title:                 "Sign up online and save your policy document",
-    description:           "Complete the application online — you will need your name, address, and date of birth. Download and store your Versicherungsschein (policy document) in a safe place. Coverage typically begins the same day.",
+    description:           "Complete the application online. You will need your name, address, and date of birth. Download and store your Versicherungsschein (policy document) in a safe place. Coverage typically begins the same day.",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: 2   # After choosing a policy
@@ -396,7 +396,7 @@ hausrat_steps = [
   {
     position:              3,
     title:                 "Sign up and store your policy documents",
-    description:           "Complete the application with your address and floor area. Store the Versicherungsschein digitally and note the claims hotline number — it will be needed immediately in case of a burglary or water damage.",
+    description:           "Complete the application with your address and floor area. Store the Versicherungsschein digitally and note the claims hotline number, as it will be needed immediately in case of a burglary or water damage.",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: 2   # After choosing a policy
@@ -411,7 +411,7 @@ bu.update!(
   pillar:         pillar_health,
   category:       "health_and_insurance",
   description:    "Secure a monthly income replacement if you become unable to work due to illness, accident, or burnout for more than 6 months.",
-  why_it_matters: "The German state pays very little in disability benefits — especially for those who have not contributed long enough. Freelancers, sole earners, and anyone with a mortgage are most at risk without BU coverage.",
+  why_it_matters: "The German state pays very little in disability benefits, especially for those who have not contributed long enough. Freelancers, sole earners, and anyone with a mortgage are most at risk without BU coverage.",
   urgency:        "medium"
 )
 
@@ -428,7 +428,7 @@ bu_steps = [
   {
     position:              2,
     title:                 "Get independent advice before signing",
-    description:           "BU policies are complex. Avoid signing without independent advice. Contact a Verbraucherzentrale (consumer advice centre) or an independent fee-based broker (Honorarberater). The key policy clause to check: 'abstrakte Verweisung' — ensure your policy does NOT include this clause (it would allow the insurer to point you to any other job instead of paying out).",
+    description:           "BU policies are complex. Avoid signing without independent advice. Contact a Verbraucherzentrale (consumer advice centre) or an independent fee-based broker (Honorarberater). The key policy clause to check: 'abstrakte Verweisung'. Ensure your policy does NOT include this clause (it would allow the insurer to point you to any other job instead of paying out).",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: nil
@@ -436,7 +436,7 @@ bu_steps = [
   {
     position:              3,
     title:                 "Compare policies and sign",
-    description:           "Compare at least 3 quotes. Ensure the payout amount covers your monthly living costs. Typical monthly benefit: 60–80% of your net income. The younger and healthier you are when you sign, the lower the premium — do not delay.",
+    description:           "Compare at least 3 quotes. Ensure the payout amount covers your monthly living costs. Typical monthly benefit: 60–80% of your net income. The younger and healthier you are when you sign, the lower the premium, so do not delay.",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: 2   # After getting independent advice
