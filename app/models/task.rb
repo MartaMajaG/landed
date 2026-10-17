@@ -19,14 +19,21 @@ class Task < ApplicationRecord
   # each request works the date out from that user's own arrival date.
   attr_accessor :due_on
 
+  # Deadlines count from arrival, or from the day the person joined Landed if
+  # that is later, so nobody starts out with a board of overdue tasks.
   def due_date_for(profile, today: Date.today)
     arrival = profile&.arrival_date
     return nil unless arrival
 
+    # created_at is stored in UTC; read it in local time like Date.today, or
+    # late-evening sign-ups land a day early.
+    joined = profile.created_at&.localtime&.to_date || today
+    start  = [arrival, joined].max
+
     case urgency
-    when "high"   then [arrival - 7.days, today].max
-    when "medium" then arrival + 14.days
-    when "low"    then arrival + 30.days
+    when "high"   then [start - 7.days, today].max
+    when "medium" then start + 14.days
+    when "low"    then start + 30.days
     end
   end
 
@@ -36,12 +43,6 @@ class Task < ApplicationRecord
 
   def overdue?(today: Date.today)
     due_on.present? && due_on < today
-  end
-
-  # Anything past its date is urgent, whatever its category says, so Active and
-  # Upcoming only ever show dates that are still ahead.
-  def urgent_now?
-    urgency == "high" || overdue?
   end
 
   def calendar_category

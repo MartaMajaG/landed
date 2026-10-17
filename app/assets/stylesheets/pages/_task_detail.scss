@@ -208,6 +208,8 @@
 .task-badge {
   display: inline-flex;
   align-items: center;
+  gap: 6px;
+  white-space: nowrap; // a date never breaks across lines
   font-size: 12px;
   font-weight: 500;
   padding: 4px 10px;

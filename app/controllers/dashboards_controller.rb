@@ -58,10 +58,10 @@ class DashboardsController < ApplicationController
     @open_total     = all_open.size
 
     # Kanban columns from incomplete tasks only
-    # Overdue tasks move to Urgent whatever their category, earliest date first.
-    @urgent_tasks   = incomplete.select(&:urgent_now?).sort_by { |t| t.due_on || Date.today }
-    @active_tasks   = incomplete.select { |t| t.urgency == "medium" && !t.urgent_now? }
-    @upcoming_tasks = incomplete.select { |t| t.urgency == "low" && !t.urgent_now? }
+    # Columns follow the task's category. A missed date shows on the card itself.
+    @urgent_tasks   = incomplete.select { |t| t.urgency == "high" }
+    @active_tasks   = incomplete.select { |t| t.urgency == "medium" }
+    @upcoming_tasks = incomplete.select { |t| t.urgency == "low" }
 
     # Top urgent task for hero CTA
     @top_urgent_task = @urgent_tasks.first

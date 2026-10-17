@@ -326,18 +326,13 @@ export default class extends Controller {
     const today = startOfToday()
     const arrival = this.dateInputTarget.value ? fromISO(this.dateInputTarget.value) : null
 
-    // Same rule as the dashboard: anything past its date is urgent, so Active
-    // and Upcoming only ever show dates still ahead.
-    const dated = tasks.map((t) => {
-      const rule = COLUMNS.find((c) => c.urgency === t.urgency)
-      const due = arrival && rule ? rule.offset(arrival, today) : null
-      return { ...t, due, urgentNow: t.urgency === "high" || (due !== null && due < today) }
-    })
+    // Same rule as Task#due_date_for: dates count from arrival, or from today
+    // (the day they join) if arrival is already past. Columns follow category.
+    const start = arrival ? new Date(Math.max(arrival, today)) : null
     const columns = COLUMNS.map((col) => ({
       ...col,
-      items: col.key === "urgent"
-        ? dated.filter((t) => t.urgentNow).sort((a, b) => (a.due || today) - (b.due || today))
-        : dated.filter((t) => t.urgency === col.urgency && !t.urgentNow)
+      items: tasks.filter((t) => t.urgency === col.urgency)
+                  .map((t) => ({ ...t, due: start ? col.offset(start, today) : null }))
     })).filter((c) => c.items.length)
 
     const first = columns[0]
