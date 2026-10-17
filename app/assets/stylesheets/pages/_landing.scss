@@ -75,12 +75,12 @@ $lp-ease:   cubic-bezier(0.22, 1, 0.36, 1);
   text-decoration: none;
   &:hover { text-decoration: none; }
 }
-// Landed logo: plane mark + wordmark, both in the logo purple from favicon.svg
+// Landed logo: plane mark + wordmark, in the brand indigo, same as favicon.svg
 .landed-logo {
   display: inline-flex;
   align-items: center;
   gap: 9px;
-  color: #4F46E5;
+  color: #6B56E2;
 }
 .landed-logo__mark { display: block; flex: none; }
 .landed-logo__word {
