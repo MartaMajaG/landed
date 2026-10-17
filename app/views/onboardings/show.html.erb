@@ -67,6 +67,7 @@
             <button type="button" class="ob-chip" data-days="14" data-action="onboarding#quickDate">In 2 weeks</button>
             <button type="button" class="ob-chip" data-days="30" data-action="onboarding#quickDate">In a month</button>
             <button type="button" class="ob-chip" data-days="90" data-action="onboarding#quickDate">In 3 months</button>
+            <button type="button" class="ob-chip ob-chip--unsure" data-action="onboarding#skipDate">I don't know yet</button>
           </div>
 
           <div class="ob-cal">
@@ -84,7 +85,7 @@
           <div class="ob-actions">
             <button type="button" class="ob-btn ob-btn--ghost" data-action="onboarding#previous"><%= lucide_icon("arrow_left", size: 16) %> Back</button>
             <button type="button" class="ob-btn" data-action="onboarding#next">Continue <%= lucide_icon("arrow_right", size: 16) %></button>
-            <button type="button" class="ob-skip" data-action="onboarding#skipDate">I don't know yet</button>
+            <span class="ob-hint">or press <kbd>Enter</kbd></span>
           </div>
         </section>
 
@@ -115,6 +116,7 @@
           <div class="ob-actions">
             <button type="button" class="ob-btn ob-btn--ghost" data-action="onboarding#previous"><%= lucide_icon("arrow_left", size: 16) %> Back</button>
             <button type="button" class="ob-btn" data-action="onboarding#next">Continue <%= lucide_icon("arrow_right", size: 16) %></button>
+            <span class="ob-hint">or press <kbd>Enter</kbd></span>
           </div>
         </section>
 
@@ -143,6 +145,7 @@
           <div class="ob-actions">
             <button type="button" class="ob-btn ob-btn--ghost" data-action="onboarding#previous"><%= lucide_icon("arrow_left", size: 16) %> Back</button>
             <button type="button" class="ob-btn" data-action="onboarding#build">Build my plan <%= lucide_icon("sparkles", size: 16) %></button>
+            <span class="ob-hint">or press <kbd>Enter</kbd></span>
           </div>
         </section>
       </div>

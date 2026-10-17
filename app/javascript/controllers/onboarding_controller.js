@@ -103,6 +103,7 @@ export default class extends Controller {
 
     const focusable = this.currentStep.querySelector(".ob-option__input:checked") ||
                       this.currentStep.querySelector(".ob-option__input:not(:disabled)") ||
+                      this.currentStep.querySelector(".ob-chip.is-selected, .ob-cal__day.is-selected") ||
                       this.currentStep.querySelector(".ob-chip")
     if (animate) focusable?.focus({ preventScroll: true })
   }
@@ -122,8 +123,12 @@ export default class extends Controller {
     if (event.metaKey || event.ctrlKey || event.altKey) return
 
     if (event.key === "Enter") {
-      const tag = document.activeElement?.tagName
-      if (tag === "BUTTON" || tag === "A") return
+      // Enter on a real action (Back, a link) keeps its own meaning. On a
+      // choice the person just made (a quick pick or a calendar day) it moves
+      // on, so "or press Enter" holds true on every step.
+      const el = document.activeElement
+      const isChoice = el?.matches?.(".ob-chip, .ob-cal__day")
+      if ((el?.tagName === "BUTTON" && !isChoice) || el?.tagName === "A") return
       event.preventDefault()
       this.next()
       return
@@ -254,15 +259,15 @@ export default class extends Controller {
     this.syncSummary("date")
   }
 
+  // "I don't know yet" is one of the answers, so like the other quick picks it
+  // selects and waits for Continue rather than jumping ahead.
   skipDate(event) {
     event.preventDefault()
     this.dateInputTarget.value = ""
     this.dateSkipped = true
-    this.markChip(null)
+    this.markChip(event.currentTarget)
     this.renderCalendar()
     this.syncSummary("date")
-    this.currentStepValue += 1
-    this.showCurrentStep()
   }
 
   // ── Validation ──

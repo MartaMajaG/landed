@@ -181,20 +181,25 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   &:focus-visible { outline: 2px solid $indigo-landed; outline-offset: 2px; }
   &.is-selected { background: $indigo-landed; border-color: $indigo-landed; color: #fff; }
 }
+// "I don't know yet" is an answer too, set apart by a dashed edge
+.ob-chip--unsure { border-style: dashed; color: $text-gray; }
+
+// The calendar spans the question column, like the answer cards on the other steps
 .ob-cal {
-  max-width: 440px;
+  width: 100%;
   background: #fff;
   border: 1px solid $ob-line;
   border-radius: 20px;
-  padding: 16px 18px 18px;
+  padding: 16px 20px 20px;
   box-shadow: $ob-glow;
 }
+// Month on the left, both arrows together on the right
 .ob-cal__head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  h2 { font-family: $font-display; font-size: 16px; font-weight: 700; margin: 0; }
+  gap: 4px;
+  margin-bottom: 12px;
+  h2 { order: -1; margin: 0 auto 0 0; font-family: $font-display; font-size: 16px; font-weight: 700; }
 }
 .ob-cal__nav {
   width: 34px;
@@ -209,9 +214,11 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   &:hover { background: $ob-tint; color: $indigo-landed; }
 }
 .ob-cal__weekdays, .ob-cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-.ob-cal__weekdays span { text-align: center; font-size: 12px; color: $ob-muted; font-weight: 500; padding: 4px 0; }
+.ob-cal__weekdays { margin-bottom: 4px; }
+.ob-cal__weekdays span { text-align: center; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: $ob-muted; padding: 4px 0; }
 .ob-cal__day {
-  aspect-ratio: 1;
+  height: 40px;
+  font-weight: 500;
   border: 0;
   border-radius: 10px;
   background: transparent;
@@ -254,17 +261,6 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   padding-left: 10px;
   padding-right: 10px;
   &:hover { background: transparent; color: $text-dark; transform: none; }
-}
-.ob-skip {
-  margin-left: auto;
-  border: 0;
-  background: none;
-  color: $ob-muted;
-  font-size: 14px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
-  &:hover { color: $text-dark; }
 }
 .ob-hint {
   font-size: 13px;
@@ -486,7 +482,6 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   .ob-progress { margin: 0 16px; }
   .ob-options--3, .ob-options--2 { grid-template-columns: 1fr; }
   .ob-header__step { display: none; }
-  .ob-skip { margin-left: 0; }
   .ob-hint { display: none; }
 }
 
