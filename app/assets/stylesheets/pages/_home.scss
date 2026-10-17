@@ -78,12 +78,20 @@
     inset: 0;
     // Tint for legibility, fading to white on the right edge so the panel
     // dissolves into .hero-journey's white background instead of stopping
-    // at a hard line. Fade spans a wide window (30%-100%) so the transition
-    // reads as gradual rather than an abrupt wash near the edge.
+    // at a hard line.
+    //
+    // Measured 17 Oct 2026: the previous rgba(60,52,137,.5) gave white text
+    // 2.68:1 over bright parts of the photo, and the fade began at 30% while
+    // the greeting runs to 73% of the column, so the right half of every
+    // line sat in the dissolve (2.37:1 at the end of "Good morning" even
+    // over black). Two changes: the brand navy at .60 clears 4.5:1 over
+    // pure white (4.62:1) and 10:1 over mid-tones, with less opacity than
+    // the purple needed (.71); and the fade now starts at 78%, after the
+    // text ends, so every word sits on solid tint.
     background-image: linear-gradient(
       to right,
-      rgba(60, 52, 137, 0.5) 0%,
-      rgba(60, 52, 137, 0.5) 30%,
+      rgba(26, 21, 53, 0.6) 0%,
+      rgba(26, 21, 53, 0.6) 78%,
       #fff 100%
     );
   }
