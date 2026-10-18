@@ -29,8 +29,8 @@
   .doc-row:hover .doc-icon { opacity: 0 !important; }
   .doc-row.is-selected .row-checkbox { opacity: 1; }
   .doc-row.is-selected .doc-icon { opacity: 0 !important; }
-  .doc-row.is-selected { background: #EEEBFD !important; border-bottom-color: #D9D2F9 !important; }
-  .doc-row.is-selected:hover { background: #D9D2F9 !important; }
+  .doc-row.is-selected { background: #EEEBFD !important; border-bottom-color: #D0C2F5 !important; }
+  .doc-row.is-selected:hover { background: #D0C2F5 !important; }
   .selection-active .single-delete { display: none !important; }
 
   #select-all {
@@ -46,7 +46,7 @@
 
   #bulk-bar {
     position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
-    z-index: 100; background: #1A1A2E; border-radius: 12px;
+    z-index: 100; background: #1A1535; border-radius: 12px;
     padding: 12px 16px; display: none; align-items: center; gap: 20px;
     box-shadow: 0 8px 32px rgba(0,0,0,0.22), 0 2px 8px rgba(0,0,0,0.12);
     min-width: 340px; white-space: nowrap;
@@ -59,17 +59,17 @@
   }
 </style>
 
-<div style="min-height:100vh; padding-bottom:48px; position:relative; overflow:hidden; background:var(--page-bg);">
-  <div class="container-xl" style="padding-top:40px; position:relative; z-index:1;">
+<div style="min-height:100vh; padding-bottom: 48px; position:relative; overflow:hidden; background:var(--page-bg);">
+  <div class="container-xl" style="padding-top: 40px; position:relative; z-index:1;">
 
-    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:24px;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 24px;">
       <div>
-        <p style="font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#9F96C6; margin:0 0 6px;">Document Vault</p>
-        <h1 style="font-size:26px; font-weight:600 !important; font-family:inherit !important; color:#1A1535; margin:0 0 4px; letter-spacing:-0.3px;">My Documents</h1>
-        <% if @chats.any? %><p style="font-size:13px; color:#5F6775; margin:0;"><%= pluralize(@chats.size, "document") %> scanned</p><% end %>
+        <p style="font-size:11px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase; color:#5F6775; margin: 0 0 6px;">Document Vault</p>
+        <h1 style="font-size:26px; font-weight:700; font-family:'Plus Jakarta Sans', Inter, sans-serif; letter-spacing:-0.3px; color:#1A1535; margin: 0 0 4px;">My documents</h1>
+        <% if @chats.any? %><p style="font-size:13px; color:#5F6775; margin: 0;"><%= pluralize(@chats.size, "document") %> scanned</p><% end %>
       </div>
       <% if @chats.any? %>
-        <button onclick="document.getElementById('upload-modal').style.display='flex'" style="background:var(--brand-indigo); color:#fff; font-size:13px; font-weight:500; padding:9px 18px; border-radius:10px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+        <button onclick="document.getElementById('upload-modal').style.display='flex'" style="background:var(--brand-indigo); color:#fff; font-size:13px; font-weight:500; padding: 8px 18px; border-radius:10px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap: 6px;">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Scan new document
         </button>
@@ -77,13 +77,13 @@
     </div>
 
     <% if @chats.empty? %>
-      <div style="background:#fff; border-radius:16px; padding:80px 40px; text-align:center; border:1px solid #D0C2F5;">
-        <div style="width:56px; height:56px; background:#EEEBFD; border-radius:12px; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
+      <div style="background:#fff; border-radius:16px; padding: 80px 40px; text-align:center; border:1px solid #D0C2F5;">
+        <div style="width:56px; height:56px; background:#EEEBFD; border-radius:12px; display:flex; align-items:center; justify-content:center; margin: 0 auto 20px;">
           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--brand-indigo)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
         </div>
-        <h2 style="font-size:18px; font-weight:600; color:#1A1535; margin-bottom:8px;">No documents yet</h2>
-        <p style="font-size:14px; color:#5F6775; margin-bottom:28px; max-width:320px; margin-left:auto; margin-right:auto;">Scan your first German document and get a plain-English summary in seconds.</p>
-        <button onclick="document.getElementById('upload-modal').style.display='flex'" style="background:var(--brand-indigo); color:#fff; font-size:13px; font-weight:500; padding:10px 20px; border-radius:10px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap:6px;">
+        <h2 style="font-size:18px; font-weight:700; font-family:'Plus Jakarta Sans', Inter, sans-serif; color:#1A1535; margin-bottom: 8px;">No documents yet</h2>
+        <p style="font-size:14px; color:#5F6775; margin-bottom: 28px; max-width:320px; margin-left: auto; margin-right: auto;">Scan your first German document and get a plain-English summary in seconds.</p>
+        <button onclick="document.getElementById('upload-modal').style.display='flex'" style="background:var(--brand-indigo); color:#fff; font-size:13px; font-weight:500; padding: 10px 20px; border-radius:10px; border:none; cursor:pointer; display:inline-flex; align-items:center; gap: 6px;">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
           Scan your first document
         </button>
@@ -91,8 +91,8 @@
     <% else %>
 
       <div id="doc-table" style="background:#fff; border-radius:16px; overflow:hidden; border:1px solid #D0C2F5;">
-        <div class="table-header" style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:11px 20px; background:#FAF9FF; border-bottom:1px solid #E4E1FD; align-items:center;">
-          <div style="display:flex; align-items:center; gap:8px;">
+        <div class="table-header" style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap: 16px; padding: 11px 20px; background:#FAFAFC; border-bottom:1px solid #E4E1FD; align-items:center;">
+          <div style="display:flex; align-items:center; gap: 8px;">
             <input type="checkbox" id="select-all" onchange="toggleAll(this)">
             <span style="font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase; color:#5F6775;">Document</span>
           </div>
@@ -105,11 +105,11 @@
           <div class="doc-row"
                data-href="<%= chat_path(chat) %>"
                onclick="handleRowClick(event, this)"
-               onmouseover="this.style.background='#FAF9FF'"
+               onmouseover="this.style.background='#FAFAFC'"
                onmouseout="if(!this.classList.contains('is-selected')) this.style.background=''"
-               style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap:16px; padding:14px 20px; border-bottom:1px solid #FAF9FF; align-items:center;">
+               style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; gap: 16px; padding: 14px 20px; border-bottom:1px solid #FAFAFC; align-items:center;">
 
-            <div style="display:flex; align-items:center; gap:12px; min-width:0;">
+            <div style="display:flex; align-items:center; gap: 12px; min-width:0;">
               <div class="doc-icon-wrap" onclick="event.stopPropagation();">
                 <div class="doc-icon">
                   <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#5F6775" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -117,32 +117,32 @@
                 <input type="checkbox" class="row-checkbox" value="<%= chat.id %>" onchange="updateBulkBar(); toggleRowTint(this);">
               </div>
               <div style="min-width:0;">
-                <p style="font-size:13px; font-weight:500; color:#1A1535; margin:0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><%= chat.title || chat.document.filename %></p>
+                <p style="font-size:13px; font-weight:500; color:#1A1535; margin: 0; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;"><%= chat.title || chat.document.filename %></p>
               </div>
             </div>
 
             <div>
               <% if chat.document_type.present? %>
-                <span style="display:inline-block; width:fit-content; font-size:11px; font-weight:600; background:#EEEBFD; color:var(--brand-indigo); padding:4px 10px; border-radius:20px;"><%= chat.document_type %></span>
+                <span style="display:inline-block; width:fit-content; font-size:11px; font-weight:600; background:#EEEBFD; color:#4433B8; padding: 4px 10px; border-radius:20px;"><%= chat.document_type %></span>
               <% else %>
-                <span style="font-size:12px; color:#D1D5DB;">—</span>
+                <span style="font-size:12px; color:#5F6775;">—</span>
               <% end %>
             </div>
 
             <div>
               <% if chat.deadline.present? %>
                 <% days_left = (chat.deadline - Date.today).to_i %>
-                <p style="font-size:13px; font-weight:500; color:<%= days_left < 0 ? '#C0392B' : '#374151' %>; margin:0;"><%= chat.deadline.strftime("%b %d, %Y") %></p>
-                <p style="font-size:11px; color:#5F6775; margin:0;"><% if days_left < 0 %>Overdue<% elsif days_left == 0 %>Today<% else %><%= days_left %> days left<% end %></p>
+                <p style="font-size:13px; font-weight:500; color:<%= days_left < 0 ? '#C04400' : '#1A1535' %>; margin: 0;"><%= short_date(chat.deadline) %></p>
+                <p style="font-size:11px; color:#5F6775; margin: 0;"><% if days_left < 0 %>Overdue<% elsif days_left == 0 %>Today<% else %><%= days_left %> days left<% end %></p>
               <% else %>
-                <span style="font-size:12px; color:#D1D5DB;">—</span>
+                <span style="font-size:12px; color:#5F6775;">—</span>
               <% end %>
             </div>
 
             <div style="display:flex; justify-content:space-between; align-items:center;">
-              <p style="font-size:12px; color:#5F6775; margin:0;"><%= chat.created_at.strftime("%b %d, %Y") %></p>
+              <p style="font-size:12px; color:#5F6775; margin: 0;"><%= short_date(chat.created_at.localtime.to_date) %></p>
               <div class="single-delete" onclick="event.stopPropagation();">
-                <%= button_to "Delete", chat_path(chat), method: :delete, form: { data: { turbo: false } }, onclick: "return confirm('Delete this document?');", style:"background:none; border:1px solid #E5E7EB; border-radius:4px; font-size:11px; font-weight:500; color:#5F6775; cursor:pointer; padding:3px 9px;" %>
+                <%= button_to "Delete", chat_path(chat), method: :delete, form: { data: { turbo: false } }, onclick: "return confirm('Delete this document?');", style:"background:none; border:1px solid #E5E7EB; border-radius:4px; font-size:11px; font-weight:500; color:#5F6775; cursor:pointer; padding: 4px 8px;" %>
               </div>
             </div>
 
@@ -157,31 +157,31 @@
 <%# Floating bulk bar %>
 <div id="bulk-bar">
   <span id="bulk-count" style="font-size:13px; font-weight:500; color:#fff; flex:1;"></span>
-  <button onclick="clearSelection()" style="background:none; border:1px solid rgba(255,255,255,0.25); border-radius:4px; font-size:12px; font-weight:500; color:rgba(255,255,255,0.75); cursor:pointer; padding:5px 14px;">Clear</button>
-  <%= button_to "Delete", bulk_destroy_chats_path, method: :delete, form: { id: "bulk-delete-form", data: { turbo: false } }, onclick: "return injectBulkIds(event)", style:"background:#C0392B; border:none; border-radius:4px; font-size:12px; font-weight:600; color:#fff; cursor:pointer; padding:5px 16px;" %>
+  <button onclick="clearSelection()" style="background:none; border:1px solid rgba(255,255,255,0.25); border-radius:4px; font-size:12px; font-weight:500; color:rgba(255,255,255,0.75); cursor:pointer; padding: 4px 14px;">Clear</button>
+  <%= button_to "Delete", bulk_destroy_chats_path, method: :delete, form: { id: "bulk-delete-form", data: { turbo: false } }, onclick: "return injectBulkIds(event)", style:"background:#C01C1C; border:none; border-radius:4px; font-size:12px; font-weight:600; color:#fff; cursor:pointer; padding: 4px 16px;" %>
 </div>
 
 <%# Upload modal %>
 <div id="upload-modal">
-  <div style="background:#fff; border-radius:16px; padding:32px; width:100%; max-width:480px; margin:20px;">
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:24px;">
-      <h2 style="font-size:18px; font-weight:600; color:#1A1535; margin:0;">Scan new document</h2>
+  <div style="background:#fff; border-radius:16px; padding: 32px; width:100%; max-width:480px; margin: 20px;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 24px;">
+      <h2 style="font-size:18px; font-weight:700; font-family:'Plus Jakarta Sans', Inter, sans-serif; color:#1A1535; margin: 0;">Scan new document</h2>
       <button onclick="document.getElementById('upload-modal').style.display='none'" style="background:none; border:none; cursor:pointer; color:#5F6775; font-size:20px; line-height:1;">✕</button>
     </div>
     <%= form_with model: @chat, local: true, multipart: true, data: { controller: "loading", action: "submit->loading#submit" } do |f| %>
       <div data-loading-target="form">
         <div class="mb-4" data-controller="uploadpreview">
-          <div style="border:2px dashed #D0C2F5; border-radius:10px; padding:32px 20px; text-align:center; background:#FAF9FF;">
-            <div style="width:44px; height:44px; background:#EEEBFD; border-radius:10px; display:flex; align-items:center; justify-content:center; margin:0 auto 14px;">
+          <div style="border:2px dashed #D0C2F5; border-radius:10px; padding: 32px 20px; text-align:center; background:#FAFAFC;">
+            <div style="width:44px; height:44px; background:#EEEBFD; border-radius:10px; display:flex; align-items:center; justify-content:center; margin: 0 auto 14px;">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--brand-indigo)" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 16 12 12 8 16"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.39 18.39A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.3"/></svg>
             </div>
-            <p style="font-size:14px; color:#5F6775; margin-bottom:16px;">Upload a photo (JPEG or PNG)</p>
+            <p style="font-size:14px; color:#5F6775; margin-bottom: 16px;">Upload a photo (JPEG or PNG)</p>
             <div class="d-flex justify-content-center gap-2">
-              <label style="background:var(--brand-indigo); color:#fff; border-radius:10px; padding:8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" for="chat_document_upload">
+              <label style="background:var(--brand-indigo); color:#fff; border-radius:10px; padding: 8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap: 6px;" for="chat_document_upload">
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 Upload
               </label>
-              <label style="background:#fff; color:var(--brand-indigo); border:1.5px solid var(--brand-indigo); border-radius:10px; padding:8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap:6px;" for="chat_document_camera">
+              <label style="background:#fff; color:var(--brand-indigo); border:1.5px solid var(--brand-indigo); border-radius:10px; padding: 8px 18px; font-size:13px; font-weight:500; cursor:pointer; display:inline-flex; align-items:center; gap: 6px;" for="chat_document_camera">
                 <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
                 Take photo
               </label>
@@ -191,26 +191,26 @@
           <input type="file" id="chat_document_camera" name="chat[document]" accept="image/*" capture="environment" class="d-none" data-action="change->uploadpreview#show" data-uploadpreview-target="input" />
           <img data-uploadpreview-target="preview" class="img-fluid rounded mt-3 d-none" style="max-height:200px;" />
           <p data-uploadpreview-target="filename" class="mt-3 d-none" style="font-size:13px; color:#5F6775;"></p>
-          <div data-uploadpreview-target="error" class="d-none" role="alert" style="margin-top:14px; gap:12px; align-items:flex-start; text-align:left; background:#FEF3F2; border:1px solid #FBD5D1; border-radius:16px; padding:14px 16px;">
-            <span style="width:32px; height:32px; border-radius:10px; background:#FDE4E1; color:#B42318; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+          <div data-uploadpreview-target="error" class="d-none" role="alert" style="margin-top: 14px; gap: 12px; align-items:flex-start; text-align:left; background:#FEE2E2; border:1px solid #FEE2E2; border-radius:16px; padding: 14px 16px;">
+            <span style="width:32px; height:32px; border-radius:10px; background:#FEE2E2; color:#C01C1C; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5z"/><path d="M14 2v6h6"/><path d="m9.5 12.5 5 5"/><path d="m14.5 12.5-5 5"/></svg>
             </span>
-            <span style="display:flex; flex-direction:column; gap:4px;">
-              <span style="font-size:14px; font-weight:600; color:#912018;">PDFs can't be scanned yet</span>
-              <span style="font-size:14px; line-height:1.5; color:#7A271A;"><span data-uploadpreview-target="errorName"></span> is a PDF. Take a photo or screenshot of the page and upload that instead (JPEG or PNG).</span>
-              <label for="chat_document_upload" style="font-size:14px; font-weight:600; color:#B42318; text-decoration:underline; cursor:pointer; margin:2px 0 0;">Choose another file</label>
+            <span style="display:flex; flex-direction:column; gap: 4px;">
+              <span style="font-size:14px; font-weight:600; color:#C01C1C;">PDFs can't be scanned yet</span>
+              <span style="font-size:14px; line-height:1.5; color:#C01C1C;"><span data-uploadpreview-target="errorName"></span> is a PDF. Take a photo or screenshot of the page and upload that instead (JPEG or PNG).</span>
+              <label for="chat_document_upload" style="font-size:14px; font-weight:600; color:#C01C1C; text-decoration:underline; cursor:pointer; margin: 2px 0 0;">Choose another file</label>
             </span>
           </div>
         </div>
-        <%= f.submit "Scan document", style:"width:100%; padding:11px; background:var(--brand-indigo); color:#fff; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer;" %>
+        <%= f.submit "Scan document", style:"width:100%; padding: 11px; background:var(--brand-indigo); color:#fff; border:none; border-radius:10px; font-size:15px; font-weight:600; cursor:pointer;" %>
       </div>
-      <div data-loading-target="loader" class="d-none" style="text-align:center; padding:32px 0;">
+      <div data-loading-target="loader" class="d-none" role="status" aria-live="polite" style="text-align:center; padding: 32px 0;">
         <div data-loading-target="scan" class="scan-anim d-none" aria-hidden="true">
           <img data-loading-target="scanImage" alt="">
           <span class="scan-anim__line"></span>
         </div>
-        <div data-loading-target="spinner" style="width:44px; height:44px; border:3px solid #D0C2F5; border-top-color:var(--brand-indigo); border-radius:50%; animation:spin 0.8s linear infinite; margin:0 auto 16px;"></div>
-        <p style="font-size:15px; font-weight:500; color:#1A1535; margin-bottom:4px;">Analysing your document...</p>
+        <div data-loading-target="spinner" style="width:44px; height:44px; border:3px solid #D0C2F5; border-top-color:var(--brand-indigo); border-radius:50%; animation:spin 0.8s linear infinite; margin: 0 auto 16px;"></div>
+        <p style="font-size:15px; font-weight:500; color:#1A1535; margin-bottom: 4px;">Analysing your document...</p>
         <p style="font-size:13px; color:#5F6775;">This takes about 10 seconds</p>
       </div>
       <style>@keyframes spin { to { transform: rotate(360deg); } }</style>

@@ -1,7 +1,7 @@
 import { Controller } from "@hotwired/stimulus"
 
 export default class extends Controller {
-  static targets = ["step", "progressBar", "stepCount", "autosave", "completionOverlay"]
+  static targets = ["step", "progressBar", "stepCount", "autosave", "completionOverlay", "dueBadge"]
 
   connect() {
     console.log("Task detail controller connected")
@@ -85,6 +85,11 @@ export default class extends Controller {
       if (completedCount === totalCount) {
         if (this.hasStepCountTarget) {
           this.stepCountTarget.innerHTML = `<span class="task-steps__all-done">All done ✓</span>`
+        }
+        // A finished task is never overdue: swap its deadline badge for Completed
+        if (this.hasDueBadgeTarget) {
+          this.dueBadgeTarget.className = "task-badge task-badge--due"
+          this.dueBadgeTarget.textContent = "Completed"
         }
       } else {
         if (this.hasStepCountTarget) {
@@ -194,7 +199,7 @@ export default class extends Controller {
     const cx = canvas.width / 2
     const cy = canvas.height / 2
 
-    const colors = ['#6B56E2', '#7A9E1F', '#9585E8', '#C8F59A', '#ffffff', '#D9D2F9']
+    const colors = ['#6B56E2', '#7A9E1F', '#6B56E2', '#C8F59A', '#ffffff', '#D0C2F5']
     const particles = []
 
     for (let i = 0; i < 160; i++) {

@@ -24,7 +24,7 @@
   justify-content: space-between;
   gap: 16px;
   color: rgba($text-gray, 0.7);
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -117,8 +117,9 @@
 .onboarding-fieldset legend {
   display: block;
   margin-bottom: 8px;
-  color: rgba($text-gray, 0.7);
-  font-size: 10px;
+  // Was rgba($text-gray, 0.7) at 10px: 3.58:1 once the alpha is painted.
+  color: $text-muted;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -336,7 +337,7 @@
 .onboarding-calendar-weekdays {
   margin-bottom: 6px;
   color: rgba($text-gray, 0.75);
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-align: center;

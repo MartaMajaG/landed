@@ -9,7 +9,7 @@
   <% else %>
     <div class="completed-section">
       <div class="col-header done-header">
-        <span class="col-dot" style="background: #10b981;"></span>
+        <span class="col-dot" style="background: #7A9E1F;"></span>
         <span class="col-title">Completed</span>
         <span class="col-count"><%= completed_tasks.size %></span>
       </div>
@@ -21,11 +21,11 @@
                 <%= pillar_chip(task) %>
               </div>
             </div>
-            <h4 class="card-title"><%= task.name %></h4>
+            <h3 class="card-title"><%= task.name %></h3>
             <p class="card-desc"><%= first_sentence(task.description) %></p>
             <div class="card-footer-group">
               <div class="card-bottom-row">
-                <span class="card-due card-done-badge" style="display:inline-flex; align-items:center; gap:4px;">
+                <span class="card-due card-done-badge" style="display:inline-flex; align-items:center; gap: 4px;">
                   <span class="lucide-icon">
                     <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                   </span>
@@ -60,7 +60,7 @@
             <%= pillar_chip(task) %>
           </div>
         </div>
-        <h4 class="card-title"><%= task.name %></h4>
+        <h3 class="card-title"><%= task.name %></h3>
         <p class="card-desc"><%= first_sentence(task.description) %></p>
         <% total = task.checklist_items.size %>
         <% done = task.checklist_items.count { |ci| completed_ids.include?(ci.id) } %>
@@ -73,21 +73,11 @@
             <div class="card-fill" style="width: <%= total > 0 ? ((done.to_f / total) * 100).round : 0 %>%;"></div>
           </div>
           <div class="card-bottom-row">
-            <span class="card-due urgent-due" style="display:inline-flex; align-items:center; gap:4px;">
+            <span class="card-due urgent-due" style="display:inline-flex; align-items:center; gap: 4px;">
               <span class="lucide-icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
               </span>
-              <%= if task.due_date == Date.today
-                    "Today"
-                  elsif task.due_date == Date.today + 1.day
-                    "Tomorrow"
-                  elsif task.due_date == Date.today - 1.day
-                    "Yesterday"
-                  elsif task.due_date&.< Date.today
-                    "Overdue"
-                  else
-                    task.due_date&.strftime("%b %d")
-                  end %>
+              <%= due_label(task.due_on) %>
             </span>
           </div>
         </div>
@@ -115,7 +105,7 @@
           <%= pillar_chip(task) %>
         </div>
       </div>
-      <h4 class="card-title"><%= task.name %></h4>
+      <h3 class="card-title"><%= task.name %></h3>
       <p class="card-desc"><%= first_sentence(task.description) %></p>
       <% total = task.checklist_items.size %>
       <% done = task.checklist_items.count { |ci| completed_ids.include?(ci.id) } %>
@@ -127,12 +117,12 @@
         <div class="card-track">
           <div class="card-fill" style="width: <%= total > 0 ? ((done.to_f / total) * 100).round : 0 %>%;"></div>
         </div>
-        <div class="card-bottom-row" <%= ('style="display:none;"').html_safe unless task.due_date %>>
-          <span class="card-due" style="display:inline-flex; align-items:center; gap:4px;">
+        <div class="card-bottom-row" <%= ('style="display:none;"').html_safe unless task.due_on %>>
+          <span class="card-due <%= 'urgent-due' if task.overdue? %>" style="display:inline-flex; align-items:center; gap: 4px;">
             <span class="lucide-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             </span>
-            <%= task.due_date&.strftime("%b %d") %>
+            <%= due_label(task.due_on) %>
           </span>
         </div>
       </div>
@@ -153,13 +143,13 @@
     <span class="col-count"><%= upcoming_count %></span>
   </div>
   <% upcoming_tasks.each_with_index do |task, index| %>
-    <div class="task-card locked task-card--pillar-<%= task.pillar&.slug %> <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>" role="link" tabindex="0">
+    <div class="task-card locked task-card--pillar-<%= task.pillar&.slug %> <%= 'kanban-hidden' if index >= 2 %>" data-href="<%= task_path(task) %>" role="link" tabindex="0" style="cursor:pointer;">
       <div class="card-top">
         <div class="card-tags">
           <%= pillar_chip(task) %>
         </div>
       </div>
-      <h4 class="card-title"><%= task.name %></h4>
+      <h3 class="card-title"><%= task.name %></h3>
       <p class="card-desc"><%= first_sentence(task.description) %></p>
       <% total = task.checklist_items.size %>
       <% done = task.checklist_items.count { |ci| completed_ids.include?(ci.id) } %>
@@ -171,12 +161,12 @@
         <div class="card-track">
           <div class="card-fill" style="width: <%= total > 0 ? ((done.to_f / total) * 100).round : 0 %>%;"></div>
         </div>
-        <div class="card-bottom-row" <%= ('style="display:none;"').html_safe unless task.due_date %>>
-          <span class="card-due" style="display:inline-flex; align-items:center; gap:4px;">
+        <div class="card-bottom-row" <%= ('style="display:none;"').html_safe unless task.due_on %>>
+          <span class="card-due <%= 'urgent-due' if task.overdue? %>" style="display:inline-flex; align-items:center; gap: 4px;">
             <span class="lucide-icon">
               <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             </span>
-            <%= task.due_date&.strftime("%b %d") %>
+            <%= due_label(task.due_on) %>
           </span>
         </div>
       </div>

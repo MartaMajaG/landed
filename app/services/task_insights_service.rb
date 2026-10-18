@@ -15,8 +15,10 @@ class TaskInsightsService
   # Add new domains here as they're verified — never let the model add its own.
   APPROVED_DOMAINS = {
     "finance_and_banking"      => %w[n26.com deutsche-bank.de commerzbank.de comdirect.de sparkasse.de],
-    "housing_and_registration" => %w[muenchen.de service.muenchen.de mvv-muenchen.de],
-    "health_and_insurance"     => %w[tk.de aok.de barmer.de bundesgesundheitsministerium.de],
+    "housing_and_registration" => %w[muenchen.de service.muenchen.de mvv-muenchen.de
+                                     rundfunkbeitrag.de swm.de check24.de verivox.de telekom.de],
+    "health_and_insurance"     => %w[tk.de aok.de barmer.de dak.de deutsche-rentenversicherung.de
+                                     verbraucherzentrale.de check24.de bundesgesundheitsministerium.de],
     "legal_and_work"           => %w[arbeitsagentur.de bamf.de make-it-in-germany.com],
   }.freeze
 
@@ -27,7 +29,9 @@ class TaskInsightsService
   # maintained ones.
   SYSTEM_PROMPT = <<~PROMPT
     You are a German relocation expert advising international expats settling in Munich.
-    Generate exactly 3 practical expert tips for the given relocation task.
+    The user prompt lists the steps of one relocation task, in order. Write exactly one
+    practical expert tip per step, in the same order, so that tip N is specifically about
+    step N. Do not write about the task in general; write about that step.
     Return ONLY a valid JSON array. No markdown fences, no explanation, no preamble.
     Each tip is an object with these keys:
       - "title": a short noun phrase, max 5 words, no trailing punctuation
@@ -40,8 +44,11 @@ class TaskInsightsService
       - "resource_title": OPTIONAL. Only include if "resource_domain" is included — a short
         name (max 6 words) describing what that domain offers for this tip.
     Never invent a domain, URL, or resource that isn't explicitly in the allowed list you
-    were given. A tip with no resource is completely acceptable and expected sometimes.
-    The tips must be genuinely useful and specific — avoid generic statements.
+    were given. Where an allowed domain is the natural place to act on a step (the office
+    to book with, the provider to sign up with, the body that issues the thing), include it.
+    Where nothing on the list fits, omit it; a tip with no resource is fine.
+    The tips must be genuinely useful and specific. Avoid generic statements.
+    Use plain punctuation. Never use em dashes.
   PROMPT
 
   def initialize(task)
@@ -71,7 +78,7 @@ class TaskInsightsService
 
     request.body = {
       model:      MODEL,
-      max_tokens: 700,
+      max_tokens: 1400,
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
         { role: "user",   content: user_prompt }
@@ -87,6 +94,14 @@ class TaskInsightsService
     context << "Task: \"#{@task.name}\""
     context << "Description: #{@task.description}" if @task.description.present?
     context << "Category: #{@task.category}"       if @task.category.present?
+
+    # One tip per step, in step order. The page maps tips to steps by index,
+    # so the model has to see the steps to write a tip that belongs to one.
+    steps = @task.checklist_items.order(:position).pluck(:title)
+    if steps.any?
+      context << "Steps, in order (write exactly #{steps.size} tips, one per step):"
+      steps.each_with_index { |t, i| context << "  #{i + 1}. #{t}" }
+    end
 
     allowed = APPROVED_DOMAINS[@task.category.to_s]
     if allowed.present?

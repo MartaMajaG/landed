@@ -51,7 +51,7 @@
 
   details = [
     { icon: icon_pin,   label: "Destination",      value: city ? "#{city.name}, #{city.country}" : nil, sub: nil, empty: "Not selected yet" },
-    { icon: icon_plane, label: "Arrival date",     value: arrival&.strftime("%B %-d, %Y"), sub: arrival_sub, empty: "Not added yet" },
+    { icon: icon_plane, label: "Arrival date",     value: arrival&.strftime("%-d %B %Y"), sub: arrival_sub, empty: "Not added yet" },
     { icon: icon_pass,  label: "Residency status", value: visa_label, sub: visa_sub, empty: "Not selected yet" },
     { icon: icon_home,  label: "Housing",          value: housing_label, sub: housing_sub, empty: "Not selected yet" }
   ]

@@ -124,7 +124,7 @@ registration_steps = [
   {
     position:              1,
     title:                 "Book Bürgerbüro appointment",
-    description:           "Book your Anmeldung appointment online at the Munich Bürgerbüro (KVR). Slots fill quickly, so book as early as you can. You don't need your documents ready to book.",
+    description:           "Book your Anmeldung appointment online at your local Bürgeramt or Bürgerbüro. Slots fill quickly, so book as early as you can. You don't need your documents ready to book.",
     category:              "housing_and_registration",
     is_optional:           false,
     unlock_after_position: nil
@@ -180,7 +180,7 @@ banking_steps = [
   {
     position:              1,
     title:                 "Open a German bank account",
-    description:           "Choose a bank that suits expats — N26, Deutsche Bank, or Commerzbank all offer English-language onboarding. You will need your passport and Meldebescheinigung. N26 and most online banks can be opened fully digitally via video ID.",
+    description:           "Choose a bank that suits expats. N26, Deutsche Bank, or Commerzbank all offer English-language onboarding. You will need your passport and Meldebescheinigung. N26 and most online banks can be opened fully digitally via video ID.",
     category:              "finance_and_banking",
     is_optional:           false,
     unlock_after_position: nil
@@ -204,7 +204,7 @@ household.update!(
   pillar:         pillar_housing,
   category:       "housing_and_registration",
   description:    "Register for the broadcasting fee, set up your electricity contract, and arrange your internet connection.",
-  why_it_matters: "The Rundfunkbeitrag is legally mandatory for every household. Signing your own electricity contract prevents you from being billed at the expensive default SWM Grundversorgung tariff.",
+  why_it_matters: "The Rundfunkbeitrag is legally mandatory for every household. Signing your own electricity contract prevents you from being billed at the local supplier's expensive default tariff (Grundversorgung).",
   urgency:        "medium"
 )
 
@@ -212,7 +212,7 @@ household_steps = [
   {
     position:              1,
     title:                 "Register for broadcasting fee (Rundfunkbeitrag)",
-    description:           "Register your household with ARD ZDF Deutschlandradio Beitragsservice to pay the €18.36/month broadcasting fee. In shared flats (WGs), ask the main tenant for their Beitragsnummer — you can be added as a co-occupant instead of creating a new account.",
+    description:           "Register your household with ARD ZDF Deutschlandradio Beitragsservice to pay the €18.36/month broadcasting fee. In shared flats (WGs), ask the main tenant for their Beitragsnummer, since you can be added as a co-occupant instead of creating a new account.",
     category:              "housing_and_registration",
     is_optional:           false,
     unlock_after_position: nil
@@ -220,7 +220,7 @@ household_steps = [
   {
     position:              2,
     title:                 "Set up electricity contract",
-    description:           "Sign up with a private electricity provider to avoid the expensive SWM Grundversorgung default tariff. You will need your meter reading (Zählerstand) and meter number (Zählernummer) from move-in day.",
+    description:           "Sign up with a private electricity provider to avoid the local supplier's expensive default tariff (Grundversorgung). You will need your meter reading (Zählerstand) and meter number (Zählernummer) from move-in day.",
     category:              "housing_and_registration",
     is_optional:           false,
     unlock_after_position: nil
@@ -228,7 +228,7 @@ household_steps = [
   {
     position:              3,
     title:                 "Set up internet/broadband contract",
-    description:           "Sign a broadband internet contract with a provider such as Deutsche Telekom, Vodafone, or O2. You will need your passport and IBAN. Lead times can be 2–4 weeks — book early.",
+    description:           "Sign a broadband internet contract with a provider such as Deutsche Telekom, Vodafone, or O2. You will need your passport and IBAN. Lead times can be 2–4 weeks, so book early.",
     category:              "housing_and_registration",
     is_optional:           false,
     unlock_after_position: nil
@@ -276,7 +276,7 @@ health_steps = [
   {
     position:              3,
     title:                 "Gather required documents",
-    description:           "Prepare: valid passport, Meldebescheinigung (registration certificate), employment contract or salary statement, and — if moving from another EU country — the E104 form from your previous insurer to ensure seamless GKV enrolment.",
+    description:           "Prepare: valid passport, Meldebescheinigung (registration certificate), employment contract or salary statement, and, if moving from another EU country, the E104 form from your previous insurer to ensure seamless GKV enrolment.",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: nil
@@ -284,7 +284,7 @@ health_steps = [
   {
     position:              4,
     title:                 "Choose your health insurance provider",
-    description:           "For GKV, compare funds such as TK (Techniker Krankenkasse), AOK Bayern, Barmer, or DAK. All charge the same base rate (14.6% of gross salary) but differ in additional services and English-language support. For PKV, obtain quotes from at least 3 providers — premiums vary by age and health status.",
+    description:           "For GKV, compare funds such as TK (Techniker Krankenkasse), AOK, Barmer, or DAK. All charge the same base rate (14.6% of gross salary) but differ in additional services and English-language support. For PKV, obtain quotes from at least 3 providers, as premiums vary by age and health status.",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: 2   # After checking GKV vs PKV eligibility
@@ -308,7 +308,7 @@ health_steps = [
   {
     position:              7,
     title:                 "Obtain Sozialversicherungsnummer and share with employer",
-    description:           "Your GKV enrolment automatically triggers the issuance of your permanent Sozialversicherungsnummer (social security number). Once received (by post), forward it to HR — it is required for legal payroll processing.",
+    description:           "Your GKV enrolment automatically triggers the issuance of your permanent Sozialversicherungsnummer (social security number). Once received (by post), forward it to HR, as it is required for legal payroll processing.",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: 5   # Issued after enrolment
@@ -340,7 +340,7 @@ haftpflicht_steps = [
   {
     position:              1,
     title:                 "Understand what to look for in a policy",
-    description:           "A good Privathaftpflicht policy for expats in Munich should include: Schlüsselverlust (key loss), Mietsachschäden (rental damage), Forderungsausfalldeckung (protection if an uninsured third party injures you), grobe Fahrlässigkeit (gross negligence), and Gefälligkeitshandlungen (damage while helping friends).",
+    description:           "A good Privathaftpflicht policy for expats should include: Schlüsselverlust (key loss), Mietsachschäden (rental damage), Forderungsausfalldeckung (protection if an uninsured third party injures you), grobe Fahrlässigkeit (gross negligence), and Gefälligkeitshandlungen (damage while helping friends).",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: nil
@@ -356,7 +356,7 @@ haftpflicht_steps = [
   {
     position:              3,
     title:                 "Sign up online and save your policy document",
-    description:           "Complete the application online — you will need your name, address, and date of birth. Download and store your Versicherungsschein (policy document) in a safe place. Coverage typically begins the same day.",
+    description:           "Complete the application online. You will need your name, address, and date of birth. Download and store your Versicherungsschein (policy document) in a safe place. Coverage typically begins the same day.",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: 2   # After choosing a policy
@@ -388,7 +388,7 @@ hausrat_steps = [
   {
     position:              2,
     title:                 "Choose a policy — ensure bicycle theft add-on is included",
-    description:           "Bicycle theft is extremely common in Munich and Berlin. When comparing policies, specifically look for the 'Fahrraddiebstahl' add-on and check that there is no Nachtklausel (night clause) excluding thefts between 22:00–06:00. Recommended providers: Getsafe, ARAG, Allianz.",
+    description:           "Bicycle theft is extremely common in German cities. When comparing policies, specifically look for the 'Fahrraddiebstahl' add-on and check that there is no Nachtklausel (night clause) excluding thefts between 22:00–06:00. Recommended providers: Getsafe, ARAG, Allianz.",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: nil
@@ -396,7 +396,7 @@ hausrat_steps = [
   {
     position:              3,
     title:                 "Sign up and store your policy documents",
-    description:           "Complete the application with your address and floor area. Store the Versicherungsschein digitally and note the claims hotline number — it will be needed immediately in case of a burglary or water damage.",
+    description:           "Complete the application with your address and floor area. Store the Versicherungsschein digitally and note the claims hotline number, as it will be needed immediately in case of a burglary or water damage.",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: 2   # After choosing a policy
@@ -411,7 +411,7 @@ bu.update!(
   pillar:         pillar_health,
   category:       "health_and_insurance",
   description:    "Secure a monthly income replacement if you become unable to work due to illness, accident, or burnout for more than 6 months.",
-  why_it_matters: "The German state pays very little in disability benefits — especially for those who have not contributed long enough. Freelancers, sole earners, and anyone with a mortgage are most at risk without BU coverage.",
+  why_it_matters: "The German state pays very little in disability benefits, especially for those who have not contributed long enough. Freelancers, sole earners, and anyone with a mortgage are most at risk without BU coverage.",
   urgency:        "medium"
 )
 
@@ -428,7 +428,7 @@ bu_steps = [
   {
     position:              2,
     title:                 "Get independent advice before signing",
-    description:           "BU policies are complex. Avoid signing without independent advice. Contact a Verbraucherzentrale (consumer advice centre) or an independent fee-based broker (Honorarberater). The key policy clause to check: 'abstrakte Verweisung' — ensure your policy does NOT include this clause (it would allow the insurer to point you to any other job instead of paying out).",
+    description:           "BU policies are complex. Avoid signing without independent advice. Contact a Verbraucherzentrale (consumer advice centre) or an independent fee-based broker (Honorarberater). The key policy clause to check: 'abstrakte Verweisung'. Ensure your policy does NOT include this clause (it would allow the insurer to point you to any other job instead of paying out).",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: nil
@@ -436,7 +436,7 @@ bu_steps = [
   {
     position:              3,
     title:                 "Compare policies and sign",
-    description:           "Compare at least 3 quotes. Ensure the payout amount covers your monthly living costs. Typical monthly benefit: 60–80% of your net income. The younger and healthier you are when you sign, the lower the premium — do not delay.",
+    description:           "Compare at least 3 quotes. Ensure the payout amount covers your monthly living costs. Typical monthly benefit: 60–80% of your net income. The younger and healthier you are when you sign, the lower the premium, so do not delay.",
     category:              "health_and_insurance",
     is_optional:           false,
     unlock_after_position: 2   # After getting independent advice
@@ -492,6 +492,203 @@ supplementary_steps = [
 ]
 
 sync_steps!(supplementary, supplementary_steps)
+
+# ── Upcoming tasks ──────────────────────────────────────────────────────────
+# These four existed in the database without any steps, so their task page
+# could never be completed. Task fields below match what was already stored;
+# only the steps are new.
+
+savings = Task.find_or_initialize_by(name: "Open a Savings Account", city: munich)
+savings.update!(
+  pillar:         pillar_housing,
+  category:       "housing_and_registration",
+  description:    "Consider opening a Tagesgeldkonto (overnight money account) for emergency savings. German banks like DKB and ING offer competitive rates.",
+  why_it_matters: "Building a financial buffer in Germany is essential for unexpected costs like deposits, repairs, or job gaps.",
+  urgency:        "low"
+)
+
+savings_steps = [
+  {
+    position:              1,
+    title:                 "Compare Tagesgeld and Festgeld",
+    description:           "A Tagesgeldkonto lets you take money out at any time. A Festgeldkonto locks it away for a fixed term at a fixed rate. For an emergency buffer, Tagesgeld is the usual choice.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              2,
+    title:                 "Check the deposit protection",
+    description:           "Savings at banks in the EU are protected up to €100,000 per person per bank. Check which country's scheme covers the bank you pick, especially for online banks based abroad.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              3,
+    title:                 "Open the account online",
+    description:           "Most banks open a savings account online in a few minutes. You will verify your identity by video call or at a post office, and the bank will ask for your tax ID (Steuer-ID).",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: 1
+  },
+  {
+    position:              4,
+    title:                 "Set up a tax exemption order (Freistellungsauftrag)",
+    description:           "Interest is taxed automatically in Germany. A Freistellungsauftrag tells the bank to leave interest untaxed up to your yearly allowance (€1,000 for a single person). You set it up in your online banking.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: 3
+  }
+]
+
+sync_steps!(savings, savings_steps)
+
+german = Task.find_or_initialize_by(name: "Learn Basic German", city: munich)
+german.update!(
+  pillar:         pillar_finance,
+  category:       "finance_and_banking",
+  description:    "Enroll in an integration course (Integrationskurs) or use apps like Duolingo, Babbel, or Volkshochschule classes to build everyday German skills.",
+  why_it_matters: "Basic German makes daily life significantly easier — from reading letters to navigating bureaucracy and building local connections.",
+  urgency:        "low"
+)
+
+german_steps = [
+  {
+    position:              1,
+    title:                 "Check if you can join an integration course",
+    description:           "Integration courses (Integrationskurse) are run with the Federal Office for Migration and Refugees (BAMF) and cost far less than private classes. Some residence permits make them compulsory. Ask the immigration office (Ausländerbehörde) or check the BAMF website.",
+    category:              "finance_and_banking",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              2,
+    title:                 "Find a course near you",
+    description:           "The Volkshochschule (VHS) in your city runs affordable evening and weekend courses at every level. Many language schools offer integration courses too.",
+    category:              "finance_and_banking",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              3,
+    title:                 "Practise a little every day",
+    description:           "Ten minutes a day with an app, a podcast or a German news site for learners does more than one long session a week.",
+    category:              "finance_and_banking",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              4,
+    title:                 "Plan for a certificate if you will need one",
+    description:           "A B1 certificate (from telc or the Goethe-Institut, for example) is usually needed for permanent residence and citizenship. You don't need it now, but it is worth knowing where you are heading.",
+    category:              "finance_and_banking",
+    is_optional:           true,
+    unlock_after_position: nil
+  }
+]
+
+sync_steps!(german, german_steps)
+
+phone = Task.find_or_initialize_by(name: "Set Up a German Phone Plan", city: munich)
+phone.update!(
+  pillar:         pillar_finance,
+  category:       "finance_and_banking",
+  description:    "Switch to a German SIM card with a local number. Providers like Aldi Talk, Congstar, or O2 offer affordable prepaid and contract options.",
+  why_it_matters: "A local number is required for many official registrations, bank accounts, and job applications in Germany.",
+  urgency:        "low"
+)
+
+phone_steps = [
+  {
+    position:              1,
+    title:                 "Choose prepaid or a contract",
+    description:           "Prepaid needs no credit check and no German bank account, so it is the easy start. A contract is often cheaper per month but usually needs a German IBAN and a credit check (Schufa), which you may not have yet.",
+    category:              "finance_and_banking",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              2,
+    title:                 "Get your ID ready",
+    description:           "Every German SIM card, prepaid included, has to be registered to a verified identity. Keep your passport at hand: activation is done by video call, in a shop, or at a post office.",
+    category:              "finance_and_banking",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              3,
+    title:                 "Order and activate your SIM",
+    description:           "Buy the SIM online or in a supermarket or phone shop, then follow the activation steps. It usually works within a day.",
+    category:              "finance_and_banking",
+    is_optional:           false,
+    unlock_after_position: 1
+  },
+  {
+    position:              4,
+    title:                 "Share your new number",
+    description:           "Give your German number to your employer, your bank, your health insurer and your landlord, so calls and verification codes reach you.",
+    category:              "finance_and_banking",
+    is_optional:           false,
+    unlock_after_position: 3
+  }
+]
+
+sync_steps!(phone, phone_steps)
+
+debits = Task.find_or_initialize_by(name: "Set Up Direct Debits and Standing Orders", city: munich)
+debits.update!(
+  pillar:         pillar_housing,
+  category:       "housing_and_registration",
+  description:    "Configure Lastschrift (direct debit) and Dauerauftrag (standing orders) for rent, utilities, and subscriptions through your German bank account.",
+  why_it_matters: "Most German landlords and utility providers require direct debit. Missing payments can affect your rental agreement and credit score.",
+  urgency:        "low"
+)
+
+debits_steps = [
+  {
+    position:              1,
+    title:                 "Set up a standing order for rent (Dauerauftrag)",
+    description:           "If your landlord asks you to transfer the rent, set up a Dauerauftrag in your online banking a few days before it is due each month, using the IBAN and reference from your lease.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              2,
+    title:                 "Give direct debit mandates (SEPA-Lastschrift)",
+    description:           "Electricity, internet, phone, insurance and the broadcasting fee (Rundfunkbeitrag) are usually paid by direct debit. Each provider asks for your IBAN and permission to collect.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: nil
+  },
+  {
+    position:              3,
+    title:                 "Check your first statements",
+    description:           "Make sure every payment arrived and nothing was charged twice. If a direct debit is wrong, you can ask your bank to reverse it within eight weeks.",
+    category:              "housing_and_registration",
+    is_optional:           false,
+    unlock_after_position: 2
+  }
+]
+
+sync_steps!(debits, debits_steps)
+
+# ── Same plan in every city ─────────────────────────────────────────────────
+# Landed shows one German checklist wherever you move. The tasks above are
+# written once, on Munich, and copied to the other cities so the content has
+# a single source. The four pillars are shared (their slugs are unique).
+# Re-running is safe: tasks are matched by name and steps by title.
+[berlin, hamburg].each do |city|
+  Task.where(city: munich).includes(:checklist_items).find_each do |source|
+    task = Task.find_or_initialize_by(name: source.name, city: city)
+    task.update!(source.attributes.slice("pillar_id", "category", "description", "why_it_matters", "urgency", "expert_tips"))
+    steps = source.checklist_items.order(:position).map do |item|
+      item.attributes.slice("position", "title", "description", "category", "is_optional", "unlock_after_position", "action_note").symbolize_keys
+    end
+    sync_steps!(task, steps)
+  end
+end
 
 puts "Subtasks seeded: #{ChecklistItem.count} total."
 

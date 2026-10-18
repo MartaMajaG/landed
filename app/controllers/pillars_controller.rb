@@ -18,10 +18,8 @@ class PillarsController < ApplicationController
   private
 
   def set_pillar
-    # Scope to the user's city so users cannot access another city's pillars.
-    @pillar = Pillar.find_by!(
-      id:      params[:id],
-      city_id: current_user.profile.city_id
-    )
+    # One set of pillars serves every city; the tasks shown are scoped to the
+    # user's city in #show.
+    @pillar = Pillar.find(params[:id])
   end
 end

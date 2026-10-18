@@ -6,7 +6,7 @@ const ICON = {
 }
 
 // The dashboard's own columns, same urgency split and same due-date rule as
-// Task.assign_due_dates, so the preview and the dashboard show the same board.
+// Task#due_date_for, so the preview and the dashboard show the same board.
 const COLUMNS = [
   { urgency: "high",   title: "Urgent",   key: "urgent",   offset: (arrival, today) => new Date(Math.max(addDays(arrival, -7), today)) },
   { urgency: "medium", title: "Active",   key: "active",   offset: (arrival) => addDays(arrival, 14) },
@@ -18,13 +18,25 @@ function addDays(date, n) { const d = new Date(date); d.setDate(d.getDate() + n)
 function startOfToday() { const d = new Date(); d.setHours(0, 0, 0, 0); return d }
 function toISO(d) { return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}` }
 function fromISO(s) { const [y, m, d] = s.split("-").map(Number); return new Date(y, m - 1, d) }
-function fmt(d) { return d.toLocaleDateString("en-GB", { day: "numeric", month: "short" }) }
-// Dashboard card date format (strftime "%b %d"), e.g. "Nov 08"
-function fmtCard(d) { return `${d.toLocaleDateString("en-US", { month: "short" })} ${String(d.getDate()).padStart(2, "0")}` }
+// Same as ApplicationHelper#short_date: day before month, the year only when it is not this year
+function fmt(d) {
+  const day = `${d.getDate()} ${d.toLocaleDateString("en-US", { month: "short" })}`
+  return d.getFullYear() === new Date().getFullYear() ? day : `${day} ${d.getFullYear()}`
+}
+// Same format as ApplicationHelper#due_label: day before month, relative word beside the date
+function fmtCard(d) {
+  const day = fmt(d)
+  const daysLeft = Math.round((d - startOfToday()) / 86400000)
+  if (daysLeft < 0) return `Overdue since ${day}`
+  if (daysLeft === 0) return `Due today, ${day}`
+  if (daysLeft === 1) return `Due tomorrow, ${day}`
+  return `Due ${day}`
+}
 function esc(s) { const el = document.createElement("span"); el.textContent = s ?? ""; return el.innerHTML }
 
 export default class extends Controller {
   static targets = [
+    "visaTypes",
     "form", "stage", "step", "stepLabel", "progressBar",
     "dateInput", "monthLabel", "calendarGrid",
     "fact", "taskCount",
@@ -92,6 +104,7 @@ export default class extends Controller {
 
     const focusable = this.currentStep.querySelector(".ob-option__input:checked") ||
                       this.currentStep.querySelector(".ob-option__input:not(:disabled)") ||
+                      this.currentStep.querySelector(".ob-chip.is-selected, .ob-cal__day.is-selected") ||
                       this.currentStep.querySelector(".ob-chip")
     if (animate) focusable?.focus({ preventScroll: true })
   }
@@ -111,8 +124,12 @@ export default class extends Controller {
     if (event.metaKey || event.ctrlKey || event.altKey) return
 
     if (event.key === "Enter") {
-      const tag = document.activeElement?.tagName
-      if (tag === "BUTTON" || tag === "A") return
+      // Enter on a real action (Back, a link) keeps its own meaning. On a
+      // choice the person just made (a quick pick or a calendar day) it moves
+      // on, so "or press Enter" holds true on every step.
+      const el = document.activeElement
+      const isChoice = el?.matches?.(".ob-chip, .ob-cal__day")
+      if ((el?.tagName === "BUTTON" && !isChoice) || el?.tagName === "A") return
       event.preventDefault()
       this.next()
       return
@@ -120,7 +137,9 @@ export default class extends Controller {
 
     const n = parseInt(event.key, 10)
     if (!n) return
+    // Only options on screen: the visa types stay hidden until "Yes"
     const inputs = [...this.currentStep.querySelectorAll(".ob-option__input:not(:disabled)")]
+      .filter((input) => input.closest("[hidden]") === null)
     if (inputs[n - 1]) {
       inputs[n - 1].checked = true
       inputs[n - 1].dispatchEvent(new Event("change", { bubbles: true }))
@@ -155,8 +174,24 @@ export default class extends Controller {
     this.taskCountTarget.textContent = cityId ? this.tasksFor(cityId).length : "–"
   }
 
+  // The last checked answer wins, so "Visa needed" gives way to the visa type once one is picked
   checkedLabel(key) {
-    return this.element.querySelector(`.ob-option__input[data-summary-key="${key}"]:checked`)?.dataset.summaryLabel
+    return [...this.element.querySelectorAll(`.ob-option__input[data-summary-key="${key}"]:checked`)].pop()?.dataset.summaryLabel
+  }
+
+  // "No" stores eu_citizen straight away. "Yes" reveals the visa types and
+  // clears any earlier answer, so the step only counts as done once one is picked.
+  chooseVisaNeed(event) {
+    const needsVisa = event.target.value === "yes"
+    const euRadio = this.element.querySelector(".ob-visa-eu")
+    this.visaTypesTarget.hidden = !needsVisa
+    if (needsVisa) {
+      euRadio.checked = false
+    } else {
+      euRadio.checked = true
+      this.visaTypesTarget.querySelectorAll("input").forEach((input) => { input.checked = false })
+    }
+    this.choose(event)
   }
 
   dateSummary() {
@@ -243,15 +278,15 @@ export default class extends Controller {
     this.syncSummary("date")
   }
 
+  // "I don't know yet" is one of the answers, so like the other quick picks it
+  // selects and waits for Continue rather than jumping ahead.
   skipDate(event) {
     event.preventDefault()
     this.dateInputTarget.value = ""
     this.dateSkipped = true
-    this.markChip(null)
+    this.markChip(event.currentTarget)
     this.renderCalendar()
     this.syncSummary("date")
-    this.currentStepValue += 1
-    this.showCurrentStep()
   }
 
   // ── Validation ──
@@ -315,10 +350,13 @@ export default class extends Controller {
     const today = startOfToday()
     const arrival = this.dateInputTarget.value ? fromISO(this.dateInputTarget.value) : null
 
+    // Same rule as Task#due_date_for: dates count from arrival, or from today
+    // (the day they join) if arrival is already past. Columns follow category.
+    const start = arrival ? new Date(Math.max(arrival, today)) : null
     const columns = COLUMNS.map((col) => ({
       ...col,
-      due: arrival ? col.offset(arrival, today) : null,
       items: tasks.filter((t) => t.urgency === col.urgency)
+                  .map((t) => ({ ...t, due: start ? col.offset(start, today) : null }))
     })).filter((c) => c.items.length)
 
     const first = columns[0]
@@ -336,7 +374,7 @@ export default class extends Controller {
           ${isFirst ? `<span class="ob-start">Start here</span>` : ""}
         </div>
         <h4 class="card-title">${esc(t.name)}</h4>
-        ${col.due ? `<div class="card-bottom-row"><span class="card-due ${col.key === "urgent" ? "urgent-due" : ""}" style="display:inline-flex; align-items:center; gap:4px;"><span class="lucide-icon">${ICON.clock}</span>${fmtCard(col.due)}</span></div>` : ""}
+        ${t.due ? `<div class="card-bottom-row"><span class="card-due ${col.key === "urgent" ? "urgent-due" : ""}" style="display:inline-flex; align-items:center; gap:4px;"><span class="lucide-icon">${ICON.clock}</span>${fmtCard(t.due)}</span></div>` : ""}
       </div>`
 
     this.planBodyTarget.innerHTML = columns.map((col) => {

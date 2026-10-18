@@ -17,7 +17,7 @@
   icon_bulb     = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0-6 6c0 2 1 3.5 2.5 4.5V16a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1v-2.5C17 12.5 18 11 18 9a6 6 0 0 0-6-6z"/><line x1="9" y1="21" x2="15" y2="21"/><line x1="9.5" y1="18" x2="14.5" y2="18"/></svg>'
   icon_list     = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>'
   icon_file_doc = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#5F6775" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'
-  icon_file_red = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E24B4A" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'
+  icon_file_red = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#E53E3E" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'
   icon_send     = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>'
   icon_cal_plus = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="15" x2="12" y2="19"/><line x1="10" y1="17" x2="14" y2="17"/></svg>'
   icon_expand   = '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>'
@@ -44,10 +44,10 @@
 
   # Deadline state, shown once in the banner
   banner_tone = banner_title = banner_meta = nil
-  due_tone = due_label = due_meta = nil
+  due_tone = due_text = due_meta = nil
   if @chat.deadline.present?
     days_left = (@chat.deadline - Date.today).to_i
-    due_on    = @chat.deadline.strftime("%b %-d, %Y")
+    due_on    = short_date(@chat.deadline)
     # A full-width tinted bar is alert furniture: it is for "you are late" or
     # "this is today". Anything further out is metadata and belongs in the tag
     # row beside the document type. A banner on every document cries wolf, and
@@ -55,13 +55,13 @@
     if days_left < 0
       # Genuinely late is the one case that earns alert furniture. The line is
       # suppressed here so the same fact is not stated twice.
-      banner_tone, banner_title, banner_meta = "overdue", "Overdue", "was due #{due_on}"
+      banner_tone, banner_title, banner_meta = "overdue", "Overdue", "since #{due_on}"
     elsif days_left == 0
-      due_tone, due_label, due_meta = "soon", "Due today", due_on
+      due_tone, due_text, due_meta = "soon", "Due today, #{due_on}", nil
     elsif days_left <= 7
-      due_tone, due_label, due_meta = "soon", "Due #{due_on}", "in #{days_left} #{'day'.pluralize(days_left)}"
+      due_tone, due_text, due_meta = "soon", "Due #{due_on}", "in #{days_left} #{'day'.pluralize(days_left)}"
     else
-      due_tone, due_label, due_meta = "calm", "Due #{due_on}", "in #{days_left} days"
+      due_tone, due_text, due_meta = "calm", "Due #{due_on}", "in #{days_left} days"
     end
   end
 
@@ -116,6 +116,7 @@
 %>
 
 <%= render "chats/document_styles" %>
+<%= render "chats/notes_store" %>
 
 <div class="doc-page">
   <div class="container-xl doc-wrap">
@@ -131,7 +132,7 @@
 
     <% if @chat.analysis_failed? %>
       <%# ── The AI couldn't read this scan: explain, help, and offer a way out ── %>
-      <section class="doc-card" style="padding:32px; display:grid; grid-template-columns:minmax(0, 220px) minmax(0, 1fr); gap:32px; align-items:start;">
+      <section class="doc-card" style="padding: 32px; display:grid; grid-template-columns:minmax(0, 220px) minmax(0, 1fr); gap: 32px; align-items:start;">
         <% if @chat.document.attached? && @chat.document.content_type.to_s.start_with?("image/") %>
           <%= link_to url_for(@chat.document), target: "_blank", class: "doc-peek", style: "height:280px;", aria: { label: "Open your photo full size" } do %>
             <%= image_tag url_for(@chat.document), alt: "" %>
@@ -140,28 +141,28 @@
           <div class="doc-file"><span class="lucide-icon"><%= icon_file_red.html_safe %></span></div>
         <% end %>
 
-        <div style="display:flex; flex-direction:column; gap:16px;">
-          <div style="display:flex; gap:14px; align-items:flex-start;">
-            <span style="width:40px; height:40px; border-radius:12px; background:#FDE4E1; color:#B42318; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+        <div style="display:flex; flex-direction:column; gap: 16px;">
+          <div style="display:flex; gap: 14px; align-items:flex-start;">
+            <span style="width:40px; height:40px; border-radius:12px; background:#FEE2E2; color:#C01C1C; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
               <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5z"/><path d="M14 2v6h6"/><path d="M12 12v3"/><path d="M12 18h.01"/></svg>
             </span>
             <div>
               <h1 class="doc-title" style="font-size:26px !important;">We couldn't read this document</h1>
-              <p style="margin:6px 0 0; font-size:15px; line-height:1.6; color:#4B5563;">Your photo is saved, but the analysis didn't work. This usually comes down to the photo itself, and a second try often does it.</p>
+              <p style="margin: 6px 0 0; font-size:15px; line-height:1.6; color:#4B5563;">Your photo is saved, but the analysis didn't work. This usually comes down to the photo itself, and a second try often does it.</p>
             </div>
           </div>
 
-          <div style="background:#F8F6FE; border:1px solid #E6E0FB; border-radius:16px; padding:16px 18px;">
-            <p style="margin:0 0 8px; font-size:14px; font-weight:600; color:#1A1535;">For a clearer scan</p>
-            <ul style="margin:0; padding-left:18px; font-size:14px; line-height:1.7; color:#374151;">
+          <div style="background:#FAFAFC; border:1px solid #E6E0FB; border-radius:16px; padding: 16px 18px;">
+            <p style="margin: 0 0 8px; font-size:14px; font-weight:600; color:#1A1535;">For a clearer scan</p>
+            <ul style="margin: 0; padding-left: 18px; font-size:14px; line-height:1.7; color:#4B5563;">
               <li>Lay the letter flat and fit the whole page in the frame</li>
               <li>Use good light and avoid shadows or glare</li>
               <li>Hold the phone straight above the page, not at an angle</li>
             </ul>
           </div>
 
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <%= button_to reanalyze_chat_path(@chat), method: :post, form: { data: { turbo: false }, style: "margin:0;" }, class: "doc-btn doc-btn--primary",
+          <div style="display:flex; gap: 10px; flex-wrap:wrap;">
+            <%= button_to reanalyze_chat_path(@chat), method: :post, form: { data: { turbo: false }, style: "margin: 0;" }, class: "doc-btn doc-btn--primary",
                   onclick: "this.style.opacity='0.6'; this.querySelector('.tp-label').textContent='Trying again… this takes about 10 seconds';" do %>
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/><path d="M8 16H3v5"/></svg>
               <span class="tp-label">Try again</span>
@@ -169,7 +170,7 @@
             <%= link_to chats_path, class: "doc-btn doc-btn--secondary", style: "text-decoration:none;" do %>
               Scan a new photo
             <% end %>
-            <%= button_to "Delete", chat_path(@chat), method: :delete, form: { data: { turbo_confirm: "Delete this document?" }, style: "margin:0;" },
+            <%= button_to "Delete", chat_path(@chat), method: :delete, form: { data: { turbo_confirm: "Delete this document?" }, style: "margin: 0;" },
                   class: "doc-btn", style: "border:1px solid #E5E7EB; background:#fff; color:#4B5563;" %>
           </div>
         </div>
@@ -184,14 +185,14 @@
             <div class="doc-tags">
               <span class="doc-tag doc-tag--brand"><%= mandatory ? "Mandatory" : "Optional" %></span>
               <% if doc_type.present? %><span class="doc-tag"><%= doc_type %></span><% end %>
-              <span class="doc-processed">Processed <%= @chat.created_at.strftime("%b %-d, %Y") %></span>
+              <span class="doc-processed">Processed <%= short_date(@chat.created_at.localtime.to_date) %></span>
             </div>
             <h1 class="doc-title"><%= english_title %></h1>
             <% if german_title.present? %><p class="doc-subtitle"><%= german_title %></p><% end %>
-            <% if due_label.present? %>
+            <% if due_text.present? %>
               <p class="doc-deadline doc-deadline--<%= due_tone %>">
                 <span class="lucide-icon doc-deadline__icon"><%= (due_tone == "soon" ? icon_warn : icon_cal_plus).html_safe %></span>
-                <strong><%= due_label %></strong>
+                <strong><%= due_text %></strong>
                 <% if due_meta.present? %><span class="doc-deadline__meta"><%= due_meta %></span><% end %>
               </p>
             <% end %>
@@ -211,13 +212,13 @@
                   Remind me
                 </button>
                 <div id="rm-<%= @chat.id %>" style="display:none; position:absolute; top:calc(100% + 4px); right:0; background:#fff; border:1px solid #E5E7EB; border-radius:16px; box-shadow:0 12px 28px -12px rgba(107,86,226,0.30); min-width:240px; overflow:hidden; z-index:100;">
-                  <div style="padding:12px 14px; border-bottom:1px solid #F3F4F6;">
-                    <label for="reminder-date-<%= @chat.id %>" style="font-size:12px; font-weight:600; color:#5F6775; text-transform:uppercase; letter-spacing:0.04em; display:block; margin-bottom:6px;">Reminder date</label>
-                    <input type="date" id="reminder-date-<%= @chat.id %>" value="<%= default_reminder_date.strftime("%Y-%m-%d") %>" style="width:100%; font-size:14px; border:1px solid #E5E7EB; border-radius:10px; padding:6px 8px; color:#1A1535;" onclick="event.stopPropagation()">
+                  <div style="padding: 12px 14px; border-bottom:1px solid #F0F2F7;">
+                    <label for="reminder-date-<%= @chat.id %>" style="font-size:12px; font-weight:600; color:#5F6775; text-transform:uppercase; letter-spacing:0.04em; display:block; margin-bottom: 6px;">Reminder date</label>
+                    <input type="date" id="reminder-date-<%= @chat.id %>" value="<%= default_reminder_date.strftime("%Y-%m-%d") %>" style="width:100%; font-size:14px; border:1px solid #E5E7EB; border-radius:10px; padding: 6px 8px; color:#1A1535;" onclick="event.stopPropagation()">
                   </div>
-                  <a href="#" id="google-cal-link-<%= @chat.id %>" target="_blank" style="display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:14px; color:#1A1535; text-decoration:none; border-bottom:1px solid #F3F4F6;"><span class="lucide-icon"><%= icon_cal_plus.html_safe %></span>Google Calendar</a>
-                  <a href="#" id="outlook-link-<%= @chat.id %>" target="_blank" style="display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:14px; color:#1A1535; text-decoration:none; border-bottom:1px solid #F3F4F6;"><span class="lucide-icon"><%= icon_cal_plus.html_safe %></span>Outlook</a>
-                  <a href="#" id="apple-link-<%= @chat.id %>" style="display:flex; align-items:center; gap:10px; padding:10px 14px; font-size:14px; color:#1A1535; text-decoration:none;"><span class="lucide-icon"><%= icon_cal_plus.html_safe %></span>Apple Calendar</a>
+                  <a href="#" id="google-cal-link-<%= @chat.id %>" target="_blank" style="display:flex; align-items:center; gap: 10px; padding: 10px 14px; font-size:14px; color:#1A1535; text-decoration:none; border-bottom:1px solid #F0F2F7;"><span class="lucide-icon"><%= icon_cal_plus.html_safe %></span>Google Calendar</a>
+                  <a href="#" id="outlook-link-<%= @chat.id %>" target="_blank" style="display:flex; align-items:center; gap: 10px; padding: 10px 14px; font-size:14px; color:#1A1535; text-decoration:none; border-bottom:1px solid #F0F2F7;"><span class="lucide-icon"><%= icon_cal_plus.html_safe %></span>Outlook</a>
+                  <a href="#" id="apple-link-<%= @chat.id %>" style="display:flex; align-items:center; gap: 10px; padding: 10px 14px; font-size:14px; color:#1A1535; text-decoration:none;"><span class="lucide-icon"><%= icon_cal_plus.html_safe %></span>Apple Calendar</a>
                 </div>
                 <script>
                   document.addEventListener('click',function(){const m=document.getElementById('rm-<%= @chat.id %>');if(m)m.style.display='none';});
@@ -307,7 +308,7 @@
           </div>
         <% end %>
 
-        <div class="doc-notes">
+        <div class="doc-notes" id="notes">
           <div class="doc-notes__head">
             <h3 class="doc-label">Your notes</h3>
             <button type="button" id="note-toggle-<%= @chat.id %>" class="doc-notes__add"
@@ -318,9 +319,9 @@
           <div id="note-panel-<%= @chat.id %>" class="note-panel">
             <label for="note-input-<%= @chat.id %>" class="visually-hidden">Note</label>
             <textarea id="note-input-<%= @chat.id %>" class="note-textarea" rows="3" placeholder="e.g. Paid by bank transfer on Monday, kept the receipt"></textarea>
-            <div style="display:flex; justify-content:flex-end; gap:8px; margin-top:8px;">
-              <button type="button" style="font-size:14px; font-weight:500; color:#4B5563; padding:8px 14px; border:1px solid #E5E7EB; border-radius:10px; background:transparent; cursor:pointer;" onclick="closeNotePanel('<%= @chat.id %>')">Cancel</button>
-              <button type="button" style="font-size:14px; font-weight:600; color:#fff; padding:8px 14px; border:none; border-radius:10px; background:#6B56E2; cursor:pointer; display:flex; align-items:center; gap:6px;" onclick="saveNote('<%= @chat.id %>')">
+            <div style="display:flex; justify-content:flex-end; gap: 8px; margin-top: 8px;">
+              <button type="button" style="font-size:14px; font-weight:500; color:#4B5563; padding: 8px 14px; border:1px solid #E5E7EB; border-radius:10px; background:transparent; cursor:pointer;" onclick="closeNotePanel('<%= @chat.id %>')">Cancel</button>
+              <button type="button" style="font-size:14px; font-weight:600; color:#fff; padding: 8px 14px; border:none; border-radius:10px; background:#6B56E2; cursor:pointer; display:flex; align-items:center; gap: 6px;" onclick="saveNote('<%= @chat.id %>')">
                 <span class="lucide-icon"><%= icon_check.html_safe %></span> Save note
               </button>
             </div>
@@ -336,7 +337,7 @@
           <div class="doc-assistant__icon"><span class="lucide-icon"><%= icon_sparkle.html_safe %></span></div>
           <div>
             <h2 class="doc-section-title">AI Assistant</h2>
-            <p style="margin:2px 0 0; font-size:14px; color:#5F6775;">Ask anything about this document</p>
+            <p style="margin: 2px 0 0; font-size:14px; color:#5F6775;">Ask anything about this document</p>
           </div>
         </header>
 
@@ -366,22 +367,22 @@
           <% if @chat.description.present? %>
             <div>
               <h3 class="doc-h3">Next steps</h3>
-              <ul style="font-size:14px; color:#374151; line-height:1.7; padding-left:18px; margin:0;">
+              <ul style="font-size:14px; color:#4B5563; line-height:1.7; padding-left: 18px; margin: 0;">
                 <% @chat.description.split("\n").reject(&:blank?).each do |step| %>
-                  <li style="margin-bottom:6px;"><%= step.gsub(/^[-•\d.]\s*/,"").strip %></li>
+                  <li style="margin-bottom: 6px;"><%= step.gsub(/^[-•\d.]\s*/,"").strip %></li>
                 <% end %>
               </ul>
             </div>
           <% end %>
 
           <% if @chat.messages.exists? %>
-            <p class="doc-label" style="padding-top:14px; border-top:1px solid #ECEBF3;">Conversation</p>
+            <p class="doc-label" style="padding-top: 14px; border-top:1px solid #ECEBF3;">Conversation</p>
           <% end %>
 
           <% @chat.messages.order(:created_at).each do |message| %>
             <% if message.role == "user" %>
               <div style="display:flex; justify-content:flex-end;">
-                <div style="background:#6B56E2; color:#fff; font-size:14px; line-height:1.6; padding:10px 14px; border-radius:20px 4px 18px 18px; max-width:75%;"><%= message.content %></div>
+                <div style="background:#6B56E2; color:#fff; font-size:14px; line-height:1.6; padding: 10px 14px; border-radius:20px 4px 18px 18px; max-width:75%;"><%= message.content %></div>
               </div>
             <% else %>
               <%= render "messages/ai_bubble", content: message.content %>
@@ -406,6 +407,12 @@
               </button>
             </div>
           <% end %>
+
+          <p class="compliance-note">
+            This summary and the deadline were read from your document
+            automatically and can be wrong. Check the original letter before you
+            act. <strong>Landed is not a legal, tax or immigration adviser.</strong>
+          </p>
         </div>
       </section>
 
@@ -437,38 +444,66 @@
     document.getElementById('note-input-' + chatId).value = '';
   }
 
-  function saveNote(chatId) {
-    const input = document.getElementById('note-input-' + chatId);
-    const text = input.value.trim();
-    if (!text) return;
+  const NOTE_TRASH_ICON = '<span class="lucide-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></span>';
 
-    const list = document.getElementById('note-list-' + chatId);
-    const now = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    const noteId = 'note-' + Date.now();
-
+  function noteElement(chatId, note) {
     const item = document.createElement('div');
     item.className = 'note-item';
-    item.id = noteId;
+    item.id = note.id;
 
     const body = document.createElement('div');
     const p = document.createElement('p');
     p.className = 'note-item-text';
-    p.textContent = text;
+    p.textContent = note.text;          // textContent, so a pasted note cannot inject markup
     const meta = document.createElement('p');
     meta.className = 'note-item-meta';
-    meta.textContent = 'Today at ' + now;
+    meta.textContent = window.LandedNotes.label(note.at);
     body.append(p, meta);
 
     const del = document.createElement('button');
     del.type = 'button';
     del.className = 'note-delete-btn';
     del.setAttribute('aria-label', 'Delete note');
-    del.innerHTML = '<span class="lucide-icon"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg></span>';
-    del.onclick = () => item.remove();
+    del.innerHTML = NOTE_TRASH_ICON;
+    del.onclick = () => { window.LandedNotes.remove(chatId, note.id); item.remove(); };
 
     item.append(body, del);
-    list.appendChild(item);
+    return item;
+  }
+
+  function renderNotes(chatId) {
+    const list = document.getElementById('note-list-' + chatId);
+    if (!list) return;
+    list.textContent = '';
+    window.LandedNotes.read(chatId).forEach(function (note) {
+      list.appendChild(noteElement(chatId, note));
+    });
+  }
+
+  function saveNote(chatId) {
+    const input = document.getElementById('note-input-' + chatId);
+    const text = input.value.trim();
+    if (!text) return;
+    const note = window.LandedNotes.add(chatId, text);
+    document.getElementById('note-list-' + chatId).appendChild(noteElement(chatId, note));
     closeNotePanel(chatId);
+  }
+
+  // Saved notes are drawn on load, so they are still here after a refresh or
+  // a trip to the vault.
+  renderNotes('<%= @chat.id %>');
+
+  // Arriving from the count bubble in the vault: land on the notes, and flash
+  // them, the same way "How to pay" flashes the answer it scrolls to.
+  if (window.location.hash === '#notes') {
+    const notesBlock = document.getElementById('notes');
+    if (notesBlock) {
+      notesBlock.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      notesBlock.classList.remove('doc-card--halo');
+      void notesBlock.offsetWidth;
+      notesBlock.classList.add('doc-card--halo');
+      setTimeout(function () { notesBlock.classList.remove('doc-card--halo'); }, 1700);
+    }
   }
 
 </script>

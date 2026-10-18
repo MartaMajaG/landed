@@ -5,7 +5,7 @@
 $ob-navy:  #1A1535;
 $ob-line:  #ECEBF3;
 $ob-lilac: #D0C2F5;
-$ob-tint:  #F3F0FD;
+$ob-tint:  #EEEBFD;
 $ob-muted: $text-muted;  // was #8B8AA0 (3.36:1)
 $ob-glow:  0 4px 14px -10px rgba(107, 86, 226, 0.35);
 $ob-glow-strong: 0 14px 32px -18px rgba(107, 86, 226, 0.55), 0 1px 2px rgba(26, 21, 53, 0.04);
@@ -100,6 +100,9 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
 .ob-options { display: grid; gap: 12px; }
 .ob-options--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .ob-options--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+// A follow-up question that appears under an answer, e.g. the visa type after "Yes"
+.ob-followup { margin-top: 28px; }
+.ob-followup__q { margin: 0 0 12px; font-size: 16px; font-weight: 600; color: $text-dark; }
 .ob-option { position: relative; }
 .ob-option__input {
   position: absolute;
@@ -163,17 +166,28 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   .ob-option__tick { opacity: 1; transform: none; }
 }
 .ob-option__input:focus-visible + .ob-option__card { outline: 2px solid $indigo-landed; outline-offset: 3px; }
-.ob-option__input:disabled + .ob-option__card { opacity: 0.45; cursor: not-allowed; }
+// Not available yet (a city without tasks). Recedes through surface and a
+// dashed edge rather than opacity, so its text still reads at full contrast.
+.ob-option__input:disabled + .ob-option__card {
+  cursor: not-allowed;
+  background: #FAFAFC;
+  border-style: dashed;
+  box-shadow: none;
+  .ob-option__icon { background: #F0F2F7; color: $text-muted; }
+}
 
 // ── Date step ──
-.ob-quick { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+// Quick picks and calendar share one width: whatever the pills row needs,
+// capped by the column. On a phone the pills wrap and the calendar fills the width.
+.ob-date { display: grid; gap: 16px; width: fit-content; max-width: 100%; }
+.ob-quick { display: flex; flex-wrap: wrap; gap: 8px; }
 .ob-chip {
   border: 1.5px solid $ob-line;
   background: #fff;
   color: $text-dark;
   font-size: 14px;
   font-weight: 500;
-  padding: 9px 14px;
+  padding: 8px 14px;
   border-radius: 999px;
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s, color 0.15s;
@@ -181,20 +195,21 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   &:focus-visible { outline: 2px solid $indigo-landed; outline-offset: 2px; }
   &.is-selected { background: $indigo-landed; border-color: $indigo-landed; color: #fff; }
 }
+// The calendar fills the .ob-date width set by the quick picks above it
 .ob-cal {
-  max-width: 440px;
   background: #fff;
   border: 1px solid $ob-line;
   border-radius: 20px;
-  padding: 16px 18px 18px;
+  padding: 16px 20px 20px;
   box-shadow: $ob-glow;
 }
+// Month on the left, both arrows together on the right
 .ob-cal__head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  margin-bottom: 10px;
-  h2 { font-family: $font-display; font-size: 16px; font-weight: 700; margin: 0; }
+  gap: 4px;
+  margin-bottom: 12px;
+  h2 { order: -1; margin: 0 auto 0 0; font-family: $font-display; font-size: 16px; font-weight: 700; }
 }
 .ob-cal__nav {
   width: 34px;
@@ -209,9 +224,15 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   &:hover { background: $ob-tint; color: $indigo-landed; }
 }
 .ob-cal__weekdays, .ob-cal__grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
-.ob-cal__weekdays span { text-align: center; font-size: 12px; color: $ob-muted; font-weight: 500; padding: 4px 0; }
+.ob-cal__weekdays { margin-bottom: 4px; }
+.ob-cal__weekdays span { text-align: center; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: $ob-muted; padding: 4px 0; }
 .ob-cal__day {
-  aspect-ratio: 1;
+  // A fixed square centred in its column, so today's ring and the selected
+  // fill stay compact however wide the calendar is
+  width: 40px;
+  height: 40px;
+  justify-self: center;
+  font-weight: 500;
   border: 0;
   border-radius: 10px;
   background: transparent;
@@ -234,7 +255,7 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   gap: 8px;
   border: 0;
   border-radius: 12px;
-  padding: 13px 22px;
+  padding: 12px 22px;
   background: $indigo-landed;
   color: #fff;
   font-weight: 600;
@@ -242,7 +263,7 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   cursor: pointer;
   box-shadow: 0 10px 22px -12px rgba(107, 86, 226, 0.9);
   transition: background 0.15s, transform 0.15s;
-  &:hover { background: #5A45D1; transform: translateY(-1px); }
+  &:hover { background: #5B47D6; transform: translateY(-1px); }
   &:focus-visible { outline: 2px solid $indigo-landed; outline-offset: 3px; }
 }
 // Back sits first on the left: pull it in so its arrow lines up with the content edge
@@ -254,17 +275,6 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   padding-left: 10px;
   padding-right: 10px;
   &:hover { background: transparent; color: $text-dark; transform: none; }
-}
-.ob-skip {
-  margin-left: auto;
-  border: 0;
-  background: none;
-  color: $ob-muted;
-  font-size: 14px;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  cursor: pointer;
-  &:hover { color: $text-dark; }
 }
 .ob-hint {
   font-size: 13px;
@@ -293,7 +303,7 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
 }
 .ob-summary__head {
   padding: 20px 22px 14px;
-  border-bottom: 1px solid #F3F2F8;
+  border-bottom: 1px solid #ECEBF3;
   h2 { font-family: $font-display; font-weight: 700; font-size: 18px; margin: 0; }
   p { margin: 2px 0 0; font-size: 13px; color: $ob-muted; }
 }
@@ -310,12 +320,15 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   height: 34px;
   flex: none;
   border-radius: 10px;
-  background: #F6F5FA;
+  background: #F0F2F7;
   color: $ob-muted;
   display: grid;
   place-items: center;
   transition: background 0.3s, color 0.3s;
-  > span { grid-area: 1 / 1; transition: opacity 0.2s, transform 0.3s; }
+  // Each layer is its own centred box, and the svg a block, so the icon sits in
+  // the middle instead of on the text baseline (it rode about 2px high)
+  > span { grid-area: 1 / 1; display: grid; place-items: center; transition: opacity 0.2s, transform 0.3s; }
+  svg { display: block; }
 }
 .ob-fact__done { opacity: 0; transform: scale(0.5); }
 .ob-fact__label { display: block; font-size: 12px; color: $ob-muted; line-height: 1.2; }
@@ -336,8 +349,8 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   align-items: center;
   gap: 10px;
   padding: 14px 22px 18px;
-  background: #FAF9FD;
-  border-top: 1px solid #F3F2F8;
+  background: #FAFAFC;
+  border-top: 1px solid #ECEBF3;
   font-size: 14px;
   color: $text-gray;
   b {
@@ -427,7 +440,7 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   .card-bottom-row { margin-top: 8px; }
 }
 @keyframes ob-card-in { to { opacity: 1; transform: none; } }
-@keyframes ob-card-in-locked { to { opacity: 0.5; transform: none; } }
+@keyframes ob-card-in-locked { to { opacity: 1; transform: none; } }
 .ob-start {
   font-size: 11px;
   font-weight: 600;
@@ -462,6 +475,17 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   &.is-in { animation: ob-card-in 0.5s $ob-ease forwards; }
   p { margin: 0; font-size: 15px; color: $text-gray; }
   b { color: $text-dark; }
+
+  // The note shares the CTA card so it reads as part of the moment the user
+  // commits, rather than as an orphaned line under it. Full basis puts it on
+  // its own row beneath the button instead of competing with it for width.
+  // The `p` rule above outranks the component, so the component's own size
+  // and colour are restated here at the higher specificity.
+  .compliance-note {
+    flex: 1 0 100%;
+    font-size: 13px;
+    color: $text-muted;
+  }
 }
 
 // ── Responsive ──
@@ -475,14 +499,12 @@ $ob-ease:  cubic-bezier(0.22, 1, 0.36, 1);
   .ob-progress { margin: 0 16px; }
   .ob-options--3, .ob-options--2 { grid-template-columns: 1fr; }
   .ob-header__step { display: none; }
-  .ob-skip { margin-left: 0; }
   .ob-hint { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .ob-step--in, .ob-plan__head, .ob-fact.is-pop .ob-fact__value, .ob-cal__day.is-selected { animation: none; }
   .ob-board .task-card.ob-card, .ob-more, .ob-plan__cta { opacity: 1; transform: none; animation: none !important; }
-  .ob-board .task-card.ob-card.locked { opacity: 0.5; }
   .ob-gen__dot { animation: none !important; }
   .ob-progress span, .ob-option__tick, .ob-fact__icon > span { transition: none; }
 }
